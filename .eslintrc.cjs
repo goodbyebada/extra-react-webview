@@ -23,7 +23,13 @@ module.exports = {
       "warn",
       { allowConstantExport: true },
     ],
-    "prettier/prettier": "error",
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: 'auto',
+        useTabs: false,
+      }
+    ],
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
   },
