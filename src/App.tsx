@@ -1,14 +1,21 @@
-import HomeRecruitBox from "./components/HomeRecruitBox";
-import StatusRecruitBox from "./components/StatusRecruitBox";
-import AdminRecruitBox from "./components/AdminRecruitBox";
+import ExtrasHome from "./components/ExtrasHome";
+import ExtraCastingBoard from "./components/ExtraCastingBoard";
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div>
-      <HomeRecruitBox />
-      <StatusRecruitBox />
-      <AdminRecruitBox />
-    </div>
+    <>
+      {/* <ExtrasHome /> */}
+      {/* <ExtraCastingBoard /> */}
+
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<ExtrasHome />} />
+          <Route path="/extra-casting-board" element={<ExtraCastingBoard />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

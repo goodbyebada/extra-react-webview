@@ -32,3 +32,8 @@ body {
   font-variant-numeric: lining-nums proportional-nums;
   font-feature-settings: "dlig" on;
 }
+
+button {
+  background-color: transparent;
+  border: none;
+}
