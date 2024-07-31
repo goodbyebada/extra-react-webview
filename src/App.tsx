@@ -1,6 +1,7 @@
 import ExtrasHome from "./components/ExtrasHome";
 import ExtraCastingBoard from "./components/ExtraCastingBoard";
 import DateSelectedNoticeList from "./components/DateSelectedNoticeList";
+import Scheduler from "./components/Scheduler";
 
 // import HomeRecruitBox from "./components/HomeRecruitBox";
 // import StatusRecruitBox from "./components/StatusRecruitBox";
@@ -18,10 +19,13 @@ function App() {
             path="/extra-casting-board/:jobPostId"
             element={<ExtraCastingBoard />}
           />
+
           <Route
             path="/date-selected-notice-list"
             element={<DateSelectedNoticeList />}
           />
+
+          <Route path="/scheduler" element={<Scheduler />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -1,12 +1,27 @@
-import React from "react";
 import styled from "styled-components";
 import multiply from "../../assets/Multiply.png";
 import SmallRecruitBox from "../SmallRecruitBox";
 
-function ScheduleModal() {
+/**
+ * 추후 props 추가 통해,
+ * 모달 창 props 추가 통해 데이터 연결 예정
+ *
+ *
+ * @param param0
+ * @returns
+ */
+
+function ScheduleModal({ closeModal }: { closeModal: () => void }) {
   return (
     <ModalContainer>
-      <MultiplyIcon src={multiply} />
+      <button
+        onClick={() => {
+          console.log("work");
+          closeModal();
+        }}
+      >
+        <MultiplyIcon src={multiply} />
+      </button>
       <ModalText>Date</ModalText>
       <SmallRecruitBoxWrapper>
         <SmallRecruitBox />

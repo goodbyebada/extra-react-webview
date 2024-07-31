@@ -4,6 +4,7 @@ import useCalendar from "../utills/useCalendar";
 
 import { useState } from "react";
 import DateSelectorItem from "./DateSelectorItem";
+import ScheduleModal from "./Modal/ScheduleModal";
 
 /**
  *
@@ -12,6 +13,10 @@ import DateSelectorItem from "./DateSelectorItem";
 
 export default function Scheduler() {
   const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const date = new Date();
   const today = {
@@ -89,9 +94,7 @@ export default function Scheduler() {
                       <div
                         className="date"
                         key={key + i * 7}
-                        onClick={() => {
-                          console.log("moved");
-                        }}
+                        onClick={openModal}
                       >
                         <div id="date-num">{!elem ? "" : elem}</div>
                         <Schedule className="approve">
@@ -109,6 +112,14 @@ export default function Scheduler() {
           </div>
         </div>
       </CalenderContainer>
+
+      {isModalOpen ? (
+        <>
+          <ScheduleModal closeModal={closeModal} />
+        </>
+      ) : (
+        <></>
+      )}
     </Container>
   );
 }
@@ -223,6 +234,7 @@ const Week = styled.div<{ $weekcnt: number }>`
 `;
 
 const Schedule = styled.div`
+  z-index: 8;
   width: 45px;
   height: 17px;
   border-radius: 20px;
