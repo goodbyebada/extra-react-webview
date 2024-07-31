@@ -1,10 +1,9 @@
 import { styled } from "styled-components";
 import { dummyRoleList } from "../api/dummyData";
 import { Role } from "../api/dummyData";
-import navBtn from "../assets/more-than-button.png";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { JobPost } from "../api/dummyData";
+import NavBar from "./custom/NavBar";
 
 /**
  * 임시 부모컴포넌트에서 상속받을 props
@@ -41,8 +40,6 @@ export default function ExtraCastingBoard() {
     // 추후 수정 예정
     setApply(true);
   };
-
-  const navigate = useNavigate();
 
   /*
    * return 한 역할 / 상세정보에 대한 UI
@@ -139,14 +136,7 @@ export default function ExtraCastingBoard() {
 
   return (
     <Container>
-      <nav>
-        <div className="wrapper">
-          <button id="link" onClick={() => navigate("/")}>
-            <img src={navBtn}></img>
-          </button>
-          <span id="drama-title">{drama_title}</span>
-        </div>
-      </nav>
+      <NavBar content={drama_title} />
 
       <ShootingSchedule className="shooting-schedule">
         <div className="time-location-set">
@@ -203,37 +193,6 @@ const Container = styled.div`
     width: 100%;
   }
 
-  nav {
-    background: #000;
-    z-index: 100;
-    position: sticky;
-    height: var(--_nav-height);
-    top: 0;
-
-    font-size: 32px;
-    font-weight: 900;
-    line-height: 62.5%;
-    letter-spacing: 0.32px;
-
-    img {
-      width: 25px;
-      height: 25px;
-      transform: rotate(-180deg);
-    }
-
-    .wrapper {
-      box-sizing: border-box;
-      padding-top: 40px;
-      padding-left: 30px;
-
-      & #link {
-        height: 100%;
-      }
-      & #drama-title {
-        margin-left: 30px;
-      }
-    }
-  }
   .shooting-schedule {
     top: var(--_nav-height);
   }

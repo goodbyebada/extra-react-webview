@@ -17,7 +17,7 @@ type JobPostList = JobPost[];
 export const dummyJobPostList: JobPostList = [
   {
     job_post_id: 1,
-    calendar: "2024/8/3-2024/8/4",
+    calendar: "8/1-8/4",
     company_name: "유엠씨 촬영팀",
     drama_title: "UMC 드라마",
     gathering_location: "신사역 6번 출구",
@@ -27,11 +27,21 @@ export const dummyJobPostList: JobPostList = [
   },
   {
     job_post_id: 2,
-    calendar: "2024/8/3-2024/8/4",
+    calendar: "8/1-8/4",
     company_name: "유엠씨 촬영팀2",
     drama_title: "UMC 드라마2",
-    gathering_location: "신사역 6번 출구",
-    gathering_time: "7:30",
+    gathering_location: "강남역 6번 출구",
+    gathering_time: "11:30",
+    category: "드라마",
+    status: true,
+  },
+  {
+    job_post_id: 3,
+    calendar: "8/1-8/4",
+    company_name: "유엠씨 촬영팀3",
+    drama_title: "UMC 드라마3",
+    gathering_location: "신촌역 6번 출구",
+    gathering_time: "3:20",
     category: "드라마",
     status: true,
   },

@@ -1,9 +1,8 @@
 import { styled } from "styled-components";
-
 import useCalendar from "../utills/useCalendar";
-
 import { useState } from "react";
 import DateSelector from "./DateSelector";
+import { useNavigate } from "react-router-dom";
 
 /**
  * 보조출연자 달력
@@ -29,6 +28,7 @@ export default function Calender() {
   const [dateYM, setDateYM] = useState(today);
 
   const weeklists = useCalendar(dateYM.year, dateYM.month);
+  const navigate = useNavigate();
   let i = -1;
 
   /**
@@ -43,6 +43,12 @@ export default function Calender() {
         ? { ...prev, [type]: value - 1 }
         : { ...prev, [type]: value };
     });
+  };
+
+  // dateSelectedNoticeList 날짜 선택시 화면으로 이동
+  const navigateToSelectedNoticeList = () => {
+    const path = "/date-selected-notice-list";
+    navigate(path);
   };
 
   return (
@@ -94,12 +100,11 @@ export default function Calender() {
                       );
                     }
                     return (
+                      // 공고 유무 확인 로직 필요 +  recommand or all 판단 로직 필요
                       <div
                         className="date got-drama recommand"
                         key={key + i * 7}
-                        onClick={() => {
-                          console.log("moved");
-                        }}
+                        onClick={navigateToSelectedNoticeList}
                       >
                         <div id="date-num">{elem}</div>
                         {gotDrama ? <div id="drama-num">{num}</div> : ""}

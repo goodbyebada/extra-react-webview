@@ -1,11 +1,16 @@
-import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { toggleStar } from "../redux/recruitSlice";
 import RecruitStatus from "./custom/recruitStatus";
 import { RootState } from "../redux/store";
+import { JobPost } from "../api/dummyData";
 
-const HomeRecruitBox: React.FC = () => {
+type Props = {
+  navigate: () => void;
+  recruitInfo: JobPost;
+};
+
+function HomeRecruitBox({ navigate, recruitInfo }: Props): React.FC {
   const dispatch = useDispatch();
   const star = useSelector((state: RootState) => state.recruit.star);
 
@@ -13,18 +18,37 @@ const HomeRecruitBox: React.FC = () => {
     dispatch(toggleStar());
   };
 
+  const {
+    category,
+    drama_title,
+    calendar,
+    company_name,
+    gathering_time,
+    gathering_location,
+  } = recruitInfo;
+
+  /**
+   * 수정 해야할 것
+   *
+   * 1. <RecruitContainer>와 같은 wrapper에 (버튼 전체에) onClick={navigate} 이벤트 추가하였을시,
+   *  starIcon 눌렀을때 페이지 이동 됨, 임시로 중첩되지 않게 TitleTxt에 이벤트 추가하였음.
+   *
+   * 2. D-0 로직은 작성하지 않았음, 추후 작성 예정
+   *
+   */
+
   return (
     <RecruitContainer>
       <RecruitBox>
         <InfoContainer>
-          <MediaSelectorTxt>media</MediaSelectorTxt>
+          <MediaSelectorTxt>{category}</MediaSelectorTxt>
           <StarIcon src={star} onClick={handleStarClick} />
-          <TitleTxt>title</TitleTxt>
+          <TitleTxt onClick={navigate}>{drama_title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>date</DateTxt>
+            <DateTxt>{calendar}</DateTxt>
             <DeadlineBox>D-0</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>team</Team>
+          <Team>{company_name}</Team>
         </InfoContainer>
         <RecruitStatus
           visible={true}
@@ -36,12 +60,12 @@ const HomeRecruitBox: React.FC = () => {
           모집중
         </RecruitStatus>
         <TimePlace>
-          00:00 예정 <br /> place
+          {gathering_time} 예정 <br /> {gathering_location}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>
   );
-};
+}
 
 export default HomeRecruitBox;
 
