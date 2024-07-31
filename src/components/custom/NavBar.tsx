@@ -32,7 +32,7 @@ const NavContainer = styled.nav`
   --_nav-height: 120px;
 
   background: #000;
-  z-index: 100;
+  z-index: 10;
   position: sticky;
   height: var(--_nav-height);
   top: 0;
