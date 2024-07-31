@@ -1,49 +1,57 @@
 import { styled } from "styled-components";
 import useCalendar from "../utills/useCalendar";
-import { useState } from "react";
-import DateSelector from "./DateSelector";
+import DateSelectorItem from "./DateSelectorItem";
 import { useNavigate } from "react-router-dom";
+import { JobPostList } from "../api/dummyData";
 
 /**
  * 보조출연자 달력
  */
 
-export default function Calender() {
+type dateYM = {
+  year: number;
+  month: number;
+};
+
+type CalenderProps = {
+  dateYM: dateYM;
+  dateYMHandler: (type: string, value: number) => void;
+  jobPostList: JobPostList;
+  isListAll: boolean;
+};
+
+/**
+ * @param param0 CalenderProps
+ * @returns 사용자 홈 화면 캘린더 UI
+ */
+
+export default function Calender({
+  dateYM,
+  dateYMHandler,
+  jobPostList,
+  isListAll,
+}: CalenderProps) {
   const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
 
-  /**임시변수  */
-  const num = 3;
-  const gotDrama = true;
-
-  const date = new Date();
-  const today = {
-    year: date.getFullYear(),
-    month: date.getMonth(),
-  };
-
-  /**
-   * date.getMonth는 항상 원래 월보다 -1이다.
-   * useCaleder에 들어가는 값도 원래  month보다 -1 이어야한다.
+  /** test 위해 임시로 구현
+   * jobPostList calender 형식 서버와 협의한 후 수정 예정
    */
-  const [dateYM, setDateYM] = useState(today);
+
+  // 한 date의 공고 일정 개수 list
+  let jobCnt = Array.from({ length: 30 }, (v, i) => 1);
+  // 공고의 유무 flag list
+  let gotJob = Array.from({ length: 30 }, (v, i) => {
+    if (i % 2 === 0) return true;
+    return false;
+  });
 
   const weeklists = useCalendar(dateYM.year, dateYM.month);
   const navigate = useNavigate();
   let i = -1;
 
-  /**
-   * 임시
-   */
-  const yearItemList = Array.from({ length: 6 }, (v, i) => 2024 + i);
+  // 2024 ~ 2053년(30년)
+  const yearItemList = Array.from({ length: 30 }, (v, i) => 2024 + i);
   const monthItemList = Array.from({ length: 12 }, (v, i) => 1 + i);
-
-  const dateHandler = (type: string, value: number) => {
-    setDateYM((prev) => {
-      return type === "month"
-        ? { ...prev, [type]: value - 1 }
-        : { ...prev, [type]: value };
-    });
-  };
 
   // dateSelectedNoticeList 날짜 선택시 화면으로 이동
   const navigateToSelectedNoticeList = () => {
@@ -51,24 +59,30 @@ export default function Calender() {
     navigate(path);
   };
 
+  const dateOnClick = (gotJob: boolean) => {
+    console.log(gotJob);
+    if (gotJob) {
+      navigateToSelectedNoticeList();
+    }
+  };
+
   return (
     <Container>
       {/* 년도 월일 선택 바 */}
-
-      <div className="date-selector">
-        <DateSelector
+      <DateSelector>
+        <DateSelectorItem
           type="year"
           value={dateYM.year}
           modalList={yearItemList}
-          dateHandler={dateHandler}
+          dateHandler={dateYMHandler}
         />
-        <DateSelector
+        <DateSelectorItem
           type="month"
           value={dateYM.month + 1}
           modalList={monthItemList}
-          dateHandler={dateHandler}
+          dateHandler={dateYMHandler}
         />
-      </div>
+      </DateSelector>
 
       {/* 캘린더 */}
       <CalenderContainer className="calender-container" $daylistHeight={8}>
@@ -99,15 +113,19 @@ export default function Calender() {
                         ></div>
                       );
                     }
+
                     return (
-                      // 공고 유무 확인 로직 필요 +  recommand or all 판단 로직 필요
                       <div
-                        className="date got-drama recommand"
+                        className={`date ${gotJob[elem] ? "got-drama" : ""} ${isListAll ? "" : "recommand"}`}
                         key={key + i * 7}
-                        onClick={navigateToSelectedNoticeList}
+                        onClick={() => dateOnClick(gotJob[elem])}
                       >
                         <div id="date-num">{elem}</div>
-                        {gotDrama ? <div id="drama-num">{num}</div> : ""}
+                        {gotJob[elem] ? (
+                          <div id="drama-num">{jobCnt[elem]}</div>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     );
                   })}
@@ -141,11 +159,10 @@ const Container = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+`;
 
-  .date-selector {
-    /* 임의로  */
-    margin-bottom: 30px;
-  }
+const DateSelector = styled.div`
+  margin-bottom: 30px;
 `;
 
 const CalenderContainer = styled.div<{ $daylistHeight: number }>`

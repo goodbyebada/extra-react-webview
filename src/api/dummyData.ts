@@ -9,7 +9,7 @@ export type JobPost = {
   status: boolean;
 };
 
-type JobPostList = JobPost[];
+export type JobPostList = JobPost[];
 
 /**
  * 캘린더/리스트 조회 dummyData
@@ -45,6 +45,135 @@ export const dummyJobPostList: JobPostList = [
     category: "드라마",
     status: true,
   },
+  {
+    job_post_id: 4,
+    calendar: "8/1-8/4",
+    company_name: "유엠씨 촬영팀1esdfs",
+    drama_title: "sdfsdf",
+    gathering_location: "sdsd역 6번 출구",
+    gathering_time: "3:20",
+    category: "드라마",
+    status: true,
+  },
+  {
+    job_post_id: 5,
+    calendar: "8/1-8/4",
+    company_name: "유엠씨 촬영팀sdf",
+    drama_title: "sdfdsdfs",
+    gathering_location: "sdfsdf역 6번 출구",
+    gathering_time: "3:20",
+    category: "드라마",
+    status: true,
+  },
+];
+
+/**
+ * 캘린더/리스트 조회  8월달 dummyData
+ * 공고가 없는 날은 객체를 생성하지 않는다는 가정하에 만들었다.
+ * -> 아직 서버와 합의 되지 않은 부분, 추후 수정 예정
+ */
+
+export const dummyMonthJobList: JobPostList = [
+  {
+    job_post_id: 1,
+    calendar: "8/1",
+    company_name: "FilmCorp",
+    drama_title: "Sunset Dreams",
+    gathering_location: "강남역 3번 출구",
+    gathering_time: "06:40",
+    category: "Drama",
+    status: true,
+  },
+  {
+    job_post_id: 2,
+    calendar: "8/3-8/4",
+    company_name: "Cinema Magic",
+    drama_title: "Moonlit Nights",
+    gathering_location: "서울역 1번 출구",
+    gathering_time: "08:00",
+    category: "Romance",
+    status: true,
+  },
+  {
+    job_post_id: 3,
+    calendar: "8/7-8/9",
+    company_name: "Starline Studios",
+    drama_title: "City Lights",
+    gathering_location: "홍대입구역 2번 출구",
+    gathering_time: "07:30",
+    category: "Action",
+    status: true,
+  },
+  {
+    job_post_id: 4,
+    calendar: "8/12",
+    company_name: "Visionary Films",
+    drama_title: "Winds of Change",
+    gathering_location: "잠실역 5번 출구",
+    gathering_time: "09:15",
+    category: "Thriller",
+    status: true,
+  },
+  {
+    job_post_id: 5,
+    calendar: "8/14-8/15",
+    company_name: "Dreamscapes",
+    drama_title: "Echoes",
+    gathering_location: "이태원역 4번 출구",
+    gathering_time: "10:00",
+    category: "Fantasy",
+    status: true,
+  },
+  {
+    job_post_id: 6,
+    calendar: "8/17",
+    company_name: "Cinematic Waves",
+    drama_title: "Silent Whispers",
+    gathering_location: "강변역 6번 출구",
+    gathering_time: "07:45",
+    category: "Mystery",
+    status: true,
+  },
+  {
+    job_post_id: 7,
+    calendar: "8/21-8/22",
+    company_name: "Screen Magic",
+    drama_title: "The Last Train",
+    gathering_location: "삼성역 8번 출구",
+    gathering_time: "06:55",
+    category: "Crime",
+    status: true,
+  },
+  {
+    job_post_id: 8,
+    calendar: "8/24",
+    company_name: "Vision Quest",
+    drama_title: "Unseen Forces",
+    gathering_location: "고속터미널역 9번 출구",
+    gathering_time: "09:00",
+    category: "Sci-Fi",
+    status: true,
+  },
+  {
+    job_post_id: 9,
+    calendar: "8/26-8/28",
+    company_name: "Dream Weavers",
+    drama_title: "Whispering Pines",
+    gathering_location: "서울대입구역 3번 출구",
+    gathering_time: "10:30",
+    category: "Horror",
+    status: true,
+  },
+  {
+    job_post_id: 10,
+    calendar: "8/30",
+    company_name: "Film Dreams",
+    drama_title: "Mirage",
+    gathering_location: "을지로입구역 7번 출구",
+    gathering_time: "08:15",
+    category: "Adventure",
+    status: true,
+  },
 ];
 
 export type Role = {
@@ -61,7 +190,7 @@ export type Role = {
 };
 
 /**
- * 역활 조회 조회 dummyData
+ * 역할 조회 dummyData
  */
 export const dummyRoleList: Role[] = [
   {
