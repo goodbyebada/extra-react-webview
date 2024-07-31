@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { toggleStar } from "../redux/recruitSlice";
 import { useParams } from "react-router-dom";
 import { dummyRoleList, dummyJobPostList } from "../api/dummyData";
-
+import { useEffect } from "react";
 /**
  *
  * @returns 공고화면 UI
@@ -24,6 +24,10 @@ export default function ExtraCastingBoard() {
     // 추후 수정 예정
     setApply(true);
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const dispatch = useDispatch();
   const star = useSelector((state) => state.recruit.star);
