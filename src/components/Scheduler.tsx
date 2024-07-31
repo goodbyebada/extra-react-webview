@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import useCalendar from "../utills/useCalendar";
 
 import { useState } from "react";
-import DateSelector from "./DateSelector";
+import DateSelectorItem from "./DateSelectorItem";
 
 /**
  *
@@ -47,13 +47,13 @@ export default function Scheduler() {
       {/* 년도 월일 선택 바 */}
 
       <div className="date-selector">
-        <DateSelector
+        <DateSelectorItem
           type="year"
           value={dateYM.year}
           modalList={yearItemList}
           dateHandler={dateHandler}
         />
-        <DateSelector
+        <DateSelectorItem
           type="month"
           value={dateYM.month + 1}
           modalList={monthItemList}
