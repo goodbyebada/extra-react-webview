@@ -9,6 +9,10 @@ import ScheduleModal from "./Modal/ScheduleModal";
 /**
  *
  * 보조출연자 달력
+ *
+ * 추후 수정 예정
+ * 1. 스케줄러(일정)이 주가 다르게 연속으로 이어져있을때 UI fix
+ * 2. 스케줄러 일정 map으로 컴포넌트 반환 로직 fix
  */
 
 export default function Scheduler() {
@@ -97,12 +101,22 @@ export default function Scheduler() {
                         onClick={openModal}
                       >
                         <div id="date-num">{!elem ? "" : elem}</div>
-                        <Schedule className="approve">
-                          <p id="drama-title">extra</p>
-                        </Schedule>
-                        <Schedule>
-                          <p id="drama-title">umc</p>
-                        </Schedule>
+
+                        {/* test 위해 임시 구현 */}
+                        {/*11일 +4일 동안 진행된다 가정 */}
+
+                        {elem == 11 ? (
+                          <>
+                            <Schedule $period={4} className="approve">
+                              <p id="drama-title">extra</p>
+                            </Schedule>
+                            <Schedule $period={1}>
+                              <p id="drama-title">umc</p>
+                            </Schedule>
+                          </>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     );
                   })}
@@ -233,12 +247,21 @@ const Week = styled.div<{ $weekcnt: number }>`
   }
 `;
 
-const Schedule = styled.div`
+const Schedule = styled.div<{ $period: number }>`
   z-index: 3;
-  width: 45px;
+  /* width: 45px; */
+
+  width: ${(props) => `calc(100% * ${props.$period})`};
+
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+
   height: 17px;
   border-radius: 20px;
   background: #4f4f4f;
+
   margin: 3px;
 
   color: #a7a7a7;
