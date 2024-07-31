@@ -1,8 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-// eslint-disable-next-line react/prop-types
-const DeleteButton = ({ cancelText }) => {
+interface DeleteButtonProps {
+  cancelText: string;
+}
+
+const DeleteButton: React.FC<DeleteButtonProps> = ({ cancelText }) => {
   return <StyledDeleteButton>{cancelText}</StyledDeleteButton>;
 };
 

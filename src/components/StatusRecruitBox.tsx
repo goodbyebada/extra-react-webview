@@ -1,21 +1,30 @@
-import React, { useRef } from "react";
+import React, { useRef, TouchEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import RecruitStatus from "./custom/recruitStatus";
 import DeleteButton from "./custom/deleteBtn";
 import { toggleSwipe } from "../redux/recruitSlice";
+import { RootState } from "../redux/store";
+
+interface RecruitStatusState {
+  pending: boolean;
+  rejected: boolean;
+  approved: boolean;
+}
 
 function StatusRecruitBox() {
   const dispatch = useDispatch();
-  const swiped = useSelector((state) => state.recruit.swiped);
-  const recruitStatus = useSelector((state) => state.recruit.recruitStatus);
+  const swiped = useSelector((state: RootState) => state.recruit.swiped);
+  const recruitStatus = useSelector(
+    (state: RootState) => state.recruit.recruitStatus,
+  ) as RecruitStatusState;
   const touchStartX = useRef(0);
 
-  const handleTouchStart = (e) => {
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     touchStartX.current = e.touches[0].clientX;
   };
 
-  const handleTouchEnd = (e) => {
+  const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
     const touchEndX = e.changedTouches[0].clientX;
     if (touchStartX.current - touchEndX > 50) {
       dispatch(toggleSwipe());
@@ -31,13 +40,17 @@ function StatusRecruitBox() {
     deleteButtonText = "삭제하기";
   }
 
+  const shouldShowDeleteButton = !recruitStatus.approved;
+  const swipeEnabled = !recruitStatus.approved;
+
   return (
     <RecruitContainer>
-      <DeleteButton visible={swiped} cancelText={deleteButtonText} />
+      {shouldShowDeleteButton && <DeleteButton cancelText={deleteButtonText} />}
       <RecruitBox
         swiped={swiped}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        onTouchStart={swipeEnabled ? handleTouchStart : undefined}
+        onTouchEnd={swipeEnabled ? handleTouchEnd : undefined}
+        swipeEnabled={swipeEnabled}
       >
         <InfoContainer>
           <MediaSelectorTxt>media</MediaSelectorTxt>
@@ -114,7 +127,7 @@ const RecruitContainer = styled.div`
   position: relative;
 `;
 
-const RecruitBox = styled.div`
+const RecruitBox = styled.div<{ swiped: boolean; swipeEnabled: boolean }>`
   display: flex;
   position: relative;
   width: 365px;
@@ -123,10 +136,11 @@ const RecruitBox = styled.div`
   border: 2px solid #3c3c3c;
   background: #191919;
   box-shadow: 5px 5px 4px 0px #000;
-  padding-top: 17px;
-  padding-left: 24px;
+  padding: 17px;
   box-sizing: border-box;
-  animation: ${(props) => (props.swiped ? swipeLeft : swipeRight)} 0.4s forwards;
+  animation: ${(props) =>
+      props.swipeEnabled ? (props.swiped ? swipeLeft : swipeRight) : "none"}
+    0.4s forwards;
   z-index: 2;
 `;
 

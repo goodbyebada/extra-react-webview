@@ -2,9 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import RecruitStatus from "./custom/smallRecuitStatus";
 import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
-function StatusRecruitBox() {
-  const recruitStatus = useSelector((state) => state.recruit.recruitStatus);
+const StatusRecruitBox: React.FC = () => {
+  const recruitStatus = useSelector(
+    (state: RootState) => state.recruit.recruitStatus,
+  );
 
   return (
     <RecruitContainer>
@@ -47,7 +50,7 @@ function StatusRecruitBox() {
       </RecruitBox>
     </RecruitContainer>
   );
-}
+};
 
 export default StatusRecruitBox;
 
