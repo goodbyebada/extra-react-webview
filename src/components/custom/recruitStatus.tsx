@@ -1,8 +1,16 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-// eslint-disable-next-line prettier/prettier, react/prop-types
-const RecruitStatus = ({
+interface RecruitStatusProps {
+  visible: boolean;
+  borderColor: string;
+  backgroundColor: string;
+  color: string;
+  fontSize: string;
+  children: ReactNode;
+}
+
+const RecruitStatus: React.FC<RecruitStatusProps> = ({
   visible,
   borderColor,
   backgroundColor,

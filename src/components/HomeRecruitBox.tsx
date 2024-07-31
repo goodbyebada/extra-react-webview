@@ -3,10 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { toggleStar } from "../redux/recruitSlice";
 import RecruitStatus from "./custom/recruitStatus";
+import { RootState } from "../redux/store";
 
-function HomeRecruitBox() {
+const HomeRecruitBox: React.FC = () => {
   const dispatch = useDispatch();
-  const star = useSelector((state) => state.recruit.star);
+  const star = useSelector((state: RootState) => state.recruit.star);
 
   const handleStarClick = () => {
     dispatch(toggleStar());
@@ -40,7 +41,7 @@ function HomeRecruitBox() {
       </RecruitBox>
     </RecruitContainer>
   );
-}
+};
 
 export default HomeRecruitBox;
 

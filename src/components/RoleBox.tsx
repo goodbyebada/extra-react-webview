@@ -1,8 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 
-// eslint-disable-next-line react/prop-types
-const RoleBox = ({ color, borderColor, backgroundColor }) => {
+interface RoleBoxProps {
+  color: string;
+  borderColor: string;
+  backgroundColor: string;
+}
+
+const RoleBox: React.FC<RoleBoxProps> = ({
+  color,
+  borderColor,
+  backgroundColor,
+}) => {
   return (
     <RoleBoxWrapper>
       <RoleContainer

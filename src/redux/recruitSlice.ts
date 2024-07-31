@@ -1,6 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import star_g from "../assets/Star_g.png";
 import star_y from "../assets/Star_y.png";
+
+interface RecruitStatus {
+  pending: boolean;
+  rejected: boolean;
+  approved: boolean;
+}
 
 const recruitSlice = createSlice({
   name: "recruit",
@@ -20,7 +26,10 @@ const recruitSlice = createSlice({
     toggleSwipe(state) {
       state.swiped = !state.swiped;
     },
-    setRecruitStatus(state, action) {
+    setRecruitStatus(
+      state,
+      action: PayloadAction<{ status: keyof RecruitStatus; visible: boolean }>,
+    ) {
       const { status, visible } = action.payload;
       state.recruitStatus[status] = visible;
     },

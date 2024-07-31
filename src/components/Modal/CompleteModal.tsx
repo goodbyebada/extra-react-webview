@@ -3,7 +3,11 @@ import styled from "styled-components";
 import multiply from "../../assets/Multiply.png";
 import approval from "../../assets/Approval.png";
 
-const modalContent = {
+interface ModalContent {
+  prefix: string;
+}
+
+const modalContent: Record<string, ModalContent> = {
   supportComplete: {
     prefix: "지원이",
   },
@@ -12,8 +16,11 @@ const modalContent = {
   },
 };
 
-// eslint-disable-next-line react/prop-types
-function CompleteModal({ type }) {
+interface CompleteModalProps {
+  type: keyof typeof modalContent;
+}
+
+const CompleteModal: React.FC<CompleteModalProps> = ({ type }) => {
   const content = modalContent[type];
 
   return (
@@ -29,7 +36,7 @@ function CompleteModal({ type }) {
       </ButtonContainer>
     </ModalContainer>
   );
-}
+};
 
 export default CompleteModal;
 
