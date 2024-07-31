@@ -6,7 +6,7 @@ import NavBar from "./custom/NavBar";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleStar } from "../redux/recruitSlice";
 import { useParams } from "react-router-dom";
-import { dummyJobPostList } from "../api/dummyData";
+import { dummyRoleList, dummyJobPostList } from "../api/dummyData";
 
 /**
  *
@@ -32,7 +32,7 @@ export default function ExtraCastingBoard() {
     dispatch(toggleStar());
   };
 
-  // 임시 데이터, 추후 수정 예정
+  // 임시 데이터 jobpostList
   const jobPostList = dummyJobPostList;
 
   const { jobPostId } = useParams();
@@ -46,7 +46,6 @@ export default function ExtraCastingBoard() {
    * 데이터 연결 예정
    * url의 jobPostId를 통해, jobPostList 데이터에서 jobPostId 공고 JobPost 정보를 찾는다.
    */
-
   const jobPostItem = jobPostList.find(
     (elem) => elem.job_post_id === parseInt(jobPostId),
   );
@@ -64,7 +63,10 @@ export default function ExtraCastingBoard() {
     gathering_time,
   }: JobPost = jobPostItem;
 
-  const roleList = jobPostItem;
+  /**
+   * jobPostId로 request 보냈을때 response data
+   */
+  const roleList = dummyRoleList;
 
   /*
    * return 한 역할 / 상세정보에 대한 UI
