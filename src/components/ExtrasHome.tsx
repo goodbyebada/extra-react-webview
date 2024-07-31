@@ -7,21 +7,20 @@ import { dummyMonthJobList } from "../api/dummyData";
 import HomeRecruitBox from "./HomeRecruitBox";
 import { useNavigate } from "react-router-dom";
 
+/**임시
+ * API 개발 후 처리할 예정
+ */
+const name = "미뇽";
+
 /**
- *
  * 보조 출연자 홈화면
  *
  * type initState(초기 상태): 캘린더
  * type True시 : 캘린더
  * type False시 : 리스트
  *
+ * @returns 보조 출연자 홈화면 UI
  */
-
-/**임시
- * API 개발 후 처리할 예정
- */
-const name = "미뇽";
-
 export default function ExtrasHome() {
   // date 관련
   const date = new Date();
@@ -119,7 +118,7 @@ const ItemWrapper = styled.div`
 const TopBar = styled.div`
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 9;
   background-color: #000000;
 
   nav {

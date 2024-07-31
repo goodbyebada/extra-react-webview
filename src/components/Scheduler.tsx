@@ -234,7 +234,7 @@ const Week = styled.div<{ $weekcnt: number }>`
 `;
 
 const Schedule = styled.div`
-  z-index: 8;
+  z-index: 3;
   width: 45px;
   height: 17px;
   border-radius: 20px;

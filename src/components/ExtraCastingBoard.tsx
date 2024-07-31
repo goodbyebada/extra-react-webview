@@ -245,7 +245,7 @@ const ShootingSchedule = styled.div`
   border-left: 0px;
 
   background: #000;
-  z-index: 100;
+  z-index: 9;
   position: sticky;
   top: 135px;
 
@@ -391,7 +391,7 @@ const ModalOverlay = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 10;
 `;
 
 const ModalContent = styled.div`

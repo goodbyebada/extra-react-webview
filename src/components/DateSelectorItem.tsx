@@ -87,7 +87,7 @@ const Container = styled.span`
       background: #383838;
       box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
       text-align: center;
-      z-index: 100;
+      z-index: 9;
       overflow-y: scroll;
 
       > * {
