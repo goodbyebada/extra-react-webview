@@ -1,36 +1,20 @@
 import { styled } from "styled-components";
-import { dummyRoleList } from "../api/dummyData";
 import { Role } from "../api/dummyData";
 import { useState } from "react";
 import { JobPost } from "../api/dummyData";
 import NavBar from "./custom/NavBar";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleStar } from "../redux/recruitSlice";
+import { useParams } from "react-router-dom";
+import { dummyJobPostList } from "../api/dummyData";
 
 /**
- * 임시 부모컴포넌트에서 상속받을 props
+ *
+ * @returns 공고화면 UI
  */
-const tmpProps: JobPost = {
-  job_post_id: 1,
-  calendar: "8/3-8/4",
-  company_name: "유엠씨 촬영팀",
-  drama_title: "UMC 드라마",
-  gathering_location: "신사역 6번 출구",
-  gathering_time: "7:00",
-  category: "드라마",
-  status: true,
-};
 
 export default function ExtraCastingBoard() {
-  const {
-    calendar,
-    status,
-    drama_title,
-    gathering_location,
-    gathering_time,
-  }: JobPost = tmpProps;
-
-  const roleList = dummyRoleList;
   const [apply, setApply] = useState(false);
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -40,6 +24,47 @@ export default function ExtraCastingBoard() {
     // 추후 수정 예정
     setApply(true);
   };
+
+  const dispatch = useDispatch();
+  const star = useSelector((state) => state.recruit.star);
+
+  const handleStarClick = () => {
+    dispatch(toggleStar());
+  };
+
+  // 임시 데이터, 추후 수정 예정
+  const jobPostList = dummyJobPostList;
+
+  const { jobPostId } = useParams();
+
+  // jobPostId가 없다면 404 화면 return
+  if (jobPostId === undefined) {
+    return <div>404</div>;
+  }
+
+  /**
+   * 데이터 연결 예정
+   * url의 jobPostId를 통해, jobPostList 데이터에서 jobPostId 공고 JobPost 정보를 찾는다.
+   */
+
+  const jobPostItem = jobPostList.find(
+    (elem) => elem.job_post_id === parseInt(jobPostId),
+  );
+
+  // jobPostId와 일치하는 jobPostItem 없다면 404 return
+  if (jobPostItem === undefined) {
+    return <div>404</div>;
+  }
+
+  const {
+    calendar,
+    status,
+    drama_title,
+    gathering_location,
+    gathering_time,
+  }: JobPost = jobPostItem;
+
+  const roleList = jobPostItem;
 
   /*
    * return 한 역할 / 상세정보에 대한 UI
@@ -144,7 +169,7 @@ export default function ExtraCastingBoard() {
           <div>{gathering_location}</div>
         </div>
         <div className="date-status-set">
-          <div id="star"></div>
+          <StarIcon id="star" src={star} onClick={handleStarClick} />
 
           <div>
             <span> {calendar}</span>
@@ -243,14 +268,7 @@ const ShootingSchedule = styled.div`
     #star {
       width: 40px;
       height: 40px;
-
       margin-top: 20px;
-      /* 임시 추후 이미지 파일로 수정 예정*/
-      background: url("https://s3-alpha-sig.figma.com/img/a6fa/0c44/e74c70c3505499302e9699b1e8310278?Expires=1723420800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=X8bsQZKQEWqBxcd9mEvAr78uzGoRe~DnUtsmFeco7mEIn04B3hpuI-stA1RvRWW1HmA-8ghSiObL-VECynhHSuJGUCEnUc7PsWJJVagCGzsb41F8Kb5GNOmw0IwdOpnCfPBx~G-pFuwxYf1e8ms8n329s8VBSUJPVL7f8uEeex4IB3sNsWtjZQZheH59XIqzXmGT48RUFrsYPXzDpJwXZmPNMkD-jqj09dXlrZzcJQLLbWTz6IntsFrgjoCRS5QEbAg06HHhmIc~C88ZMzfqlsJMf-BLx2B6la68tO6GLf--q~aSW4vEBPs8l6qRvlmIUve4v8KQUx0nzezjMlyc~w__");
-      background-position: center;
-      background-size: contain;
-      background-repeat: no-repeat;
-      filter: opacity(0.5) drop-shadow(0 0 0 yellow);
     }
 
     #status {
@@ -394,4 +412,12 @@ const ModalContent = styled.div`
   p {
     margin: 0 0 20px;
   }
+`;
+
+const StarIcon = styled.img`
+  image-rendering: -webkit-optimize-contrast;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  width: 100%;
+  object-fit: cover;
 `;
