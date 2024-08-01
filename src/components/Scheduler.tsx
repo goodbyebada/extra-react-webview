@@ -41,12 +41,56 @@ export default function Scheduler() {
   const yearItemList = Array.from({ length: 6 }, (v, i) => 2024 + i);
   const monthItemList = Array.from({ length: 12 }, (v, i) => 1 + i);
 
+  // test 위해 임시 구현 11일 ~ 14일동안 진행되는 드라마 공고
+  const dummyCalender = [
+    { startDay: 11, endDay: 14, approve: true },
+    { startDay: 15, endDay: 15, aprrove: false },
+  ];
+
   const dateHandler = (type: string, value: number) => {
     setDateYM((prev) => {
       return type === "month"
         ? { ...prev, [type]: value - 1 }
         : { ...prev, [type]: value };
     });
+  };
+
+  /**
+   *
+   * 미완성 임시 구현
+   *
+   * @param date 일
+   * @param title 드라마 제목
+   * @returns 스케줄 표시 item
+   */
+  const returnSchduleItemComponent = (date: number, title: string) => {
+    for (const obj of dummyCalender) {
+      const approve = obj.approve;
+
+      if (date == obj.startDay && date === obj.endDay) {
+        return (
+          <SingleScheduleItem className={`${approve ? "approve" : ""} `}>
+            {title}
+          </SingleScheduleItem>
+        );
+      }
+      if (date == obj.startDay) {
+        return <StartScheduleItem className={`${approve ? "approve" : ""} `} />;
+      }
+      if (date === obj.endDay) {
+        return <EndScheduleItem className={`${approve ? "approve" : ""} `} />;
+      }
+      if (Math.ceil((obj.startDay + obj.endDay) / 2) === date) {
+        return (
+          <ScheduleItem className={`${approve ? "approve" : ""} `}>
+            {title}
+          </ScheduleItem>
+        );
+      }
+      if (obj.startDay < date && date < obj.endDay) {
+        return <ScheduleItem className={`${approve ? "approve" : ""} `} />;
+      }
+    }
   };
 
   return (
@@ -99,22 +143,7 @@ export default function Scheduler() {
                         onClick={openModal}
                       >
                         <div id="date-num">{!elem ? "" : elem}</div>
-
-                        {/* test 위해 임시 구현 */}
-                        {/*11일 +4일 동안 진행된다 가정 */}
-
-                        {elem == 11 ? (
-                          <>
-                            <Schedule $period={4} className="approve">
-                              <p id="drama-title">extra</p>
-                            </Schedule>
-                            <Schedule $period={1}>
-                              <p id="drama-title">umc</p>
-                            </Schedule>
-                          </>
-                        ) : (
-                          ""
-                        )}
+                        {returnSchduleItemComponent(elem, "title")}
                       </div>
                     );
                   })}
@@ -159,6 +188,7 @@ const Container = styled.div`
 
   .date-selector {
     /* 임의로  */
+    margin-top: 30px;
     margin-bottom: 30px;
   }
 `;
@@ -245,22 +275,20 @@ const Week = styled.div<{ $weekcnt: number }>`
   }
 `;
 
-const Schedule = styled.div<{ $period: number }>`
-  z-index: 3;
-  /* width: 45px; */
-
-  width: ${(props) => `calc(100% * ${props.$period})`};
+const ScheduleItem = styled.div`
+  /* 스케줄표 border width 만큼 늘림 */
+  z-index: 2;
+  width: calc(100% + 2px);
+  height: 17px;
 
   display: flex;
   justify-content: center;
   justify-items: center;
   text-align: center;
 
-  height: 17px;
-  border-radius: 20px;
   background: #4f4f4f;
 
-  margin: 3px;
+  /* margin: 3px; */
 
   color: #a7a7a7;
   text-align: center;
@@ -282,8 +310,29 @@ const Schedule = styled.div<{ $period: number }>`
   }
 
   &.approve {
-    border-radius: 20px;
     background: #49e300;
     color: #fff;
   }
+
+  /* 시작하는 날 css */
+  .start {
+  }
+
+  /* 끝나는 날 css */
+  .end {
+  }
+`;
+
+const StartScheduleItem = styled(ScheduleItem)`
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+`;
+
+const EndScheduleItem = styled(ScheduleItem)`
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+`;
+
+const SingleScheduleItem = styled(ScheduleItem)`
+  border-radius: 20px;
 `;
