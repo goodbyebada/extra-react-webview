@@ -120,6 +120,7 @@ const TopBar = styled.div`
   top: 0;
   z-index: 9;
   background-color: #000000;
+  margin-top: 43px;
 
   nav {
     display: flex;
