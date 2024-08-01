@@ -1,5 +1,6 @@
 import { styled } from "styled-components";
-import navBtn from "../../assets/more-than-button.png";
+
+import navBtn from "@assets/more-than-button.png";
 import { useNavigate } from "react-router-dom";
 
 type NavBarProps = {

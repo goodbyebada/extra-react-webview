@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import multiply from "../../assets/Multiply.png";
-import SmallRecruitBox from "../SmallRecruitBox";
+import multiply from "@assets/Multiply.png";
+import SmallRecruitBox from "@components/SmallRecruitBox";
 
 /**
  * 추후 props 추가 통해,

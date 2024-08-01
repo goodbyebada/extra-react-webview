@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
-import multiply from "../../assets/Multiply.png";
-import approval from "../../assets/Approval.png";
+import multiply from "@assets/Multiply.png";
+import approval from "@assets/Approval.png";
 
 interface ModalContent {
   prefix: string;

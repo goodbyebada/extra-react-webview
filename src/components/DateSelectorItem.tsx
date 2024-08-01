@@ -1,5 +1,5 @@
 import { useState } from "react";
-import dropDownBtn from "../assets/more-than-button.png";
+import dropDownBtn from "@assets/more-than-button.png";
 import { styled } from "styled-components";
 
 export default function DateSelectorItem({

@@ -1,8 +1,8 @@
 import { styled } from "styled-components";
-import NavBar from "./custom/NavBar";
-import HomeRecruitBox from "./HomeRecruitBox";
+import NavBar from "@components/custom/NavBar";
+import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useNavigate } from "react-router-dom";
-import { dummyJobPostList } from "../api/dummyData";
+import { dummyJobPostList } from "@api/dummyData";
 
 /**
  * 날짜 선택시 화면

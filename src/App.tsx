@@ -1,11 +1,7 @@
-import ExtrasHome from "./components/ExtrasHome";
-import ExtraCastingBoard from "./components/ExtraCastingBoard";
-import DateSelectedNoticeList from "./components/DateSelectedNoticeList";
-import Scheduler from "./components/Scheduler";
-
-// import HomeRecruitBox from "./components/HomeRecruitBox";
-// import StatusRecruitBox from "./components/StatusRecruitBox";
-// import AdminRecruitBox from "./components/AdminRecruitBox";
+import ExtrasHome from "@components/ExtrasHome";
+import ExtraCastingBoard from "@components/ExtraCastingBoard";
+import DateSelectedNoticeList from "@components/DateSelectedNoticeList";
+import Scheduler from "@components/Scheduler";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 

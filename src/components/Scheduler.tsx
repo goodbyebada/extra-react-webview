@@ -1,10 +1,8 @@
 import { styled } from "styled-components";
-
-import useCalendar from "../utills/useCalendar";
-
 import { useState } from "react";
-import DateSelectorItem from "./DateSelectorItem";
-import ScheduleModal from "./Modal/ScheduleModal";
+import useCalendar from "@utills/useCalendar";
+import DateSelectorItem from "@components/DateSelectorItem";
+import ScheduleModal from "@components/Modal/ScheduleModal";
 
 /**
  *

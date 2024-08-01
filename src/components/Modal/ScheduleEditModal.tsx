@@ -1,6 +1,5 @@
-import React from "react";
 import styled from "styled-components";
-import multiply from "../../assets/Multiply.png";
+import multiply from "@assets/Multiply.png";
 
 function ScheduleEditModal() {
   return (

@@ -1,16 +1,16 @@
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { toggleStar } from "../redux/recruitSlice";
-import RecruitStatus from "./custom/recruitStatus";
-import { RootState } from "../redux/store";
-import { JobPost } from "../api/dummyData";
+import { toggleStar } from "@redux/recruitSlice";
+import { RootState } from "@redux/store";
+import RecruitStatus from "@components/custom/recruitStatus";
+import { JobPost } from "@api/dummyData";
 
 type Props = {
   navigate: () => void;
   recruitInfo: JobPost;
 };
 
-function HomeRecruitBox({ navigate, recruitInfo }: Props): React.FC {
+function HomeRecruitBox({ navigate, recruitInfo }: Props) {
   const dispatch = useDispatch();
   const star = useSelector((state: RootState) => state.recruit.star);
 

@@ -1,10 +1,10 @@
 import { styled } from "styled-components";
-import ToggleBar from "./ToggleBar";
-import TypeSelector from "./TypeSelector";
-import Calender from "./Calender";
+import ToggleBar from "@components/ToggleBar";
+import TypeSelector from "@components/TypeSelector";
+import Calender from "@components/Calender";
 import { useState } from "react";
-import { dummyMonthJobList } from "../api/dummyData";
-import HomeRecruitBox from "./HomeRecruitBox";
+import { dummyMonthJobList } from "@api/dummyData";
+import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useNavigate } from "react-router-dom";
 
 /**임시
