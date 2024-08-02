@@ -10,6 +10,19 @@ type Props = {
   recruitInfo: JobPost;
 };
 
+/**
+ * 수정 해야할 것
+ *
+ * 1. D-0 로직은 작성하지 않았음, 추후 작성 예정
+ *
+ */
+
+/**
+ * @param param0
+ * navigate props 예시 : ()=>navigate("/")
+ * recruitInfo :  JobPost 객체
+ * @returns 공고 기본 컴포넌트 + 즐겨찾기 기능
+ */
 function HomeRecruitBox({ navigate, recruitInfo }: Props) {
   const dispatch = useDispatch();
   const star = useSelector((state: RootState) => state.recruit.star);
@@ -20,30 +33,20 @@ function HomeRecruitBox({ navigate, recruitInfo }: Props) {
 
   const {
     category,
-    drama_title,
+    title,
     calendar,
     company_name,
     gathering_time,
     gathering_location,
   } = recruitInfo;
 
-  /**
-   * 수정 해야할 것
-   *
-   * 1. <RecruitContainer>와 같은 wrapper에 (버튼 전체에) onClick={navigate} 이벤트 추가하였을시,
-   *  starIcon 눌렀을때 페이지 이동 됨, 임시로 중첩되지 않게 TitleTxt에 이벤트 추가하였음.
-   *
-   * 2. D-0 로직은 작성하지 않았음, 추후 작성 예정
-   *
-   */
-
   return (
     <RecruitContainer>
-      <RecruitBox>
+      <StarIcon src={star} onClick={handleStarClick} />
+      <RecruitBox onClick={navigate}>
         <InfoContainer>
           <MediaSelectorTxt>{category}</MediaSelectorTxt>
-          <StarIcon src={star} onClick={handleStarClick} />
-          <TitleTxt onClick={navigate}>{drama_title}</TitleTxt>
+          <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
             <DateTxt>{calendar}</DateTxt>
             <DeadlineBox>D-0</DeadlineBox>
@@ -70,6 +73,7 @@ function HomeRecruitBox({ navigate, recruitInfo }: Props) {
 export default HomeRecruitBox;
 
 const RecruitContainer = styled.div`
+  position: relative;
   font-variant-numeric: lining-nums proportional-nums;
   font-feature-settings: "dlig" on;
   font-family: Inter;
@@ -158,6 +162,7 @@ const StarIcon = styled.img`
   position: absolute;
   top: 18px;
   right: 10px;
+  z-index: 1;
 `;
 
 const TimePlace = styled.div`
