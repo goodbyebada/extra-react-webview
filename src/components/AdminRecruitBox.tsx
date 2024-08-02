@@ -1,6 +1,5 @@
-import React from "react";
 import styled from "styled-components";
-import RecruitStatus from "./custom/recruitStatus";
+import RecruitStatus from "@components/custom/recruitStatus";
 
 function HomeRecruitBox() {
   return (

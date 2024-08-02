@@ -1,11 +1,29 @@
-import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { toggleStar } from "../redux/recruitSlice";
-import RecruitStatus from "./custom/recruitStatus";
-import { RootState } from "../redux/store";
+import { toggleStar } from "@redux/recruitSlice";
+import { RootState } from "@redux/store";
+import RecruitStatus from "@components/custom/recruitStatus";
+import { JobPost } from "@api/interface";
 
-const HomeRecruitBox: React.FC = () => {
+type Props = {
+  navigate: () => void;
+  recruitInfo: JobPost;
+};
+
+/**
+ * 수정 해야할 것
+ *
+ * 1. D-0 로직은 작성하지 않았음, 추후 작성 예정
+ *
+ */
+
+/**
+ * @param param0
+ * navigate props 예시 : ()=>navigate("/")
+ * recruitInfo :  JobPost 객체
+ * @returns 공고 기본 컴포넌트 + 즐겨찾기 기능
+ */
+function HomeRecruitBox({ navigate, recruitInfo }: Props) {
   const dispatch = useDispatch();
   const star = useSelector((state: RootState) => state.recruit.star);
 
@@ -13,18 +31,27 @@ const HomeRecruitBox: React.FC = () => {
     dispatch(toggleStar());
   };
 
+  const {
+    category,
+    title,
+    calendar,
+    company_name,
+    gathering_time,
+    gathering_location,
+  } = recruitInfo;
+
   return (
     <RecruitContainer>
-      <RecruitBox>
+      <StarIcon src={star} onClick={handleStarClick} />
+      <RecruitBox onClick={navigate}>
         <InfoContainer>
-          <MediaSelectorTxt>media</MediaSelectorTxt>
-          <StarIcon src={star} onClick={handleStarClick} />
-          <TitleTxt>title</TitleTxt>
+          <MediaSelectorTxt>{category}</MediaSelectorTxt>
+          <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>date</DateTxt>
+            <DateTxt>{calendar}</DateTxt>
             <DeadlineBox>D-0</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>team</Team>
+          <Team>{company_name}</Team>
         </InfoContainer>
         <RecruitStatus
           visible={true}
@@ -36,16 +63,17 @@ const HomeRecruitBox: React.FC = () => {
           모집중
         </RecruitStatus>
         <TimePlace>
-          00:00 예정 <br /> place
+          {gathering_time} 예정 <br /> {gathering_location}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>
   );
-};
+}
 
 export default HomeRecruitBox;
 
 const RecruitContainer = styled.div`
+  position: relative;
   font-variant-numeric: lining-nums proportional-nums;
   font-feature-settings: "dlig" on;
   font-family: Inter;
@@ -134,6 +162,7 @@ const StarIcon = styled.img`
   position: absolute;
   top: 18px;
   right: 10px;
+  z-index: 1;
 `;
 
 const TimePlace = styled.div`

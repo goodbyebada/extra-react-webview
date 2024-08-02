@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
-import multiply from "../../assets/Multiply.png";
-import RoleBox from "../RoleBox";
+import multiply from "@assets/Multiply.png";
+import RoleBox from "@components/RoleBox";
 
 function RuleModal() {
   return (

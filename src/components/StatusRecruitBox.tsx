@@ -1,8 +1,8 @@
 import React, { useRef, TouchEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
-import RecruitStatus from "./custom/recruitStatus";
-import DeleteButton from "./custom/deleteBtn";
+import RecruitStatus from "@components/custom/recruitStatus";
+import DeleteButton from "@components/custom/deleteBtn";
 import { toggleSwipe } from "../redux/recruitSlice";
 import { RootState } from "../redux/store";
 

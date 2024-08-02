@@ -79,3 +79,26 @@ main branch와 merge 전에 PR 진행
 2. 설명
 
 - 주요 변경사항에 대해서만 간략하게 나열합니다.
+
+## Code convention
+
+### Package Structure
+
+- src
+  - api
+  - assets
+  - components
+    - custom
+    - modal
+  - pages
+  - redux
+  - utills
+
+### 주석
+- 주석으로 어떤 UI 혹은 기능에 대한 설명 간단하게 작성합니다.
+
+```bash
+/**
+ * 보조출연자 달력
+ */
+```

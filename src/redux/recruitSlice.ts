@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import star_g from "../assets/Star_g.png";
-import star_y from "../assets/Star_y.png";
+import star_g from "@assets/Star_g.png";
+import star_y from "@assets/Star_y.png";
 
 interface RecruitStatus {
   pending: boolean;
