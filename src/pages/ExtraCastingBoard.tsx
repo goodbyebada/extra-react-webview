@@ -1,13 +1,12 @@
 import { styled } from "styled-components";
-import { Role } from "@api/dummyData";
-import { useState } from "react";
-import { JobPost } from "@api/dummyData";
+import { useEffect, useState } from "react";
+import { Role, JobPost } from "@api/interface";
 import NavBar from "@components/custom/NavBar";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleStar } from "../redux/recruitSlice";
+import { toggleStar } from "@redux/recruitSlice";
 import { useParams } from "react-router-dom";
 import { dummyRoleList, dummyJobPostList } from "@api/dummyData";
-import { useEffect } from "react";
+
 /**
  *
  * @returns 공고화면 UI

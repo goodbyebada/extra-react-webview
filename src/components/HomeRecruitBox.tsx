@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { toggleStar } from "@redux/recruitSlice";
 import { RootState } from "@redux/store";
 import RecruitStatus from "@components/custom/recruitStatus";
-import { JobPost } from "@api/dummyData";
+import { JobPost } from "@api/interface";
 
 type Props = {
   navigate: () => void;
