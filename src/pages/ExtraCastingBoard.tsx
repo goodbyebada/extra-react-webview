@@ -61,7 +61,7 @@ export default function ExtraCastingBoard() {
   const {
     calendar,
     status,
-    drama_title,
+    title,
     gathering_location,
     gathering_time,
   }: JobPost = jobPostItem;
@@ -166,7 +166,7 @@ export default function ExtraCastingBoard() {
 
   return (
     <Container>
-      <NavBar content={drama_title} />
+      <NavBar content={title} />
 
       <ShootingSchedule className="shooting-schedule">
         <div className="time-location-set">

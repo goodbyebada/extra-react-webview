@@ -5,7 +5,7 @@ export type JobPost = {
   job_post_id: number;
   calendar: string;
   company_name: string;
-  drama_title: string;
+  title: string;
   gathering_location: string;
   gathering_time: string; // string 또는 timestamp 형식의 string 사용 가능
   category: string;
