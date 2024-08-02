@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
-import { JobPostList } from "@api/dummyData";
+import { JobPostList } from "@api/interface";
 
 /**
  * 보조출연자 달력

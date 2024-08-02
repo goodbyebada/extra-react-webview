@@ -1,11 +1,14 @@
 import { styled } from "styled-components";
 import { useEffect, useState } from "react";
-import { Role, JobPost } from "@api/interface";
-import NavBar from "@components/custom/NavBar";
+import { useParams } from "react-router-dom";
+
 import { useSelector, useDispatch } from "react-redux";
 import { toggleStar } from "@redux/recruitSlice";
-import { useParams } from "react-router-dom";
+
+import NavBar from "@components/custom/NavBar";
+
 import { dummyRoleList, dummyJobPostList } from "@api/dummyData";
+import { Role, JobPost } from "@api/interface";
 
 /**
  *

@@ -2,10 +2,12 @@ import { styled } from "styled-components";
 import ToggleBar from "@components/ToggleBar";
 import TypeSelector from "@components/TypeSelector";
 import Calender from "@components/Calender";
-import { useState } from "react";
-import { dummyMonthJobList } from "@api/dummyData";
 import HomeRecruitBox from "@components/HomeRecruitBox";
+
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+import { dummyMonthJobList } from "@api/dummyData";
 
 /**임시
  * API 개발 후 처리할 예정
