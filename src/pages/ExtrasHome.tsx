@@ -2,6 +2,7 @@ import { styled } from "styled-components";
 import ToggleBar from "@components/ToggleBar";
 import TypeSelector from "@components/TypeSelector";
 import Calender from "@components/Calender";
+
 import HomeRecruitBox from "@components/HomeRecruitBox";
 
 import { useState } from "react";
@@ -16,10 +17,6 @@ const name = "미뇽";
 
 /**
  * 보조 출연자 홈화면
- *
- * type initState(초기 상태): 캘린더
- * type True시 : 캘린더
- * type False시 : 리스트
  *
  * @returns 보조 출연자 홈화면 UI
  */
@@ -52,10 +49,17 @@ export default function ExtrasHome() {
   const path = "/date-selected-notice-list";
   const navigate = useNavigate();
 
-  // 전체 / 추천 토글 state 관리
+  /*
+   * 전체 / 추천 토글 state 관리
+   * type True시 : 전체
+   * type False시 : 추천 */
   const [isListAll, setListAll] = useState(true);
 
-  // 캘린더 / 리스트 버튼 state 관리
+  /**
+   * 캘린더 / 리스트 버튼 state 관리
+   * true시, 캘린더
+   * false시, 리스트
+   */
   const [type, setType] = useState(true);
 
   const listAll = `지금 당장 ${name}님이 필요해요 ⏰`;
@@ -104,9 +108,7 @@ export default function ExtrasHome() {
   );
 }
 
-const Container = styled.div`
-  padding: 0 22px;
-`;
+const Container = styled.div``;
 
 const Content = styled.div``;
 
@@ -118,11 +120,13 @@ const ItemWrapper = styled.div`
 `;
 
 const TopBar = styled.div`
+  padding: 0 22px;
   position: sticky;
   top: 0;
   z-index: 9;
   background-color: #000000;
-  margin-top: 43px;
+  padding-top: 43px;
+  width: 100vw;
 
   nav {
     display: flex;
