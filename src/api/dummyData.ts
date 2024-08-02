@@ -1,15 +1,4 @@
-export type JobPost = {
-  job_post_id: number;
-  calendar: string;
-  company_name: string;
-  drama_title: string;
-  gathering_location: string;
-  gathering_time: string; // string 또는 timestamp 형식의 string 사용 가능
-  category: string;
-  status: boolean;
-};
-
-export type JobPostList = JobPost[];
+import { RoleList, JobPostList } from "@api/interface";
 
 /**
  * 캘린더/리스트 조회 dummyData
@@ -176,23 +165,10 @@ export const dummyMonthJobList: JobPostList = [
   },
 ];
 
-export type Role = {
-  role_id: number;
-  role_name: string;
-  costume: string;
-  sex: boolean; // true: female, false: male
-  role_age: string;
-  limit_personnal: number;
-  current_personnal: number;
-  season: string;
-  check_tatto: boolean;
-  apply_status: string;
-};
-
 /**
  * 역할 조회 dummyData
  */
-export const dummyRoleList: Role[] = [
+export const dummyRoleList: RoleList = [
   {
     role_id: 1,
     role_name: "학생 역할",
