@@ -13,8 +13,8 @@ type Props = {
 /**
  * 수정 해야할 것
  *
- * 1. D-0 로직은 작성하지 않았음, 추후 작성 예정
- *
+ * 1. D-day 데이터 받아올 때 year 필요(임시- 2024), 추후 수정 예정
+ * 2. D-0, D-day 기준 필요, 8/1-8/4와 같이 여러 날일 경우 기준 필요
  */
 
 /**
@@ -23,6 +23,25 @@ type Props = {
  * recruitInfo :  JobPost 객체
  * @returns 공고 기본 컴포넌트 + 즐겨찾기 기능
  */
+
+const calculateDday = (calendar: string) => {
+  const today = new Date();
+  const [startCal, endCal] = calendar
+    .split("-")
+    .map((date) => new Date(`2024/${date.trim()}`));
+
+  const startDiff = Math.ceil((+startCal - +today) / (1000 * 60 * 60 * 24));
+  const endDiff = Math.ceil((+endCal - +today) / (1000 * 60 * 60 * 24));
+
+  if (startDiff <= 0 && endDiff >= 0) {
+    return "D-day";
+  } else if (startDiff > 0) {
+    return `D-${startDiff}`;
+  } else {
+    return "종료";
+  }
+};
+
 function HomeRecruitBox({ navigate, recruitInfo }: Props) {
   const dispatch = useDispatch();
   const star = useSelector((state: RootState) => state.recruit.star);
@@ -40,6 +59,8 @@ function HomeRecruitBox({ navigate, recruitInfo }: Props) {
     gathering_location,
   } = recruitInfo;
 
+  const dday = calculateDday(calendar);
+
   return (
     <RecruitContainer>
       <StarIcon src={star} onClick={handleStarClick} />
@@ -49,7 +70,7 @@ function HomeRecruitBox({ navigate, recruitInfo }: Props) {
           <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
             <DateTxt>{calendar}</DateTxt>
-            <DeadlineBox>D-0</DeadlineBox>
+            <DeadlineBox>{dday}</DeadlineBox>
           </DateAndDeadlineContainer>
           <Team>{company_name}</Team>
         </InfoContainer>
@@ -139,7 +160,6 @@ const DeadlineBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
   height: 18px;
   border-radius: 20px;
   background: #d9d9d9;
@@ -147,6 +167,8 @@ const DeadlineBox = styled.div`
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.11px;
+  padding-left: 7px;
+  padding-right: 7px;
 `;
 
 const Team = styled.div`

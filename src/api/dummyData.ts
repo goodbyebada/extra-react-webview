@@ -6,7 +6,7 @@ import { RoleList, JobPostList } from "@api/interface";
 export const dummyJobPostList: JobPostList = [
   {
     job_post_id: 1,
-    calendar: "8/1-8/4",
+    calendar: "7/28",
     company_name: "유엠씨 촬영팀",
     title: "UMC 드라마",
     gathering_location: "신사역 6번 출구",
@@ -26,7 +26,7 @@ export const dummyJobPostList: JobPostList = [
   },
   {
     job_post_id: 3,
-    calendar: "8/1-8/4",
+    calendar: "8/3-8/7",
     company_name: "유엠씨 촬영팀3",
     title: "UMC 드라마3",
     gathering_location: "신촌역 6번 출구",
@@ -36,7 +36,7 @@ export const dummyJobPostList: JobPostList = [
   },
   {
     job_post_id: 4,
-    calendar: "8/1-8/4",
+    calendar: "8/7-8/11",
     company_name: "유엠씨 촬영팀1esdfs",
     title: "sdfsdf",
     gathering_location: "sdsd역 6번 출구",
@@ -46,7 +46,7 @@ export const dummyJobPostList: JobPostList = [
   },
   {
     job_post_id: 5,
-    calendar: "8/1-8/4",
+    calendar: "8/15",
     company_name: "유엠씨 촬영팀sdf",
     title: "sdfdsdfs",
     gathering_location: "sdfsdf역 6번 출구",
