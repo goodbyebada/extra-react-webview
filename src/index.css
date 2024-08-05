@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 *,
 body,
 :root {
@@ -13,7 +11,6 @@ html {
   height: 100vh;
 }
 
->>>>>>> d4b43e5e1bad0fbc529e1c9004daa172a732b614
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -21,11 +18,7 @@ html {
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-<<<<<<< HEAD
-  background-color: #242424;
-=======
   background: #000;
->>>>>>> d4b43e5e1bad0fbc529e1c9004daa172a732b614
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -33,40 +26,6 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
-<<<<<<< HEAD
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  width: 430px;
-  height: 932px;
-  /* 화면 크기보다 더 크게 배경이 보이지 않도록 overflow 숨기기 */
-  overflow: hidden;
-  background-color: #000;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-@media only screen and (min-width: 430px) and (min-height: 932px) {
-  /* 화면이 정확히 430px x 932px일 때 추가 스타일링 */
-  .container {
-      padding: 16px;
-      background-color: orange;
-  }
-}
-=======
 body {
   margin: 0 auto;
   font-style: normal;
@@ -78,4 +37,8 @@ button {
   background-color: transparent;
   border: none;
 }
->>>>>>> d4b43e5e1bad0fbc529e1c9004daa172a732b614
+
+/* UI 크기 확인 위한 test용 클래스 */
+.test {
+  border: solid 1px white;
+}
