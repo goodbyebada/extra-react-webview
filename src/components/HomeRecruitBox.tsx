@@ -90,11 +90,16 @@ const RecruitContainer = styled.div`
   border-radius: 20px;
   box-shadow: 5px 5px 4px 0px #000;
 
+  width: 365px;
+  height: 145px;
+  border: 2px solid transparent;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  background-image: linear-gradient(#191919, #191919),
+    linear-gradient(#3c3c3c, #3c3c3c);
+
   /* 추천 시 그라데이션 border css class */
   &.recommand {
-    border: 2px solid transparent;
-    background-origin: border-box;
-    background-clip: content-box, border-box;
     background-image: linear-gradient(#191919, #191919),
       linear-gradient(#3c3c3c, #f5c001);
   }
@@ -103,19 +108,12 @@ const RecruitContainer = styled.div`
 const RecruitBox = styled.div`
   display: flex;
   position: relative;
-  width: 365px;
-  height: 145px;
+  width: 100%;
+  height: 100%;
   border-radius: 20px;
-  border: 2px solid #3c3c3c;
-  background: #191919;
+  background: transparent;
   padding-top: 17px;
   padding-left: 24px;
-  box-sizing: border-box;
-
-  &.recommand {
-    border: none;
-    background: transparent;
-  }
 `;
 
 const InfoContainer = styled.div`

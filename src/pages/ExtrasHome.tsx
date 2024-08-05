@@ -98,6 +98,7 @@ export default function ExtrasHome() {
                   navigate={() => navigate(path)}
                   key={key}
                   recruitInfo={elem}
+                  recommand={!isListAll}
                 />
               );
             })}
