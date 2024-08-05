@@ -6,6 +6,15 @@ interface RoleBoxProps {
   backgroundColor: string;
 }
 
+type RoleContainerProps = {
+  $borderColor: string;
+  $backgroundColor: string;
+};
+
+type InfoContainerProps = {
+  color: string;
+};
+
 const RoleBox: React.FC<RoleBoxProps> = ({
   color,
   borderColor,
@@ -14,14 +23,15 @@ const RoleBox: React.FC<RoleBoxProps> = ({
   return (
     <RoleBoxWrapper>
       <RoleContainer
-        borderColor={borderColor}
-        backgroundColor={backgroundColor}
+        $borderColor={borderColor}
+        $backgroundColor={backgroundColor}
       >
         <InfoContainer color={color}>
           <RoleTxt>Role</RoleTxt>
           <Line />
           <AgeTxt>Age</AgeTxt>
           <Line />
+
           <GenderTxt>Gender</GenderTxt>
         </InfoContainer>
       </RoleContainer>
@@ -35,19 +45,19 @@ const RoleBoxWrapper = styled.div`
   padding-bottom: 23px;
 `;
 
-const RoleContainer = styled.div`
+const RoleContainer = styled.div<RoleContainerProps>`
   width: 298px;
   height: 67px;
   flex-shrink: 0;
   border-radius: 18px;
-  border: 3px solid ${(props) => props.borderColor};
-  background: ${(props) => props.backgroundColor};
+  border: 3px solid ${(props) => props.$borderColor};
+  background: ${(props) => props.$backgroundColor};
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-const InfoContainer = styled.div`
+const InfoContainer = styled.div<InfoContainerProps>`
   display: flex;
   flex-direction: row;
   align-items: center;
