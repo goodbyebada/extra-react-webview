@@ -1,9 +1,12 @@
+import { Role } from "@api/interface";
 import styled from "styled-components";
 
 interface RoleBoxProps {
-  color: string;
-  borderColor: string;
-  backgroundColor: string;
+  styled: { color: string; borderColor: string; backgroundColor: string };
+  roleInfo: Role;
+  isSelected: boolean;
+  handleClick: (idx: number) => void;
+  index: number;
 }
 
 type RoleContainerProps = {
@@ -16,23 +19,37 @@ type InfoContainerProps = {
 };
 
 const RoleBox: React.FC<RoleBoxProps> = ({
-  color,
-  borderColor,
-  backgroundColor,
+  styled,
+  roleInfo,
+  handleClick,
+  isSelected,
+  index,
 }) => {
+  const { role_name, role_age, sex } = roleInfo;
+  const { borderColor, backgroundColor, color } = styled;
+
+  const selectedStyled = {
+    borderColor: "transparent",
+    backgroundColor: `linear-gradient(#000, #000) padding-box,
+    linear-gradient(180deg, #FFFFFF 0%, #F5C001 100%) border-box;`,
+    color: "#fff",
+  };
+
   return (
-    <RoleBoxWrapper>
+    <RoleBoxWrapper onClick={() => handleClick(index)}>
       <RoleContainer
-        $borderColor={borderColor}
-        $backgroundColor={backgroundColor}
+        $borderColor={isSelected ? selectedStyled.borderColor : borderColor}
+        $backgroundColor={
+          isSelected ? selectedStyled.backgroundColor : backgroundColor
+        }
       >
-        <InfoContainer color={color}>
-          <RoleTxt>Role</RoleTxt>
+        <InfoContainer color={isSelected ? selectedStyled.color : color}>
+          <RoleTxt>{role_name}</RoleTxt>
           <Line />
-          <AgeTxt>Age</AgeTxt>
+          <AgeTxt>{role_age}</AgeTxt>
           <Line />
 
-          <GenderTxt>Gender</GenderTxt>
+          <GenderTxt>{sex ? "여" : "남"}</GenderTxt>
         </InfoContainer>
       </RoleContainer>
     </RoleBoxWrapper>
