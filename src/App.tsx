@@ -5,6 +5,7 @@ import Scheduler from "@pages/Scheduler";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import CompanyHome from "@pages/CompanyHome";
+import ExtraShootManagePage from "@pages/ExtraShootManagePage";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           />
 
           <Route path="/scheduler" element={<Scheduler />} />
+          <Route path="/member/manage" element={<ExtraShootManagePage />} />
         </Routes>
       </BrowserRouter>
     </>

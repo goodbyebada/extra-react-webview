@@ -40,3 +40,18 @@ export type JobPostList = JobPost[];
  * response.data.rolelist type
  */
 export type RoleList = Role[];
+
+export enum ShootManageSelectStatus {
+  "ALL" = 0,
+  "APPLIED" = 1,
+  "REJECTED" = 2,
+  "APPROVED" = 3,
+}
+
+// Reverse mapping
+export const ApplyStatusLabel: { [key: number]: string } = {
+  0: "전체",
+  1: "승인 대기",
+  2: "미승인",
+  3: "승인 완료",
+};
