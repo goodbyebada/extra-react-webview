@@ -133,6 +133,7 @@ export default function CompanyHome() {
               }}
             >
               <CompanyModal
+                dateMonth={(dateYM.month + 1).toString()}
                 dayOfWeek={selectedDate.dayOfWeek}
                 dateNum={selectedDate.dateNum}
                 jobList={jobList}
