@@ -46,7 +46,6 @@ export default function ExtrasHome() {
   const jobPostList = dummyMonthJobList;
 
   // navigate
-  const path = "/date-selected-notice-list";
   const navigate = useNavigate();
 
   /*
@@ -64,6 +63,12 @@ export default function ExtrasHome() {
 
   const listAll = `지금 당장 ${name}님이 필요해요 ⏰`;
   const listRecommand = `${name}님한테 딱 맞는 역할이 있어요 🤩`;
+
+  // dateSelectedNoticeList 날짜 선택시 화면으로 이동
+  const navigateToSelectedNoticeList = () => {
+    const path = "/date-selected-notice-list";
+    navigate(path);
+  };
 
   return (
     <Container className="extras-home">
@@ -89,13 +94,14 @@ export default function ExtrasHome() {
             dateYMHandler={dateYMHandler}
             jobPostList={jobPostList}
             isListAll={isListAll}
+            clickedDateEvent={navigateToSelectedNoticeList}
           />
         ) : (
           <ItemWrapper>
             {jobPostList.map((elem, key) => {
               return (
                 <HomeRecruitBox
-                  navigate={() => navigate(path)}
+                  navigate={navigateToSelectedNoticeList}
                   key={key}
                   recruitInfo={elem}
                   recommand={!isListAll}
@@ -120,7 +126,7 @@ const ItemWrapper = styled.div`
   margin-top: 30px;
 `;
 
-const TopBar = styled.div`
+export const TopBar = styled.div`
   padding: 0 22px;
   position: sticky;
   top: 0;
@@ -128,6 +134,7 @@ const TopBar = styled.div`
   background-color: #000000;
   padding-top: 43px;
   width: 100vw;
+  padding-bottom: 23px;
 
   nav {
     display: flex;
@@ -144,6 +151,4 @@ const TopBar = styled.div`
     margin-top: 21px;
     top: 30px;
   }
-
-  padding-bottom: 23px;
 `;
