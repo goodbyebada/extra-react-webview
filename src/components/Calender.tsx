@@ -1,12 +1,7 @@
 import { styled } from "styled-components";
-import { useNavigate } from "react-router-dom";
 import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
 import { JobPostList } from "@api/interface";
-
-/**
- * 보조출연자 달력
- */
 
 type dateYM = {
   year: number;
@@ -18,11 +13,12 @@ type CalenderProps = {
   dateYMHandler: (type: string, value: number) => void;
   jobPostList: JobPostList;
   isListAll: boolean;
+  clickedDateEvent: (dateNum: string, dayOfWeek: string) => void;
 };
 
 /**
  * @param param0 CalenderProps
- * @returns 사용자 홈 화면 캘린더 UI
+ * @returns 사용자/ 업체 홈 화면 캘린더 UI
  */
 
 export default function Calender({
@@ -30,6 +26,7 @@ export default function Calender({
   dateYMHandler,
   jobPostList,
   isListAll,
+  clickedDateEvent,
 }: CalenderProps) {
   const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -46,23 +43,16 @@ export default function Calender({
   });
 
   const weeklists = useCalendar(dateYM.year, dateYM.month);
-  const navigate = useNavigate();
+
   let i = -1;
 
   // 2024 ~ 2053년(30년)
   const yearItemList = Array.from({ length: 30 }, (v, i) => 2024 + i);
   const monthItemList = Array.from({ length: 12 }, (v, i) => 1 + i);
 
-  // dateSelectedNoticeList 날짜 선택시 화면으로 이동
-  const navigateToSelectedNoticeList = () => {
-    const path = "/date-selected-notice-list";
-    navigate(path);
-  };
-
-  const dateOnClick = (gotJob: boolean) => {
-    console.log(gotJob);
-    if (gotJob) {
-      navigateToSelectedNoticeList();
+  const dateOnClick = (dateNum: number, dayOfWeek: string) => {
+    if (gotJob[dateNum]) {
+      clickedDateEvent(dateNum.toString(), dayOfWeek);
     }
   };
 
@@ -118,7 +108,7 @@ export default function Calender({
                       <div
                         className={`date ${gotJob[elem] ? "got-drama" : ""} ${isListAll ? "" : "recommand"}`}
                         key={key + i * 7}
-                        onClick={() => dateOnClick(gotJob[elem])}
+                        onClick={() => dateOnClick(elem, DAY_LIST[key % 7])}
                       >
                         <div id="date-num">{elem}</div>
                         {gotJob[elem] ? (

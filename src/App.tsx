@@ -24,6 +24,7 @@ import DateSelectedNoticeList from "@pages/DateSelectedNoticeList";
 import Scheduler from "@pages/Scheduler";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import CompanyHome from "@pages/CompanyHome";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ExtrasHome />} />
+          <Route path="/company-home" element={<CompanyHome />} />
           <Route
             path="/extra-casting-board/:jobPostId"
             element={<ExtraCastingBoard />}
