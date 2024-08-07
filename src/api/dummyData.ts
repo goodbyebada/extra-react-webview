@@ -1,4 +1,4 @@
-import { RoleList, JobPostList } from "@api/interface";
+import { RoleList, JobPostList, RoleRegister } from "@api/interface";
 
 /**
  * 캘린더/리스트 조회 dummyData
@@ -206,3 +206,15 @@ export const dummyRoleList: RoleList = [
     apply_status: "신청 중",
   },
 ];
+
+export const dummyRoleResister: RoleRegister = {
+  job_post_id: 35, // 임시, API 연결 시 수정
+  sex: true, // 남: false, 여: true
+  min_age: 1,
+  max_age: 4,
+  season: "가을",
+  costume: "코트",
+  check_tatto: "팔, 다리",
+  etc: "없음",
+  limit_personnal: 10,
+};
