@@ -4,6 +4,7 @@ import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useNavigate } from "react-router-dom";
 
 type CompanyModalType = {
+  dateMonth: string;
   dateNum: string;
   dayOfWeek: string;
   jobList: JobPostList;
@@ -18,6 +19,7 @@ type CompanyModalType = {
  * @returns 홈 업체 화면에서 날짜 선택시의 모달창
  */
 export default function CompanyModal({
+  dateMonth,
   dateNum,
   dayOfWeek,
   jobList,
@@ -62,6 +64,16 @@ export default function CompanyModal({
           );
         })}
       </JobListContainer>
+
+      <BottomBarWrapper>
+        <BottomBarInput>
+          <p>
+            {dateMonth}월 {dateNum}일에 추가
+          </p>
+        </BottomBarInput>
+
+        <BottomBarButton>+</BottomBarButton>
+      </BottomBarWrapper>
     </Container>
   );
 }
@@ -70,6 +82,7 @@ const Container = styled.div`
   --__top_bar: 162px;
   --__container_height: 618px;
   --__border-radius: 25px;
+  --__bottom_bar_height: 70px;
 
   width: 326px;
   height: var(--__container_height);
@@ -81,7 +94,7 @@ const Container = styled.div`
   }
 
   .job-list-container {
-    height: calc(100% - var(--__top_bar) - 3px);
+    height: calc(100% - var(--__top_bar) - var(--__bottom_bar_height));
     border-bottom-left-radius: 25px;
     border-bottom-right-radius: 25px;
   }
@@ -130,4 +143,44 @@ const Wrapper = styled.li`
   list-style-type: none;
   display: flex;
   justify-content: center;
+`;
+
+const BottomBarWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 20px;
+  height: var(--__bottom_bar_height);
+`;
+
+// 만약 기능 구현시 tag input으로 수정해야함
+const BottomBarInput = styled.span`
+  vertical-align: middle;
+
+  color: #7b7b7b;
+
+  border-radius: 5px;
+  border: 1px solid #fff;
+  width: 223px;
+  height: 26px;
+
+  display: flex;
+  align-items: center;
+
+  p {
+    padding-left: 10px;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+  }
+`;
+
+const BottomBarButton = styled.button`
+  color: #7b7b7b;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.32px;
+  display: flex;
+  align-self: center;
 `;
