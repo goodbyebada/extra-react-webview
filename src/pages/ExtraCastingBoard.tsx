@@ -9,9 +9,9 @@ import NavBar from "@components/custom/NavBar";
 
 import { dummyRoleList, dummyJobPostList } from "@api/dummyData";
 import { RoleList, JobPost } from "@api/interface";
-import RoleModal from "@components/modal/RoleModal";
+import RoleModal from "@components/Modal/RoleModal";
 import { useRef } from "react";
-import CompleteModal from "@components/modal/CompleteModal";
+import CompleteModal from "@components/Modal/CompleteModal";
 
 /**
  *

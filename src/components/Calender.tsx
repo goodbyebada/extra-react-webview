@@ -2,6 +2,8 @@ import { styled } from "styled-components";
 import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
 import { JobPostList } from "@api/interface";
+import { useDispatch } from "react-redux";
+import { setDate } from "@redux/homeSelectedDateSlice";
 
 type dateYM = {
   year: number;
@@ -13,7 +15,7 @@ type CalenderProps = {
   dateYMHandler: (type: string, value: number) => void;
   jobPostList: JobPostList;
   isListAll: boolean;
-  clickedDateEvent: (dateNum: string, dayOfWeek: string) => void;
+  clickedDateEvent: () => void;
 };
 
 /**
@@ -50,11 +52,21 @@ export default function Calender({
   const yearItemList = Array.from({ length: 30 }, (v, i) => 2024 + i);
   const monthItemList = Array.from({ length: 12 }, (v, i) => 1 + i);
 
-  const dateOnClick = (dateNum: number, dayOfWeek: string) => {
+  const dateOnClick = (dateNum: number, key: number) => {
     if (gotJob[dateNum]) {
-      clickedDateEvent(dateNum.toString(), dayOfWeek);
+      const data = {
+        year: dateYM.year.toString(),
+        month: (dateYM.month + 1).toString(),
+        dateNum: dateNum.toString(),
+        weekOfDay: DAY_LIST[key % 7],
+      };
+      dispatch(setDate(data));
+
+      clickedDateEvent();
     }
   };
+
+  const dispatch = useDispatch();
 
   return (
     <Container>
@@ -108,7 +120,7 @@ export default function Calender({
                       <div
                         className={`date ${gotJob[elem] ? "got-drama" : ""} ${isListAll ? "" : "recommand"}`}
                         key={key + i * 7}
-                        onClick={() => dateOnClick(elem, DAY_LIST[key % 7])}
+                        onClick={() => dateOnClick(elem, key)}
                       >
                         <div id="date-num">{elem}</div>
                         {gotJob[elem] ? (

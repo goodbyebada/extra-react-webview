@@ -42,6 +42,8 @@ export default function ExtrasHome() {
     });
   };
 
+  // 월 기준으로 API 호출 로직 추가 예정
+  //  list로 보기 시,infiniteScrolling으로 구현 해야함
   // dummydata
   const jobPostList = dummyMonthJobList;
 
