@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { dummyMonthJobList } from "@api/dummyData";
+import { JobPost } from "@api/interface";
 
 /**임시
  * API 개발 후 처리할 예정
@@ -72,6 +73,12 @@ export default function ExtrasHome() {
     navigate(path);
   };
 
+  // 리스트 보기 선택시
+  const navigateToExtraCastingBoard = (elem: JobPost) => {
+    const path = `/extra-casting-board/${elem.job_post_id}`;
+    navigate(path);
+  };
+
   return (
     <Container className="extras-home">
       <TopBar>
@@ -103,7 +110,7 @@ export default function ExtrasHome() {
             {jobPostList.map((elem, key) => {
               return (
                 <HomeRecruitBox
-                  navigate={navigateToSelectedNoticeList}
+                  navigate={() => navigateToExtraCastingBoard(elem)}
                   key={key}
                   recruitInfo={elem}
                   recommand={!isListAll}
