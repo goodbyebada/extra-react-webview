@@ -1,4 +1,4 @@
-import { RoleList, JobPostList } from "../api/interface";
+import { RoleList, JobPostList } from "@api/interface";
 
 /**
  * 캘린더/리스트 조회 dummyData

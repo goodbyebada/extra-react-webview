@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 import styled from "styled-components";
 
-interface RecruitStatusProps {
+interface SmallRecruitStatusProps {
   visible: boolean;
   borderColor: string;
   backgroundColor: string;
@@ -10,7 +10,7 @@ interface RecruitStatusProps {
   children: ReactNode;
 }
 
-const RecruitStatus: React.FC<RecruitStatusProps> = ({
+const SmallRecruitStatus: React.FC<SmallRecruitStatusProps> = ({
   visible,
   borderColor,
   backgroundColor,
@@ -31,17 +31,17 @@ const RecruitStatus: React.FC<RecruitStatusProps> = ({
   );
 };
 
-export default RecruitStatus;
+export default SmallRecruitStatus;
 
 const RecruitStatusContainer = styled.div`
   position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: 14px;
+  bottom: 12px;
   right: 10px;
-  width: 62px;
-  height: 26px;
+  width: 52px;
+  height: 22px;
   border-radius: 20px;
   border: 1px solid ${(props) => props.borderColor};
   background: ${(props) => props.backgroundColor};
@@ -50,8 +50,4 @@ const RecruitStatusContainer = styled.div`
   font-weight: 900;
   letter-spacing: 0.1px;
   display: ${(props) => (props.visible ? "flex" : "none")};
-<<<<<<< HEAD
 `;
-=======
-`;
->>>>>>> d4b43e5e1bad0fbc529e1c9004daa172a732b614

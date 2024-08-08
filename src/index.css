@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+=======
+*,
+body,
+:root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  width: 100vw;
+  height: 100vh;
+}
+
+>>>>>>> d4b43e5e1bad0fbc529e1c9004daa172a732b614
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -5,7 +21,11 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
+<<<<<<< HEAD
   background-color: #242424;
+=======
+  background: #000;
+>>>>>>> d4b43e5e1bad0fbc529e1c9004daa172a732b614
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -13,6 +33,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+<<<<<<< HEAD
 a {
   font-weight: 500;
   color: #646cff;
@@ -45,3 +66,16 @@ h1 {
       background-color: orange;
   }
 }
+=======
+body {
+  margin: 0 auto;
+  font-style: normal;
+  font-variant-numeric: lining-nums proportional-nums;
+  font-feature-settings: "dlig" on;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+}
+>>>>>>> d4b43e5e1bad0fbc529e1c9004daa172a732b614

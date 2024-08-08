@@ -86,7 +86,7 @@ function ManagerDashboard() {
                 </div>
             </div>
             <Column>
-                <HomeRecruitBox></HomeRecruitBox>
+                <HomeRecruitBox ></HomeRecruitBox>
             </Column>
 
             <Modal isVisible={isMOdalOPen} onClose={closeModal}>

@@ -1,18 +1,57 @@
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+import { toggleStar } from "@redux/recruitSlice";
+import { RootState } from "@redux/store";
 import RecruitStatus from "@components/custom/recruitStatus";
+import { JobPost } from "@api/interface";
 
-function HomeRecruitBox() {
+type Props = {
+  navigate: () => void;
+  recruitInfo: JobPost;
+};
+
+/**
+ * 수정 해야할 것
+ *
+ * 1. D-0 로직은 작성하지 않았음, 추후 작성 예정
+ *
+ */
+
+/**
+ * @param param0
+ * navigate props 예시 : ()=>navigate("/")
+ * recruitInfo :  JobPost 객체
+ * @returns 공고 기본 컴포넌트 + 즐겨찾기 기능
+ */
+function HomeRecruitBox({ navigate, recruitInfo }: Props) {
+  const dispatch = useDispatch();
+  const star = useSelector((state: RootState) => state.recruit.star);
+
+  const handleStarClick = () => {
+    dispatch(toggleStar());
+  };
+
+  const {
+    category,
+    title,
+    calendar,
+    company_name,
+    gathering_time,
+    gathering_location,
+  } = recruitInfo;
+
   return (
     <RecruitContainer>
-      <RecruitBox>
+      <StarIcon src={star} onClick={handleStarClick} />
+      <RecruitBox onClick={navigate}>
         <InfoContainer>
-          <MediaSelectorTxt>media</MediaSelectorTxt>
-          <TitleTxt>title</TitleTxt>
+          <MediaSelectorTxt>{category}</MediaSelectorTxt>
+          <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>date</DateTxt>
+            <DateTxt>{calendar}</DateTxt>
             <DeadlineBox>D-0</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>team</Team>
+          <Team>{company_name}</Team>
         </InfoContainer>
         <RecruitStatus
           visible={true}
@@ -24,7 +63,7 @@ function HomeRecruitBox() {
           모집중
         </RecruitStatus>
         <TimePlace>
-          00:00 예정 <br /> place
+          {gathering_time} 예정 <br /> {gathering_location}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>
@@ -34,6 +73,7 @@ function HomeRecruitBox() {
 export default HomeRecruitBox;
 
 const RecruitContainer = styled.div`
+  position: relative;
   font-variant-numeric: lining-nums proportional-nums;
   font-feature-settings: "dlig" on;
   font-family: Inter;
@@ -49,7 +89,8 @@ const RecruitBox = styled.div`
   width: 365px;
   height: 145px;
   border-radius: 20px;
-  background: #302e34;
+  border: 2px solid #3c3c3c;
+  background: #191919;
   box-shadow: 5px 5px 4px 0px #000;
   padding-top: 17px;
   padding-left: 24px;
@@ -63,7 +104,7 @@ const InfoContainer = styled.div`
 `;
 
 const MediaSelectorTxt = styled.div`
-  color: #8b8b8b;
+  color: #868686;
   font-size: 10px;
   font-weight: 900;
   letter-spacing: 0.1px;
@@ -109,7 +150,7 @@ const DeadlineBox = styled.div`
 `;
 
 const Team = styled.div`
-  color: #8b8b8b;
+  color: #a7a7a7;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.1px;
@@ -117,23 +158,21 @@ const Team = styled.div`
   bottom: 17px;
 `;
 
+const StarIcon = styled.img`
+  position: absolute;
+  top: 18px;
+  right: 10px;
+  z-index: 1;
+`;
+
 const TimePlace = styled.div`
   position: absolute;
-  top: 0px;
-  right: 0px;
-  width: 84px;
-  height: 54px;
-  flex-shrink: 0;
-  border-radius: 5px 20px 5px 5px;
-  background: #f5c001;
+  top: 16px;
+  right: 45px;
   color: #fff;
-  text-align: center;
-  font-size: 10px;
+  text-align: right;
+  font-size: 11px;
   font-weight: 500;
   line-height: 15px;
   letter-spacing: 0.11px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: left;
 `;
