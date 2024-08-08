@@ -102,7 +102,7 @@ export default function CompanyHome() {
             dateYM={dateYM}
             dateYMHandler={dateYMHandler}
             jobPostList={jobList}
-            isListAll={true}
+            showRecommand={true}
             clickedDateEvent={clickedDateEvent}
           />
         ) : (

@@ -11,6 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { dummyMonthJobList } from "@api/dummyData";
 import { JobPost } from "@api/interface";
 
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/store";
+
 /**임시
  * API 개발 후 처리할 예정
  */
@@ -51,18 +54,15 @@ export default function ExtrasHome() {
   // navigate
   const navigate = useNavigate();
 
-  /*
-   * 전체 / 추천 토글 state 관리
-   * type True시 : 전체
-   * type False시 : 추천 */
-  const [isListAll, setListAll] = useState(true);
+  // 전체 || 추천
+  const showRecommand = useSelector(
+    (state: RootState) => state.showType.showRecommand,
+  );
 
-  /**
-   * 캘린더 / 리스트 버튼 state 관리
-   * true시, 캘린더
-   * false시, 리스트
-   */
-  const [type, setType] = useState(true);
+  // 캘린더 || 리스트
+  const showAsCalender = useSelector(
+    (state: RootState) => state.showType.showAsCalender,
+  );
 
   const listAll = `지금 당장 ${name}님이 필요해요 ⏰`;
   const listRecommand = `${name}님한테 딱 맞는 역할이 있어요 🤩`;
@@ -73,7 +73,7 @@ export default function ExtrasHome() {
     navigate(path);
   };
 
-  // 리스트 보기 선택시
+  // 리스트 보기 선택시 navigate
   const navigateToExtraCastingBoard = (elem: JobPost) => {
     const path = `/extra-casting-board/${elem.job_post_id}`;
     navigate(path);
@@ -83,26 +83,20 @@ export default function ExtrasHome() {
     <Container className="extras-home">
       <TopBar>
         <nav>
-          <ToggleBar
-            toggle={isListAll}
-            toggleHandler={() => setListAll((prev) => !prev)}
-          />
-          <TypeSelector
-            type={type}
-            changeTypeHandler={() => setType((prev) => !prev)}
-          />
+          <ToggleBar />
+          <TypeSelector />
         </nav>
 
-        <h1>{isListAll ? listAll : listRecommand}</h1>
+        <h1>{!showRecommand ? listAll : listRecommand}</h1>
       </TopBar>
 
       <Content className="content">
-        {type ? (
+        {showAsCalender ? (
           <Calender
             dateYM={dateYM}
             dateYMHandler={dateYMHandler}
             jobPostList={jobPostList}
-            isListAll={isListAll}
+            showRecommand={showRecommand}
             clickedDateEvent={navigateToSelectedNoticeList}
           />
         ) : (
@@ -113,7 +107,7 @@ export default function ExtrasHome() {
                   navigate={() => navigateToExtraCastingBoard(elem)}
                   key={key}
                   recruitInfo={elem}
-                  recommand={!isListAll}
+                  recommand={showRecommand}
                 />
               );
             })}

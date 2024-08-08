@@ -7,6 +7,9 @@ import { createSlice } from "@reduxjs/toolkit";
 //   weekOfDay: string;
 // }
 
+/**
+ * 홈 화면, 사용자가 선택한 날짜 state
+ */
 const initialState = {
   year: "",
   month: "",

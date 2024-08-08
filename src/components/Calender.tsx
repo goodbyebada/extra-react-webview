@@ -3,7 +3,7 @@ import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
 import { JobPostList } from "@api/interface";
 import { useDispatch } from "react-redux";
-import { setDate } from "@redux/homeSelectedDateSlice";
+import { setDate } from "@redux/home/homeSelectedDateSlice";
 
 type dateYM = {
   year: number;
@@ -14,7 +14,7 @@ type CalenderProps = {
   dateYM: dateYM;
   dateYMHandler: (type: string, value: number) => void;
   jobPostList: JobPostList;
-  isListAll: boolean;
+  showRecommand: boolean;
   clickedDateEvent: () => void;
 };
 
@@ -27,7 +27,7 @@ export default function Calender({
   dateYM,
   dateYMHandler,
   jobPostList,
-  isListAll,
+  showRecommand,
   clickedDateEvent,
 }: CalenderProps) {
   const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
@@ -118,7 +118,7 @@ export default function Calender({
 
                     return (
                       <div
-                        className={`date ${gotJob[elem] ? "got-drama" : ""} ${isListAll ? "" : "recommand"}`}
+                        className={`date ${gotJob[elem] ? "got-drama" : ""} ${showRecommand ? "recommand" : ""}`}
                         key={key + i * 7}
                         onClick={() => dateOnClick(elem, key)}
                       >
