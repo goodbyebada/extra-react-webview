@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import backIcon from '../asset/backIcon.png';
-import reviseIcon from '../asset/reviseIcon.png';
+import backIcon from '@assets/backIcon.png';
+import reviseIcon from '@assets/reviseIcon.png';
 
 const CustomBorder = styled.div`
     border-top: 2px solid white;
@@ -80,7 +80,7 @@ function DetailPage() {
 
     // 이전페이지로 돌아가기
     const goBackManager = () => {
-        navigate('/');
+        navigate('/manager-dashboard');
     }
 
     const goToCheckApplicant = () => {

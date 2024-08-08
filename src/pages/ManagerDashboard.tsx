@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Modal from "../components/Modal";
-import HomeRecruitBox from "../components/AdminRecruitBox";
+import Modal from "@components/Modal";
+import HomeRecruitBox from "@components/HomeRecruitBox";
+import { dummyMonthJobList } from "@api/dummyData";
 
 const Column = styled.div`
     display: flex;
@@ -41,9 +42,8 @@ const CreateNewButton = styled.button`
 function ManagerDashboard() {
     const navigate = useNavigate();
 
-    const goToDetail = () => {
-        navigate('/detail');
-    }
+    const jobPostList = dummyMonthJobList;
+
     const goToAdd = () => {
         navigate('/add-notice');
     }
@@ -86,7 +86,16 @@ function ManagerDashboard() {
                 </div>
             </div>
             <Column>
-                <HomeRecruitBox ></HomeRecruitBox>
+                {jobPostList.map((elem, key) => {
+                    return (
+                        <HomeRecruitBox
+                            navigate = {() => navigate("/detail")}
+                            key={key}
+                            recruitInfo = {elem}
+                        />
+                    )
+                })}
+                
             </Column>
 
             <Modal isVisible={isMOdalOPen} onClose={closeModal}>

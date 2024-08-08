@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import backIcon from "../asset/backIcon.png";
+import backIcon from "@assets/backIcon.png";
 import styled from "styled-components";
-import Modal from "../components/Modal";
+import Modal from "@components/Modal";
 //import CompanyRoleModal from "../component/CompanyRoleModal";
 
 const Column = styled.div`
@@ -106,7 +106,7 @@ function AddNotice() {
 
 
     const goBackManager = () => {
-        navigate('/');
+        navigate('/manager-dashboard');
     }
 
     // 제목과 카테고리 설정을 위한

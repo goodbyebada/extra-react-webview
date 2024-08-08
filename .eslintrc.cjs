@@ -23,9 +23,6 @@ module.exports = {
       "warn",
       { allowConstantExport: true },
     ],
-<<<<<<< HEAD
-    "prettier/prettier": "error",
-=======
     "prettier/prettier": [
       "error",
       {
@@ -33,7 +30,6 @@ module.exports = {
         useTabs: false,
       }
     ],
->>>>>>> d4b43e5e1bad0fbc529e1c9004daa172a732b614
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
   },
