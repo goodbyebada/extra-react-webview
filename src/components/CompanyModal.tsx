@@ -2,11 +2,10 @@ import { styled } from "styled-components";
 import { JobPostList } from "@api/interface";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/store";
 
 type CompanyModalType = {
-  dateMonth: string;
-  dateNum: string;
-  dayOfWeek: string;
   jobList: JobPostList;
 };
 
@@ -15,26 +14,27 @@ type CompanyModalType = {
  * 1. 음력 날짜 치환 로직
  * 2. HomeRecruitBox click시 이동할 navigate path 확정시 수정 예정
  *
- * @param param0 날짜, 요일, 해당 날짜의 일정 리스트
+ * @param param0
  * @returns 홈 업체 화면에서 날짜 선택시의 모달창
  */
-export default function CompanyModal({
-  dateMonth,
-  dateNum,
-  dayOfWeek,
-  jobList,
-}: CompanyModalType) {
+export default function CompanyModal({ jobList }: CompanyModalType) {
   // 임시 경로
   const path = "company-job-list/";
 
   const navigate = useNavigate();
+  // 선택된 날짜
+  const selectedDate = useSelector(
+    (state: RootState) => state.homeSelectedDate,
+  );
+  const {  month, dateNum, dayOfWeek } = selectedDate;
+  const dayOfWeekString = dayOfWeek + "요일";
 
   return (
     <Container>
       <Top className="top">
         <div className="date">
           <span id="date-num">{dateNum}</span>
-          <span id="day-of-week">{dayOfWeek}</span>
+          <span id="day-of-week">{dayOfWeekString}</span>
         </div>
         <svg
           width="100%"
@@ -68,7 +68,7 @@ export default function CompanyModal({
       <BottomBarWrapper>
         <BottomBarInput>
           <p>
-            {dateMonth}월 {dateNum}일에 추가
+            {month}월 {dateNum}일에 추가
           </p>
         </BottomBarInput>
 

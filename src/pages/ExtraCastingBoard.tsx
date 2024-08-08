@@ -7,11 +7,16 @@ import { toggleStar } from "@redux/recruitSlice";
 
 import NavBar from "@components/custom/NavBar";
 
-import { dummyRoleList, dummyJobPostList } from "@api/dummyData";
+import {
+  dummyRoleList,
+  dummyJobPostList,
+  dummyMonthJobList,
+} from "@api/dummyData";
 import { RoleList, JobPost } from "@api/interface";
 import RoleModal from "@components/Modal/RoleModal";
 import { useRef } from "react";
 import CompleteModal from "@components/Modal/CompleteModal";
+import { RootState } from "@redux/store";
 
 /**
  *
@@ -30,13 +35,14 @@ export default function ExtraCastingBoard() {
   }, []);
 
   const dispatch = useDispatch();
-  const star = useSelector((state) => state.recruit.star);
+  const star = useSelector((state: RootState) => state.recruit.star);
 
   const handleStarClick = () => {
     dispatch(toggleStar());
   };
 
   // 임시 데이터 jobpostList
+  // const jobPostList = dummyMonthJobList;
   const jobPostList = dummyJobPostList;
 
   const { jobPostId } = useParams();

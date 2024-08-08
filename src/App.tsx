@@ -33,6 +33,12 @@ function App() {
         <Routes>
           <Route path="/" element={<ExtrasHome />} />
           <Route path="/company-home" element={<CompanyHome />} />
+
+          {/* 임시, 추후 주디님 관리자 화면으로 연결할 route */}
+          <Route
+            path="company-home/company-job-list/:jobPostId"
+            element={<ExtraCastingBoard />}
+          />
           <Route
             path="/extra-casting-board/:jobPostId"
             element={<ExtraCastingBoard />}

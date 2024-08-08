@@ -1,13 +1,16 @@
 import { TopBar } from "@pages/ExtrasHome";
 import { styled } from "styled-components";
 import TypeSelector from "@components/TypeSelector";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Calender from "@components/Calender";
 import { dummyMonthJobList } from "@api/dummyData";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useRef } from "react";
 import CompanyModal from "@components/CompanyModal";
 import { useNavigate } from "react-router-dom";
+
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/store";
 
 /**
  *추후 수정 예정
@@ -40,12 +43,10 @@ export default function CompanyHome() {
   // dummydata
   const jobList = dummyMonthJobList;
 
-  /**
-   * 캘린더 / 리스트 버튼 state 관리
-   * true시, 캘린더
-   * false시, 리스트
-   */
-  const [type, setType] = useState(true);
+  // 캘린더 || 리스트
+  const showAsCalender = useSelector(
+    (state: RootState) => state.showType.showAsCalender,
+  );
 
   // 임시 경로
   const path = "company-job-list/";
@@ -55,13 +56,6 @@ export default function CompanyHome() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  // 선택된 날짜 state
-  const selectedDateInitState = {
-    dateNum: "",
-    dayOfWeek: "",
-  };
-  const [selectedDate, setSelectedDate] = useState(selectedDateInitState);
-
   const modalRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
@@ -69,40 +63,28 @@ export default function CompanyHome() {
   /**
    * 일을 클릭했을때 일어날 Event
    */
-  const clickedDateEvent = (dateNum: string, dayOfWeek: string) => {
+  const clickedDateEvent = () => {
     // 모달창을 연다
     openModal();
-
-    const selectedDate = {
-      dateNum: dateNum,
-      dayOfWeek: `${dayOfWeek}요일`,
-    };
-    setSelectedDate(selectedDate);
   };
 
-  useEffect(() => {
-    console.log(selectedDate);
-  }, [selectedDate]);
   return (
     <div className="company-home-container">
       <CompanyHomeTopBar>
         <nav>
-          <TypeSelector
-            type={type}
-            changeTypeHandler={() => setType((prev) => !prev)}
-          />
+          <TypeSelector />
         </nav>
         <h1>내 촬영</h1>
       </CompanyHomeTopBar>
 
       <div className="content">
-        {type ? (
+        {showAsCalender ? (
           // 항상 전체 추천 UI
           <Calender
             dateYM={dateYM}
             dateYMHandler={dateYMHandler}
             jobPostList={jobList}
-            showRecommand={true}
+            showRecommand={false}
             clickedDateEvent={clickedDateEvent}
           />
         ) : (
@@ -132,12 +114,7 @@ export default function CompanyHome() {
                 }
               }}
             >
-              <CompanyModal
-                dateMonth={(dateYM.month + 1).toString()}
-                dayOfWeek={selectedDate.dayOfWeek}
-                dateNum={selectedDate.dateNum}
-                jobList={jobList}
-              />
+              <CompanyModal jobList={jobList} />
             </ModalOverlay>
           </>
         )}
