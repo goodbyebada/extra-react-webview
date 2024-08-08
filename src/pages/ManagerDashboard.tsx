@@ -28,10 +28,11 @@ const PlusButton = styled.button`
 const CreateNewButton = styled.button`
     background: #858585;
     color: #FFF;
+    border: none;
     border-radius: 10px;
-    width: 90%;
+    width: 284px;
     padding: 5px 0 5px;
-    font-size: 15px;
+    font-size: 20px;
     font-weight: bold;
 `
 

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Modal from "../component/Modal";
 import backIcon from "../asset/backIcon.png";
 import forwardIcon from "../asset/forwardIcon.png";
+import checkIcon from "../asset/checkIcon.png";
 
 const Row = styled.div`
     display: flex;
@@ -18,17 +19,29 @@ const Column = styled.div`
     align-items: center;
 `
 
+const ApplicantWrapper = styled.div`
+    background: #302E34;
+    border-radius: 30px;
+    padding-top: 20px;
+    padding-right: 15px;
+    padding-bottom: 20px;
+    padding-left: 15px;
+    margin-top: 20px;
+    margin-right: 10px;
+    margin-left: 10px;
+`
+
 const Applicant = styled.div<{ isSelected: boolean }>`
     background: ${props => (props.isSelected ? '#F5C001' : '#575757')};
     height: 60px;
-    width: 80%;
+    width: 90%;
     border-radius: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 35px;
     display: flex;
     align-items: center;
     padding-left: 15px;
     padding-right: 10px;
-    font-size: 18px;
+    font-size: 16px;
     justify-content: space-between;
 `
 
@@ -108,60 +121,91 @@ return(
     <div style={{paddingTop: '50px',
         margin: '0 15px 0 12px'
     }}>
-        <Row>
+        <Row style={{borderBottom: '1px solid white'}}>
             <img 
                 src={backIcon} 
                 alt="back" 
                 onClick={goBackDetailPage} 
                 style={{}}
             />
-            <p style={{fontSize: '25px', fontWeight: 'bold'}}>지원현황</p>
-            <p style={{background: '#F5C001', borderRadius: '15px', width: '55px', fontSize: '18px', fontWeight: 'bold', textAlign: 'center'}}>마감</p>
+            <p style={{
+                fontSize: '32px', 
+                fontWeight: '900'
+                }}
+            >
+                지원현황
+            </p>
+            <p style={{
+                background: '#F5C001', 
+                borderRadius: '15px', 
+                width: '89px', 
+                fontSize: '20px', 
+                fontWeight: 'bold', 
+                textAlign: 'center'
+                }}
+            >
+                마감
+            </p>
         </Row>
     
         
         {/* 데이터 연결!!!!!!!!!!! */}
+        <ApplicantWrapper>
+            <p style={{fontSize: '20px', fontWeight: 'bold', marginLeft: '8px'}}>
+                1. 학생 역할</p>
 
-        <p style={{fontSize: '13px', fontWeight: 'bold', marginLeft: '8px'}}>
-            1. 학생 역할</p>
-        <Row>
-            <div style={{display: 'flex', gap: '12px', marginLeft: '8px'}}>
-                <p style={{borderBottom: '1px solid white'}}>시간순</p>
-                <p style={{borderBottom: '1px solid white'}}>온도순</p>
-                <p style={{borderBottom: '1px solid white'}}>경력순</p>
+            <div style={{marginBottom: '10px', fontSize: '10px'}}>
+                <Row>
+                    <div style={{display: 'flex', gap: '12px', marginLeft: '8px'}}>
+                        <p style={{borderBottom: '1px solid white'}}>시간순</p>
+                        <p style={{borderBottom: '1px solid white'}}>온도순</p>
+                        <p style={{borderBottom: '1px solid white'}}>경력순</p>
+                    </div>
+                    <p 
+                        style={{
+                            borderBottom: '1px solid white', 
+                            marginRight: '10px',
+                        }} 
+                        onClick={selectAllApplicants}
+                    >
+                        전체선택
+                    </p>
+                </Row>
             </div>
-            <p 
-                style={{
-                    borderBottom: '1px solid white', 
-                    marginRight: '10px'
-                }} 
-                onClick={selectAllApplicants}
-            >
-                전체선택
-            </p>
-        </Row>
-        <Column>
-            {applicants.map(applicant => (
-                <Applicant
-                    key={applicant}
-                    isSelected={selectedApplicants.includes(applicant)}
-                    onClick={() => toggleApplicantSelection(applicant)}
-                >
-                    {applicant}
-                    <img 
-                        src={forwardIcon} 
-                        alt="forward" 
-                        onClick={(e) => { 
-                            e.stopPropagation(); 
-                            showApplicantDetail(applicant);
-                        }}/>
-                </Applicant>
-            ))}
-        </Column>
-        <Row>
-            <CustomButton onClick={handleApprove}>승인</CustomButton>
-            <CustomButton onClick={handleReject}>미승인</CustomButton>
-        </Row>
+
+            <Column>
+                {applicants.map(applicant => (
+                    <Applicant
+                        key={applicant}
+                        isSelected={selectedApplicants.includes(applicant)}
+                    >
+                        <div style={{
+                            display: 'flex',
+                            justifyContent: 'flex-start'
+                        }}>
+                            <img 
+                                src={checkIcon} 
+                                alt="selected"  
+                                onClick={() => toggleApplicantSelection(applicant)}
+                                style={{width: '25px', paddingRight: '10px'}}
+                            />
+                            {applicant}
+                        </div>
+                        <img 
+                            src={forwardIcon} 
+                            alt="forward" 
+                            onClick={(e) => { 
+                                e.stopPropagation(); 
+                                showApplicantDetail(applicant);
+                            }}/>
+                    </Applicant>
+                ))}
+            </Column>
+            <Row>
+                <CustomButton onClick={handleApprove}>승인</CustomButton>
+                <CustomButton onClick={handleReject}>미승인</CustomButton>
+            </Row>
+        </ApplicantWrapper>
 
         <Modal isVisible={isDetailModalVisible} onClose={closeApplicantDetail}>
             <div 
@@ -178,15 +222,16 @@ return(
                     onClick={closeApplicantDetail} 
                     style={{width: '20px'}}
                 />
-                <p style={{fontSize: '15px', fontWeight: 'bold'}}>상세 프로필</p>
+                <p style={{fontSize: '24px', fontWeight: '900'}}>상세 프로필</p>
             </div>
             
-            {selectedApplicant && <p style={{fontWeight: 'bold'}}>{selectedApplicant}</p>}
+            {selectedApplicant && <p style={{fontSize: '20px', fontWeight: '700'}}>이름 : {selectedApplicant}</p>}
 
             <Row>
                 <CustomButton onClick={handleApprove}>승인</CustomButton>
                 <CustomButton onClick={handleReject}>미승인</CustomButton>
             </Row>
+            
         </Modal>
         </div>
     </>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import backIcon from "../asset/backIcon.png";
 import styled from "styled-components";
 import Modal from "../component/Modal";
+//import CompanyRoleModal from "../component/CompanyRoleModal";
 
 const Column = styled.div`
     display: flex;
@@ -28,7 +29,8 @@ const Container = styled.div`
 `
 
 const Container2 = styled.div`
-    background: #575659;
+    background-color: rgba(83, 82, 85, 0.70);
+    color: rgba(255, 255, 255, 0.70);
     width: 90%;
     height: 80px;
     border-radius: 10px;
@@ -36,6 +38,7 @@ const Container2 = styled.div`
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
+    font-size: 14px;
 `
 
 const PlusButton = styled.button`
@@ -54,13 +57,25 @@ const CheckButton = styled.button`
 `
 
 const CustomInput = styled.input`
-    border: none; 
-    border-radius: 5px;
+    border: none;
     outline: none; 
-    background: #74747466; 
+    background: #302E34; 
     height: 25px;
-    margin-left: 20px;
+    margin-left: 10px;
     padding-left: 15px;
+    color: white;
+    margin-right: 10px;
+    width: 40%;
+`
+
+const CustomInput2 = styled.input`
+    border: none;
+    border-bottom: 1px solid white;
+    outline: none; 
+    background: #302E34; 
+    height: 25px;
+    margin-left: 10px;
+    padding-left: 10px;
     color: white;
     margin-right: 10px;
     width: 40%;
@@ -186,8 +201,8 @@ function AddNotice() {
                                 flexDirection: "column",
                             }}
                         >
-                            <div style={{marginTop: "15px"}}>
-                                <CustomInput type="text" onKeyDown={(e) => {handleKeyDown}}/>
+                            <div style={{marginTop: "15px", marginLeft: '15px'}}>
+                                <CustomInput2 type="text" onKeyDown={(e) => {handleKeyDown}}/>
                                 역할
                             </div>     
                             <div style={{
@@ -202,7 +217,7 @@ function AddNotice() {
                                 {/* 눌렀을 때 7개의 조율 사항 모달이 뜨도록 구현해야함!!!! */}
 
                                 <Container2>
-                                    <p>+ 역할 상세 프로필</p>
+                                        <p>+ 역할 상세 프로필</p>
                                 </Container2> 
                             </div>
                             

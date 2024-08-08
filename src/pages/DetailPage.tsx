@@ -29,13 +29,16 @@ const Column = styled.div`
 
 const StatusBadge = styled.div`
     margin-left: auto;
-    border-radius: 10px;
+    border-radius: 20px;
     background-color: white;
     color: black;
-    width: 55px;
-    text-align: center;
+    width: 42px;
+    height: 20px;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 const RoleInfo = styled.div`
@@ -48,8 +51,8 @@ const RoleInfo = styled.div`
 `
 
 const DetailProfileButton = styled.button`
-    background-color: #535255;
-    color: #fff;
+    background-color: rgba(83, 82, 85, 0.70);
+    color: rgba(255, 255, 255, 0.70);
     border-radius: 10px;
     border: none;
     padding: 10px;
@@ -120,13 +123,13 @@ function DetailPage() {
                 <p 
                     style={{
                         margin: '0 5px', 
-                        fontSize: '40px', 
-                        fontWeight: 'bold', 
+                        fontSize: '36px', 
+                        fontWeight: '600',
                         color: '#F5C001'
                     }}
                 >
                     {/* 데이터 연결!!!!!! */}
-                    Title
+                    드라마제목
                 </p>
             </div>
             
@@ -184,7 +187,7 @@ function DetailPage() {
                     
                 </RoleInfo>
                 {isRevisionVisible && (
-                    <DetailProfileButton>+ 역할 상세 프로필</DetailProfileButton>
+                    <DetailProfileButton >+ 역할 상세 프로필</DetailProfileButton>
                 )}
                 <RoleInfo/>
                 {isRevisionVisible && (
