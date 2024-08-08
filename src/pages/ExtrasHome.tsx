@@ -2,12 +2,17 @@ import { styled } from "styled-components";
 import ToggleBar from "@components/ToggleBar";
 import TypeSelector from "@components/TypeSelector";
 import Calender from "@components/Calender";
+
 import HomeRecruitBox from "@components/HomeRecruitBox";
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { dummyMonthJobList } from "@api/dummyData";
+import { JobPost } from "@api/interface";
+
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/store";
 
 /**임시
  * API 개발 후 처리할 예정
@@ -16,10 +21,6 @@ const name = "미뇽";
 
 /**
  * 보조 출연자 홈화면
- *
- * type initState(초기 상태): 캘린더
- * type True시 : 캘린더
- * type False시 : 리스트
  *
  * @returns 보조 출연자 홈화면 UI
  */
@@ -45,55 +46,68 @@ export default function ExtrasHome() {
     });
   };
 
+  // 월 기준으로 API 호출 로직 추가 예정
+  //  list로 보기 시,infiniteScrolling으로 구현 해야함
   // dummydata
   const jobPostList = dummyMonthJobList;
 
   // navigate
-  const path = "/date-selected-notice-list";
   const navigate = useNavigate();
 
-  // 전체 / 추천 토글 state 관리
-  const [isListAll, setListAll] = useState(true);
+  // 전체 || 추천
+  const showRecommand = useSelector(
+    (state: RootState) => state.showType.showRecommand,
+  );
 
-  // 캘린더 / 리스트 버튼 state 관리
-  const [type, setType] = useState(true);
+  // 캘린더 || 리스트
+  const showAsCalender = useSelector(
+    (state: RootState) => state.showType.showAsCalender,
+  );
 
   const listAll = `지금 당장 ${name}님이 필요해요 ⏰`;
   const listRecommand = `${name}님한테 딱 맞는 역할이 있어요 🤩`;
+
+  // dateSelectedNoticeList 날짜 선택시 화면으로 이동
+  const navigateToSelectedNoticeList = () => {
+    const path = "/date-selected-notice-list";
+    navigate(path);
+  };
+
+  // 리스트 보기 선택시 navigate
+  const navigateToExtraCastingBoard = (elem: JobPost) => {
+    const path = `/extra-casting-board/${elem.job_post_id}`;
+    navigate(path);
+  };
 
   return (
     <Container className="extras-home">
       <TopBar>
         <nav>
-          <ToggleBar
-            toggle={isListAll}
-            toggleHandler={() => setListAll((prev) => !prev)}
-          />
-          <TypeSelector
-            type={type}
-            changeTypeHandler={() => setType((prev) => !prev)}
-          />
+          <ToggleBar />
+          <TypeSelector />
         </nav>
 
-        <h1>{isListAll ? listAll : listRecommand}</h1>
+        <h1>{!showRecommand ? listAll : listRecommand}</h1>
       </TopBar>
 
       <Content className="content">
-        {type ? (
+        {showAsCalender ? (
           <Calender
             dateYM={dateYM}
             dateYMHandler={dateYMHandler}
             jobPostList={jobPostList}
-            isListAll={isListAll}
+            showRecommand={showRecommand}
+            clickedDateEvent={navigateToSelectedNoticeList}
           />
         ) : (
           <ItemWrapper>
             {jobPostList.map((elem, key) => {
               return (
                 <HomeRecruitBox
-                  navigate={() => navigate(path)}
+                  navigate={() => navigateToExtraCastingBoard(elem)}
                   key={key}
                   recruitInfo={elem}
+                  recommand={showRecommand}
                 />
               );
             })}
@@ -104,9 +118,7 @@ export default function ExtrasHome() {
   );
 }
 
-const Container = styled.div`
-  padding: 0 22px;
-`;
+const Container = styled.div``;
 
 const Content = styled.div``;
 
@@ -117,12 +129,15 @@ const ItemWrapper = styled.div`
   margin-top: 30px;
 `;
 
-const TopBar = styled.div`
+export const TopBar = styled.div`
+  padding: 0 22px;
   position: sticky;
   top: 0;
   z-index: 9;
   background-color: #000000;
-  margin-top: 43px;
+  padding-top: 43px;
+  width: 100vw;
+  padding-bottom: 23px;
 
   nav {
     display: flex;
@@ -139,6 +154,4 @@ const TopBar = styled.div`
     margin-top: 21px;
     top: 30px;
   }
-
-  padding-bottom: 23px;
 `;

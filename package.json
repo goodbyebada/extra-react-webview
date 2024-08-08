@@ -15,18 +15,10 @@
     "@reduxjs/toolkit": "^2.2.6",
     "eslint-plugin-react": "^7.34.4",
     "react": "^18.3.1",
-<<<<<<< HEAD
-    "react-calendar": "^5.0.0",
-    "react-dom": "^18.3.1",
-    "react-redux": "^9.1.2",
-    "react-router-dom": "^6.25.1",
-    "styled-components": "^6.1.12"
-=======
     "react-dom": "^18.3.1",
     "react-redux": "^9.1.2",
     "react-router-dom": "^6.25.1",
     "styled-components": "^6.1.11"
->>>>>>> d4b43e5e1bad0fbc529e1c9004daa172a732b614
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
@@ -43,12 +35,8 @@
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.3",
     "typescript": "^5.2.2",
-<<<<<<< HEAD
-    "vite": "^5.3.4"
-=======
     "vite": "^5.3.4",
     "vite-tsconfig-paths": "^4.3.2"
->>>>>>> d4b43e5e1bad0fbc529e1c9004daa172a732b614
   },
   "lint-staged": {
     "*.{ts,tsx}": [

@@ -50,8 +50,4 @@ const RecruitStatusContainer = styled.div`
   font-weight: 900;
   letter-spacing: 0.1px;
   display: ${(props) => (props.visible ? "flex" : "none")};
-<<<<<<< HEAD
 `;
-=======
-`;
->>>>>>> d4b43e5e1bad0fbc529e1c9004daa172a732b614

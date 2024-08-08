@@ -1,4 +1,7 @@
 import { styled } from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@redux/store";
+import { setTypeShow } from "@redux/home/showTypeSlice";
 
 /**
  * UI 초기상태 :리스트로 보기
@@ -6,13 +9,15 @@ import { styled } from "styled-components";
  * type false: 캘린더로 보기
  */
 
-export default function TypeSelector({
-  type,
-  changeTypeHandler,
-}: {
-  type: boolean;
-  changeTypeHandler: () => void;
-}) {
+export default function TypeSelector() {
+  const showAsCalender = useSelector(
+    (state: RootState) => state.showType.showAsCalender,
+  );
+  const dispatch = useDispatch();
+  const changeTypeHandler = () => {
+    dispatch(setTypeShow());
+  };
+
   return (
     <Container onClick={changeTypeHandler}>
       <svg
@@ -31,7 +36,7 @@ export default function TypeSelector({
           fill="#211F25"
         />
       </svg>
-      <span id="selected-type">{type ? "캘린더" : "리스트"}</span>
+      <span id="selected-type">{showAsCalender ? "캘린더" : "리스트"}</span>
       <span>로 보기</span>
     </Container>
   );
