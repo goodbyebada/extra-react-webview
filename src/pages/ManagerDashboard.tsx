@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Modal from "../component/Modal";
+import Modal from "../components/Modal";
+import HomeRecruitBox from "../components/AdminRecruitBox";
 
 const Column = styled.div`
     display: flex;
@@ -57,25 +58,35 @@ function ManagerDashboard() {
     
     return (
         <>
-            <div style={{display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        margin: '0 20px 0 20px',
-                        paddingTop: '50px'
-                        }}>
-                <p style={{fontWeight: 'bold', fontSize: '25px'}}>우리 회사 공고</p>
-                <PlusButton onClick={handleAdd}>+</PlusButton>
-            </div>
-            <div style={{display: 'flex',
-                        alignItems: 'end',
-                        justifyContent: 'flex-end',
-                        marginRight: '20px',
-                        fontSize: '12px'}}>
-                <p style={{margin: '0 15px'}}>전체</p>
-                <p style={{margin: '0 0'}}>내게만 보기</p>
+            <div style={{
+                marginLeft: '30px',
+                marginRight: '30px'
+                }}
+            >
+                <div style={{display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            paddingTop: '50px'
+                            }}>
+                    <p style={{
+                        fontWeight: '900', 
+                        fontSize: '32px'}}
+                    >
+                        우리 회사 공고
+                    </p>
+                    <PlusButton onClick={handleAdd}>+</PlusButton>
+                </div>
+                <div style={{display: 'flex',
+                            alignItems: 'end',
+                            justifyContent: 'flex-end',
+                            marginBottom: '15px',
+                            fontSize: '12px'}}>
+                    <p style={{margin: '0 15px'}}>전체</p>
+                    <p style={{margin: '0 0'}}>내게만 보기</p>
+                </div>
             </div>
             <Column>
-                <Announcement onClick={goToDetail}><p>announcement content</p></Announcement>
+                <HomeRecruitBox></HomeRecruitBox>
             </Column>
 
             <Modal isVisible={isMOdalOPen} onClose={closeModal}>
