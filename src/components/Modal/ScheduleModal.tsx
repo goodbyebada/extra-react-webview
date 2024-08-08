@@ -1,29 +1,45 @@
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import SmallRecruitBox from "@components/SmallRecruitBox";
+import { JobPost } from "@api/interface";
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/store";
 
 /**
  * 추후 props 추가 통해,
  * 모달 창 props 추가 통해 데이터 연결 예정
  *
  *
- * @param param0
+ * @param param0s
  * @returns
  */
 
-function ScheduleModal({ closeModal }: { closeModal: () => void }) {
+// dayOfJobList 해당 날짜의 공고일정들 추후 ? 삭제 예정
+interface ScheduleModalProps {
+  dayOfJobList?: JobPost;
+  closeModal: () => void;
+}
+
+function ScheduleModal({ closeModal }: ScheduleModalProps) {
+  const selectedDate = useSelector(
+    (state: RootState) => state.homeSelectedDate,
+  );
+
+  const { year, month, dateNum, dayOfWeek } = selectedDate;
+  const dateString = `${year}/${month}/${dateNum}  (${dayOfWeek})`;
+
   return (
     <ModalContainer>
       <button
         onClick={() => {
-          console.log("work");
           closeModal();
         }}
       >
         <MultiplyIcon src={multiply} />
       </button>
-      <ModalText>Date</ModalText>
+      <ModalText>{dateString}</ModalText>
       <SmallRecruitBoxWrapper>
+        <SmallRecruitBox />
         <SmallRecruitBox />
       </SmallRecruitBoxWrapper>
       <Edit>편집</Edit>
@@ -73,7 +89,9 @@ const ModalText = styled.div`
 const SmallRecruitBoxWrapper = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
+  flex-direction: column;
 `;
 
 const Edit = styled.div`

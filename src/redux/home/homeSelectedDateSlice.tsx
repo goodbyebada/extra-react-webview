@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 //   year: string;
 //   month: string;
 //   dateNum: string;
-//   weekOfDay: string;
+//   dayOfWeek: string;
 // }
 
 /**
@@ -14,7 +14,7 @@ const initialState = {
   year: "",
   month: "",
   dateNum: "",
-  weekOfDay: "",
+  dayOfWeek: "",
 };
 
 const homeSelectedDateSlice = createSlice({

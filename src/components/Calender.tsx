@@ -58,7 +58,7 @@ export default function Calender({
         year: dateYM.year.toString(),
         month: (dateYM.month + 1).toString(),
         dateNum: dateNum.toString(),
-        weekOfDay: DAY_LIST[key % 7],
+        dayOfWeek: DAY_LIST[key % 7],
       };
       dispatch(setDate(data));
 
