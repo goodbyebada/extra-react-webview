@@ -7,8 +7,16 @@ import { toggleStar } from "@redux/recruitSlice";
 
 import NavBar from "@components/custom/NavBar";
 
-import { dummyRoleList, dummyJobPostList } from "@api/dummyData";
-import { Role, JobPost } from "@api/interface";
+import {
+  dummyRoleList,
+  dummyJobPostList,
+  // dummyMonthJobList,
+} from "@api/dummyData";
+import { RoleList, JobPost } from "@api/interface";
+import RoleModal from "@components/Modal/RoleModal";
+import { useRef } from "react";
+import CompleteModal from "@components/Modal/CompleteModal";
+import { RootState } from "@redux/store";
 
 /**
  *
@@ -17,28 +25,24 @@ import { Role, JobPost } from "@api/interface";
 
 export default function ExtraCastingBoard() {
   const [apply, setApply] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => {
-    setIsModalOpen(false);
-
-    // 지원했다 가정
-    // 추후 수정 예정
-    setApply(true);
-  };
+  const closeModal = () => setIsModalOpen(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const dispatch = useDispatch();
-  const star = useSelector((state) => state.recruit.star);
+  const star = useSelector((state: RootState) => state.recruit.star);
 
   const handleStarClick = () => {
     dispatch(toggleStar());
   };
 
   // 임시 데이터 jobpostList
+  // const jobPostList = dummyMonthJobList;
   const jobPostList = dummyJobPostList;
 
   const { jobPostId } = useParams();
@@ -81,7 +85,7 @@ export default function ExtraCastingBoard() {
   const generateRoleDetailItem = (
     cnt: number,
     tragetRoleName: string,
-    selectedArr: Role[],
+    selectedArr: RoleList,
   ) => {
     // 공백제거
 
@@ -129,6 +133,13 @@ export default function ExtraCastingBoard() {
       );
     }
   };
+
+  /**
+   * 필요없는 로직
+   * 수정 예정
+   * 역할 기준으로 온다함
+   * @returns
+   */
 
   const generateRoleDetailItemList = () => {
     let remainRoleList = roleList;
@@ -200,21 +211,42 @@ export default function ExtraCastingBoard() {
       </footer>
 
       {/* 임시 모달창 구현 */}
+      {/* API 로직 보충해야함 */}
       {isModalOpen && (
-        <ModalOverlay>
-          <ModalContent onClick={(e) => e.preventDefault()}>
-            <h2>Modal Title</h2>
-            <p>This is a temporary modal.</p>
-
-            <Button $apply={apply} onClick={closeModal}>
-              Close
-            </Button>
-          </ModalContent>
-        </ModalOverlay>
+        <>
+          <ModalOverlay
+            ref={modalRef}
+            onClick={(e) => {
+              if (modalRef !== null && e.target === modalRef.current) {
+                setIsModalOpen(false);
+              }
+            }}
+          >
+            <Wrapper>
+              {!apply ? (
+                <RoleModal
+                  handleApply={(value) => setApply(value)}
+                  closeModal={closeModal}
+                  roleList={roleList}
+                />
+              ) : (
+                <CompleteModal
+                  closeModal={closeModal}
+                  type={"supportComplete"}
+                />
+              )}
+            </Wrapper>
+          </ModalOverlay>
+        </>
       )}
     </Container>
   );
 }
+
+const Wrapper = styled.div`
+  position: relative;
+  height: 100%;
+`;
 
 const Container = styled.div`
   overflow: none;
@@ -398,28 +430,6 @@ const ModalOverlay = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 10;
-`;
-
-const ModalContent = styled.div`
-  position: absolute;
-  top: 0;
-
-  width: 400px; //모달의 가로크기
-  height: 600px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
-  width: 90%;
-
-  h2 {
-    margin: 0 0 10px;
-  }
-
-  p {
-    margin: 0 0 20px;
-  }
 `;
 
 const StarIcon = styled.img`

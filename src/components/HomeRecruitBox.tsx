@@ -8,6 +8,7 @@ import { JobPost } from "@api/interface";
 type Props = {
   navigate: () => void;
   recruitInfo: JobPost;
+  recommand?: boolean | undefined;
 };
 
 /**
@@ -19,8 +20,10 @@ type Props = {
 
 /**
  * @param param0
- * navigate props 예시 : ()=>navigate("/")
- * recruitInfo :  JobPost 객체
+ *  navigate props 예시 : ()=>navigate("/")
+ *  recruitInfo :  JobPost 객체
+ *  recommand : 추천 공고리스트일 경우 true 넣어야함
+ *   일반 공고 리스트라면 navigate, recruitInfo만 작성하면 됨
  * @returns 공고 기본 컴포넌트 + 즐겨찾기 기능
  */
 
@@ -42,7 +45,7 @@ const calculateDday = (calendar: string) => {
   }
 };
 
-function HomeRecruitBox({ navigate, recruitInfo }: Props) {
+function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
   const dispatch = useDispatch();
   const star = useSelector((state: RootState) => state.recruit.star);
 
@@ -62,9 +65,12 @@ function HomeRecruitBox({ navigate, recruitInfo }: Props) {
   const dday = calculateDday(calendar);
 
   return (
-    <RecruitContainer>
+    <RecruitContainer className={`${!recommand ? "" : "recommand"}`}>
       <StarIcon src={star} onClick={handleStarClick} />
-      <RecruitBox onClick={navigate}>
+      <RecruitBox
+        className={`${!recommand ? "" : "recommand"}`}
+        onClick={navigate}
+      >
         <InfoContainer>
           <MediaSelectorTxt>{category}</MediaSelectorTxt>
           <TitleTxt>{title}</TitleTxt>
@@ -101,21 +107,34 @@ const RecruitContainer = styled.div`
   font-style: normal;
   line-height: 20px;
   letter-spacing: 0.1px;
-  padding-bottom: 23px;
+  margin-bottom: 23px;
+  border-radius: 20px;
+  box-shadow: 5px 5px 4px 0px #000;
+
+  width: 365px;
+  height: 145px;
+  border: 2px solid transparent;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  background-image: linear-gradient(#191919, #191919),
+    linear-gradient(#3c3c3c, #3c3c3c);
+
+  /* 추천 시 그라데이션 border css class */
+  &.recommand {
+    background-image: linear-gradient(#191919, #191919),
+      linear-gradient(#3c3c3c, #f5c001);
+  }
 `;
 
 const RecruitBox = styled.div`
   display: flex;
   position: relative;
-  width: 365px;
-  height: 145px;
+  width: 100%;
+  height: 100%;
   border-radius: 20px;
-  border: 2px solid #3c3c3c;
-  background: #191919;
-  box-shadow: 5px 5px 4px 0px #000;
+  background: transparent;
   padding-top: 17px;
   padding-left: 24px;
-  box-sizing: border-box;
 `;
 
 const InfoContainer = styled.div`

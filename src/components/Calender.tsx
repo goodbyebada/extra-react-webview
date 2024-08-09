@@ -1,12 +1,9 @@
 import { styled } from "styled-components";
-import { useNavigate } from "react-router-dom";
 import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
 import { JobPostList } from "@api/interface";
-
-/**
- * 보조출연자 달력
- */
+import { useDispatch } from "react-redux";
+import { setDate } from "@redux/home/homeSelectedDateSlice";
 
 type dateYM = {
   year: number;
@@ -17,19 +14,27 @@ type CalenderProps = {
   dateYM: dateYM;
   dateYMHandler: (type: string, value: number) => void;
   jobPostList: JobPostList;
-  isListAll: boolean;
+  showRecommand: boolean;
+  clickedDateEvent: () => void;
 };
 
 /**
  * @param param0 CalenderProps
- * @returns 사용자 홈 화면 캘린더 UI
+ * @returns 사용자/ 업체 홈 화면 캘린더 UI
  */
+
+//수정 사항 추후 삭제
+// merge 과정에서 오류로 인해 commit이 안되는 문제 발생. error, warning 부분 주석 처리 후 임시 작성.
+// jobPostList 주석처리
+// let -> const 수정
+// Array.from v,i
 
 export default function Calender({
   dateYM,
   dateYMHandler,
-  jobPostList,
-  isListAll,
+  // jobPostList,
+  showRecommand,
+  clickedDateEvent,
 }: CalenderProps) {
   const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -37,34 +42,45 @@ export default function Calender({
    * jobPostList calender 형식 서버와 협의한 후 수정 예정
    */
 
+  // // 한 date의 공고 일정 개수 list
+  // let jobCnt = Array.from({ length: 30 }, (v, i) => 1);
+  // // 공고의 유무 flag list
+  // let gotJob = Array.from({ length: 30 }, (v, i) => {
+  //   if (i % 2 === 0) return true;
+  //   return false;
+  // });
+
   // 한 date의 공고 일정 개수 list
-  let jobCnt = Array.from({ length: 30 }, (v, i) => 1);
+  const jobCnt = Array.from({ length: 30 }, () => 1);
   // 공고의 유무 flag list
-  let gotJob = Array.from({ length: 30 }, (v, i) => {
+  const gotJob = Array.from({ length: 30 }, (_, i) => {
     if (i % 2 === 0) return true;
     return false;
   });
 
   const weeklists = useCalendar(dateYM.year, dateYM.month);
-  const navigate = useNavigate();
+
   let i = -1;
 
   // 2024 ~ 2053년(30년)
   const yearItemList = Array.from({ length: 30 }, (v, i) => 2024 + i);
   const monthItemList = Array.from({ length: 12 }, (v, i) => 1 + i);
 
-  // dateSelectedNoticeList 날짜 선택시 화면으로 이동
-  const navigateToSelectedNoticeList = () => {
-    const path = "/date-selected-notice-list";
-    navigate(path);
-  };
+  const dateOnClick = (dateNum: number, key: number) => {
+    if (gotJob[dateNum]) {
+      const data = {
+        year: dateYM.year.toString(),
+        month: (dateYM.month + 1).toString(),
+        dateNum: dateNum.toString(),
+        dayOfWeek: DAY_LIST[key % 7],
+      };
+      dispatch(setDate(data));
 
-  const dateOnClick = (gotJob: boolean) => {
-    console.log(gotJob);
-    if (gotJob) {
-      navigateToSelectedNoticeList();
+      clickedDateEvent();
     }
   };
+
+  const dispatch = useDispatch();
 
   return (
     <Container>
@@ -116,9 +132,9 @@ export default function Calender({
 
                     return (
                       <div
-                        className={`date ${gotJob[elem] ? "got-drama" : ""} ${isListAll ? "" : "recommand"}`}
+                        className={`date ${gotJob[elem] ? "got-drama" : ""} ${showRecommand ? "recommand" : ""}`}
                         key={key + i * 7}
-                        onClick={() => dateOnClick(gotJob[elem])}
+                        onClick={() => dateOnClick(elem, key)}
                       >
                         <div id="date-num">{elem}</div>
                         {gotJob[elem] ? (
