@@ -1,4 +1,3 @@
-import React from "react";
 import { Role } from "@api/interface";
 import styled from "styled-components";
 
@@ -19,13 +18,13 @@ type InfoContainerProps = {
   color: string;
 };
 
-const RoleBox: React.FC<RoleBoxProps> = ({
+const RoleBox = ({
   styled,
   roleInfo,
   handleClick,
   isSelected,
   index,
-}) => {
+}: RoleBoxProps) => {
   const { role_name, role_age, sex } = roleInfo;
   const { borderColor, backgroundColor, color } = styled;
 

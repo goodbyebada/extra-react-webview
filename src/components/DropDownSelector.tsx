@@ -56,12 +56,15 @@ const Container = styled.span`
   font-weight: 500;
   line-height: 111.111%;
   letter-spacing: 0.18px;
+
   > * {
     padding: 5px;
   }
+
   .item {
     width: 110px;
     position: relative;
+
     display: flex;
     justify-content: center;
     align-items: center;
