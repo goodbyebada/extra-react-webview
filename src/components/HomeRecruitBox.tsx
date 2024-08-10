@@ -1,9 +1,9 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
 import styled from "styled-components";
-import { toggleStar } from "@redux/recruitSlice";
-import { RootState } from "@redux/store";
 import RecruitStatus from "@components/custom/recruitStatus";
 import { JobPost } from "@api/interface";
+import star_g from "@assets/Star_g.png";
+import star_y from "@assets/Star_y.png";
 
 type Props = {
   navigate: () => void;
@@ -46,11 +46,10 @@ const calculateDday = (calendar: string) => {
 };
 
 function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
-  const dispatch = useDispatch();
-  const star = useSelector((state: RootState) => state.recruit.star);
+  const [star, setStar] = useState(star_g);
 
   const handleStarClick = () => {
-    dispatch(toggleStar());
+    setStar(star === star_g ? star_y : star_g);
   };
 
   const {
@@ -60,6 +59,7 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
     company_name,
     gathering_time,
     gathering_location,
+    status,
   } = recruitInfo;
 
   const dday = calculateDday(calendar);
@@ -82,12 +82,12 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
         </InfoContainer>
         <RecruitStatus
           visible={true}
-          borderColor="#767676"
-          backgroundColor="#d9d9d9"
-          color="#000"
-          fontSize={"12px"}
+          borderColor={status ? "#767676" : "#F00"}
+          backgroundColor={status ? "#d9d9d9" : "#F00"}
+          color={status ? "#000" : "#fff"}
+          fontSize={status ? "12px" : "11px"}
         >
-          모집중
+          {status ? "모집중" : "모집마감"}
         </RecruitStatus>
         <TimePlace>
           {gathering_time} 예정 <br /> {gathering_location}

@@ -71,7 +71,7 @@ export const dummyMonthJobList: JobPostList = [
     gathering_location: "강남역 3번 출구",
     gathering_time: "06:40",
     category: "Drama",
-    status: true,
+    status: true, //true: 모집중, false: 모집마감
   },
   {
     job_post_id: 2,
@@ -81,7 +81,7 @@ export const dummyMonthJobList: JobPostList = [
     gathering_location: "서울역 1번 출구",
     gathering_time: "08:00",
     category: "Romance",
-    status: true,
+    status: false,
   },
   {
     job_post_id: 3,
