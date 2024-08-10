@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Modal from "@components/Modal";
 import backIcon from "@assets/backIcon.png";
@@ -33,10 +33,10 @@ const ApplicantWrapper = styled.div`
 
 const Applicant = styled.div<{ isSelected: boolean }>`
     background: ${props => (props.isSelected ? '#F5C001' : '#575757')};
-    height: 60px;
-    width: 90%;
+    width: 100%;
+    height: 50px;
     border-radius: 10px;
-    margin-bottom: 35px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
     padding-left: 15px;
@@ -59,8 +59,19 @@ const CustomButton = styled.button`
 const ShowApplicant = () => {
     const navigate = useNavigate();
 
+    const {title} = useParams();
+
+    const [roleName, setRoleName] = useState(localStorage.getItem('role_name') || '');
+
+    useEffect(() => {
+        const savedRoleName = localStorage.getItem('role_name');
+
+        if (savedRoleName) setRoleName(savedRoleName);
+    }, []);
+
+
     const goBackDetailPage = () => {
-        navigate('/detail');
+        navigate(`/detail/${title}`);
     }
 
     // 지원현황에서 각각의 지원자에 대한 상세 프로필을 보여주기 위한 모달
@@ -121,16 +132,15 @@ return(
     <div style={{paddingTop: '50px',
         margin: '0 15px 0 12px'
     }}>
-        <Row style={{borderBottom: '1px solid white'}}>
+        <Row style={{paddingBottom: '10px', borderBottom: '1px solid white'}}>
             <img 
                 src={backIcon} 
                 alt="back" 
                 onClick={goBackDetailPage} 
-                style={{}}
             />
             <p style={{
-                fontSize: '32px', 
-                fontWeight: '900'
+                fontSize: '25px', 
+                fontWeight: '900',
                 }}
             >
                 지원현황
@@ -138,8 +148,8 @@ return(
             <p style={{
                 background: '#F5C001', 
                 borderRadius: '15px', 
-                width: '89px', 
-                fontSize: '20px', 
+                width: '50px', 
+                fontSize: '15px', 
                 fontWeight: 'bold', 
                 textAlign: 'center'
                 }}
@@ -149,14 +159,20 @@ return(
         </Row>
     
         
-        {/* 데이터 연결!!!!!!!!!!! */}
         <ApplicantWrapper>
-            <p style={{fontSize: '20px', fontWeight: 'bold', marginLeft: '8px'}}>
-                1. 학생 역할</p>
+            <p style={{
+                fontSize: '20px', 
+                fontWeight: 'bold', 
+                marginLeft: '8px', 
+                marginBottom: '10px'
+                }}
+            >
+                {roleName}
+            </p>
 
             <div style={{marginBottom: '10px', fontSize: '10px'}}>
                 <Row>
-                    <div style={{display: 'flex', gap: '12px', marginLeft: '8px'}}>
+                    <div style={{display: 'flex', gap: '12px', marginLeft: '8px', marginBottom: '10px'}}>
                         <p style={{borderBottom: '1px solid white'}}>시간순</p>
                         <p style={{borderBottom: '1px solid white'}}>온도순</p>
                         <p style={{borderBottom: '1px solid white'}}>경력순</p>
@@ -187,7 +203,7 @@ return(
                                 src={checkIcon} 
                                 alt="selected"  
                                 onClick={() => toggleApplicantSelection(applicant)}
-                                style={{width: '25px', paddingRight: '10px'}}
+                                style={{width: '15%', height: '15%', paddingRight: '10px'}}
                             />
                             {applicant}
                         </div>
@@ -213,7 +229,8 @@ return(
                     display: 'flex', 
                     justifyContent: 'flex-start', 
                     alignItems: 'center', 
-                    gap: '15px'
+                    gap: '15px',
+                    marginBottom: '15px',
                 }}
             >
                 <img 
@@ -225,7 +242,19 @@ return(
                 <p style={{fontSize: '24px', fontWeight: '900'}}>상세 프로필</p>
             </div>
             
-            {selectedApplicant && <p style={{fontSize: '20px', fontWeight: '700'}}>이름 : {selectedApplicant}</p>}
+            <div style={{
+                marginBottom: '15px',
+            }}>
+                {selectedApplicant && 
+                    <p style={{
+                        fontSize: '18px', 
+                        fontWeight: '600',
+                        }}
+                    >
+                        이름 : {selectedApplicant}
+                    </p>
+                }
+            </div>
 
             <Row>
                 <CustomButton onClick={handleApprove}>승인</CustomButton>

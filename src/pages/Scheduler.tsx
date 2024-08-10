@@ -3,6 +3,9 @@ import { useState } from "react";
 import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
 import ScheduleModal from "@components/Modal/ScheduleModal";
+import { useRef } from "react";
+import { useDispatch } from "react-redux";
+import { setDate } from "@redux/home/homeSelectedDateSlice";
 
 /**
  *
@@ -16,6 +19,7 @@ import ScheduleModal from "@components/Modal/ScheduleModal";
 export default function Scheduler() {
   const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
 
+  //모달창 state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -53,6 +57,22 @@ export default function Scheduler() {
         ? { ...prev, [type]: value - 1 }
         : { ...prev, [type]: value };
     });
+  };
+
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  const dispatch = useDispatch();
+
+  const selectedDateEvent = (elem: number, idx: number) => {
+    const selectedDateInfo = {
+      year: dateYM.year.toString(),
+      month: (dateYM.month + 1).toString(),
+      dateNum: elem.toString(),
+      dayOfWeek: DAY_LIST[idx % 7],
+    };
+
+    dispatch(setDate(selectedDateInfo));
+    openModal();
   };
 
   /**
@@ -136,11 +156,14 @@ export default function Scheduler() {
                       return <div key={key + i * 7} className="date"></div>;
                     }
 
+                    // 공고 없을때 returnSchduleItemComponent 로직 안타게 추가해야함
+                    // 확인하는 로직 필요
+
                     return (
                       <div
                         className="date"
                         key={key + i * 7}
-                        onClick={openModal}
+                        onClick={() => selectedDateEvent(elem, key)}
                       >
                         <div id="date-num">{!elem ? "" : elem}</div>
                         {returnSchduleItemComponent(elem, "title")}
@@ -156,7 +179,16 @@ export default function Scheduler() {
 
       {isModalOpen ? (
         <>
-          <ScheduleModal closeModal={closeModal} />
+          <ModalOverlay
+            ref={modalRef}
+            onClick={(e) => {
+              if (modalRef !== null && e.target === modalRef.current) {
+                closeModal();
+              }
+            }}
+          >
+            <ScheduleModal closeModal={closeModal} />
+          </ModalOverlay>
         </>
       ) : (
         <></>
@@ -335,4 +367,17 @@ const EndScheduleItem = styled(ScheduleItem)`
 
 const SingleScheduleItem = styled(ScheduleItem)`
   border-radius: 20px;
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
 `;

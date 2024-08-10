@@ -1,27 +1,112 @@
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import RoleBox from "@components/RoleBox";
+import { RoleList } from "@api/interface";
+import { useState } from "react";
 
-function RuleModal() {
+type ModalProps = {
+  handleApply: (value: boolean) => void;
+  closeModal: () => void;
+  roleList: RoleList;
+};
+
+/**
+ * Info에 대한 정보
+ * 예시) 학생 | 20~25 | 남
+ *
+ *
+ * 1.성별이 맞지 않으면 추천하지 않음 로직만 적용된 상태,
+ * 2. 중복지원이 되서는 안된다.
+ */
+
+function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
+  /**
+   * 임시 사용자 정보
+   */
+  const DummyUser = {
+    name: "미뇽",
+    sex: false,
+  };
+
+  const user = DummyUser;
+
+  const [isSelected, setSelected] = useState<boolean[]>(
+    new Array(roleList.length).fill(false),
+  );
+
+  const handleClick = (idx: number) => {
+    const newArr = Array(roleList.length).fill(false);
+    newArr[idx] = true;
+    setSelected(newArr);
+  };
+
+  /**
+   * POST API 호출
+   * roleList[idx].role_id로 접근 예정
+   */
+
   return (
     <ModalContainer>
-      <MultiplyIcon src={multiply} />
+      <MultiplyIcon src={multiply} onClick={closeModal} />
+
       <RoleBoxWrapper>
-        <RoleBox borderColor="#fff" backgroundColor="#000" color="#fff" />
-        <RoleBox
-          borderColor="transparent"
-          backgroundColor="linear-gradient(#000, #000) padding-box,
-              linear-gradient(180deg, #FFFFFF 0%, #F5C001 100%) border-box;"
-          color="#fff"
-        />
-        <RoleBox borderColor="#666666" backgroundColor="#000" color="#666666" />
+        {roleList.length &&
+          roleList.map((elem, idx) => {
+            let styled = {
+              borderColor: "#fff",
+              backgroundColor: "#000",
+              color: "#fff",
+            };
+
+            // 사용자의 정보와 맞는 조건일시,
+            //  추후 수정 예정, API 형식 미정
+
+            if (elem.sex === user.sex) {
+              return (
+                <RoleBox
+                  key={idx}
+                  index={idx}
+                  roleInfo={elem}
+                  handleClick={handleClick}
+                  isSelected={isSelected[idx]}
+                  styled={styled}
+                />
+              );
+            }
+
+            styled = {
+              borderColor: "#666666",
+              backgroundColor: "#000",
+              color: "#666666",
+            };
+
+            return (
+              <RoleBox
+                key={idx}
+                index={idx}
+                roleInfo={elem}
+                handleClick={() => {}}
+                isSelected={isSelected[idx]}
+                styled={styled}
+              />
+            );
+          })}
       </RoleBoxWrapper>
-      <Btn>지원하기</Btn>
+
+      {/* undefined를 걸러낼수있다.*/}
+      <Btn
+        className={
+          isSelected.find((elem) => elem === true) ? "" : "non-selected"
+        }
+        onClick={() => handleApply(!!isSelected.find((elem) => elem === true))}
+      >
+        지원하기
+      </Btn>
     </ModalContainer>
   );
 }
 
-export default RuleModal;
+export default RoleModal;
 
 const ModalContainer = styled.div`
   position: absolute;
@@ -71,4 +156,11 @@ const Btn = styled.button`
   bottom: 22px;
   left: 50%;
   transform: translateX(-50%);
+
+  /* 선택되지 않았을시 비활성화 버튼  css 추가  */
+
+  &.non-selected {
+    background: #595959;
+    color: #b0b0b0;
+  }
 `;

@@ -1,12 +1,9 @@
 import { styled } from "styled-components";
-import { useNavigate } from "react-router-dom";
 import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
 import { JobPostList } from "@api/interface";
-
-/**
- * 보조출연자 달력
- */
+import { useDispatch } from "react-redux";
+import { setDate } from "@redux/home/homeSelectedDateSlice";
 
 type dateYM = {
   year: number;
@@ -17,19 +14,21 @@ type CalenderProps = {
   dateYM: dateYM;
   dateYMHandler: (type: string, value: number) => void;
   jobPostList: JobPostList;
-  isListAll: boolean;
+  showRecommand: boolean;
+  clickedDateEvent: () => void;
 };
 
 /**
  * @param param0 CalenderProps
- * @returns 사용자 홈 화면 캘린더 UI
+ * @returns 사용자/ 업체 홈 화면 캘린더 UI
  */
 
 export default function Calender({
   dateYM,
   dateYMHandler,
   jobPostList,
-  isListAll,
+  showRecommand,
+  clickedDateEvent,
 }: CalenderProps) {
   const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
 
@@ -46,25 +45,28 @@ export default function Calender({
   });
 
   const weeklists = useCalendar(dateYM.year, dateYM.month);
-  const navigate = useNavigate();
+
   let i = -1;
 
   // 2024 ~ 2053년(30년)
   const yearItemList = Array.from({ length: 30 }, (v, i) => 2024 + i);
   const monthItemList = Array.from({ length: 12 }, (v, i) => 1 + i);
 
-  // dateSelectedNoticeList 날짜 선택시 화면으로 이동
-  const navigateToSelectedNoticeList = () => {
-    const path = "/date-selected-notice-list";
-    navigate(path);
-  };
+  const dateOnClick = (dateNum: number, key: number) => {
+    if (gotJob[dateNum]) {
+      const data = {
+        year: dateYM.year.toString(),
+        month: (dateYM.month + 1).toString(),
+        dateNum: dateNum.toString(),
+        dayOfWeek: DAY_LIST[key % 7],
+      };
+      dispatch(setDate(data));
 
-  const dateOnClick = (gotJob: boolean) => {
-    console.log(gotJob);
-    if (gotJob) {
-      navigateToSelectedNoticeList();
+      clickedDateEvent();
     }
   };
+
+  const dispatch = useDispatch();
 
   return (
     <Container>
@@ -116,9 +118,9 @@ export default function Calender({
 
                     return (
                       <div
-                        className={`date ${gotJob[elem] ? "got-drama" : ""} ${isListAll ? "" : "recommand"}`}
+                        className={`date ${gotJob[elem] ? "got-drama" : ""} ${showRecommand ? "recommand" : ""}`}
                         key={key + i * 7}
-                        onClick={() => dateOnClick(gotJob[elem])}
+                        onClick={() => dateOnClick(elem, key)}
                       >
                         <div id="date-num">{elem}</div>
                         {gotJob[elem] ? (

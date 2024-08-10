@@ -1,24 +1,33 @@
 import { styled } from "styled-components";
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/store";
+import { useDispatch } from "react-redux";
+import { setTypetoggle } from "@redux/home/showTypeSlice";
 
 /**
  * 기본 상태 전체
  * toggle True시 : 전체
  * toggle False시 : 추천
  */
-export default function ToggleBar({
-  toggle,
-  toggleHandler,
-}: {
-  toggle: boolean;
-  toggleHandler: () => void;
-}) {
+export default function ToggleBar() {
+  const toggle = useSelector(
+    (state: RootState) => state.showType.showRecommand,
+  );
+  const dispatch = useDispatch();
+  const toggleHandler = () => dispatch(setTypetoggle());
+
   return (
     <Container>
       <label htmlFor="filter" className="switch" aria-label="Toggle Filter">
-        <input type="checkbox" id="filter" onClick={toggleHandler} />
+        <input
+          type="checkbox"
+          id="filter"
+          onChange={toggleHandler}
+          checked={toggle}
+        />
 
-        <Item $on={toggle}>전체</Item>
-        <Item $on={!toggle}>추천</Item>
+        <Item $on={!toggle}>전체</Item>
+        <Item $on={toggle}>추천</Item>
       </label>
     </Container>
   );

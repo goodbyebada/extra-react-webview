@@ -15,6 +15,7 @@ const Row = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin-bottom: 10px;
 `
 
 const Container = styled.div`
@@ -45,6 +46,8 @@ const PlusButton = styled.button`
     font-size: 30px;
     border-radius: 5px;
     padding: 0 8px 0;
+    background-color: #fff;
+    margin-bottom: 10px;
 `
 
 const CheckButton = styled.button`
@@ -65,7 +68,7 @@ const CustomInput = styled.input`
     padding-left: 15px;
     color: white;
     margin-right: 10px;
-    width: 40%;
+    width: 60%;
 `
 
 const CustomInput2 = styled.input`
@@ -98,11 +101,6 @@ function AddNotice() {
     const [place, setPlace] = useState("");
 
     const [role, setRole] = useState("");
-    const [gender, setGender] = useState("");
-    const [season, setSeason] = useState("");
-    const [costume, setCostume] = useState("");
-    const [tattoo, setTattoo] = useState("");
-    const [people, setPeople] = useState(0);
 
 
     const goBackManager = () => {
@@ -128,7 +126,7 @@ function AddNotice() {
     }
 
     // 확인 버튼 구현
-    const handleConfirmClick = () => {
+    const handleConfirmClickModal = () => {
         // 제목과 카테고리 모달의 경우
         if (modalType === 1){
             setTitle(title);
@@ -146,11 +144,18 @@ function AddNotice() {
         }
     }
 
+    // ????????????????????????????????????
     // 역할을 작성했을 때
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             setRole(e.currentTarget.value);
         }
+    }
+
+    const handleConfirmToAdd = () => {
+
+
+        navigate(`/manager-dashboard`);
     }
 
     return(
@@ -162,8 +167,22 @@ function AddNotice() {
             <Column>
                     {title.length > 0 && category.length > 0 ?
                         <Column style={{background: '#000'}}>
-                            <p style={{color: '#F5C001', fontSize: '32px', fontWeight: 'bold'}}>{title}</p>
-                            <p style={{color: '#5A5A5A'}}>{category}</p>
+                            <p style={{
+                                color: '#F5C001', 
+                                fontSize: '32px', 
+                                fontWeight: 'bold',
+                                marginBottom: '15px'
+                                }}
+                            >
+                                {title}
+                            </p>
+                            <p style={{
+                                color: '#5A5A5A',
+                                marginBottom: '10px'
+                                }}
+                            >
+                                {category}
+                            </p>
                         </Column>
                         : 
                         <Container>
@@ -174,12 +193,24 @@ function AddNotice() {
                         </Container>
                     }
                     {date.length > 0 && time.length && place.length > 0 ?
-                        <Column style={{background: '#000', width: '90%', borderTop: '1px solid white', borderBottom: '1px solid white', alignItems: 'flex-start'}}>
-                            <div>
-                                <p>{time} 예정</p>
-                                <p>{place}</p>
+                        <Column style={{
+                            background: '#000', 
+                            width: '90%', 
+                            borderTop: '1px solid white', 
+                            borderBottom: '1px solid white', 
+                            alignItems: 'flex-start',
+                            marginTop: '10px',
+                            marginBottom: '20px'
+                            }}
+                        >
+                            <div style={{ margin: '10px 0' }}>
+                                <div>
+                                    <p>{time} 예정</p>
+                                    <p>{place}</p>
+                                </div>
+                                <p>{date}</p>
                             </div>
-                            <p>{date}</p>
+                            
                         </Column>
                         : 
                         <Container>
@@ -225,7 +256,7 @@ function AddNotice() {
                     
                     }
 
-                <CheckButton>확인</CheckButton>
+                <CheckButton onClick={handleConfirmToAdd}>확인</CheckButton>
             </Column>
             
             {/* 제목과 카테고리 모달 내용 */}
@@ -240,7 +271,7 @@ function AddNotice() {
                 </Row>
 
                 <div style={{display: 'flex', justifyContent: 'center', marginTop: '25px'}}>
-                    <CheckButton onClick={handleConfirmClick}>확인</CheckButton>
+                    <CheckButton onClick={handleConfirmClickModal}>확인</CheckButton>
                 </div>
             </Modal>
 
@@ -248,19 +279,19 @@ function AddNotice() {
             <Modal isVisible={isModalOpen2} onClose={closeModal2}>
                 <Row>
                     <p style={{fontSize: '17px', fontWeight: 'bold'}}>날짜 : </p>
-                    <CustomInput type="date" value={date} onChange={(e) => setDate(e.target.value)}></CustomInput>
+                    <CustomInput type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{width: '150px'}}/>
                 </Row>
                 <Row>
                     <p style={{fontSize: '17px', fontWeight: 'bold'}}>시간 : </p>
-                    <CustomInput type="time" value={time} onChange={(e) => setTime(e.target.value)}></CustomInput>
+                    <CustomInput type="time" value={time} onChange={(e) => setTime(e.target.value)} style={{width: '150px'}}/>
                 </Row>
                 <Row>
                     <p style={{fontSize: '17px', fontWeight: 'bold'}}>장소 : </p>
-                    <CustomInput type="text" value={place} onChange={(e) => setPlace(e.target.value)}></CustomInput>
+                    <CustomInput type="text" value={place} onChange={(e) => setPlace(e.target.value)} style={{width: '150px'}}/>
                 </Row>
 
                 <div style={{display: 'flex', justifyContent: 'center', marginTop: '25px'}}>
-                    <CheckButton onClick={handleConfirmClick}>확인</CheckButton>
+                    <CheckButton onClick={handleConfirmClickModal}>확인</CheckButton>
                 </div>
             </Modal>
 

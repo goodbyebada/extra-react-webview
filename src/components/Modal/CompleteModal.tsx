@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import approval from "@assets/Approval.png";
+import { useNavigate } from "react-router-dom";
 
 interface ModalContent {
   prefix: string;
@@ -17,21 +18,38 @@ const modalContent: Record<string, ModalContent> = {
 
 interface CompleteModalProps {
   type: keyof typeof modalContent;
+  closeModal: () => void;
 }
 
-const CompleteModal: React.FC<CompleteModalProps> = ({ type }) => {
+const CompleteModal: React.FC<CompleteModalProps> = ({ type, closeModal }) => {
   const content = modalContent[type];
+  const navigate = useNavigate();
+  const homePath = "/";
+  const mySupportStatusPath = "/";
+  // 지원현황 라우팅 주소 임시
 
   return (
     <ModalContainer>
-      <MultiplyIcon src={multiply} />
+      <MultiplyIcon src={multiply} onClick={closeModal} />
       <ModalText>
         {content.prefix} <br /> 완료되었어요!
       </ModalText>
       <ApprovalIcon src={approval} />
       <ButtonContainer>
-        <Btn>홈 화면 가기</Btn>
-        <Btn>내 지원 현황 보기</Btn>
+        <Btn
+          onClick={() => {
+            navigate(homePath);
+          }}
+        >
+          홈 화면 가기
+        </Btn>
+        <Btn
+          onClick={() => {
+            navigate(mySupportStatusPath);
+          }}
+        >
+          내 지원 현황 보기
+        </Btn>
       </ButtonContainer>
     </ModalContainer>
   );
