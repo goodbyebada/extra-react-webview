@@ -1,3 +1,5 @@
+import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import approval from "@assets/Approval.png";
@@ -53,6 +55,10 @@ const CompleteModal: React.FC<CompleteModalProps> = ({ type, closeModal }) => {
       </ButtonContainer>
     </ModalContainer>
   );
+};
+
+CompleteModal.propTypes = {
+  type: PropTypes.oneOf(Object.keys(modalContent)).isRequired,
 };
 
 export default CompleteModal;

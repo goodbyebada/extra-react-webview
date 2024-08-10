@@ -26,7 +26,7 @@ export default function CompanyModal({ jobList }: CompanyModalType) {
   const selectedDate = useSelector(
     (state: RootState) => state.homeSelectedDate,
   );
-  const {  month, dateNum, dayOfWeek } = selectedDate;
+  const { month, dateNum, dayOfWeek } = selectedDate;
   const dayOfWeekString = dayOfWeek + "요일";
 
   return (
