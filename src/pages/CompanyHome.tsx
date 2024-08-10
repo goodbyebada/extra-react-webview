@@ -7,10 +7,11 @@ import { dummyMonthJobList } from "@api/dummyData";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useRef } from "react";
 import CompanyModal from "@components/CompanyModal";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
+import { sendMessage } from "@api/message";
 
 /**
  *추후 수정 예정
@@ -58,7 +59,7 @@ export default function CompanyHome() {
 
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   /**
    * 일을 클릭했을때 일어날 Event
@@ -93,7 +94,14 @@ export default function CompanyHome() {
               return (
                 <HomeRecruitBox
                   navigate={() => {
-                    navigate(path + `${elem.job_post_id}`);
+                    //navigate(path + `${elem.job_post_id}`);
+                    sendMessage({
+                      type: "NAVIGATION_DETAIL",
+                      payload: {
+                        url: `/company-home/${path}${elem.job_post_id}`,
+                      },
+                      version: "1.0",
+                    });
                   }}
                   key={key}
                   recruitInfo={elem}
@@ -131,10 +139,10 @@ const CompanyHomeTopBar = styled(TopBar)`
   h1 {
     display: flex;
     justify-content: center;
-    font-size: 24px;
+    font-size: 20px;
     font-style: normal;
     font-weight: 600;
-    line-height: 83.333%;
+    line-height: 30%;
     letter-spacing: 0.24px;
     margin: 0px;
     padding-top: 20px;

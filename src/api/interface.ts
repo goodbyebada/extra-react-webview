@@ -40,3 +40,37 @@ export type JobPostList = JobPost[];
  * response.data.rolelist type
  */
 export type RoleList = Role[];
+
+export enum ShootManageSelectStatus {
+  "ALL" = 0,
+  "APPLIED" = 1,
+  "REJECTED" = 2,
+  "APPROVED" = 3,
+}
+
+// Reverse mapping
+export const ApplyStatusLabel: { [key: number]: string } = {
+  0: "전체",
+  1: "승인 대기",
+  2: "미승인",
+  3: "승인 완료",
+};
+
+type RecruitStatus = {
+  pending: boolean;
+  rejected: boolean;
+  approved: boolean;
+};
+
+export type Recruit = {
+  job_post_id: number;
+  calendar: string;
+  company_name: string;
+  title: string;
+  gathering_location: string;
+  gathering_time: string; // string 또는 timestamp 형식의 string 사용 가능
+  category: string;
+  status: RecruitStatus;
+};
+
+export type RecruitList = Recruit[];

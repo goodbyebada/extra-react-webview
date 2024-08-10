@@ -1,4 +1,5 @@
 import { RoleList, JobPostList } from "@api/interface";
+import { RecruitList } from "@api/interface";
 
 /**
  * 캘린더/리스트 조회 dummyData
@@ -204,5 +205,79 @@ export const dummyRoleList: RoleList = [
     season: "여름",
     check_tatto: false,
     apply_status: "신청 중",
+  },
+];
+
+// 촬영 관리 더미 데이터
+export const dummyRecruitList: RecruitList = [
+  {
+    job_post_id: 1,
+    calendar: "8/1-8/4",
+    company_name: "유엠씨 촬영팀",
+    title: "UMC 드라마",
+    gathering_location: "신사역 6번 출구",
+    gathering_time: "7:00",
+    category: "드라마",
+    status: {
+      pending: false,
+      rejected: false,
+      approved: true,
+    },
+  },
+  {
+    job_post_id: 2,
+    calendar: "8/1-8/4",
+    company_name: "유엠씨 촬영팀2",
+    title: "UMC 드라마2",
+    gathering_location: "강남역 6번 출구",
+    gathering_time: "11:30",
+    category: "드라마",
+    status: {
+      pending: true,
+      rejected: false,
+      approved: false,
+    },
+  },
+  {
+    job_post_id: 3,
+    calendar: "8/1-8/4",
+    company_name: "유엠씨 촬영팀3",
+    title: "UMC 드라마3",
+    gathering_location: "신촌역 6번 출구",
+    gathering_time: "3:20",
+    category: "드라마",
+    status: {
+      pending: true,
+      rejected: false,
+      approved: false,
+    },
+  },
+  {
+    job_post_id: 4,
+    calendar: "8/1-8/4",
+    company_name: "유엠씨 촬영팀1esdfs",
+    title: "sdfsdf",
+    gathering_location: "sdsd역 6번 출구",
+    gathering_time: "3:20",
+    category: "드라마",
+    status: {
+      pending: true,
+      rejected: false,
+      approved: false,
+    },
+  },
+  {
+    job_post_id: 5,
+    calendar: "8/1-8/4",
+    company_name: "유엠씨 촬영팀sdf",
+    title: "sdfdsdfs",
+    gathering_location: "sdfsdf역 6번 출구",
+    gathering_time: "3:20",
+    category: "드라마",
+    status: {
+      pending: true,
+      rejected: false,
+      approved: false,
+    },
   },
 ];

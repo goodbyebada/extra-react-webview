@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import approval from "@assets/Approval.png";
-import { useNavigate } from "react-router-dom";
+import { sendMessage } from "@api/message";
+// import { useNavigate } from "react-router-dom";
 
 interface ModalContent {
   prefix: string;
@@ -21,11 +22,22 @@ interface CompleteModalProps {
   closeModal: () => void;
 }
 
-const CompleteModal: React.FC<CompleteModalProps> = ({ type, closeModal }) => {
+// RN 라우팅
+const navigate = (type: string) => {
+  sendMessage({
+    type,
+    version: "1.0",
+  });
+};
+
+const CompleteModal: React.FC<CompleteModalProps> = ({
+  type,
+  closeModal,
+}: CompleteModalProps) => {
   const content = modalContent[type];
-  const navigate = useNavigate();
-  const homePath = "/";
-  const mySupportStatusPath = "/";
+  // const navigate = useNavigate();
+  //const homePath = "/";
+  //const mySupportStatusPath = "/";
   // 지원현황 라우팅 주소 임시
 
   return (
@@ -38,14 +50,14 @@ const CompleteModal: React.FC<CompleteModalProps> = ({ type, closeModal }) => {
       <ButtonContainer>
         <Btn
           onClick={() => {
-            navigate(homePath);
+            navigate("NAVIGATION_HOME");
           }}
         >
           홈 화면 가기
         </Btn>
         <Btn
           onClick={() => {
-            navigate(mySupportStatusPath);
+            navigate("NAVIGATION_MANAGE");
           }}
         >
           내 지원 현황 보기

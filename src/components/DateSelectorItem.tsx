@@ -53,7 +53,7 @@ export default function DateSelectorItem({
 }
 
 const Container = styled.span`
-  font-size: 32px;
+  font-size: 25px;
   font-weight: 900;
   line-height: 62.5%;
   letter-spacing: 0.32px;
@@ -111,8 +111,8 @@ const Container = styled.span`
       }
 
       img {
-        width: 25px;
-        height: 25px;
+        width: 20px;
+        height: 20px;
       }
     }
   }

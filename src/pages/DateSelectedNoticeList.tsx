@@ -1,10 +1,12 @@
+import { useEffect } from "react";
 import { styled } from "styled-components";
-import NavBar from "@components/custom/NavBar";
+// import NavBar from "@components/custom/NavBar";
 import HomeRecruitBox from "@components/HomeRecruitBox";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { dummyJobPostList } from "@api/dummyData";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
+import { sendMessage } from "@api/message";
 
 /**
  * 날짜 선택시 화면
@@ -23,16 +25,33 @@ export default function DateSelectedNoticeList() {
   // month에 따른 데이터들중 해당 날짜에 맞는 joblist만 고르는 로직 추가 필요
   // dummydata
   const jobPostList = dummyJobPostList;
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const navigateToExtraCastingBoard = (jobPostId: number) => {
     const basePath = "/extra-casting-board";
-    navigate(`${basePath}/${jobPostId}`);
+    // navigate(`${basePath}/${jobPostId}`);
+    sendMessage({
+      type: "NAVIGATION_DETAIL",
+      payload: {
+        url: `${basePath}/${jobPostId}`,
+      },
+      version: "1.0",
+    });
   };
+
+  useEffect(() => {
+    sendMessage({
+      type: "POST_DATA",
+      payload: {
+        title: navContent,
+      },
+      version: "1.0",
+    });
+  }, []);
 
   return (
     <Container>
-      <NavBar content={navContent} />
+      {/* <NavBar content={navContent} /> */}
 
       <ItemWrapper>
         {jobPostList.map((elem, key) => {

@@ -6,13 +6,15 @@ import Calender from "@components/Calender";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 import { dummyMonthJobList } from "@api/dummyData";
 import { JobPost } from "@api/interface";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
+
+import { sendMessage } from "@api/message";
 
 /**임시
  * API 개발 후 처리할 예정
@@ -52,7 +54,7 @@ export default function ExtrasHome() {
   const jobPostList = dummyMonthJobList;
 
   // navigate
-  const navigate = useNavigate();
+  //  const navigate = useNavigate();
 
   // 전체 || 추천
   const showRecommand = useSelector(
@@ -70,13 +72,27 @@ export default function ExtrasHome() {
   // dateSelectedNoticeList 날짜 선택시 화면으로 이동
   const navigateToSelectedNoticeList = () => {
     const path = "/date-selected-notice-list";
-    navigate(path);
+    // navigate(path);
+    sendMessage({
+      type: "NAVIGATION_DATE",
+      payload: {
+        url: path,
+      },
+      version: "1.0",
+    });
   };
 
   // 리스트 보기 선택시 navigate
   const navigateToExtraCastingBoard = (elem: JobPost) => {
     const path = `/extra-casting-board/${elem.job_post_id}`;
-    navigate(path);
+    //navigate(path);
+    sendMessage({
+      type: "NAVIGATION_DETAIL",
+      payload: {
+        url: path,
+      },
+      version: "1.0",
+    });
   };
 
   return (
@@ -104,7 +120,9 @@ export default function ExtrasHome() {
             {jobPostList.map((elem, key) => {
               return (
                 <HomeRecruitBox
-                  navigate={() => navigateToExtraCastingBoard(elem)}
+                  navigate={() => {
+                    navigateToExtraCastingBoard(elem);
+                  }}
                   key={key}
                   recruitInfo={elem}
                   recommand={showRecommand}

@@ -1,19 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import modalReducer from "@redux/modalSlice";
-import recruitReducer from "@redux/recruitSlice";
-import homeSelectedDateReducer from "@redux/home/homeSelectedDateSlice";
-import showTypeSliceReducer from "@redux/home/showTypeSlice";
+import rootReducer from "./rootReducer";
+import { persistStore } from "redux-persist";
 
 const store = configureStore({
-  reducer: {
-    modal: modalReducer,
-    recruit: recruitReducer,
-    homeSelectedDate: homeSelectedDateReducer,
-    showType: showTypeSliceReducer,
-  },
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 export default store;
+export const persistor = persistStore(store);

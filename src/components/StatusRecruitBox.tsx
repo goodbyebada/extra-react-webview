@@ -1,24 +1,32 @@
-import React, { useRef, TouchEvent } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useRef, TouchEvent, useState } from "react";
+// import { useSelector, useDispatch } from "react-redux";
 import styled, { keyframes } from "styled-components";
 import RecruitStatus from "@components/custom/recruitStatus";
 import DeleteButton from "@components/custom/deleteBtn";
-import { toggleSwipe } from "../redux/recruitSlice";
-import { RootState } from "../redux/store";
+// import { toggleSwipe } from "../redux/recruitSlice";
+// import { RootState } from "../redux/store";
+import { sendMessage } from "@api/message";
+import { Recruit } from "@api/interface";
 
-interface RecruitStatusState {
-  pending: boolean;
-  rejected: boolean;
-  approved: boolean;
-}
+type Props = {
+  recruitInfo: Recruit;
+};
 
-function StatusRecruitBox() {
-  const dispatch = useDispatch();
-  const swiped = useSelector((state: RootState) => state.recruit.swiped);
-  const recruitStatus = useSelector(
-    (state: RootState) => state.recruit.recruitStatus,
-  ) as RecruitStatusState;
+function StatusRecruitBox({ recruitInfo }: Props) {
+  const [swiped, setSwiped] = useState(false);
+  // const dispatch = useDispatch();
+  //  const swiped = useSelector((state: RootState) => state.recruit.swiped);
   const touchStartX = useRef(0);
+
+  const {
+    category,
+    title,
+    calendar,
+    company_name,
+    gathering_time,
+    gathering_location,
+    status,
+  } = recruitInfo;
 
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     touchStartX.current = e.touches[0].clientX;
@@ -27,24 +35,43 @@ function StatusRecruitBox() {
   const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
     const touchEndX = e.changedTouches[0].clientX;
     if (touchStartX.current - touchEndX > 50) {
-      dispatch(toggleSwipe());
+      // dispatch(toggleSwipe());
+      setSwiped(!swiped);
     } else if (touchEndX - touchStartX.current > 50) {
-      dispatch(toggleSwipe());
+      // dispatch(toggleSwipe())
+      setSwiped(!swiped);
     }
   };
 
   let deleteButtonText = "";
-  if (recruitStatus.pending) {
+  if (status.pending) {
     deleteButtonText = "지원\n취소하기";
-  } else if (recruitStatus.rejected) {
+  } else if (status.rejected) {
     deleteButtonText = "삭제하기";
   }
 
-  const shouldShowDeleteButton = !recruitStatus.approved;
-  const swipeEnabled = !recruitStatus.approved;
+  const shouldShowDeleteButton = !status.approved;
+  const swipeEnabled = !status.approved;
 
   return (
-    <RecruitContainer>
+    <RecruitContainer
+      onClick={() => {
+        if (!status.rejected) {
+          const payload = status.approved
+            ? {
+                job_post_id: 1,
+              }
+            : {
+                url: `/extra-casting-board/1`,
+              };
+          sendMessage({
+            type: status.approved ? "NAVIGATION_MANAGE" : "NAVIGATION_DETAIL",
+            payload: payload,
+            version: "1.0",
+          });
+        }
+      }}
+    >
       {shouldShowDeleteButton && <DeleteButton cancelText={deleteButtonText} />}
       <RecruitBox
         swiped={swiped}
@@ -53,16 +80,16 @@ function StatusRecruitBox() {
         swipeEnabled={swipeEnabled}
       >
         <InfoContainer>
-          <MediaSelectorTxt>media</MediaSelectorTxt>
-          <TitleTxt>title</TitleTxt>
+          <MediaSelectorTxt>{category}</MediaSelectorTxt>
+          <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>date</DateTxt>
+            <DateTxt>{calendar}</DateTxt>
             <DeadlineBox>D-0</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>team</Team>
+          <Team>{company_name}</Team>
         </InfoContainer>
         <RecruitStatus
-          visible={recruitStatus.pending}
+          visible={status.pending}
           borderColor="#767676"
           backgroundColor="#d9d9d9"
           color="#000"
@@ -71,7 +98,7 @@ function StatusRecruitBox() {
           승인 대기
         </RecruitStatus>
         <RecruitStatus
-          visible={recruitStatus.rejected}
+          visible={status.rejected}
           borderColor="#F00"
           backgroundColor="#F00"
           color="#FFF"
@@ -80,7 +107,7 @@ function StatusRecruitBox() {
           미승인
         </RecruitStatus>
         <RecruitStatus
-          visible={recruitStatus.approved}
+          visible={status.approved}
           borderColor="#23D014"
           backgroundColor="#23D014"
           color="#FFF"
@@ -89,7 +116,7 @@ function StatusRecruitBox() {
           승인 완료
         </RecruitStatus>
         <TimePlace>
-          00:00 예정 <br /> place
+          {gathering_time} 예정 <br /> {gathering_location}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>

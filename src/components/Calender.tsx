@@ -26,7 +26,7 @@ type CalenderProps = {
 export default function Calender({
   dateYM,
   dateYMHandler,
-  jobPostList,
+  // jobPostList,
   showRecommand,
   clickedDateEvent,
 }: CalenderProps) {
@@ -37,9 +37,9 @@ export default function Calender({
    */
 
   // 한 date의 공고 일정 개수 list
-  let jobCnt = Array.from({ length: 30 }, (v, i) => 1);
+  const jobCnt = Array.from({ length: 30 }, () => 1);
   // 공고의 유무 flag list
-  let gotJob = Array.from({ length: 30 }, (v, i) => {
+  const gotJob = Array.from({ length: 30 }, (_, i) => {
     if (i % 2 === 0) return true;
     return false;
   });
@@ -49,8 +49,8 @@ export default function Calender({
   let i = -1;
 
   // 2024 ~ 2053년(30년)
-  const yearItemList = Array.from({ length: 30 }, (v, i) => 2024 + i);
-  const monthItemList = Array.from({ length: 12 }, (v, i) => 1 + i);
+  const yearItemList = Array.from({ length: 30 }, (_, i) => 2024 + i);
+  const monthItemList = Array.from({ length: 12 }, (_, i) => 1 + i);
 
   const dateOnClick = (dateNum: number, key: number) => {
     if (gotJob[dateNum]) {
@@ -143,7 +143,7 @@ export default function Calender({
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
+  max-height: 100vh;
 
   display: flex;
   flex-direction: column;
@@ -164,12 +164,12 @@ const Container = styled.div`
 `;
 
 const DateSelector = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 `;
 
 const CalenderContainer = styled.div<{ $daylistHeight: number }>`
   width: 372px;
-  height: 412px;
+  height: 430px;
 
   font-size: 16px;
   font-weight: 900;
@@ -178,7 +178,7 @@ const CalenderContainer = styled.div<{ $daylistHeight: number }>`
 
   .calender-wrapper {
     background-color: black;
-    height: 100%;
+    height: 75%;
     border-radius: 20px;
   }
 
