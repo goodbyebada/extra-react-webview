@@ -9,6 +9,7 @@ import ExtraCastingBoard from "@pages/ExtraCastingBoard";
 import DateSelectedNoticeList from "@pages/DateSelectedNoticeList";
 import Scheduler from "@pages/Scheduler";
 import CompanyHome from "@pages/CompanyHome";
+import ExtraShootManagePage from "@pages/ExtraShootManagePage";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           />
 
           <Route path="/scheduler" element={<Scheduler />} />
+          <Route path="/member/manage" element={<ExtraShootManagePage />} />
 
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/detail" element={<DetailPage />} />

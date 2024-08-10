@@ -56,3 +56,16 @@ export type RoleRegister = {
   etc: string;
   limit_personnal: number;
 };
+
+export enum ShootManageSelectStatus {
+  "APPLIED" = 1,
+  "REJECTED" = 2,
+  "APPROVED" = 3,
+}
+
+// Reverse mapping
+export const ApplyStatusLabel: { [key: number]: string } = {
+  1: "승인 대기",
+  2: "미승인",
+  3: "승인 완료",
+};
