@@ -6,7 +6,6 @@ import RecruitStatus from "@components/custom/recruitStatus";
 import { JobPost } from "@api/interface";
 
 type Props = {
-  key: number;
   navigate: () => void;
   recruitInfo: JobPost;
   recommand?: boolean | undefined;

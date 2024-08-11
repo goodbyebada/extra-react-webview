@@ -5,7 +5,7 @@
 
 import styled from "styled-components";
 import { dummyMonthJobList } from "@api/dummyData";
-import HomeRecruitBox from "@/components/HomeRecruitBox";
+import AdminManageRecruitBox from "@components/AdminManageRecruitBox";
 import { sendMessage } from "@api/message";
 
 export default function CompanyShootManagePage() {
@@ -13,9 +13,10 @@ export default function CompanyShootManagePage() {
 
   return (
     <ItemWrapper>
-      {jobPostList.map((elem, key) => {
+      {jobPostList.map((_, key) => {
         return (
-          <HomeRecruitBox
+          <AdminManageRecruitBox
+            key={key}
             navigate={() => {
               sendMessage({
                 type: "NAVIGATION_MANAGE",
@@ -25,8 +26,6 @@ export default function CompanyShootManagePage() {
                 version: "1.0",
               });
             }}
-            key={key}
-            recruitInfo={elem}
           />
         );
       })}

@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import DropDownSelector from "@components/DropDownSelector";
 import { dummyRecruitList } from "@api/dummyData";
+import { Recruit } from "@api/interface";
 
 // {
 //   "id": 1,
@@ -22,12 +23,28 @@ import { dummyRecruitList } from "@api/dummyData";
 export default function ExtraShootManagePage() {
   const [applyStatusIdx, setApplyStatusIdx] = useState(0);
   // 1~3까지의 배열
-  const selcetorList = Array.from({ length: 4 }, (v, i) => i);
+  const selcetorList = Array.from({ length: 4 }, (_, i) => i);
   const handler = (selectedIdx: number) => {
     setApplyStatusIdx(selectedIdx);
   };
 
   const recruitList = dummyRecruitList;
+
+  const element = (key: number, elem: Recruit) => (
+    <Wrapper key={key}>
+      <StatusRecruitBox recruitInfo={elem} />
+    </Wrapper>
+  );
+
+  const elementList = recruitList
+    .filter(
+      (elem) =>
+        applyStatusIdx === 0 ||
+        (applyStatusIdx === 1 && elem.status.pending) ||
+        (applyStatusIdx === 2 && elem.status.rejected) ||
+        (applyStatusIdx === 3 && elem.status.approved),
+    )
+    .map((elem, key) => element(key, elem));
 
   return (
     <div>
@@ -37,16 +54,8 @@ export default function ExtraShootManagePage() {
           modalIdxList={selcetorList}
           handler={handler}
         />
-      </Top>{" "}
-      <ListContainer>
-        {recruitList.map((elem, key) => {
-          return (
-            <Wrapper key={key}>
-              <StatusRecruitBox recruitInfo={elem} />
-            </Wrapper>
-          );
-        })}
-      </ListContainer>
+      </Top>
+      <ListContainer>{elementList}</ListContainer>
     </div>
   );
 }
