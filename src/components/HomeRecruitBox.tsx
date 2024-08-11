@@ -1,9 +1,9 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
 import styled from "styled-components";
-import { toggleStar } from "@redux/recruitSlice";
-import { RootState } from "@redux/store";
 import RecruitStatus from "@components/custom/recruitStatus";
 import { JobPost } from "@api/interface";
+import star_g from "@assets/Star_g.png";
+import star_y from "@assets/Star_y.png";
 
 type Props = {
   navigate: () => void;
@@ -14,8 +14,8 @@ type Props = {
 /**
  * 수정 해야할 것
  *
- * 1. D-0 로직은 작성하지 않았음, 추후 작성 예정
- *
+ * 1. D-day 데이터 받아올 때 year 필요(임시- 2024), 추후 수정 예정
+ * 2. D-0, D-day 기준 필요, 8/1-8/4와 같이 여러 날일 경우 기준 필요
  */
 
 /**
@@ -26,12 +26,30 @@ type Props = {
  *   일반 공고 리스트라면 navigate, recruitInfo만 작성하면 됨
  * @returns 공고 기본 컴포넌트 + 즐겨찾기 기능
  */
+
+const calculateDday = (calendar: string) => {
+  const today = new Date();
+  const [startCal, endCal] = calendar
+    .split("-")
+    .map((date) => new Date(`2024/${date.trim()}`));
+
+  const startDiff = Math.ceil((+startCal - +today) / (1000 * 60 * 60 * 24));
+  const endDiff = Math.ceil((+endCal - +today) / (1000 * 60 * 60 * 24));
+
+  if (startDiff <= 0 && endDiff >= 0) {
+    return "D-day";
+  } else if (startDiff > 0) {
+    return `D-${startDiff}`;
+  } else {
+    return "종료";
+  }
+};
+
 function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
-  const dispatch = useDispatch();
-  const star = useSelector((state: RootState) => state.recruit.star);
+  const [star, setStar] = useState(star_g);
 
   const handleStarClick = () => {
-    dispatch(toggleStar());
+    setStar(star === star_g ? star_y : star_g);
   };
 
   const {
@@ -41,7 +59,10 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
     company_name,
     gathering_time,
     gathering_location,
+    status,
   } = recruitInfo;
+
+  const dday = calculateDday(calendar);
 
   return (
     <RecruitContainer className={`${!recommand ? "" : "recommand"}`}>
@@ -55,18 +76,18 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
           <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
             <DateTxt>{calendar}</DateTxt>
-            <DeadlineBox>D-0</DeadlineBox>
+            <DeadlineBox>{dday}</DeadlineBox>
           </DateAndDeadlineContainer>
           <Team>{company_name}</Team>
         </InfoContainer>
         <RecruitStatus
           visible={true}
-          borderColor="#767676"
-          backgroundColor="#d9d9d9"
-          color="#000"
-          fontSize={"12px"}
+          borderColor={status ? "#767676" : "#F00"}
+          backgroundColor={status ? "#d9d9d9" : "#F00"}
+          color={status ? "#000" : "#fff"}
+          fontSize={status ? "12px" : "11px"}
         >
-          모집중
+          {status ? "모집중" : "모집마감"}
         </RecruitStatus>
         <TimePlace>
           {gathering_time} 예정 <br /> {gathering_location}
@@ -158,7 +179,6 @@ const DeadlineBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
   height: 18px;
   border-radius: 20px;
   background: #d9d9d9;
@@ -166,6 +186,8 @@ const DeadlineBox = styled.div`
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.11px;
+  padding-left: 7px;
+  padding-right: 7px;
 `;
 
 const Team = styled.div`

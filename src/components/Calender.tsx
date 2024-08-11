@@ -23,10 +23,16 @@ type CalenderProps = {
  * @returns 사용자/ 업체 홈 화면 캘린더 UI
  */
 
+//수정 사항 추후 삭제
+// merge 과정에서 오류로 인해 commit이 안되는 문제 발생. error, warning 부분 주석 처리 후 임시 작성.
+// jobPostList 주석처리
+// let -> const 수정
+// Array.from v,i
+
 export default function Calender({
   dateYM,
   dateYMHandler,
-  jobPostList,
+  // jobPostList,
   showRecommand,
   clickedDateEvent,
 }: CalenderProps) {
@@ -36,10 +42,18 @@ export default function Calender({
    * jobPostList calender 형식 서버와 협의한 후 수정 예정
    */
 
+  // // 한 date의 공고 일정 개수 list
+  // let jobCnt = Array.from({ length: 30 }, (v, i) => 1);
+  // // 공고의 유무 flag list
+  // let gotJob = Array.from({ length: 30 }, (v, i) => {
+  //   if (i % 2 === 0) return true;
+  //   return false;
+  // });
+
   // 한 date의 공고 일정 개수 list
-  let jobCnt = Array.from({ length: 30 }, (v, i) => 1);
+  const jobCnt = Array.from({ length: 30 }, () => 1);
   // 공고의 유무 flag list
-  let gotJob = Array.from({ length: 30 }, (v, i) => {
+  const gotJob = Array.from({ length: 30 }, (_, i) => {
     if (i % 2 === 0) return true;
     return false;
   });
