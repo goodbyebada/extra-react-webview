@@ -7,8 +7,6 @@ import StatusRecruitBox from "@components/StatusRecruitBox";
 import styled from "styled-components";
 import { useState } from "react";
 import DropDownSelector from "@components/DropDownSelector";
-import { dummyRecruitList } from "@api/dummyData";
-import { Recruit } from "@api/interface";
 
 // {
 //   "id": 1,
@@ -28,24 +26,6 @@ export default function ExtraShootManagePage() {
     setApplyStatusIdx(selectedIdx);
   };
 
-  const recruitList = dummyRecruitList;
-
-  const element = (key: number, elem: Recruit) => (
-    <Wrapper key={key}>
-      <StatusRecruitBox recruitInfo={elem} />
-    </Wrapper>
-  );
-
-  const elementList = recruitList
-    .filter(
-      (elem) =>
-        applyStatusIdx === 0 ||
-        (applyStatusIdx === 1 && elem.status.pending) ||
-        (applyStatusIdx === 2 && elem.status.rejected) ||
-        (applyStatusIdx === 3 && elem.status.approved),
-    )
-    .map((elem, key) => element(key, elem));
-
   return (
     <div>
       <Top>
@@ -54,8 +34,30 @@ export default function ExtraShootManagePage() {
           modalIdxList={selcetorList}
           handler={handler}
         />
-      </Top>
-      <ListContainer>{elementList}</ListContainer>
+      </Top>{" "}
+      <ListContainer>
+        <Wrapper>
+          <StatusRecruitBox />
+        </Wrapper>
+        <Wrapper>
+          <StatusRecruitBox />
+        </Wrapper>{" "}
+        <Wrapper>
+          <StatusRecruitBox />
+        </Wrapper>
+        <Wrapper>
+          <StatusRecruitBox />
+        </Wrapper>{" "}
+        <Wrapper>
+          <StatusRecruitBox />
+        </Wrapper>{" "}
+        <Wrapper>
+          <StatusRecruitBox />
+        </Wrapper>{" "}
+        <Wrapper>
+          <StatusRecruitBox />
+        </Wrapper>
+      </ListContainer>
     </div>
   );
 }
@@ -75,7 +77,6 @@ const Top = styled.div`
   left: 0;
   background-color: black;
   z-index: 9;
-  margin: 20px 0 10px;
 `;
 
 const ListContainer = styled.div`
@@ -85,7 +86,6 @@ const ListContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   > * {
     margin-bottom: 10px;
   }

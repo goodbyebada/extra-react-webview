@@ -20,11 +20,11 @@ const SmallRecruitStatus: React.FC<SmallRecruitStatusProps> = ({
 }) => {
   return (
     <RecruitStatusContainer
-      visible={visible}
-      borderColor={borderColor}
-      backgroundColor={backgroundColor}
-      color={color}
-      fontSize={fontSize}
+      $visible={visible}
+      $borderColor={borderColor}
+      $backgroundColor={backgroundColor}
+      $color={color}
+      $fontSize={fontSize}
     >
       {children}
     </RecruitStatusContainer>
@@ -33,7 +33,13 @@ const SmallRecruitStatus: React.FC<SmallRecruitStatusProps> = ({
 
 export default SmallRecruitStatus;
 
-const RecruitStatusContainer = styled.div`
+const RecruitStatusContainer = styled.div<{
+  $visible: boolean;
+  $borderColor: string;
+  $backgroundColor: string;
+  $color: string;
+  $fontSize: string;
+}>`
   position: absolute;
   display: flex;
   align-items: center;
@@ -43,11 +49,11 @@ const RecruitStatusContainer = styled.div`
   width: 52px;
   height: 22px;
   border-radius: 20px;
-  border: 1px solid ${(props) => props.borderColor};
-  background: ${(props) => props.backgroundColor};
-  color: ${(props) => props.color};
-  font-size: ${(props) => props.fontSize};
+  border: 1px solid ${(props) => props.$borderColor};
+  background: ${(props) => props.$backgroundColor};
+  color: ${(props) => props.$color};
+  font-size: ${(props) => props.$fontSize};
   font-weight: 900;
   letter-spacing: 0.1px;
-  display: ${(props) => (props.visible ? "flex" : "none")};
+  display: ${(props) => (props.$visible ? "flex" : "none")};
 `;

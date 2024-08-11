@@ -41,6 +41,22 @@ export type JobPostList = JobPost[];
  */
 export type RoleList = Role[];
 
+/**
+ * 역할 등록 API 호출시,
+ * request
+ */
+export type RoleRegister = {
+  job_post_id: number;
+  sex: boolean; // true: female, false: male
+  min_age: number;
+  max_age: number;
+  season: string;
+  costume: string;
+  check_tatto: string; // boolean -> string 변경
+  etc: string;
+  limit_personnal: number;
+};
+
 export enum ShootManageSelectStatus {
   "ALL" = 0,
   "APPLIED" = 1,
@@ -55,22 +71,3 @@ export const ApplyStatusLabel: { [key: number]: string } = {
   2: "미승인",
   3: "승인 완료",
 };
-
-type RecruitStatus = {
-  pending: boolean;
-  rejected: boolean;
-  approved: boolean;
-};
-
-export type Recruit = {
-  job_post_id: number;
-  calendar: string;
-  company_name: string;
-  title: string;
-  gathering_location: string;
-  gathering_time: string; // string 또는 timestamp 형식의 string 사용 가능
-  category: string;
-  status: RecruitStatus;
-};
-
-export type RecruitList = Recruit[];

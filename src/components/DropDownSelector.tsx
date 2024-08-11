@@ -69,7 +69,6 @@ const Container = styled.span`
     justify-content: center;
     align-items: center;
   }
-
   .dropDown-list {
     position: absolute;
     min-width: 110px;
@@ -83,26 +82,22 @@ const Container = styled.span`
     z-index: 9;
     overflow-y: scroll;
     font-size: 16px;
-
     > * {
       font-weight: 700;
       line-height: 150%;
       margin: 3px;
     }
   }
-
   button {
     background-color: transparent;
     border: 0px;
     transform: rotate(90deg);
     padding: 5px;
-
     &.clicked {
       img {
         transform: rotate(-180deg);
       }
     }
-
     img {
       width: 17px;
       height: 17px;

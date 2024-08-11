@@ -1,32 +1,24 @@
-import { useRef, TouchEvent, useState } from "react";
-// import { useSelector, useDispatch } from "react-redux";
+import { useState, useRef, TouchEvent } from "react";
 import styled, { keyframes } from "styled-components";
 import RecruitStatus from "@components/custom/recruitStatus";
 import DeleteButton from "@components/custom/deleteBtn";
-// import { toggleSwipe } from "../redux/recruitSlice";
-// import { RootState } from "../redux/store";
+import star_g from "@assets/Star_g.png";
+import star_y from "@assets/Star_y.png";
+import { ShootManageSelectStatus, ApplyStatusLabel } from "@api/interface";
 import { sendMessage } from "@api/message";
-import { Recruit } from "@api/interface";
 
-type Props = {
-  recruitInfo: Recruit;
-};
+/**
+ * 촬영관리 컴포넌트
+ *
+ * 수정할 것
+ * 현재 승인상태(승인대기, 미승인, 승인완료)는 데이터 연결 전이라 임시로 승인대기 상태. 추후 수정예정
+ */
 
-function StatusRecruitBox({ recruitInfo }: Props) {
+function StatusRecruitBox() {
   const [swiped, setSwiped] = useState(false);
-  // const dispatch = useDispatch();
-  //  const swiped = useSelector((state: RootState) => state.recruit.swiped);
-  const touchStartX = useRef(0);
+  const [star, setStar] = useState(star_g);
 
-  const {
-    category,
-    title,
-    calendar,
-    company_name,
-    gathering_time,
-    gathering_location,
-    status,
-  } = recruitInfo;
+  const touchStartX = useRef(0);
 
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     touchStartX.current = e.touches[0].clientX;
@@ -35,37 +27,49 @@ function StatusRecruitBox({ recruitInfo }: Props) {
   const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
     const touchEndX = e.changedTouches[0].clientX;
     if (touchStartX.current - touchEndX > 50) {
-      // dispatch(toggleSwipe());
-      setSwiped(!swiped);
+      setSwiped(true);
     } else if (touchEndX - touchStartX.current > 50) {
-      // dispatch(toggleSwipe())
-      setSwiped(!swiped);
+      setSwiped(false);
     }
   };
 
+  const handleStarClick = () => {
+    setStar(star === star_g ? star_y : star_g);
+  };
+
+  const recruitStatus = {
+    status: ShootManageSelectStatus.APPLIED, // 기본 상태, 데이터 연결시 수정
+  };
+
   let deleteButtonText = "";
-  if (status.pending) {
+  if (recruitStatus.status === ShootManageSelectStatus.APPLIED) {
     deleteButtonText = "지원\n취소하기";
-  } else if (status.rejected) {
+  } else if (recruitStatus.status === ShootManageSelectStatus.REJECTED) {
     deleteButtonText = "삭제하기";
   }
 
-  const shouldShowDeleteButton = !status.approved;
-  const swipeEnabled = !status.approved;
+  const shouldShowDeleteButton =
+    recruitStatus.status !== ShootManageSelectStatus.APPROVED;
+  const swipeEnabled =
+    recruitStatus.status !== ShootManageSelectStatus.APPROVED;
 
   return (
     <RecruitContainer
       onClick={() => {
-        if (!status.rejected) {
-          const payload = status.approved
-            ? {
-                job_post_id: 1,
-              }
-            : {
-                url: `/extra-casting-board/1`,
-              };
+        if (recruitStatus.status !== ShootManageSelectStatus.REJECTED) {
+          const payload =
+            recruitStatus.status === ShootManageSelectStatus.APPROVED
+              ? {
+                  job_post_id: 1,
+                }
+              : {
+                  url: `/extra-casting-board/1`,
+                };
           sendMessage({
-            type: status.approved ? "NAVIGATION_MANAGE" : "NAVIGATION_DETAIL",
+            type:
+              recruitStatus.status === ShootManageSelectStatus.APPROVED
+                ? "NAVIGATION_MANAGE"
+                : "NAVIGATION_DETAIL",
             payload: payload,
             version: "1.0",
           });
@@ -74,50 +78,51 @@ function StatusRecruitBox({ recruitInfo }: Props) {
     >
       {shouldShowDeleteButton && <DeleteButton cancelText={deleteButtonText} />}
       <RecruitBox
-        swiped={swiped}
+        $swiped={swiped}
         onTouchStart={swipeEnabled ? handleTouchStart : undefined}
         onTouchEnd={swipeEnabled ? handleTouchEnd : undefined}
-        swipeEnabled={swipeEnabled}
+        $swipeEnabled={swipeEnabled}
       >
         <InfoContainer>
-          <MediaSelectorTxt>{category}</MediaSelectorTxt>
-          <TitleTxt>{title}</TitleTxt>
+          <MediaSelectorTxt>media</MediaSelectorTxt>
+          <TitleTxt>title</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>{calendar}</DateTxt>
+            <DateTxt>date</DateTxt>
             <DeadlineBox>D-0</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>{company_name}</Team>
+          <Team>team</Team>
         </InfoContainer>
         <RecruitStatus
-          visible={status.pending}
+          visible={recruitStatus.status === ShootManageSelectStatus.APPLIED}
           borderColor="#767676"
           backgroundColor="#d9d9d9"
           color="#000"
           fontSize={"10px"}
         >
-          승인 대기
+          {ApplyStatusLabel[ShootManageSelectStatus.APPLIED]}
         </RecruitStatus>
         <RecruitStatus
-          visible={status.rejected}
+          visible={recruitStatus.status === ShootManageSelectStatus.REJECTED}
           borderColor="#F00"
           backgroundColor="#F00"
           color="#FFF"
           fontSize={"12px"}
         >
-          미승인
+          {ApplyStatusLabel[ShootManageSelectStatus.REJECTED]}
         </RecruitStatus>
         <RecruitStatus
-          visible={status.approved}
+          visible={recruitStatus.status === ShootManageSelectStatus.APPROVED}
           borderColor="#23D014"
           backgroundColor="#23D014"
           color="#FFF"
           fontSize={"10px"}
         >
-          승인 완료
+          {ApplyStatusLabel[ShootManageSelectStatus.APPROVED]}
         </RecruitStatus>
         <TimePlace>
-          {gathering_time} 예정 <br /> {gathering_location}
+          00:00 예정 <br /> place
         </TimePlace>
+        <StarIcon src={star} onClick={handleStarClick} />
       </RecruitBox>
     </RecruitContainer>
   );
@@ -125,6 +130,7 @@ function StatusRecruitBox({ recruitInfo }: Props) {
 
 export default StatusRecruitBox;
 
+// 스와이프 애니메이션 정의
 const swipeLeft = keyframes`
   0% {
     transform: translateX(0);
@@ -154,7 +160,7 @@ const RecruitContainer = styled.div`
   position: relative;
 `;
 
-const RecruitBox = styled.div<{ swiped: boolean; swipeEnabled: boolean }>`
+const RecruitBox = styled.div<{ $swiped: boolean; $swipeEnabled: boolean }>`
   display: flex;
   position: relative;
   width: 365px;
@@ -166,7 +172,7 @@ const RecruitBox = styled.div<{ swiped: boolean; swipeEnabled: boolean }>`
   padding: 17px;
   box-sizing: border-box;
   animation: ${(props) =>
-      props.swipeEnabled ? (props.swiped ? swipeLeft : swipeRight) : "none"}
+      props.$swipeEnabled ? (props.$swiped ? swipeLeft : swipeRight) : "none"}
     0.4s forwards;
   z-index: 2;
 `;
@@ -234,12 +240,19 @@ const Team = styled.div`
 
 const TimePlace = styled.div`
   position: absolute;
-  top: 20px;
-  right: 10px;
+  top: 16px;
+  right: 45px;
   color: #fff;
   text-align: right;
   font-size: 11px;
   font-weight: 500;
   line-height: 15px;
   letter-spacing: 0.11px;
+`;
+
+const StarIcon = styled.img`
+  position: absolute;
+  top: 18px;
+  right: 10px;
+  z-index: 1;
 `;

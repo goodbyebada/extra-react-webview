@@ -10,15 +10,15 @@ const Column = styled.div`
 `;
 
 // const Announcement = styled.div`
-//   background-color: #302e34;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   width: 380px;
-//   height: 100px;
-//   margin: 20px 0;
-//   cursor: pointer;
-// `;
+//     background-color: #302E34;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     width: 380px;
+//     height: 100px;
+//     margin: 20px 0;
+//     cursor: pointer;
+// `
 
 const PlusButton = styled.button`
   font-size: 30px;
@@ -41,8 +41,8 @@ function ManagerDashboard() {
   const navigate = useNavigate();
 
   // const goToDetail = () => {
-  //   navigate("/detail");
-  // };
+  //     navigate('/detail');
+  // }
   const goToAdd = () => {
     navigate("/add-notice");
   };

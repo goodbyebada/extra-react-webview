@@ -8,10 +8,10 @@ import ExtrasHome from "@pages/ExtrasHome";
 import ExtraCastingBoard from "@pages/ExtraCastingBoard";
 import DateSelectedNoticeList from "@pages/DateSelectedNoticeList";
 import Scheduler from "@pages/Scheduler";
-import ExtraShootManagePage from "@pages/ExtraShootManagePage";
-
 import CompanyHome from "@pages/CompanyHome";
+import ExtraShootManagePage from "@pages/ExtraShootManagePage";
 import CompanyShootManagePage from "@pages/CompanyShootManagePage";
+import DetailPage from "@pages/DetailPage";
 
 function App() {
   return (
@@ -37,6 +37,7 @@ function App() {
           />
 
           <Route path="/scheduler" element={<Scheduler />} />
+          <Route path="/member/manage" element={<ExtraShootManagePage />} />
 
           <Route
             path="/extra-shoot-manage"
@@ -49,6 +50,7 @@ function App() {
           />
 
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
+          <Route path="/detail" element={<DetailPage />} />
           <Route path="/applicants" element={<ShowApplicant />} />
           <Route path="/add-notice" element={<AddNotice />} />
         </Routes>

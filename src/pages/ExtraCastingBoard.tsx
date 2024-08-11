@@ -10,7 +10,7 @@ import NavBar from "@components/custom/NavBar";
 import {
   dummyRoleList,
   dummyJobPostList,
-  //dummyMonthJobList,
+  // dummyMonthJobList,
 } from "@api/dummyData";
 import { RoleList, JobPost } from "@api/interface";
 import RoleModal from "@components/Modal/RoleModal";
