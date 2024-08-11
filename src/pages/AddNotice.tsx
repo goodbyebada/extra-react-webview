@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import backIcon from "../asset/backIcon.png";
 import styled from "styled-components";
 import Modal from "../components/Modal";
-//import CompanyRoleModal from "../component/CompanyRoleModal";
+import CompanyRoleModal from "@/components/Modal/CompanyRoleModal";
 
 const Column = styled.div`
   display: flex;
@@ -90,6 +90,8 @@ function AddNotice() {
   // 모달의 종류 지정 ( 1: 제목 카테고리 / 2: 날짜 시간 장소 )
   const [modalType, setModalType] = useState(0);
 
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false); // 역할 모달 열림 상태 추가
+
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
 
@@ -150,6 +152,14 @@ function AddNotice() {
     if (e.key === "Enter") {
       setRole(e.currentTarget.value);
     }
+  };
+
+  const openRoleModal = () => {
+    setIsRoleModalOpen(true);
+  };
+
+  const closeRoleModal = () => {
+    setIsRoleModalOpen(false);
   };
 
   return (
@@ -241,7 +251,7 @@ function AddNotice() {
             >
               {/* 눌렀을 때 7개의 조율 사항 모달이 뜨도록 구현해야함!!!! */}
 
-              <Container2>
+              <Container2 onClick={openRoleModal}>
                 <p>+ 역할 상세 프로필</p>
               </Container2>
             </div>
@@ -319,7 +329,8 @@ function AddNotice() {
         </div>
       </Modal>
 
-      {/* 역할에 대한 모달도 추가해야함 */}
+      {/* 역할 상세 모달 */}
+      {isRoleModalOpen && <CompanyRoleModal closeModal={closeRoleModal} />}
     </>
   );
 }
