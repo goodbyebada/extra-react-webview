@@ -4,6 +4,7 @@ import backIcon from "../asset/backIcon.png";
 import styled from "styled-components";
 import Modal from "../components/Modal";
 import CompanyRoleModal from "@/components/Modal/CompanyRoleModal";
+import CompanyTitleCategoryModal from "@components/Modal/CompanyTitleCategoryModal";
 
 const Column = styled.div`
   display: flex;
@@ -111,10 +112,6 @@ function AddNotice() {
   };
 
   // 제목과 카테고리 설정을 위한
-  const handlePlusButtonClick1 = (type: 1) => {
-    setModalType(type);
-    setIsModalOpen1(true);
-  };
   const closeModal1 = () => {
     setIsModalOpen1(false);
   };
@@ -154,6 +151,16 @@ function AddNotice() {
     }
   };
 
+  const openTitleCategoryModal = () => {
+    setIsModalOpen1(true);
+  };
+
+  const closeTitleCategoryModal = (title: string, category: string) => {
+    setTitle(title);
+    setCategory(category);
+    setIsModalOpen1(false);
+  };
+
   const openRoleModal = () => {
     setIsRoleModalOpen(true);
   };
@@ -188,9 +195,7 @@ function AddNotice() {
         ) : (
           <Container>
             <Column>
-              <PlusButton onClick={() => handlePlusButtonClick1(1)}>
-                +
-              </PlusButton>
+              <PlusButton onClick={openTitleCategoryModal}>+</PlusButton>
               <p style={{ color: "#5A5A5A" }}>제목, 카테고리</p>
             </Column>
           </Container>
@@ -262,7 +267,7 @@ function AddNotice() {
       </Column>
 
       {/* 제목과 카테고리 모달 내용 */}
-      <Modal isVisible={isModalOpen1} onClose={closeModal1}>
+      {/* <Modal isVisible={isModalOpen1} onClose={closeModal1}>
         <Row>
           <p style={{ fontSize: "17px", fontWeight: "bold" }}>제목 : </p>
           <CustomInput
@@ -289,7 +294,7 @@ function AddNotice() {
         >
           <CheckButton onClick={handleConfirmClick}>확인</CheckButton>
         </div>
-      </Modal>
+      </Modal> */}
 
       {/* 날짜 시간 장소 모달의 내용 */}
       <Modal isVisible={isModalOpen2} onClose={closeModal2}>
@@ -331,6 +336,9 @@ function AddNotice() {
 
       {/* 역할 상세 모달 */}
       {isRoleModalOpen && <CompanyRoleModal closeModal={closeRoleModal} />}
+      {isModalOpen1 && (
+        <CompanyTitleCategoryModal closeModal={closeTitleCategoryModal} />
+      )}
     </>
   );
 }
