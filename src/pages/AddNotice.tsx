@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import backIcon from "../asset/backIcon.png";
 import styled from "styled-components";
 import Modal from "../components/Modal";
-//import CompanyRoleModal from "../component/CompanyRoleModal";
+import CompanyRoleModal from "@/components/Modal/CompanyRoleModal";
+import CompanyTitleCategoryModal from "@components/Modal/CompanyTitleCategoryModal";
 
 const Column = styled.div`
   display: flex;
@@ -90,6 +91,8 @@ function AddNotice() {
   // 모달의 종류 지정 ( 1: 제목 카테고리 / 2: 날짜 시간 장소 )
   const [modalType, setModalType] = useState(0);
 
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false); // 역할 모달 열림 상태 추가
+
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
 
@@ -109,10 +112,6 @@ function AddNotice() {
   };
 
   // 제목과 카테고리 설정을 위한
-  const handlePlusButtonClick1 = (type: 1) => {
-    setModalType(type);
-    setIsModalOpen1(true);
-  };
   const closeModal1 = () => {
     setIsModalOpen1(false);
   };
@@ -152,6 +151,24 @@ function AddNotice() {
     }
   };
 
+  const openTitleCategoryModal = () => {
+    setIsModalOpen1(true);
+  };
+
+  const closeTitleCategoryModal = (title: string, category: string) => {
+    setTitle(title);
+    setCategory(category);
+    setIsModalOpen1(false);
+  };
+
+  const openRoleModal = () => {
+    setIsRoleModalOpen(true);
+  };
+
+  const closeRoleModal = () => {
+    setIsRoleModalOpen(false);
+  };
+
   return (
     <>
       <div style={{ display: "flex", alignItems: "start", padding: "10px" }}>
@@ -178,9 +195,7 @@ function AddNotice() {
         ) : (
           <Container>
             <Column>
-              <PlusButton onClick={() => handlePlusButtonClick1(1)}>
-                +
-              </PlusButton>
+              <PlusButton onClick={openTitleCategoryModal}>+</PlusButton>
               <p style={{ color: "#5A5A5A" }}>제목, 카테고리</p>
             </Column>
           </Container>
@@ -241,7 +256,7 @@ function AddNotice() {
             >
               {/* 눌렀을 때 7개의 조율 사항 모달이 뜨도록 구현해야함!!!! */}
 
-              <Container2>
+              <Container2 onClick={openRoleModal}>
                 <p>+ 역할 상세 프로필</p>
               </Container2>
             </div>
@@ -252,7 +267,7 @@ function AddNotice() {
       </Column>
 
       {/* 제목과 카테고리 모달 내용 */}
-      <Modal isVisible={isModalOpen1} onClose={closeModal1}>
+      {/* <Modal isVisible={isModalOpen1} onClose={closeModal1}>
         <Row>
           <p style={{ fontSize: "17px", fontWeight: "bold" }}>제목 : </p>
           <CustomInput
@@ -279,7 +294,7 @@ function AddNotice() {
         >
           <CheckButton onClick={handleConfirmClick}>확인</CheckButton>
         </div>
-      </Modal>
+      </Modal> */}
 
       {/* 날짜 시간 장소 모달의 내용 */}
       <Modal isVisible={isModalOpen2} onClose={closeModal2}>
@@ -319,7 +334,11 @@ function AddNotice() {
         </div>
       </Modal>
 
-      {/* 역할에 대한 모달도 추가해야함 */}
+      {/* 역할 상세 모달 */}
+      {isRoleModalOpen && <CompanyRoleModal closeModal={closeRoleModal} />}
+      {isModalOpen1 && (
+        <CompanyTitleCategoryModal closeModal={closeTitleCategoryModal} />
+      )}
     </>
   );
 }
