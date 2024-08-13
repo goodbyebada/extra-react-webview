@@ -14,7 +14,7 @@ import { JobPost } from "@api/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 
-import { sendMessage } from "@api/message";
+import { sendMessage } from "@api/utils";
 
 /**임시
  * API 개발 후 처리할 예정
