@@ -57,6 +57,26 @@ export type RoleRegister = {
   limit_personnal: number;
 };
 
+/**
+ * 촬영관리 API 호출시,
+ * request
+ */
+export type ShootManage = {
+  id: number;
+  category: string;
+  title: string;
+  gatheringTime: string;
+  gatheringLocation: string;
+  name: string;
+  applyStatus: ShootManageSelectStatus;
+};
+
+/**
+ * 촬영관리 조회 API 호출시,
+ * response.data.shoot_manage_list type
+ */
+export type ShootManageList = ShootManage[];
+
 export enum ShootManageSelectStatus {
   "ALL" = 0,
   "APPLIED" = 1,

@@ -5,6 +5,7 @@ import DeleteButton from "@components/custom/deleteBtn";
 import star_g from "@assets/Star_g.png";
 import star_y from "@assets/Star_y.png";
 import { ShootManageSelectStatus, ApplyStatusLabel } from "@api/interface";
+import { ShootManage } from "@api/interface";
 
 /**
  * 촬영관리 컴포넌트
@@ -13,7 +14,15 @@ import { ShootManageSelectStatus, ApplyStatusLabel } from "@api/interface";
  * 현재 승인상태(승인대기, 미승인, 승인완료)는 데이터 연결 전이라 임시로 승인대기 상태. 추후 수정예정
  */
 
-function StatusRecruitBox() {
+interface StatusRecruitBoxProps {
+  shootManageInfo: ShootManage;
+  onDelete: (id: number) => void;
+}
+
+function StatusRecruitBox({
+  shootManageInfo,
+  onDelete,
+}: StatusRecruitBoxProps) {
   const [swiped, setSwiped] = useState(false);
   const [star, setStar] = useState(star_g);
 
@@ -36,25 +45,27 @@ function StatusRecruitBox() {
     setStar(star === star_g ? star_y : star_g);
   };
 
-  const recruitStatus = {
-    status: ShootManageSelectStatus.APPLIED, // 기본 상태, 데이터 연결시 수정
-  };
+  const recruitStatus = shootManageInfo.applyStatus;
 
   let deleteButtonText = "";
-  if (recruitStatus.status === ShootManageSelectStatus.APPLIED) {
+  if (recruitStatus === ShootManageSelectStatus.APPLIED) {
     deleteButtonText = "지원\n취소하기";
-  } else if (recruitStatus.status === ShootManageSelectStatus.REJECTED) {
+  } else if (recruitStatus === ShootManageSelectStatus.REJECTED) {
     deleteButtonText = "삭제하기";
   }
 
   const shouldShowDeleteButton =
-    recruitStatus.status !== ShootManageSelectStatus.APPROVED;
-  const swipeEnabled =
-    recruitStatus.status !== ShootManageSelectStatus.APPROVED;
+    recruitStatus !== ShootManageSelectStatus.APPROVED;
+  const swipeEnabled = recruitStatus !== ShootManageSelectStatus.APPROVED;
 
   return (
     <RecruitContainer>
-      {shouldShowDeleteButton && <DeleteButton cancelText={deleteButtonText} />}
+      {shouldShowDeleteButton && (
+        <DeleteButton
+          cancelText={deleteButtonText}
+          onClick={() => onDelete(shootManageInfo.id)}
+        />
+      )}
       <RecruitBox
         $swiped={swiped}
         onTouchStart={swipeEnabled ? handleTouchStart : undefined}
@@ -63,15 +74,15 @@ function StatusRecruitBox() {
       >
         <InfoContainer>
           <MediaSelectorTxt>media</MediaSelectorTxt>
-          <TitleTxt>title</TitleTxt>
+          <TitleTxt>{shootManageInfo.title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>date</DateTxt>
+            <DateTxt>{shootManageInfo.gatheringTime}</DateTxt>
             <DeadlineBox>D-0</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>team</Team>
+          <Team>{shootManageInfo.name}</Team>
         </InfoContainer>
         <RecruitStatus
-          visible={recruitStatus.status === ShootManageSelectStatus.APPLIED}
+          visible={recruitStatus === ShootManageSelectStatus.APPLIED}
           borderColor="#767676"
           backgroundColor="#d9d9d9"
           color="#000"
@@ -80,7 +91,7 @@ function StatusRecruitBox() {
           {ApplyStatusLabel[ShootManageSelectStatus.APPLIED]}
         </RecruitStatus>
         <RecruitStatus
-          visible={recruitStatus.status === ShootManageSelectStatus.REJECTED}
+          visible={recruitStatus === ShootManageSelectStatus.REJECTED}
           borderColor="#F00"
           backgroundColor="#F00"
           color="#FFF"
@@ -89,7 +100,7 @@ function StatusRecruitBox() {
           {ApplyStatusLabel[ShootManageSelectStatus.REJECTED]}
         </RecruitStatus>
         <RecruitStatus
-          visible={recruitStatus.status === ShootManageSelectStatus.APPROVED}
+          visible={recruitStatus === ShootManageSelectStatus.APPROVED}
           borderColor="#23D014"
           backgroundColor="#23D014"
           color="#FFF"
@@ -98,7 +109,8 @@ function StatusRecruitBox() {
           {ApplyStatusLabel[ShootManageSelectStatus.APPROVED]}
         </RecruitStatus>
         <TimePlace>
-          00:00 예정 <br /> place
+          {shootManageInfo.gatheringTime} 예정 <br />{" "}
+          {shootManageInfo.gatheringLocation}
         </TimePlace>
         <StarIcon src={star} onClick={handleStarClick} />
       </RecruitBox>

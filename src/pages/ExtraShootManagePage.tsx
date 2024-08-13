@@ -7,6 +7,7 @@ import StatusRecruitBox from "@components/StatusRecruitBox";
 import styled from "styled-components";
 import { useState } from "react";
 import DropDownSelector from "@components/DropDownSelector";
+import { dummyShootManageList } from "@api/dummyData";
 
 // {
 //   "id": 1,
@@ -20,10 +21,16 @@ import DropDownSelector from "@components/DropDownSelector";
 
 export default function ExtraShootManagePage() {
   const [applyStatusIdx, setApplyStatusIdx] = useState(0);
+  const [recruitBoxes, setRecruitBoxes] = useState(dummyShootManageList);
+
   // 1~3까지의 배열
   const selcetorList = Array.from({ length: 4 }, (v, i) => i);
   const handler = (selectedIdx: number) => {
     setApplyStatusIdx(selectedIdx);
+  };
+
+  const handleDelete = (id: number) => {
+    setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
   };
 
   return (
@@ -34,29 +41,13 @@ export default function ExtraShootManagePage() {
           modalIdxList={selcetorList}
           handler={handler}
         />
-      </Top>{" "}
+      </Top>
       <ListContainer>
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>{" "}
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>{" "}
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>{" "}
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>{" "}
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>
+        {recruitBoxes.map((box) => (
+          <Wrapper key={box.id}>
+            <StatusRecruitBox shootManageInfo={box} onDelete={handleDelete} />
+          </Wrapper>
+        ))}
       </ListContainer>
     </div>
   );

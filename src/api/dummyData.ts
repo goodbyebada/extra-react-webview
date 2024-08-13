@@ -1,4 +1,10 @@
-import { RoleList, JobPostList, RoleRegister } from "@api/interface";
+import {
+  RoleList,
+  JobPostList,
+  RoleRegister,
+  ShootManageList,
+  ShootManageSelectStatus,
+} from "@api/interface";
 
 /**
  * 캘린더/리스트 조회 dummyData
@@ -218,3 +224,54 @@ export const dummyRoleResister: RoleRegister = {
   etc: "없음",
   limit_personnal: 10,
 };
+
+/**
+ * 촬영관리 리스트 조회 dummyData
+ */
+export const dummyShootManageList: ShootManageList = [
+  {
+    id: 1,
+    category: "드라마",
+    title: "UMC1",
+    gatheringTime: "2024-01-06T00:29:55",
+    gatheringLocation: "강남역",
+    name: "UMC1",
+    applyStatus: ShootManageSelectStatus.APPLIED,
+  },
+  {
+    id: 2,
+    category: "영화",
+    title: "UMC2",
+    gatheringTime: "2024-01-07T00:29:55",
+    gatheringLocation: "신논현역",
+    name: "UMC2",
+    applyStatus: ShootManageSelectStatus.REJECTED,
+  },
+  {
+    id: 3,
+    category: "영화",
+    title: "UMC3",
+    gatheringTime: "2024-01-08T00:29:55",
+    gatheringLocation: "고속 터미널역",
+    name: "UMC3",
+    applyStatus: ShootManageSelectStatus.APPROVED,
+  },
+  {
+    id: 4,
+    category: "드라마",
+    title: "UMC4",
+    gatheringTime: "2024-01-08T00:29:55",
+    gatheringLocation: "고속 터미널역",
+    name: "UMC4",
+    applyStatus: ShootManageSelectStatus.REJECTED,
+  },
+  {
+    id: 5,
+    category: "영화",
+    title: "UMC5",
+    gatheringTime: "2024-01-08T00:29:55",
+    gatheringLocation: "고속 터미널역",
+    name: "UMC5",
+    applyStatus: ShootManageSelectStatus.APPLIED,
+  },
+];
