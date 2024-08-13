@@ -135,3 +135,13 @@ export enum ResponseStatus {
   "fullfilled" = "FULFILLED",
   "rejected" = "REJECTED",
 }
+
+export interface MemberRole {
+  id: number;
+  category: string;
+  title: string;
+  gatheringTime: string;
+  gatheringLocation: string;
+  name: string;
+  applyStatus: string;
+}

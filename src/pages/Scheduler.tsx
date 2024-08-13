@@ -4,8 +4,14 @@ import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
 import ScheduleModal from "@components/Modal/ScheduleModal";
 import { useRef } from "react";
-import { useDispatch } from "react-redux";
+
 import { setDate } from "@redux/home/homeSelectedDateSlice";
+import { useEffect } from "react";
+import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
+
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@redux/store";
+import { AppDispatch } from "@redux/store";
 
 /**
  *
@@ -23,6 +29,8 @@ export default function Scheduler() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const [clicketCnt, setClickedCnt] = useState<number>(1);
 
   const date = new Date();
   const today = {
@@ -57,11 +65,12 @@ export default function Scheduler() {
         ? { ...prev, [type]: value - 1 }
         : { ...prev, [type]: value };
     });
+    setClickedCnt((prev) => prev + 1);
   };
 
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const selectedDateEvent = (elem: number, idx: number) => {
     const selectedDateInfo = {
@@ -75,6 +84,16 @@ export default function Scheduler() {
     openModal();
   };
 
+  const appliedList = useSelector((state: RootState) => {
+    return state.appliedRoles;
+  });
+
+  // 날짜 바꿀때마다 get 요청
+  useEffect(() => {
+    dispatch(getMemberAppliedRoles());
+    console.log(appliedList);
+  }, [clicketCnt]);
+
   /**
    *
    * 미완성 임시 구현
@@ -83,6 +102,9 @@ export default function Scheduler() {
    * @param title 드라마 제목
    * @returns 스케줄 표시 item
    */
+  // 왜 gatheringTime?
+  // CALENDER 항목 없음
+
   const returnSchduleItemComponent = (date: number, title: string) => {
     for (const obj of dummyCalender) {
       const approve = obj.approve;
