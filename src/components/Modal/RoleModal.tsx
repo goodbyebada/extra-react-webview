@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import RoleBox from "@components/RoleBox";
-import { RoleList } from "@api/interface";
+import { RoleListToShow } from "@api/interface";
 import { useState } from "react";
 
 type ModalProps = {
   handleApply: (value: boolean) => void;
   closeModal: () => void;
-  roleList: RoleList;
+  roleList: RoleListToShow;
 };
 
 /**

@@ -8,7 +8,7 @@ import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { dummyMonthJobList } from "@api/dummyData";
+import { dummyJobPostList } from "@api/dummyData";
 import { JobPost } from "@api/interface";
 
 import { useSelector } from "react-redux";
@@ -49,7 +49,7 @@ export default function ExtrasHome() {
   // 월 기준으로 API 호출 로직 추가 예정
   //  list로 보기 시,infiniteScrolling으로 구현 해야함
   // dummydata
-  const jobPostList = dummyMonthJobList;
+  const jobPostList = dummyJobPostList;
 
   // navigate
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ export default function ExtrasHome() {
 
   // 리스트 보기 선택시 navigate
   const navigateToExtraCastingBoard = (elem: JobPost) => {
-    const path = `/extra-casting-board/${elem.job_post_id}`;
+    const path = `/extra-casting-board/${elem.id}`;
     navigate(path);
   };
 

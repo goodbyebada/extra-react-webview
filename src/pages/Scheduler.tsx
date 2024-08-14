@@ -42,8 +42,8 @@ export default function Scheduler() {
   /**
    * 임시
    */
-  const yearItemList = Array.from({ length: 6 }, (v, i) => 2024 + i);
-  const monthItemList = Array.from({ length: 12 }, (v, i) => 1 + i);
+  const yearItemList = Array.from({ length: 6 }, (_, i) => 2024 + i);
+  const monthItemList = Array.from({ length: 12 }, (_, i) => 1 + i);
 
   // test 위해 임시 구현 11일 ~ 14일동안 진행되는 드라마 공고
   const dummyCalender = [

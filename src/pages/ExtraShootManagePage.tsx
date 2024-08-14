@@ -79,7 +79,7 @@ export default function ExtraShootManagePage() {
   }, [applyStatusIdx]);
 
   // 1~3까지의 배열
-  const selcetorList = Array.from({ length: 4 }, (_v, i) => i);
+  const selcetorList = Array.from({ length: 4 }, (_, i) => i);
   const handler = (selectedIdx: number) => {
     setApplyStatusIdx(selectedIdx);
   };

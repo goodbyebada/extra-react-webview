@@ -38,7 +38,7 @@ export default function DateSelectedNoticeList() {
         {jobPostList.map((elem, key) => {
           return (
             <HomeRecruitBox
-              navigate={() => navigateToExtraCastingBoard(elem.job_post_id)}
+              navigate={() => navigateToExtraCastingBoard(elem.id)}
               key={key}
               recruitInfo={elem}
             />

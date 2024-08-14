@@ -9,6 +9,9 @@ import { RoleRegister } from "@api/interface";
  * 수정할 것
  * 1. API 연결 시 역할 상세 프로필 등록과 수정 구분
  * 2. 데이터가 있다면 수정, 없다면 등록
+ *
+ * 역할 등록 === 역할 생성
+ * roleBodyType으로 수정 부탁드립니다.
  */
 
 interface CompanyRoleModalProps {
