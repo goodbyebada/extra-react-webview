@@ -1,21 +1,62 @@
 import styled from "styled-components";
+import documentIcon from "@assets/document.png";
+import { JobPost } from "@api/interface";
 
 type Props = {
   navigate: () => void;
+  jobPostInfo: JobPost;
 };
 
-function AdminManageRecruitBox({ navigate }: Props) {
+function AdminManageRecruitBox({ navigate, jobPostInfo }: Props) {
+  // calendar가 '2020-01-01'일 경우로 구현
+
+  // 01/01 형태로 받아오기
+  const getMMDD = (calendar: string) => {
+    const date = new Date(calendar);
+
+    const mm = date.getMonth();
+    const dd = date.getDate();
+
+    return mm + "/" + dd;
+  };
+
+  // D-Day 계산
+  const getDaysUntil = (calender: string) => {
+    // 오늘 날짜 가져오기
+    const today = new Date();
+
+    // 입력받은 날짜 Date 타입으로 변환
+    const targetDate = new Date(calender);
+
+    // 날짜 차이 계산 (밀리초 단위로 계산 후 일 단위로 변환)
+    const differenceInTime = targetDate.getTime() - today.getTime();
+    const differenceInDays = Math.ceil(
+      differenceInTime / (1000 * 60 * 60 * 24),
+    );
+
+    if (differenceInDays > 0) {
+      return `D-${differenceInDays}`;
+    } else if (differenceInDays === 0) {
+      return `D-Day`;
+    } else {
+      return `D+${Math.abs(differenceInDays)}`;
+    }
+  };
+
   return (
     <RecruitContainer onClick={navigate}>
       <RecruitBox>
         <InfoContainer>
-          <MediaSelectorTxt>media</MediaSelectorTxt>
-          <TitleTxt>title</TitleTxt>
+          <MediaSelectorTxt>{jobPostInfo.category}</MediaSelectorTxt>
+          <TitleTxt>{jobPostInfo.title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>date</DateTxt>
-            <DeadlineBox>D-0</DeadlineBox>
+            {/* calendar가 '2001-01-01'일 경우로 구현함 */}
+            {/* calendarList일 경우 => getMMDD(jobPostInfo.calendarList[0]) + " - " + getMMDD(jobPostInfo.calendarList[jobPostInfo.calendarList.length - 1])  */}
+            <DateTxt>{getMMDD(jobPostInfo.calendar)}</DateTxt>
+            {/* calendarList일 경우 => getDaysUntil(jobPostInfo.calendarList[0])  */}
+            <DeadlineBox>{getDaysUntil(jobPostInfo.calendar)}</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>team</Team>
+          <Team>{jobPostInfo.company_name}</Team>
         </InfoContainer>
         <button
           style={{
@@ -27,13 +68,14 @@ function AdminManageRecruitBox({ navigate }: Props) {
           }}
         >
           <img
-            src="./src/assets/document-icon.png"
+            src={documentIcon}
             alt="document"
             style={{ maxWidth: "100%", maxHeight: "100%" }}
           />
         </button>
         <TimePlace>
-          00:00 예정 <br /> place
+          {jobPostInfo.gathering_time} 예정 <br />{" "}
+          {jobPostInfo.gathering_location}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>

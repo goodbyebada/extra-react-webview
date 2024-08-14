@@ -11,7 +11,11 @@ import { RoleRegister } from "@api/interface";
  * 2. 데이터가 있다면 수정, 없다면 등록
  */
 
-function CompanyRoleModal() {
+interface CompanyRoleModalProps {
+  closeModal: () => void;
+}
+
+function CompanyRoleModal({ closeModal }: CompanyRoleModalProps) {
   const [formState, setFormState] = useState<RoleRegister>({
     job_post_id: 1, // 임시, API 연결 시 수정
     sex: false, // 남: false, 여: true
@@ -84,7 +88,10 @@ function CompanyRoleModal() {
   };
 
   const handleSubmit = () => {
-    console.log(formState);
+    if (isFormValid) {
+      console.log(formState);
+      closeModal();
+    }
   };
 
   useEffect(() => {
