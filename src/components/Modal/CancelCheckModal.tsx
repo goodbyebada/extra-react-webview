@@ -1,30 +1,5 @@
+import React from "react";
 import styled from "styled-components";
-
-function CancelCheckModal() {
-  return (
-    <ModalContainer>
-      <ModalText>
-        해당 공고의 지원을 <br /> 취소하시겠어요?
-      </ModalText>
-      <HomeBox>
-        <Img />
-        <InfoContainer>
-          <TitleTxt>title</TitleTxt>
-          <DateAndDeadlineContainer>
-            <DateTxt>date</DateTxt>
-            <DeadlineBox>D-0</DeadlineBox>
-          </DateAndDeadlineContainer>
-        </InfoContainer>
-      </HomeBox>
-      <ButtonContainer>
-        <BtnY>예</BtnY>
-        <BtnN>아니요</BtnN>
-      </ButtonContainer>
-    </ModalContainer>
-  );
-}
-
-export default CancelCheckModal;
 
 const ModalContainer = styled.div`
   position: absolute;
@@ -156,3 +131,29 @@ const DeadlineBox = styled.div`
   font-weight: 900;
   letter-spacing: 0.11px;
 `;
+
+function CancelCheckModal() {
+  return (
+    <ModalContainer>
+      <ModalText>
+        해당 공고의 지원을 <br /> 취소하시겠어요?
+      </ModalText>
+      <HomeBox>
+        <Img />
+        <InfoContainer>
+          <TitleTxt>title</TitleTxt>
+          <DateAndDeadlineContainer>
+            <DateTxt>date</DateTxt>
+            <DeadlineBox>D-0</DeadlineBox>
+          </DateAndDeadlineContainer>
+        </InfoContainer>
+      </HomeBox>
+      <ButtonContainer>
+        <BtnY>예</BtnY>
+        <BtnN>아니요</BtnN>
+      </ButtonContainer>
+    </ModalContainer>
+  );
+}
+
+export default CancelCheckModal;

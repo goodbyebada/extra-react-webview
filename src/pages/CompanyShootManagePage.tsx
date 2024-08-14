@@ -4,12 +4,12 @@
  */
 
 import styled from "styled-components";
-import { dummyMonthJobList } from "@api/dummyData";
+import { dummyJobPostList } from "@api/dummyData";
 import AdminManageRecruitBox from "@components/AdminManageRecruitBox";
 import { sendMessage } from "@api/utils";
 
 export default function CompanyShootManagePage() {
-  const jobPostList = dummyMonthJobList;
+  const jobPostList = dummyJobPostList;
 
   return (
     <ItemWrapper>

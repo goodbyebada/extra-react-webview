@@ -3,11 +3,8 @@ import { styled } from "styled-components";
 import TypeSelector from "@components/TypeSelector";
 import { useState } from "react";
 import Calender from "@components/Calender";
-import { dummyMonthJobList } from "@api/dummyData";
+import { dummyJobPostList } from "@api/dummyData";
 import HomeRecruitBox from "@components/HomeRecruitBox";
-// import { useRef } from "react";
-// import CompanyModal from "@components/CompanyModal";
-// import { useNavigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
@@ -42,7 +39,7 @@ export default function CompanyHome() {
   };
 
   // dummydata
-  const jobList = dummyMonthJobList;
+  const jobList = dummyJobPostList;
 
   // 캘린더 || 리스트
   const showAsCalender = useSelector(
@@ -92,7 +89,7 @@ export default function CompanyHome() {
                     sendMessage({
                       type: "NAVIGATION_DETAIL",
                       payload: {
-                        uri: `/company-home/company-job-list/${elem.job_post_id}`,
+                        uri: `/company-home/company-job-list/${elem.id}`,
                       },
                       version: "1.0",
                     });

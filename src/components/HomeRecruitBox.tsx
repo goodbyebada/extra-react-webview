@@ -29,17 +29,14 @@ type Props = {
 
 const calculateDday = (calendar: string) => {
   const today = new Date();
-  const [startCal, endCal] = calendar
-    .split("-")
-    .map((date) => new Date(`2024/${date.trim()}`));
+  const targetDate = new Date(calendar);
 
-  const startDiff = Math.ceil((+startCal - +today) / (1000 * 60 * 60 * 24));
-  const endDiff = Math.ceil((+endCal - +today) / (1000 * 60 * 60 * 24));
+  const dateDifference = targetDate.getTime() - today.getTime();
 
-  if (startDiff <= 0 && endDiff >= 0) {
+  if (dateDifference === 0) {
     return "D-day";
-  } else if (startDiff > 0) {
-    return `D-${startDiff}`;
+  } else if (dateDifference > 0) {
+    return `D-${dateDifference}`;
   } else {
     return "종료";
   }
@@ -55,14 +52,22 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
   const {
     category,
     title,
-    calendar,
-    company_name,
-    gathering_time,
-    gathering_location,
+    calenderList,
+    companyName,
+    gatheringTime,
+    gatheringLocation,
     status,
   } = recruitInfo;
 
-  const dday = calculateDday(calendar);
+  // 촬영날짜가 1일이라는 가정하에 작성됨
+  // 추후 논의 예정
+  const dateOfShotting = calenderList[0];
+
+  // 백 형식에 맞게 D-day 수정 필요
+  // const dday = calculateDday(calenderList);
+
+  // 임시 Dday for test
+  // const dday = "D-7";
 
   return (
     <RecruitContainer className={`${!recommand ? "" : "recommand"}`}>
@@ -75,10 +80,10 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
           <MediaSelectorTxt>{category}</MediaSelectorTxt>
           <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>{calendar}</DateTxt>
-            <DeadlineBox>{dday}</DeadlineBox>
+            <DateTxt>{dateOfShotting}</DateTxt>
+            <DeadlineBox>{calculateDday(dateOfShotting)}</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>{company_name}</Team>
+          <Team>{companyName}</Team>
         </InfoContainer>
         <RecruitStatus
           visible={true}
@@ -90,7 +95,7 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
           {status ? "모집중" : "모집마감"}
         </RecruitStatus>
         <TimePlace>
-          {gathering_time} 예정 <br /> {gathering_location}
+          {gatheringTime} 예정 <br /> {gatheringLocation}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>
