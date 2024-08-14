@@ -21,7 +21,7 @@ import DropDownSelector from "@components/DropDownSelector";
 export default function ExtraShootManagePage() {
   const [applyStatusIdx, setApplyStatusIdx] = useState(0);
   // 1~3까지의 배열
-  const selcetorList = Array.from({ length: 4 }, (v, i) => i);
+  const selcetorList = Array.from({ length: 4 }, (_, i) => i);
   const handler = (selectedIdx: number) => {
     setApplyStatusIdx(selectedIdx);
   };

@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import backIcon from "../asset/backIcon.png";
-import reviseIcon from "../asset/reviseIcon.png";
+import backIcon from "@assetsbackIcon.png";
+import reviseIcon from "@assetsreviseIcon.png";
 
 const CustomBorder = styled.div`
   border-top: 2px solid white;
