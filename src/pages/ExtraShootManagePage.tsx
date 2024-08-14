@@ -7,7 +7,11 @@ import StatusRecruitBox from "@components/StatusRecruitBox";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import DropDownSelector from "@components/DropDownSelector";
-import { ShootManageList, ShootManageSelectStatus } from "@api/interface";
+import {
+  ShootManageList,
+  ShootManageSelectStatus,
+  ShootManage,
+} from "@api/interface";
 
 export default function ExtraShootManagePage() {
   const [applyStatusIdx, setApplyStatusIdx] = useState(0);
@@ -22,8 +26,8 @@ export default function ExtraShootManagePage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: "test@test.com",
-        password: "qwer1234",
+        email: "email0",
+        password: "string",
       }),
     }).then((res) => {
       if (res.status === 200) {
@@ -67,12 +71,21 @@ export default function ExtraShootManagePage() {
         }
         return response.json();
       })
-      .then((data: ShootManageList) => {
-        setRecruitBoxes(data);
+      .then((data: ShootManage[]) => {
+        const mappedData = data.map((item) => ({
+          ...item,
+          applyStatus:
+            ShootManageSelectStatus[
+              item.applyStatus as unknown as keyof typeof ShootManageSelectStatus
+            ],
+        }));
+
+        setRecruitBoxes(mappedData);
         const status =
           ShootManageSelectStatus[applyStatusIdx] || "Unknown status";
         console.log(`Data fetched successfully for ${status}:`, data);
       })
+
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
