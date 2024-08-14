@@ -3,6 +3,7 @@ import multiply from "@assets/Multiply.png";
 import RoleBox from "@components/RoleBox";
 import { RoleListToShow } from "@api/interface";
 import { useState } from "react";
+import memberRolesAPI from "@api/memberRolesAPI";
 
 type ModalProps = {
   handleApply: (value: boolean) => void;
@@ -38,6 +39,13 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
     const newArr = Array(roleList.length).fill(false);
     newArr[idx] = true;
     setSelected(newArr);
+
+    const fetch = async (roleId: number) => {
+      return await memberRolesAPI.postMemberRoles(roleId);
+    };
+
+    const res = fetch(roleList[idx].roleId);
+    console.log(res);
   };
 
   /**

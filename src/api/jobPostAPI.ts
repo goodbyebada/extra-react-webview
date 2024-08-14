@@ -2,11 +2,11 @@
 import { BASE_URL } from "@api/interface";
 import {
   requestGetFetch,
-  requestDeleteFetch,
-  requestPutFetch,
-  requestPostFetch,
+  // requestDeleteFetch,
+  // requestPutFetch,
+  // requestPostFetch,
 } from "@api/utils";
-import { JobPostRequest } from "@api/interface";
+// import { JobPostRequest } from "@api/interface";
 
 const jobPostURL = `${BASE_URL}/jobposts`;
 
@@ -34,20 +34,20 @@ const jobPostAPI = {
     return await this.handleResponse(response);
   },
 
-  async deleteJobPostById(jobPostId: number) {
-    const response = await requestDeleteFetch(`${jobPostURL}/${jobPostId}`);
-    return await this.handleResponse(response);
-  },
+  // async deleteJobPostById(jobPostId: number) {
+  //   const response = await requestDeleteFetch(`${jobPostURL}/${jobPostId}`);
+  //   return await this.handleResponse(response);
+  // },
 
-  async putJobPostById(jobPostId: number, data: JobPostRequest) {
-    const response = await requestPutFetch(`${jobPostURL}/${jobPostId}`, data);
-    return await this.handleResponse(response);
-  },
+  // async putJobPostById(jobPostId: number, data: JobPostRequest) {
+  //   const response = await requestPutFetch(`${jobPostURL}/${jobPostId}`, data);
+  //   return await this.handleResponse(response);
+  // },
 
-  async postJobPost(data: JobPostRequest) {
-    const response = await requestPostFetch(jobPostURL, data);
-    return await this.handleResponse(response);
-  },
+  // async postJobPost(data: JobPostRequest) {
+  //   const response = await requestPostFetch(jobPostURL, data);
+  //   return await this.handleResponse(response);
+  // },
 };
 
 export default jobPostAPI;
