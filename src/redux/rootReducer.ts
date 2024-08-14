@@ -6,7 +6,6 @@ import modalReducer from "@redux/modalSlice";
 import recruitReducer from "@redux/recruitSlice";
 import homeSelectedDateReducer from "@redux/home/homeSelectedDateSlice";
 import showTypeSliceReducer from "@redux/home/showTypeSlice";
-
 import jobPostReducer from "@redux/jobPost/jobPostSlice";
 import appliedRoleReducer from "@redux/memberRoles/memberRolesSlice";
 

@@ -97,7 +97,6 @@ const jobPostSlice = createSlice({
       })
       .addCase(fetchJobPostById.rejected, (state, action) => {
         state.jobPostItem.status = ResponseStatus.rejected;
-
         state.jobPostItem.error =
           action.error.message ||
           `Failed to fetch job post with id ${action.meta.arg}`;
