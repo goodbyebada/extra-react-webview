@@ -26,9 +26,11 @@ interface CompleteModalProps {
 const CompleteModal: React.FC<CompleteModalProps> = ({ type, closeModal }) => {
   const content = modalContent[type];
   const navigate = useNavigate();
+
+  // web에서는 정상작동
+  // RN 구현 따로 해야함
   const homePath = "/";
-  const mySupportStatusPath = "/";
-  // 지원현황 라우팅 주소 임시
+  const mySupportStatusPath = "/member/manage";
 
   return (
     <ModalContainer>
