@@ -32,8 +32,6 @@ export default function ExtraCastingBoard() {
 
   useEffect(() => {
     // 서버에서 데이터를 불러오는 createAsyncThunk 호출
-    console.log("SDfs");
-
     const fetch = () => {
       if (jobPostId !== undefined && jobPostId !== null) {
         dispatch(fetchJobPostById(parseInt(jobPostId)));
@@ -44,15 +42,23 @@ export default function ExtraCastingBoard() {
   }, [dispatch, jobPostId]);
 
   const selectedJobPostItem = jobPostItem.data;
-  console.log(jobPostItem);
+  // console.log(jobPostItem);
 
-  return !(jobPostItem.status === ResponseStatus.fullfilled) ? (
-    jobPostItem.status === ResponseStatus.loading ? (
-      <Loading />
-    ) : (
-      <Err />
-    )
-  ) : (
-    <ExtraCastsComponent selectedJobPostItem={selectedJobPostItem} />
-  );
+  const Component = () => {
+    switch (jobPostItem.status) {
+      case ResponseStatus.loading:
+        return <Loading />;
+      case ResponseStatus.fullfilled:
+        return (
+          <ExtraCastsComponent selectedJobPostItem={selectedJobPostItem} />
+        );
+      case ResponseStatus.rejected:
+        return <Err />;
+
+      default:
+        return;
+    }
+  };
+
+  return <>{Component()}</>;
 }

@@ -19,6 +19,7 @@ import { fetchAllJobPosts } from "@redux/jobPost/jobPostSlice";
 import { AppDispatch } from "@redux/store";
 import { GetToken } from "@api/GetToken";
 import { Loading } from "@components/Loading";
+import { Err } from "@components/Err";
 
 /**임시
  * API 개발 후 처리할 예정
@@ -102,6 +103,48 @@ export default function ExtrasHome() {
     navigate(path);
   };
 
+  const ReturnComponent = () => {
+    switch (jobpost.status) {
+      case ResponseStatus.loading:
+        return <Loading />;
+
+      case ResponseStatus.fullfilled:
+        switch (showAsCalender) {
+          case true:
+            return (
+              <Calender
+                dateYM={dateYM}
+                dateYMHandler={dateYMHandler}
+                jobPostList={jobPostList}
+                showRecommand={showRecommand}
+                clickedDateEvent={navigateToSelectedNoticeList}
+              />
+            );
+
+          case false:
+          default:
+            return (
+              <ItemWrapper>
+                {jobPostList.map((elem, key) => (
+                  <HomeRecruitBox
+                    navigate={() => navigateToExtraCastingBoard(elem)}
+                    key={key}
+                    recruitInfo={elem}
+                    recommand={showRecommand}
+                  />
+                ))}
+              </ItemWrapper>
+            );
+        }
+
+      case ResponseStatus.rejected:
+        return <Err />;
+
+      default:
+        return "";
+    }
+  };
+
   return (
     <Container className="extras-home">
       <TopBar>
@@ -113,32 +156,7 @@ export default function ExtrasHome() {
         <h1>{!showRecommand ? listAll : listRecommand}</h1>
       </TopBar>
 
-      <Content className="content">
-        {jobpost.status === ResponseStatus.loading ? <Loading /> : ""}
-
-        {!jobPostList.length && showAsCalender ? (
-          <Calender
-            dateYM={dateYM}
-            dateYMHandler={dateYMHandler}
-            jobPostList={jobPostList}
-            showRecommand={showRecommand}
-            clickedDateEvent={navigateToSelectedNoticeList}
-          />
-        ) : (
-          <ItemWrapper>
-            {jobPostList.map((elem, key) => {
-              return (
-                <HomeRecruitBox
-                  navigate={() => navigateToExtraCastingBoard(elem)}
-                  key={key}
-                  recruitInfo={elem}
-                  recommand={showRecommand}
-                />
-              );
-            })}
-          </ItemWrapper>
-        )}
-      </Content>
+      <Content className="content">{ReturnComponent()}</Content>
     </Container>
   );
 }
