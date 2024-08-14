@@ -5,13 +5,13 @@ import { useState } from "react";
 import Calender from "@components/Calender";
 import { dummyMonthJobList } from "@api/dummyData";
 import HomeRecruitBox from "@components/HomeRecruitBox";
-import { useRef } from "react";
-import CompanyModal from "@components/CompanyModal";
+// import { useRef } from "react";
+// import CompanyModal from "@components/CompanyModal";
 // import { useNavigate } from "react-router-dom";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { sendMessage } from "@api/message";
+import { sendMessage } from "@api/utils";
 
 /**
  *추후 수정 예정
@@ -52,13 +52,6 @@ export default function CompanyHome() {
   // 임시 경로
   const path = "company-job-list/";
 
-  // 모달창 state
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-  const modalRef = useRef<HTMLDivElement>(null);
-
   // const navigate = useNavigate();
 
   /**
@@ -66,7 +59,13 @@ export default function CompanyHome() {
    */
   const clickedDateEvent = () => {
     // 모달창을 연다
-    openModal();
+    sendMessage({
+      type: "MODAL_OPEN",
+      payload: {
+        uri: "/company-date-selected-notice-list",
+      },
+      version: "1.0",
+    });
   };
 
   return (
@@ -111,21 +110,6 @@ export default function CompanyHome() {
             })}
           </ItemWrapper>
         )}
-
-        {isModalOpen && (
-          <>
-            <ModalOverlay
-              ref={modalRef}
-              onClick={(e) => {
-                if (modalRef !== null && e.target === modalRef.current) {
-                  closeModal();
-                }
-              }}
-            >
-              <CompanyModal jobList={jobList} />
-            </ModalOverlay>
-          </>
-        )}
       </div>
     </div>
   );
@@ -156,15 +140,15 @@ const ItemWrapper = styled.div`
   margin-top: 30px;
 `;
 
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-`;
+// const ModalOverlay = styled.div`
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   right: 0;
+//   bottom: 0;
+//   background-color: rgba(0, 0, 0, 0.5);
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   z-index: 10;
+// `;

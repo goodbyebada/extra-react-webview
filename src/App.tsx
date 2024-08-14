@@ -12,6 +12,7 @@ import CompanyHome from "@pages/CompanyHome";
 import ExtraShootManagePage from "@pages/ExtraShootManagePage";
 import CompanyShootManagePage from "@pages/CompanyShootManagePage";
 import DetailPage from "@pages/DetailPage";
+import CompanyDateSelectedPage from "@pages/CompanyDateSelectedPage";
 
 function App() {
   return (
@@ -34,6 +35,11 @@ function App() {
           <Route
             path="/date-selected-notice-list"
             element={<DateSelectedNoticeList />}
+          />
+
+          <Route
+            path="/company-date-selected-notice-list"
+            element={<CompanyDateSelectedPage />}
           />
 
           <Route path="/scheduler" element={<Scheduler />} />

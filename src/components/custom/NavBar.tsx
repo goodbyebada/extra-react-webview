@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import navBtn from "@assets/more-than-button.png";
 //import { useNavigate } from "react-router-dom";
 
-import { sendMessage } from "@api/message";
+import { sendMessage } from "@api/utils";
 
 type NavBarProps = {
   content: string;

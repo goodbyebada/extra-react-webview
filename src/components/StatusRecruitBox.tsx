@@ -5,7 +5,7 @@ import DeleteButton from "@components/custom/deleteBtn";
 import star_g from "@assets/Star_g.png";
 import star_y from "@assets/Star_y.png";
 import { ShootManageSelectStatus, ApplyStatusLabel } from "@api/interface";
-import { sendMessage } from "@api/message";
+import { sendMessage } from "@api/utils";
 
 /**
  * 촬영관리 컴포넌트

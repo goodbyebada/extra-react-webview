@@ -76,7 +76,7 @@ export default function ExtrasHome() {
     sendMessage({
       type: "NAVIGATION_DATE",
       payload: {
-        url: path,
+        uri: path,
       },
       version: "1.0",
     });
@@ -89,7 +89,7 @@ export default function ExtrasHome() {
     sendMessage({
       type: "NAVIGATION_DETAIL",
       payload: {
-        url: path,
+        uri: path,
       },
       version: "1.0",
     });

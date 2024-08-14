@@ -6,7 +6,7 @@ import HomeRecruitBox from "@components/HomeRecruitBox";
 import { dummyJobPostList } from "@api/dummyData";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { sendMessage } from "@api/message";
+import { sendMessage } from "@api/utils";
 
 /**
  * 날짜 선택시 화면
@@ -33,7 +33,7 @@ export default function DateSelectedNoticeList() {
     sendMessage({
       type: "NAVIGATION_DETAIL",
       payload: {
-        url: `${basePath}/${jobPostId}`,
+        uri: `${basePath}/${jobPostId}`,
       },
       version: "1.0",
     });

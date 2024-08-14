@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import approval from "@assets/Approval.png";
-import { sendMessage } from "@api/message";
+import { sendMessage } from "@api/utils";
 // import { useNavigate } from "react-router-dom";
 
 interface ModalContent {

@@ -6,7 +6,7 @@
 import styled from "styled-components";
 import { dummyMonthJobList } from "@api/dummyData";
 import AdminManageRecruitBox from "@components/AdminManageRecruitBox";
-import { sendMessage } from "@api/message";
+import { sendMessage } from "@api/utils";
 
 export default function CompanyShootManagePage() {
   const jobPostList = dummyMonthJobList;
