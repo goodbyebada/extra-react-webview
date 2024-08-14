@@ -1,6 +1,26 @@
 /**
- * API 요청시
- * JobPost 전체 조회 response.data의 한 item
+ * JobPost API 관련 인터페이스
+ * - 공고 생성
+ * - 공고 수정
+ * - 전체 조회
+ * - 단건 조회
+ */
+
+/**
+ * JobPost 공고 생성, 공고 수정시 사용되는 type
+ */
+export interface JobPostRequest {
+  title: string;
+  gatheringLocation: string;
+  gatheringTime: string;
+  imageUrl: string;
+  status: boolean;
+  hourPay: number;
+  category: string;
+}
+
+/**
+ * JobPost 단건 조회
  */
 export interface JobPost {
   id: number;
@@ -26,7 +46,7 @@ export interface JobPost {
 }
 
 /**
- *  JobPost 전체 조회 response.data
+ *  JobPost 전체 조회
  */
 export type JobPostList = JobPost[];
 
@@ -45,11 +65,9 @@ export type RoleItemToShow = {
 export type RoleListToShow = RoleItemToShow[];
 
 /**
- * 역할 생성 / 역할 수정시
- * API put post 시 body type
- *
- * 역할 등록 === 역할 생성
- * roleBodyType으로 수정 부탁드립니다.
+ * jobPosts/{jobPost_id}/roles API
+ * - 역할 생성
+ * - 역할 수정
  */
 export type RoleBodyType = {
   roleName: string;
@@ -62,6 +80,13 @@ export type RoleBodyType = {
   checkTattoo: boolean;
 };
 
+/**
+ * 역할 생성 / 역할 수정시
+ * API put post 시 body type
+ *
+ * 역할 등록 === 역할 생성
+ * roleBodyType으로 수정 부탁드립니다.
+ */
 /**
  * 역할 등록 API 호출시,
  * request
