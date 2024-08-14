@@ -90,16 +90,21 @@ const jobPostSlice = createSlice({
     builder
       .addCase(fetchJobPostById.pending, (state) => {
         state.jobPostItem.status = ResponseStatus.loading;
+        console.log("ㄴㅇㄹㄴㅇ");
       })
       .addCase(fetchJobPostById.fulfilled, (state, action) => {
+        console.log("ㄴㅇㄹㄴㅇ");
         state.jobPostItem.status = ResponseStatus.fullfilled;
+
         state.jobPostItem.data = action.payload;
       })
       .addCase(fetchJobPostById.rejected, (state, action) => {
         state.jobPostItem.status = ResponseStatus.rejected;
-        state.jobPostItem.error =
-          action.error.message ||
-          `Failed to fetch job post with id ${action.meta.arg}`;
+        console.log("ㄴㅇㄹㄴㅇ");
+
+        // state.jobPostItem.error =
+        //   action.error.message ||
+        //   `Failed to fetch job post with id ${action.meta.arg}`;
       });
   },
 });
