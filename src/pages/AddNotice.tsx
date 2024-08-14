@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import backIcon from "@assetsbackIcon.png";
+import backIcon from "@assets/backIcon.png";
 import styled from "styled-components";
 import Modal from "../components/Modal";
 import CompanyRoleModal from "@/components/Modal/CompanyRoleModal";

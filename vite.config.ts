@@ -13,7 +13,7 @@ export default defineConfig({
 //   alias: [
 //     { find: "@", replacement: "src/*" },
 //     { find: "@api", replacement: "src/api/*" },
-//     { find: "@assets", replacement: "src/assets/*" },
+//     { find: "@assets/", replacement: "src/assets/*" },
 //     { find: "@components", replacement: "src/components/*" },
 //     { find: "@pages", replacement: "src/pages/*" },
 //     { find: "@redux", replacement: "src/redux/*" },

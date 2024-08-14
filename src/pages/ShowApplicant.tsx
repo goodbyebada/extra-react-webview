@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Modal from "../components/Modal";
-import backIcon from "@assetsbackIcon.png";
-import forwardIcon from "@assetsforwardIcon.png";
-import checkIcon from "@assetscheckIcon.png";
+import backIcon from "@assets/backIcon.png";
+import forwardIcon from "@assets/forwardIcon.png";
+import checkIcon from "@assets/checkIcon.png";
 
 const Row = styled.div`
   display: flex;
