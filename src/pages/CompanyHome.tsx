@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import TypeSelector from "@components/TypeSelector";
 import { useState } from "react";
 import Calender from "@components/Calender";
-import { dummyMonthJobList } from "@api/dummyData";
+import { dummyJobPostList } from "@api/dummyData";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useRef } from "react";
 import CompanyModal from "@components/CompanyModal";
@@ -41,7 +41,7 @@ export default function CompanyHome() {
   };
 
   // dummydata
-  const jobList = dummyMonthJobList;
+  const jobList = dummyJobPostList;
 
   // 캘린더 || 리스트
   const showAsCalender = useSelector(

@@ -7,12 +7,8 @@ import { toggleStar } from "@redux/recruitSlice";
 
 import NavBar from "@components/custom/NavBar";
 
-import {
-  dummyRoleList,
-  dummyJobPostList,
-  // dummyMonthJobList,
-} from "@api/dummyData";
-import { RoleList, JobPost } from "@api/interface";
+import { dummyJobPostList } from "@api/dummyData";
+import { JobPost, RoleItemToShow } from "@api/interface";
 import RoleModal from "@components/Modal/RoleModal";
 import { useRef } from "react";
 import CompleteModal from "@components/Modal/CompleteModal";
@@ -23,6 +19,9 @@ import { RootState } from "@redux/store";
  * @returns 공고화면 UI
  */
 
+/**
+ * 단건 조회할 예정
+ */
 export default function ExtraCastingBoard() {
   const [apply, setApply] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
@@ -41,9 +40,10 @@ export default function ExtraCastingBoard() {
     dispatch(toggleStar());
   };
 
-  // 임시 데이터 jobpostList
-  // const jobPostList = dummyMonthJobList;
-  const jobPostList = dummyJobPostList;
+  // 임시 선택된 데이터
+  const selectedJobPostItem = dummyJobPostList[0];
+
+  console.log(selectedJobPostItem);
 
   const { jobPostId } = useParams();
 
@@ -56,118 +56,150 @@ export default function ExtraCastingBoard() {
    * 데이터 연결 예정
    * url의 jobPostId를 통해, jobPostList 데이터에서 jobPostId 공고 JobPost 정보를 찾는다.
    */
-  const jobPostItem = jobPostList.find(
-    (elem) => elem.job_post_id === parseInt(jobPostId),
-  );
+  // const jobPostItem = selectedJobPostItem.find(
+  //   (elem) => elem.id === parseInt(jobPostId),
+  // );
 
-  // jobPostId와 일치하는 jobPostItem 없다면 404 return
-  if (jobPostItem === undefined) {
-    return <div>404</div>;
-  }
+  // // jobPostId와 일치하는 jobPostItem 없다면 404 return
+  // if (jobPostItem === undefined) {
+  //   return <div>404</div>;
+  // }
 
   const {
-    calendar,
-    status,
+    // category,
     title,
-    gathering_location,
-    gathering_time,
-  }: JobPost = jobPostItem;
+    calenderList,
+    // companyName,
+    gatheringTime,
+    gatheringLocation,
+    status,
+  }: JobPost = selectedJobPostItem;
 
-  /**
-   * jobPostId로 request 보냈을때 response data
-   */
-  const roleList = dummyRoleList;
+  // 촬영날짜가 1일이라는 가정하에 작성됨
+  // 추후 논의 예정
+  const dateOfShotting = calenderList[0];
 
+  const generateRoleDetailItemList = (selectedJobPostItem: JobPost) => {
+    const {
+      roleNameList,
+      costumeList,
+      sexList,
+      roleAgeList,
+      // limitPersonnelList,
+      // currentPersonnelList,
+      seasonList,
+    } = selectedJobPostItem;
+
+    const roleComponents = [];
+
+    for (let i = 0; i < selectedJobPostItem.roleNameList.length; i++) {
+      roleComponents.push(
+        RoleDetailItem(
+          i,
+          roleNameList[i],
+          costumeList[i],
+          sexList[i],
+          roleAgeList[i],
+          seasonList[i],
+        ),
+      );
+    }
+
+    // roleNameList: string[],
+    // costumeList: string[],
+    // sexList : boolean[],
+    // roleAgeList: string[],
+    // limitPersonnelList: number[],
+    // currentPersonnelList: number[],
+    // seasonList: string[],
+
+    return <>{roleComponents}</>;
+  };
   /*
    * return 한 역할 / 상세정보에 대한 UI
    * Ex) 학생역할 : { 성별 : 여자, ...} , { 성별 : 남자, ...}
    */
-  const generateRoleDetailItem = (
-    cnt: number,
-    tragetRoleName: string,
-    selectedArr: RoleList,
+  const RoleDetailItem = (
+    idx: number,
+    roleName: string,
+    costumeList: string[],
+    sex: boolean,
+    roleAge: string[],
+    season: string,
   ) => {
-    // 공백제거
+    return (
+      <RoleItem key={idx}>
+        <h1 id="role-name">
+          {idx + 1}&#41;{roleName}
+        </h1>
 
-    const selectedRolenameObj = { [tragetRoleName]: selectedArr };
+        <div className="content">
+          <DetailItem>
+            <ol className="details">
+              <li className="item">
+                <div id="notice-num">1</div>
+                <p>성별 : {sex ? "여자" : "남자"}</p>
+              </li>
 
-    for (const e in selectedRolenameObj) {
-      return (
-        <RoleItem key={cnt}>
-          <h1 id="role-name">
-            {cnt}&#41;{e}
-          </h1>
+              <li className="item">
+                <div id="notice-num">2</div>
+                <p>
+                  나이 :
+                  {roleAge.map((elem, idx) => {
+                    if (roleAge.length === idx + 1) {
+                      return <span key={idx}>{elem}</span>;
+                    }
+                    return <span key={idx}>{elem},</span>;
+                  })}
+                </p>
+              </li>
 
-          <div className="content">
-            {selectedRolenameObj[e].map((elem) => {
-              const { role_id, sex, season, role_age, costume } = elem;
+              <li className="item">
+                <div id="notice-num">3</div>
+                <p>계절 : {season}</p>
+              </li>
 
-              return (
-                <DetailItem key={role_id}>
-                  <ol className="details">
-                    <li className="item">
-                      <div id="notice-num">1</div>
-                      <p>성별 : {sex ? "여자" : "남자"}</p>
-                    </li>
-
-                    <li className="item">
-                      <div id="notice-num">2</div>
-                      <p>나이 : {role_age}</p>
-                    </li>
-
-                    <li className="item">
-                      <div id="notice-num">3</div>
-                      <p>계절 : {season}</p>
-                    </li>
-
-                    <li className="item">
-                      <div id="notice-num">4</div>
-                      <p>의상 : {costume}</p>
-                    </li>
-                  </ol>
-                </DetailItem>
-              );
-            })}
-          </div>
-        </RoleItem>
-      );
-    }
+              <li className="item">
+                <div id="notice-num">4</div>
+                <p>
+                  의상:
+                  {costumeList.map((elem, idx) => {
+                    if (costumeList.length === idx + 1) {
+                      return <span key={idx}>{elem}</span>;
+                    }
+                    return <span key={idx}>{elem},</span>;
+                  })}
+                </p>
+              </li>
+            </ol>
+          </DetailItem>
+        </div>
+      </RoleItem>
+    );
   };
 
   /**
-   * 필요없는 로직
-   * 수정 예정
-   * 역할 기준으로 온다함
+   *
+   * 모달창에 띄울 역할 리스트 생성
+   * @param selectedJobPostItem
    * @returns
    */
+  const makeRoleList = (selectedJobPostItem: JobPost) => {
+    const RoleList = [];
 
-  const generateRoleDetailItemList = () => {
-    let remainRoleList = roleList;
-    const roleComponents = [];
-    let cnt = 0;
+    const { roleIdList, roleNameList, roleAgeList, sexList } =
+      selectedJobPostItem;
 
-    while (remainRoleList.length !== 0) {
-      const tragetRoleName = remainRoleList[0].role_name.replace(/\s/g, "");
-
-      // 학생역할 : { 성별 : 여자, ...} , { 성별 : 남자, ...}
-      const selectedArr = remainRoleList.filter(
-        (elem) => elem.role_name.replace(/\s/g, "") === tragetRoleName,
-      );
-
-      const remainingArr = remainRoleList.filter(
-        (elem) => elem.role_name.replace(/\s/g, "") !== tragetRoleName,
-      );
-
-      cnt++;
-      remainRoleList = remainingArr;
-      // 업데이트
-
-      roleComponents.push(
-        generateRoleDetailItem(cnt, tragetRoleName, selectedArr),
-      );
+    for (let i = 0; i < selectedJobPostItem.roleNameList.length; i++) {
+      const Role: RoleItemToShow = {
+        roleId: roleIdList[i],
+        roleName: roleNameList[i],
+        roleAge: roleAgeList[i][0],
+        sex: sexList[i],
+      };
+      RoleList.push(Role);
     }
-
-    return <>{roleComponents}</>;
+    return RoleList;
   };
 
   /**
@@ -184,14 +216,14 @@ export default function ExtraCastingBoard() {
 
       <ShootingSchedule className="shooting-schedule">
         <div className="time-location-set">
-          <div>{gathering_time} 예정</div>
-          <div>{gathering_location}</div>
+          <div>{gatheringTime} 예정</div>
+          <div>{gatheringLocation}</div>
         </div>
         <div className="date-status-set">
           <StarIcon id="star" src={star} onClick={handleStarClick} />
 
           <div>
-            <span> {calendar}</span>
+            <span> {dateOfShotting}</span>
 
             {/* 추후 공통 컴포넌트의 모집중 컴포넌트로 통일 예정 */}
             <span id="status"> {status ? "모집중" : "모집완료"}</span>
@@ -201,7 +233,9 @@ export default function ExtraCastingBoard() {
 
       {/* 역할 / 상세정보 리스트 */}
       {/* 한 item, RoleItem 컴포넌트 */}
-      <div className="role-list">{generateRoleDetailItemList()}</div>
+      <div className="role-list">
+        {selectedJobPostItem && generateRoleDetailItemList(selectedJobPostItem)}
+      </div>
 
       {/* 지원하기 버튼  */}
       <footer>
@@ -227,7 +261,7 @@ export default function ExtraCastingBoard() {
                 <RoleModal
                   handleApply={(value) => setApply(value)}
                   closeModal={closeModal}
-                  roleList={roleList}
+                  roleList={makeRoleList(selectedJobPostItem)}
                 />
               ) : (
                 <CompleteModal
