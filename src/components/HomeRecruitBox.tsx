@@ -29,17 +29,22 @@ type Props = {
 
 const calculateDday = (calendar: string) => {
   const today = new Date();
-  const [startCal, endCal] = calendar
-    .split("-")
-    .map((date) => new Date(`2024/${date.trim()}`));
+  const target = new Date(calendar);
 
-  const startDiff = Math.ceil((+startCal - +today) / (1000 * 60 * 60 * 24));
-  const endDiff = Math.ceil((+endCal - +today) / (1000 * 60 * 60 * 24));
+  // 시간을 00:00:00으로 설정
+  today.setHours(0, 0, 0, 0);
 
-  if (startDiff <= 0 && endDiff >= 0) {
+  // 닐찌 차이 계산 (밀리초 단위)
+  const differenceInTime = target.getTime() - today.getTime();
+
+  // 밀리초를 일수로 변환
+  const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+  if (differenceInDays === 0) {
     return "D-day";
-  } else if (startDiff > 0) {
-    return `D-${startDiff}`;
+  } else if (differenceInDays > 0) {
+    // D-day 이전
+    return `D-${differenceInDays}`;
   } else {
     return "종료";
   }
@@ -70,7 +75,7 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
   // const dday = calculateDday(calenderList);
 
   // 임시 Dday for test
-  const dday = "D-7";
+  // const dday = "D-7";
 
   return (
     <RecruitContainer className={`${!recommand ? "" : "recommand"}`}>
@@ -84,7 +89,7 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
           <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
             <DateTxt>{dateOfShotting}</DateTxt>
-            <DeadlineBox>{dday}</DeadlineBox>
+            <DeadlineBox>{calculateDday(dateOfShotting)}</DeadlineBox>
           </DateAndDeadlineContainer>
           <Team>{companyName}</Team>
         </InfoContainer>
