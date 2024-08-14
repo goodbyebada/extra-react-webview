@@ -85,7 +85,7 @@ const requestToken = () => {
   }
 };
 
-export const requestFetch = async (
+const requestFetch = async (
   url: string,
   method: string,
   data?: object,
@@ -117,4 +117,24 @@ export const requestFetch = async (
   }
 
   return null;
+};
+
+export const requestPostFetch = async (url: string, data: object) => {
+  return await requestFetch(url, "POST", data, {
+    "Content-Type": "application/json",
+  });
+};
+
+export const requestPutFetch = async (url: string, data: object) => {
+  return await requestFetch(url, "PUT", data, {
+    "Content-Type": "application/json",
+  });
+};
+
+export const requestGetFetch = async (url: string) => {
+  return await requestFetch(url, "GET");
+};
+
+export const requestDeleteFetch = async (url: string) => {
+  return await requestFetch(url, "DELETE");
 };
