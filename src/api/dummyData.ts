@@ -88,7 +88,7 @@ export const dummyJobPostList: JobPostList = [
     category: "코미디",
     companyName: "코미디 스튜디오",
     scheduleIdList: [],
-    calenderList: ["2024-08-20"],
+    calenderList: ["2024-08-20", "2024-08-21", "2024-08-22"],
     roleIdList: [10, 20, 30, 40, 50],
     roleNameList: ["주연1", "주연2", "조연1", "조연2", "엑스트라"],
     costumeList: [
