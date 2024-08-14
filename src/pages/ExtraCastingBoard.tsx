@@ -17,6 +17,7 @@ import { fetchJobPostById } from "@redux/jobPost/jobPostSlice";
 import { AppDispatch } from "@redux/store";
 import { Loading } from "@components/Loading";
 import { Err } from "@components/Err";
+import { ReturnDateOfShooting } from "@utills/returnDateOfShooting";
 
 /**
  *
@@ -74,10 +75,8 @@ export default function ExtraCastingBoard() {
     status,
   }: JobPost = selectedJobPostItem;
 
-  // 촬영날짜가 1일이라는 가정하에 작성됨
   // 추후 논의 예정
-  const dateOfShotting = calenderList[0];
-
+  const dateOfShotting = ReturnDateOfShooting(calenderList);
   const generateRoleDetailItemList = (selectedJobPostItem: JobPost) => {
     const {
       roleNameList,
