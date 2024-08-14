@@ -5,26 +5,81 @@
 
 import StatusRecruitBox from "@components/StatusRecruitBox";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DropDownSelector from "@components/DropDownSelector";
-import { dummyShootManageList } from "@api/dummyData";
-
-// {
-//   "id": 1,
-//   "category": "공고 카테고리",
-//   "title": "공고 제목",
-//   "gatheringTime": "2024-01-06T00:29:55",
-//   "gatheringLocation": "어디어디",
-//   "name": “업체 이름",
-//   "applyStatus": "APPLIED(지원 상태 enum- APPLIED, REJECTED, APPROVED)"
-//   }
+import { ShootManageList, ShootManageSelectStatus } from "@api/interface";
 
 export default function ExtraShootManagePage() {
   const [applyStatusIdx, setApplyStatusIdx] = useState(0);
-  const [recruitBoxes, setRecruitBoxes] = useState(dummyShootManageList);
+  const [recruitBoxes, setRecruitBoxes] = useState<ShootManageList>([]);
+
+  // 페이지 마운트 시 토큰을 받아오는 함수 실행
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_SERVER_URL}api/v1/members/login`, {
+      method: "POST",
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: "test@test.com",
+        password: "qwer1234",
+      }),
+    }).then((res) => {
+      if (res.status === 200) {
+        const token = res.headers.get("authorization");
+        if (token && token.startsWith("Bearer ")) {
+          const accesToken = token.slice(7);
+
+          localStorage.setItem("accessToken", accesToken);
+          console.log(accesToken);
+        }
+      }
+    });
+  }, []);
+
+  // applyStatusIdx가 변경될 때마다 API 호출
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      console.error("No access token found");
+      return;
+    }
+
+    const status = ShootManageSelectStatus[applyStatusIdx];
+    const statusUrl =
+      applyStatusIdx === 0
+        ? "" // 전체 목록은 /roles만 호출
+        : `/${status.toLowerCase()}`;
+
+    fetch(
+      `${import.meta.env.VITE_SERVER_URL}api/v1/application-request/member/roles${statusUrl}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`API call failed with status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data: ShootManageList) => {
+        setRecruitBoxes(data);
+        const status =
+          ShootManageSelectStatus[applyStatusIdx] || "Unknown status";
+        console.log(`Data fetched successfully for ${status}:`, data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [applyStatusIdx]);
 
   // 1~3까지의 배열
-  const selcetorList = Array.from({ length: 4 }, (v, i) => i);
+  const selcetorList = Array.from({ length: 4 }, (_v, i) => i);
   const handler = (selectedIdx: number) => {
     setApplyStatusIdx(selectedIdx);
   };

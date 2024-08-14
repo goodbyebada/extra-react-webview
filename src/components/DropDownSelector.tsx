@@ -62,7 +62,7 @@ const Container = styled.span`
   }
 
   .item {
-    width: 110px;
+    width: 120px;
     position: relative;
 
     display: flex;
