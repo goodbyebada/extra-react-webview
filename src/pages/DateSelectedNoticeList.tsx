@@ -47,7 +47,7 @@ export default function DateSelectedNoticeList() {
       },
       version: "1.0",
     });
-  }, []);
+  }, [navContent]);
 
   return (
     <Container>
