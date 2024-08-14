@@ -35,7 +35,9 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
     new Array(roleList.length).fill(false),
   );
 
-  const handleClick = (idx: number) => {
+  // !!! 데이터 연결 문제 있음
+  // !! 이미 접수 완료 되었을 시 모달 추가 해야함
+  const handleClick = async (idx: number) => {
     const newArr = Array(roleList.length).fill(false);
     newArr[idx] = true;
     setSelected(newArr);
@@ -44,7 +46,7 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
       return await memberRolesAPI.postMemberRoles(roleId);
     };
 
-    const res = fetch(roleList[idx].roleId);
+    const res = await fetch(roleList[idx].roleId);
     console.log(res);
   };
 
