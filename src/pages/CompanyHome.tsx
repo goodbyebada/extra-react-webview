@@ -93,7 +93,7 @@ export default function CompanyHome() {
               return (
                 <HomeRecruitBox
                   navigate={() => {
-                    navigate(path + `${elem.job_post_id}`);
+                    navigate(path + `${elem.id}`);
                   }}
                   key={key}
                   recruitInfo={elem}

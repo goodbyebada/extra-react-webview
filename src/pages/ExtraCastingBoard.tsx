@@ -7,12 +7,16 @@ import { toggleStar } from "@redux/recruitSlice";
 
 import NavBar from "@components/custom/NavBar";
 
-import { dummyJobPostList } from "@api/dummyData";
-import { JobPost, RoleItemToShow } from "@api/interface";
+import { JobPost, ResponseStatus, RoleItemToShow } from "@api/interface";
 import RoleModal from "@components/Modal/RoleModal";
 import { useRef } from "react";
 import CompleteModal from "@components/Modal/CompleteModal";
 import { RootState } from "@redux/store";
+
+import { fetchJobPostById } from "@redux/jobPost/jobPostSlice";
+import { AppDispatch } from "@redux/store";
+import { Loading } from "@components/Loading";
+import { Err } from "@components/Err";
 
 /**
  *
@@ -28,42 +32,37 @@ export default function ExtraCastingBoard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const { jobPostId } = useParams();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const star = useSelector((state: RootState) => state.recruit.star);
 
   const handleStarClick = () => {
     dispatch(toggleStar());
   };
 
+  const jobPostItem = useSelector(
+    (state: RootState) => state.jobPosts.jobPostItem,
+  );
+
+  useEffect(() => {
+    // 서버에서 데이터를 불러오는 createAsyncThunk 호출
+
+    const fetch = () => {
+      if (jobPostId !== undefined && jobPostId !== null) {
+        dispatch(fetchJobPostById(parseInt(jobPostId)));
+      }
+    };
+
+    fetch();
+  }, [dispatch, jobPostId]);
+
   // 임시 선택된 데이터
-  const selectedJobPostItem = dummyJobPostList[0];
-
-  console.log(selectedJobPostItem);
-
-  const { jobPostId } = useParams();
-
-  // jobPostId가 없다면 404 화면 return
-  if (jobPostId === undefined) {
-    return <div>404</div>;
-  }
-
-  /**
-   * 데이터 연결 예정
-   * url의 jobPostId를 통해, jobPostList 데이터에서 jobPostId 공고 JobPost 정보를 찾는다.
-   */
-  // const jobPostItem = selectedJobPostItem.find(
-  //   (elem) => elem.id === parseInt(jobPostId),
-  // );
-
-  // // jobPostId와 일치하는 jobPostItem 없다면 404 return
-  // if (jobPostItem === undefined) {
-  //   return <div>404</div>;
-  // }
+  const selectedJobPostItem = jobPostItem.data;
 
   const {
     // category,
@@ -92,29 +91,30 @@ export default function ExtraCastingBoard() {
 
     const roleComponents = [];
 
+    // 서버 나이 현재 null 로 되어있음 나이 임시처리
     for (let i = 0; i < selectedJobPostItem.roleNameList.length; i++) {
+      let roleDefaultList = "나이 무관";
+
+      if (roleAgeList !== null) {
+        roleDefaultList = selectedJobPostItem.roleAgeList[i][0];
+      }
+
+      console.log(costumeList[0]);
       roleComponents.push(
         RoleDetailItem(
           i,
           roleNameList[i],
           costumeList[i],
           sexList[i],
-          roleAgeList[i],
+          roleDefaultList,
           seasonList[i],
         ),
       );
     }
 
-    // roleNameList: string[],
-    // costumeList: string[],
-    // sexList : boolean[],
-    // roleAgeList: string[],
-    // limitPersonnelList: number[],
-    // currentPersonnelList: number[],
-    // seasonList: string[],
-
     return <>{roleComponents}</>;
   };
+
   /*
    * return 한 역할 / 상세정보에 대한 UI
    * Ex) 학생역할 : { 성별 : 여자, ...} , { 성별 : 남자, ...}
@@ -122,9 +122,9 @@ export default function ExtraCastingBoard() {
   const RoleDetailItem = (
     idx: number,
     roleName: string,
-    costumeList: string[],
+    costumeList: string[] | string,
     sex: boolean,
-    roleAge: string[],
+    roleAge: string,
     season: string,
   ) => {
     return (
@@ -143,15 +143,7 @@ export default function ExtraCastingBoard() {
 
               <li className="item">
                 <div id="notice-num">2</div>
-                <p>
-                  나이 :
-                  {roleAge.map((elem, idx) => {
-                    if (roleAge.length === idx + 1) {
-                      return <span key={idx}>{elem}</span>;
-                    }
-                    return <span key={idx}>{elem},</span>;
-                  })}
-                </p>
+                <p>나이 : {roleAge}</p>
               </li>
 
               <li className="item">
@@ -163,12 +155,15 @@ export default function ExtraCastingBoard() {
                 <div id="notice-num">4</div>
                 <p>
                   의상:
-                  {costumeList.map((elem, idx) => {
-                    if (costumeList.length === idx + 1) {
-                      return <span key={idx}>{elem}</span>;
-                    }
-                    return <span key={idx}>{elem},</span>;
-                  })}
+                  {/* {costumeList.length > 0 &&
+                    costumeList.map((elem, idx) => {
+                      if (costumeList.length === idx + 1) {
+                        return <span key={idx}>{elem}</span>;
+                      }
+                      return <span key={idx}>{elem},</span>;
+                    })} */}
+                  <>{costumeList}</>
+                  ~~예상 서버 값과 다름
                 </p>
               </li>
             </ol>
@@ -210,7 +205,13 @@ export default function ExtraCastingBoard() {
     openModal();
   };
 
-  return (
+  return !(jobPostItem.status === ResponseStatus.fullfilled) ? (
+    jobPostItem.status === ResponseStatus.loading ? (
+      <Loading />
+    ) : (
+      <Err />
+    )
+  ) : (
     <Container>
       <NavBar content={title} />
 

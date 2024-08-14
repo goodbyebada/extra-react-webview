@@ -4,6 +4,7 @@ import RecruitStatus from "@components/custom/recruitStatus";
 import { JobPost } from "@api/interface";
 import star_g from "@assets/Star_g.png";
 import star_y from "@assets/Star_y.png";
+// import returnGatherInfo from "@utills/returnGaterInfo";
 
 type Props = {
   navigate: () => void;
@@ -95,6 +96,20 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
   // 촬영날짜가 여러 날일 경우 가장 가까운 날짜를 기준으로 디데이 계산
   const formattedDate = formatDateRange(calenderList);
   const dday = calculateDday(calenderList);
+  // 촬영날짜가 1일이라는 가정하에 작성됨
+  // 추후 논의 예정
+
+  // 예상되는 촬영시간 string으로 올 수 있음
+  // const timeToExpected = returnGatherInfo(gatheringTime).time;
+
+  // string 값으로 준다면 사용할 예정
+  const timeToExpected = gatheringTime;
+
+  // 백 형식에 맞게 D-day 수정 필요
+  // const dday = calculateDday(calenderList);
+
+  // 임시 Dday for test
+  // const dday = "D-7";
 
   return (
     <RecruitContainer className={`${!recommand ? "" : "recommand"}`}>
@@ -122,7 +137,7 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
           {status ? "모집중" : "모집마감"}
         </RecruitStatus>
         <TimePlace>
-          {gatheringTime} 예정 <br /> {gatheringLocation}
+          {timeToExpected} 예정 <br /> {gatheringLocation}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>

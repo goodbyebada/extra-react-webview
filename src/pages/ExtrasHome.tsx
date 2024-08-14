@@ -5,14 +5,20 @@ import Calender from "@components/Calender";
 
 import HomeRecruitBox from "@components/HomeRecruitBox";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { dummyJobPostList } from "@api/dummyData";
-import { JobPost } from "@api/interface";
+import { JobPost, ResponseStatus } from "@api/interface";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
+
+import { useDispatch } from "react-redux";
+import { fetchAllJobPosts } from "@redux/jobPost/jobPostSlice";
+
+import { AppDispatch } from "@redux/store";
+import { GetToken } from "@api/GetToken";
+import { Loading } from "@components/Loading";
 
 /**임시
  * API 개발 후 처리할 예정
@@ -46,10 +52,27 @@ export default function ExtrasHome() {
     });
   };
 
+  const dispatch = useDispatch<AppDispatch>();
+  const jobpost = useSelector((state: RootState) => state.jobPosts.jobPostAll);
+
+  useEffect(() => {
+    // 서버에서 데이터를 불러오는 createAsyncThunk 호출
+
+    const Dispatch = () => {
+      dispatch(fetchAllJobPosts());
+    };
+
+    if (!localStorage.getItem("token")) {
+      GetToken(0);
+    }
+
+    Dispatch();
+  }, [dispatch]);
+
   // 월 기준으로 API 호출 로직 추가 예정
   //  list로 보기 시,infiniteScrolling으로 구현 해야함
   // dummydata
-  const jobPostList = dummyJobPostList;
+  const jobPostList = jobpost.data;
 
   // navigate
   const navigate = useNavigate();
@@ -91,7 +114,9 @@ export default function ExtrasHome() {
       </TopBar>
 
       <Content className="content">
-        {showAsCalender ? (
+        {jobpost.status === ResponseStatus.loading ? <Loading /> : ""}
+
+        {!jobPostList.length && showAsCalender ? (
           <Calender
             dateYM={dateYM}
             dateYMHandler={dateYMHandler}
