@@ -1,13 +1,13 @@
 import { styled } from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { dummyMonthJobList } from "@api/dummyData";
+import { dummyJobPostList } from "@api/dummyData";
 import { useEffect } from "react";
 import { sendMessage } from "@api/utils";
 import CompanyRecruitMiniBox from "@components/CompanyRecruitMiniBox";
 
 export default function CompanyDateSelectedPage() {
-  const jobList = dummyMonthJobList;
+  const jobList = dummyJobPostList;
 
   // 선택된 날짜
   const selectedDate = useSelector(
@@ -34,7 +34,7 @@ export default function CompanyDateSelectedPage() {
                 sendMessage({
                   type: "NAVIGATION_DETAIL",
                   payload: {
-                    uri: "/company-home/company-job-list/" + elem.job_post_id,
+                    uri: "/company-home/company-job-list/" + elem.id,
                   },
                   version: "1.0",
                 });
