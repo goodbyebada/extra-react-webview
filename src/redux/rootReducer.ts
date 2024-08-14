@@ -6,6 +6,7 @@ import modalReducer from "@redux/modalSlice";
 import recruitReducer from "@redux/recruitSlice";
 import homeSelectedDateReducer from "@redux/home/homeSelectedDateSlice";
 import showTypeSliceReducer from "@redux/home/showTypeSlice";
+import jobPostReducer from "@redux/jobPost/jobPostSlice";
 
 // redux-persist를 사용한 데이터 유지를 위한 설정
 
@@ -33,6 +34,13 @@ const showTypeConfig = {
   whitelist: ["showType"],
 };
 
+// 확인필요
+const jobPostConfig = {
+  key: "jobPosts",
+  storage,
+  whitelist: ["jobPostAll", "jobPostItem"],
+};
+
 // reducer 통합
 const rootReducer = combineReducers({
   modal: persistReducer(modalConfig, modalReducer),
@@ -42,6 +50,7 @@ const rootReducer = combineReducers({
     homeSelectedDateReducer,
   ),
   showType: persistReducer(showTypeConfig, showTypeSliceReducer),
+  jobPosts: persistReducer(jobPostConfig, jobPostReducer), // jobPostSlice 추가
 });
 
 export default rootReducer;

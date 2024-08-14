@@ -1,3 +1,5 @@
+export const BASE_URL = "http://3.34.74.22:8080/api/v1";
+
 /**
  * JobPost API 관련 인터페이스
  * - 공고 생성
@@ -127,3 +129,9 @@ export const ApplyStatusLabel: { [key: number]: string } = {
   2: "미승인",
   3: "승인 완료",
 };
+
+export enum ResponseStatus {
+  "loading" = "LOAIDNG",
+  "fullfilled" = "FULFILLED",
+  "rejected" = "REJECTED",
+}
