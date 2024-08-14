@@ -49,11 +49,6 @@ export default function CompanyHome() {
     (state: RootState) => state.showType.showAsCalender,
   );
 
-  // 임시 경로
-  const path = "company-job-list/";
-
-  // const navigate = useNavigate();
-
   /**
    * 일을 클릭했을때 일어날 Event
    */
@@ -97,7 +92,7 @@ export default function CompanyHome() {
                     sendMessage({
                       type: "NAVIGATION_DETAIL",
                       payload: {
-                        url: `/company-home/${path}${elem.job_post_id}`,
+                        uri: `/company-home/company-job-list/${elem.job_post_id}`,
                       },
                       version: "1.0",
                     });

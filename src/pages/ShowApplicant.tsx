@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Modal from "../components/Modal";
 import backIcon from "@assets/backIcon.png";
 import forwardIcon from "@assets/forwardIcon.png";
 import checkIcon from "@assets/checkIcon.png";
+import { sendMessage } from "@api/utils";
 
 const Row = styled.div`
   display: flex;
@@ -57,10 +57,11 @@ const CustomButton = styled.button`
 `;
 
 const ShowApplicant = () => {
-  const navigate = useNavigate();
-
   const goBackDetailPage = () => {
-    navigate("/detail");
+    sendMessage({
+      type: "HISTORY_BACK",
+      version: "1.0",
+    });
   };
 
   // 지원현황에서 각각의 지원자에 대한 상세 프로필을 보여주기 위한 모달
@@ -200,7 +201,7 @@ const ShowApplicant = () => {
                     src={checkIcon}
                     alt="selected"
                     onClick={() => toggleApplicantSelection(applicant)}
-                    style={{ width: "25px", paddingRight: "10px" }}
+                    style={{ maxHeight: "25px", paddingRight: "10px" }}
                   />
                   {applicant}
                 </div>

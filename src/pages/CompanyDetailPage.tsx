@@ -1,26 +1,8 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import backIcon from "@assets/backIcon.png";
 import reviseIcon from "@assets/reviseIcon.png";
 import { sendMessage } from "@api/utils";
-
-const CustomBorder = styled.div`
-  border-top: 2px solid white;
-  border-bottom: 2px solid white;
-  border-left: 0;
-  border-right: 0;
-  padding: 10px;
-  margin: 0 10px 0 10px;
-  font-size: 13px;
-`;
-
-const Row = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`;
 
 const Column = styled.div`
   display: flex;
@@ -28,27 +10,31 @@ const Column = styled.div`
   align-items: center;
 `;
 
-const StatusBadge = styled.div`
-  margin-left: auto;
-  border-radius: 20px;
-  background-color: white;
-  color: black;
-  width: 42px;
-  height: 20px;
-  font-weight: bold;
-  font-size: 9px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const RoleName = styled.p`
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #fff;
+  font-weight: 700;
 `;
 
 const RoleInfo = styled.div`
-  background-color: #302e34;
-  width: 380px;
+  background-color: #535255;
+  width: "80%";
   height: 100px;
-  margin: 20px 0;
-  cursor: pointer;
+  margin-bottom: 20px;
   font-size: 10px;
+  border-radius: 20px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+`;
+
+const RolePersonnal = styled.div`
+  position: absolute;
+  top: 15px;
+  right: 15px;
 `;
 
 const DetailProfileButton = styled.button`
@@ -76,8 +62,6 @@ const CompleteRevButton = styled.button`
 `;
 
 function CompanyDetailPage() {
-  const navigate = useNavigate();
-
   // 이전페이지로 돌아가기
   const goBackManager = () => {
     //navigate("/");
@@ -88,7 +72,14 @@ function CompanyDetailPage() {
   };
 
   const goToCheckApplicant = () => {
-    navigate("/applicants");
+    // navigate("/applicants");
+    sendMessage({
+      type: "NAVIGATION_APPLICANTS",
+      payload: {
+        uri: "/applicants",
+      },
+      version: "1.0",
+    });
   };
 
   // 수정버튼을 누르면 나오는 "+역할 상세 프로필"이 보이는 유무
@@ -107,88 +98,147 @@ function CompanyDetailPage() {
     setCompleteRevVisible(false);
   };
 
+  const [data, setData] = useState({
+    id: 0,
+    title: "",
+    category: "",
+    time: "",
+    place: "",
+    date: "",
+    limit_personnal: 0,
+    current_personnal: 0,
+  });
+
+  useEffect(() => {
+    setData({
+      id: 1,
+      title: "테스트",
+      category: "테스트",
+      time: "테스트",
+      place: "테스트",
+      date: "2021-08-01",
+      limit_personnal: 10,
+      current_personnal: 5,
+    });
+  }, []);
+
   return (
-    <div
-      style={{
-        overflowX: "hidden",
-      }}
-    >
-      <div
+    <Column>
+      <Column
         style={{
-          display: "flex",
-          alignItems: "start",
-          padding: "10px",
-          position: "relative",
-          paddingTop: "50px",
+          width: "90%",
         }}
       >
-        <img
-          src={backIcon}
-          alt="back"
-          style={{ margin: "12px 10px 10px" }}
-          onClick={goBackManager}
-        />
-        <p
+        <div
           style={{
-            margin: "0 5px",
-            fontSize: "36px",
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <button
+            onClick={goBackManager}
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={backIcon}
+              alt="back"
+              style={{
+                height: "1.5rem",
+                marginRight: "1rem",
+              }}
+            />
+            <span
+              style={{
+                color: "#fff",
+              }}
+            >
+              모집공고
+            </span>
+          </button>
+          <div>{data.category}</div>
+        </div>
+        <div
+          style={{
+            marginTop: "2rem",
+            fontSize: "2rem",
             fontWeight: "600",
             color: "#F5C001",
+            marginBottom: ".5rem",
           }}
         >
-          {/* 데이터 연결!!!!!! */}
-          드라마제목
+          {data.title}
+        </div>
+      </Column>
+
+      <Column
+        style={{
+          background: "#000",
+          width: "90%",
+          borderTop: "1px solid #fff",
+          borderBottom: "1px solid #fff",
+          padding: ".5rem 0 .5rem",
+          marginBottom: "1rem",
+        }}
+      >
+        <p style={{ width: "100%", fontSize: "1rem", fontWeight: "700" }}>
+          {data.time} 예정
         </p>
-      </div>
-
-      <CustomBorder>
-        <p style={{ margin: 0 }}>시간</p>
-        <Row>
-          <p style={{ margin: 0, marginRight: "auto" }}>위치</p>
-
-          {/* 모집중인지 판단하도록 로직을 구현해야함!!!!!!! */}
-          <StatusBadge>모집중</StatusBadge>
-        </Row>
-      </CustomBorder>
-      <div></div>
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <img
-          src={reviseIcon}
-          alt="revise"
-          style={{
-            width: "27px",
-            height: "25px",
-            cursor: "pointer",
-            marginRight: "20px",
-            marginTop: "10px",
-          }}
-          onClick={handleReviseClick}
-        />
-      </div>
-
-      <Column>
-        {/* 데이터를 연결해야하는 부분 */}
-
+        <p style={{ width: "100%", fontSize: "1rem", fontWeight: "700" }}>
+          {data.place}
+        </p>
         <p
           style={{
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
             width: "100%",
-            textAlign: "left",
-            marginLeft: "50px",
-            marginBottom: "-10px",
-            fontWeight: "bold",
+            fontSize: "1rem",
+            fontWeight: "700",
+            textAlign: "right",
           }}
         >
-          학생 역할
+          {data.date.replace(/(\d{4})-(\d{2})-(\d{2})/, "$2/$3")}
         </p>
+      </Column>
+      <div
+        style={{
+          width: "90%",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <img
+            src={reviseIcon}
+            alt="revise"
+            style={{
+              width: "27px",
+              height: "25px",
+              cursor: "pointer",
+              marginRight: "20px",
+              marginTop: "10px",
+            }}
+            onClick={handleReviseClick}
+          />
+        </div>
+      </div>
+
+      <div
+        style={{
+          width: "90%",
+        }}
+      >
+        {/* 데이터를 연결해야하는 부분 */}
+
+        <RoleName>1) 학생 역할</RoleName>
 
         <RoleInfo onClick={goToCheckApplicant}>
           <p>1. 성별: 남</p>
           <p>2. 나이: 20~35세</p>
           <p>3. 계절: 여름</p>
           <p>4. 의상: 정장1, 세미정장1, 캐주얼2</p>
+          <RolePersonnal>
+            ({data.limit_personnal}/{data.current_personnal})
+          </RolePersonnal>
         </RoleInfo>
         {isRevisionVisible && (
           <DetailProfileButton>+ 역할 상세 프로필</DetailProfileButton>
@@ -209,8 +259,8 @@ function CompanyDetailPage() {
             </CompleteRevButton>
           </div>
         )}
-      </Column>
-    </div>
+      </div>
+    </Column>
   );
 }
 

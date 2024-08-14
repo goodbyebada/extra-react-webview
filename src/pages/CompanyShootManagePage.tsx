@@ -13,10 +13,11 @@ export default function CompanyShootManagePage() {
 
   return (
     <ItemWrapper>
-      {jobPostList.map((_, key) => {
+      {jobPostList.map((jobPostInfo, key) => {
         return (
           <AdminManageRecruitBox
             key={key}
+            jobPostInfo={jobPostInfo}
             navigate={() => {
               sendMessage({
                 type: "NAVIGATION_MANAGE",
