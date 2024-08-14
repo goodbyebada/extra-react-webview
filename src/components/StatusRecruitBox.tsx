@@ -10,18 +10,18 @@ import { ShootManage } from "@api/interface";
 /**
  * 촬영관리 컴포넌트
  *
- * 수정할 것
- * 현재 승인상태(승인대기, 미승인, 승인완료)는 데이터 연결 전이라 임시로 승인대기 상태. 추후 수정예정
  */
 
 interface StatusRecruitBoxProps {
   shootManageInfo: ShootManage;
   onDelete: (id: number) => void;
+  onCancelApplication: (id: number) => void;
 }
 
 function StatusRecruitBox({
   shootManageInfo,
   onDelete,
+  onCancelApplication,
 }: StatusRecruitBoxProps) {
   const [swiped, setSwiped] = useState(false);
   const [star, setStar] = useState(star_g);
@@ -63,7 +63,13 @@ function StatusRecruitBox({
       {shouldShowDeleteButton && (
         <DeleteButton
           cancelText={deleteButtonText}
-          onClick={() => onDelete(shootManageInfo.id)}
+          onClick={() => {
+            if (recruitStatus === ShootManageSelectStatus.APPLIED) {
+              onCancelApplication(shootManageInfo.id);
+            } else {
+              onDelete(shootManageInfo.id);
+            }
+          }}
         />
       )}
       <RecruitBox

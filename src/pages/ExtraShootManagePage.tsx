@@ -1,6 +1,11 @@
 /**
  * 보조출연자 촬영관리 화면
  * @returns
+ *
+ * 수정사항
+ * 1. 로그인 api 연결은 추후 삭제 예정
+ * 2. 현재 취소하기 버튼 클릭하면 api 연동 돼서 바로 아이템 삭제. 추후 수정 예정
+ *    원래 순서는 취소하기 버튼 클릭 -> 취소 확인 모달 -> Yes 시 아이템 삭제 -> 취소 완료 모달
  */
 
 import StatusRecruitBox from "@components/StatusRecruitBox";
@@ -101,6 +106,33 @@ export default function ExtraShootManagePage() {
     setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
   };
 
+  const handleCancelApplication = (id: number) => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      console.error("No access token found");
+      return;
+    }
+
+    fetch(
+      `${import.meta.env.VITE_SERVER_URL}api/v1/application-request/member/application-requests/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`API call failed with status ${response.status}`);
+        }
+        setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
+      })
+      .catch((error) => {
+        console.error("Error deleting application:", error);
+      });
+  };
+
   return (
     <div>
       <Top>
@@ -113,7 +145,11 @@ export default function ExtraShootManagePage() {
       <ListContainer>
         {recruitBoxes.map((box) => (
           <Wrapper key={box.id}>
-            <StatusRecruitBox shootManageInfo={box} onDelete={handleDelete} />
+            <StatusRecruitBox
+              shootManageInfo={box}
+              onDelete={handleDelete}
+              onCancelApplication={handleCancelApplication}
+            />
           </Wrapper>
         ))}
       </ListContainer>
