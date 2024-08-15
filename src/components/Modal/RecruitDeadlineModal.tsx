@@ -3,11 +3,13 @@ import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import { useNavigate } from "react-router-dom";
 
-interface CompleteModalProps {
+interface RecruitDeadlineModalProps {
   closeModal: () => void;
 }
 
-const CompleteModal: React.FC<CompleteModalProps> = ({ closeModal }) => {
+const RecruitDeadlineModalModal: React.FC<RecruitDeadlineModalProps> = ({
+  closeModal,
+}) => {
   const navigate = useNavigate();
   const homePath = "/";
   const mySupportStatusPath = "/";
@@ -39,7 +41,7 @@ const CompleteModal: React.FC<CompleteModalProps> = ({ closeModal }) => {
   );
 };
 
-export default CompleteModal;
+export default RecruitDeadlineModalModal;
 
 const ModalContainer = styled.div`
   position: absolute;
