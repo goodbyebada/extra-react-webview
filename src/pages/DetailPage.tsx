@@ -23,7 +23,6 @@ function DetailPage() {
         if (savedGatheringTime) setGatheringTime(savedGatheringTime);
         if (savedGatheringLocation) setGatheringLocation(savedGatheringLocation);
     }, []);
-    
 
     const roleList = dummyRoleList;
     
@@ -33,6 +32,11 @@ function DetailPage() {
         navigate(`/detail/${title}/applicants`)
     };
 
+    const [isStatusIng, setisStatusIng] = useState(true);
+
+    const makeStatusDone = () => {
+      setisStatusIng(false);
+    }
 
     // 이전페이지로 돌아가기
     const goBackManager = () => {
@@ -95,8 +99,12 @@ function DetailPage() {
                         {gatheringLocation}
                     </p>
 
-                    {/* 모집중인지 판단하도록 로직을 구현해야함!!!!!!! */}
-                    <StatusBadge>모집중</StatusBadge>
+                    {isStatusIng ? 
+                      <StatusBadge>모집중</StatusBadge>
+                      :
+                      <StatusBadge>모집마감</StatusBadge>
+                    }
+                    
                 </Row>
             </CustomBorder>
             <div>
@@ -152,6 +160,8 @@ function DetailPage() {
                         </>
                     )
                 })}
+
+                <RecruitDoneButton onClick={makeStatusDone}>마감</RecruitDoneButton>
                 
                 {isCompleteRevVisible && (
                     <div style={{display: 'flex', justifyContent: 'flex-end'}}>
@@ -181,31 +191,31 @@ const CustomBorder = styled.div`
 `
 
 const Row = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
 
 const Column = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const StatusBadge = styled.div`
-    margin-left: auto;
-    border-radius: 20px;
-    background-color: white;
-    color: black;
-    width: 42px;
-    height: 20px;
-    font-weight: bold;
-    font-size: 9px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`
+  margin-left: auto;
+  border-radius: 20px;
+  background-color: white;
+  color: black;
+  width: 42px;
+  height: 20px;
+  font-weight: bold;
+  font-size: 9px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const RoleInfo = styled.div`
     background-color: #535255;
@@ -257,4 +267,16 @@ const CompleteRevButton = styled.button`
     border: none;
     margin-top: 20px;
     padding: 3px 8px;
+`
+
+const RecruitDoneButton = styled.button`
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  background: #F5C001;
+  padding: 5px;
+  width: 70px;
 `

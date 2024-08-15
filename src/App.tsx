@@ -1,19 +1,15 @@
-
-import { BrowserRouter , Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import DetailPage from "./pages/DetailPage";
 import AddNotice from "./pages/AddNotice";
 import ShowApplicant from "./pages/ShowApplicant";
 
-
-
 import ExtrasHome from "@pages/ExtrasHome";
 import ExtraCastingBoard from "@pages/ExtraCastingBoard";
 import DateSelectedNoticeList from "@pages/DateSelectedNoticeList";
 import Scheduler from "@pages/Scheduler";
-
-
 import CompanyHome from "@pages/CompanyHome";
+import ExtraShootManagePage from "@pages/ExtraShootManagePage";
 
 function App() {
   return (
@@ -39,6 +35,7 @@ function App() {
           />
 
           <Route path="/scheduler" element={<Scheduler />} />
+          <Route path="/member/manage" element={<ExtraShootManagePage />} />
 
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
               <Route path="/detail/:title" element={<DetailPage />} /> 

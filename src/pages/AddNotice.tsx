@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import backIcon from "@assets/backIcon.png";
 import styled from "styled-components";
-import Modal from "@components/Modal";
-//import CompanyRoleModal from "../component/CompanyRoleModal";
+import Modal from "../components/Modal";
+import CompanyRoleModal from "@/components/Modal/CompanyRoleModal";
+import CompanyTitleCategoryModal from "@components/Modal/CompanyTitleCategoryModal";
 
 const Column = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 const Row = styled.div`
     display: flex;
@@ -19,28 +20,28 @@ const Row = styled.div`
 `
 
 const Container = styled.div`
-    background: #302E34;
-    width: 90%;
-    height: 150px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-`
+  background: #302e34;
+  width: 90%;
+  height: 150px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+`;
 
 const Container2 = styled.div`
-    background-color: rgba(83, 82, 85, 0.70);
-    color: rgba(255, 255, 255, 0.70);
-    width: 90%;
-    height: 80px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-    font-size: 14px;
-`
+  background-color: rgba(83, 82, 85, 0.7);
+  color: rgba(255, 255, 255, 0.7);
+  width: 90%;
+  height: 80px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+`;
 
 const PlusButton = styled.button`
     font-size: 30px;
@@ -51,13 +52,13 @@ const PlusButton = styled.button`
 `
 
 const CheckButton = styled.button`
-    background: #F5C001;
-    color: white;
-    border-radius: 8px;
-    font-size: 15px;
-    font-weight: bold;
-    padding: 5px 14px 5px;    
-`
+  background: #f5c001;
+  color: white;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 5px 14px 5px;
+`;
 
 const CustomInput = styled.input`
     border: none;
@@ -72,17 +73,17 @@ const CustomInput = styled.input`
 `
 
 const CustomInput2 = styled.input`
-    border: none;
-    border-bottom: 1px solid white;
-    outline: none; 
-    background: #302E34; 
-    height: 25px;
-    margin-left: 10px;
-    padding-left: 10px;
-    color: white;
-    margin-right: 10px;
-    width: 40%;
-`
+  border: none;
+  border-bottom: 1px solid white;
+  outline: none;
+  background: #302e34;
+  height: 25px;
+  margin-left: 10px;
+  padding-left: 10px;
+  color: white;
+  margin-right: 10px;
+  width: 40%;
+`;
 
 function AddNotice() {
     const navigate = useNavigate();
@@ -93,6 +94,8 @@ function AddNotice() {
     // 모달의 종류 지정 ( 1: 제목 카테고리 / 2: 날짜 시간 장소 )
     const [modalType, setModalType] = useState(0);
 
+    const [isRoleModalOpen, setIsRoleModalOpen] = useState(false); // 역할 모달 열림 상태 추가
+
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
 
@@ -102,15 +105,14 @@ function AddNotice() {
 
     const [role, setRole] = useState("");
 
-
     const goBackManager = () => {
         navigate('/manager-dashboard');
-    }
+    };
 
     // 제목과 카테고리 설정을 위한
     const handlePlusButtonClick1 = (type: 1) => {
-        setModalType(type);
-        setIsModalOpen1(true);
+      setModalType(type);
+      setIsModalOpen1(true);
     }
     const closeModal1 = () => {
         setIsModalOpen1(false);
@@ -118,44 +120,62 @@ function AddNotice() {
 
     // 날짜 시간 장소 설정을 위한
     const handlePlusButtonClick2 = (type: 2) => {
-        setModalType(type);
-        setIsModalOpen2(true);
-    }
+      setModalType(type);
+      setIsModalOpen2(true);
+    };
     const closeModal2 = () => {
-        setIsModalOpen2(false);
-    }
+      setIsModalOpen2(false);
+    };
+
 
     // 확인 버튼 구현
-    const handleConfirmClickModal = () => {
-        // 제목과 카테고리 모달의 경우
-        if (modalType === 1){
-            setTitle(title);
-            setCategory(category);
-            
-            closeModal1();
-        }
-        // 날짜 시간 장소 모달의 경우
-        else if (modalType === 2){
-            setDate(date);
-            setTime(time);
-            setPlace(place);
+    const handleConfirmClick = () => {
+      // 제목과 카테고리 모달의 경우
+      if (modalType === 1) {
+        setTitle(title);
+        setCategory(category);
 
-            closeModal2();
-        }
-    }
+        closeModal1();
+      }
+      // 날짜 시간 장소 모달의 경우
+      else if (modalType === 2) {
+        setDate(date);
+        setTime(time);
+        setPlace(place);
 
-    // ????????????????????????????????????
+        closeModal2();
+      }
+    };
+
+    // ?????????????????
     // 역할을 작성했을 때
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            setRole(e.currentTarget.value);
-        }
+      if (e.key === "Enter") {
+        setRole(e.currentTarget.value);
+      }
+    };
+
+    const openTitleCategoryModal = () => {
+      setIsModalOpen1(true);
+    };
+
+    const closeTitleCategoryModal = (title: string, category: string) => {
+      setTitle(title);
+      setCategory(category);
+      setIsModalOpen1(false);
+    };
+
+
+    const openRoleModal = () => {
+      setIsRoleModalOpen(true);
+    }
+    const closeRoleModal = () => {
+      setIsRoleModalOpen(false);
     }
 
+
     const handleConfirmToAdd = () => {
-
-
-        navigate(`/manager-dashboard`);
+      navigate(`/manager-dashboard`);
     }
 
     return(
@@ -247,7 +267,7 @@ function AddNotice() {
 
                                 {/* 눌렀을 때 7개의 조율 사항 모달이 뜨도록 구현해야함!!!! */}
 
-                                <Container2>
+                                <Container2 onClick={openRoleModal}>
                                         <p>+ 역할 상세 프로필</p>
                                 </Container2> 
                             </div>
@@ -258,46 +278,83 @@ function AddNotice() {
 
                 <CheckButton onClick={handleConfirmToAdd}>확인</CheckButton>
             </Column>
-            
-            {/* 제목과 카테고리 모달 내용 */}
-            <Modal isVisible={isModalOpen1} onClose={closeModal1}>
-                <Row>
-                    <p style={{fontSize: '17px', fontWeight: 'bold'}}>제목 : </p>
-                    <CustomInput type="text"  value={title} onChange={(e) => setTitle(e.target.value)}></CustomInput>
-                </Row>
-                <Row>
-                    <p style={{fontSize: '17px', fontWeight: 'bold'}}>카테고리 : </p>
-                    <CustomInput type="text"  value={category} onChange={(e) => setCategory(e.target.value)}></CustomInput>
-                </Row>
 
-                <div style={{display: 'flex', justifyContent: 'center', marginTop: '25px'}}>
-                    <CheckButton onClick={handleConfirmClickModal}>확인</CheckButton>
-                </div>
-            </Modal>
 
-            {/* 날짜 시간 장소 모달의 내용 */}
-            <Modal isVisible={isModalOpen2} onClose={closeModal2}>
-                <Row>
-                    <p style={{fontSize: '17px', fontWeight: 'bold'}}>날짜 : </p>
-                    <CustomInput type="date" value={date} onChange={(e) => setDate(e.target.value)} style={{width: '150px'}}/>
-                </Row>
-                <Row>
-                    <p style={{fontSize: '17px', fontWeight: 'bold'}}>시간 : </p>
-                    <CustomInput type="time" value={time} onChange={(e) => setTime(e.target.value)} style={{width: '150px'}}/>
-                </Row>
-                <Row>
-                    <p style={{fontSize: '17px', fontWeight: 'bold'}}>장소 : </p>
-                    <CustomInput type="text" value={place} onChange={(e) => setPlace(e.target.value)} style={{width: '150px'}}/>
-                </Row>
+      {/* 제목과 카테고리 모달 내용
+      <Modal isVisible={isModalOpen1} onClose={closeModal1}>
+        <Row>
+          <p style={{ fontSize: "17px", fontWeight: "bold" }}>제목 : </p>
+          <CustomInput
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          ></CustomInput>
+        </Row>
+        <Row>
+          <p style={{ fontSize: "17px", fontWeight: "bold" }}>카테고리 : </p>
+          <CustomInput
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          ></CustomInput>
+        </Row>
 
-                <div style={{display: 'flex', justifyContent: 'center', marginTop: '25px'}}>
-                    <CheckButton onClick={handleConfirmClickModal}>확인</CheckButton>
-                </div>
-            </Modal>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "25px",
+          }}
+        >
+          <CheckButton onClick={handleConfirmClick}>확인</CheckButton>
+        </div>
+      </Modal> */}
 
-            {/* 역할에 대한 모달도 추가해야함 */}
-        </>
-    )
+      {/* 날짜 시간 장소 모달의 내용 */}
+      <Modal isVisible={isModalOpen2} onClose={closeModal2}>
+        <Row>
+          <p style={{ fontSize: "17px", fontWeight: "bold" }}>날짜 : </p>
+          <CustomInput
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          ></CustomInput>
+        </Row>
+        <Row>
+          <p style={{ fontSize: "17px", fontWeight: "bold" }}>시간 : </p>
+          <CustomInput
+            type="time"
+            value={time}
+            onChange={(e) => setTime(e.target.value)}
+          ></CustomInput>
+        </Row>
+        <Row>
+          <p style={{ fontSize: "17px", fontWeight: "bold" }}>장소 : </p>
+          <CustomInput
+            type="text"
+            value={place}
+            onChange={(e) => setPlace(e.target.value)}
+          ></CustomInput>
+        </Row>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "25px",
+          }}
+        >
+          <CheckButton onClick={handleConfirmClick}>확인</CheckButton>
+        </div>
+      </Modal>
+
+      {/* 역할 상세 모달 */}
+      {isRoleModalOpen && <CompanyRoleModal closeModal={closeRoleModal} />}
+      {isModalOpen1 && (
+        <CompanyTitleCategoryModal closeModal={closeTitleCategoryModal} />
+      )}
+    </>
+  );
 }
 
 export default AddNotice;

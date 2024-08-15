@@ -40,3 +40,34 @@ export type JobPostList = JobPost[];
  * response.data.rolelist type
  */
 export type RoleList = Role[];
+
+/**
+ * 역할 등록 API 호출시,
+ * request
+ */
+export type RoleRegister = {
+  job_post_id: number;
+  sex: boolean; // true: female, false: male
+  min_age: number;
+  max_age: number;
+  season: string;
+  costume: string;
+  check_tatto: string; // boolean -> string 변경
+  etc: string;
+  limit_personnal: number;
+};
+
+export enum ShootManageSelectStatus {
+  "ALL" = 0,
+  "APPLIED" = 1,
+  "REJECTED" = 2,
+  "APPROVED" = 3,
+}
+
+// Reverse mapping
+export const ApplyStatusLabel: { [key: number]: string } = {
+  0: "전체",
+  1: "승인 대기",
+  2: "미승인",
+  3: "승인 완료",
+};

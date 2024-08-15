@@ -8,7 +8,7 @@ import { JobPost } from "@api/interface";
 
 
 function ManagerDashboard() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
     const goToDetail = ({title, gathering_time, gathering_location}: JobPost) => {
         localStorage.setItem('gathering_time', gathering_time);
