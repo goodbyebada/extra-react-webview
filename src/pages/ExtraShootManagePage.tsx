@@ -4,14 +4,15 @@
  *
  * 수정사항
  * 1. 로그인 api 연결은 추후 삭제 예정
- * 2. 현재 취소하기 버튼 클릭하면 api 연동 돼서 바로 아이템 삭제. 추후 수정 예정
- *    원래 순서는 취소하기 버튼 클릭 -> 취소 확인 모달 -> Yes 시 아이템 삭제 -> 취소 완료 모달
+ * 2. 삭제하기 api 아직 연결 안함
  */
 
 import StatusRecruitBox from "@components/StatusRecruitBox";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import DropDownSelector from "@components/DropDownSelector";
+import CancelCheckModal from "@components/Modal/CancelCheckModal";
+import CompleteModal from "@components/Modal/CompleteModal";
 import {
   ShootManageList,
   ShootManageSelectStatus,
@@ -21,6 +22,9 @@ import {
 export default function ExtraShootManagePage() {
   const [applyStatusIdx, setApplyStatusIdx] = useState(0);
   const [recruitBoxes, setRecruitBoxes] = useState<ShootManageList>([]);
+  const [modalData, setModalData] = useState<ShootManage | null>(null);
+  const [isCancelCheckModalOpen, setIsCancelCheckModalOpen] = useState(false);
+  const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
 
   // 페이지 마운트 시 토큰을 받아오는 함수 실행
   useEffect(() => {
@@ -90,7 +94,6 @@ export default function ExtraShootManagePage() {
           ShootManageSelectStatus[applyStatusIdx] || "Unknown status";
         console.log(`Data fetched successfully for ${status}:`, data);
       })
-
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
@@ -104,6 +107,24 @@ export default function ExtraShootManagePage() {
 
   const handleDelete = (id: number) => {
     setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
+  };
+
+  const openCancelModal = (item: ShootManage) => {
+    setModalData(item);
+    setIsCancelCheckModalOpen(true);
+  };
+
+  const closeCancelModal = () => {
+    setIsCancelCheckModalOpen(false);
+    setModalData(null);
+  };
+
+  const openCompleteModal = () => {
+    setIsCompleteModalOpen(true);
+  };
+
+  const closeCompleteModal = () => {
+    setIsCompleteModalOpen(false);
   };
 
   const handleCancelApplication = (id: number) => {
@@ -127,10 +148,18 @@ export default function ExtraShootManagePage() {
           throw new Error(`API call failed with status ${response.status}`);
         }
         setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
+        closeCancelModal(); // Close the CancelCheckModal
+        openCompleteModal(); // Open the CompleteModal
       })
       .catch((error) => {
         console.error("Error deleting application:", error);
       });
+  };
+
+  const handleCancel = () => {
+    if (modalData) {
+      handleCancelApplication(modalData.id);
+    }
   };
 
   return (
@@ -148,11 +177,22 @@ export default function ExtraShootManagePage() {
             <StatusRecruitBox
               shootManageInfo={box}
               onDelete={handleDelete}
-              onCancelApplication={handleCancelApplication}
+              onOpenCancelModal={openCancelModal}
             />
           </Wrapper>
         ))}
       </ListContainer>
+      {isCancelCheckModalOpen && modalData && (
+        <CancelCheckModal
+          title={modalData.title}
+          date={modalData.gatheringTime}
+          onConfirm={handleCancel}
+          onCancel={closeCancelModal}
+        />
+      )}
+      {isCompleteModalOpen && (
+        <CompleteModal type="supportCancel" closeModal={closeCompleteModal} />
+      )}
     </div>
   );
 }

@@ -15,13 +15,13 @@ import { ShootManage } from "@api/interface";
 interface StatusRecruitBoxProps {
   shootManageInfo: ShootManage;
   onDelete: (id: number) => void;
-  onCancelApplication: (id: number) => void;
+  onOpenCancelModal: (item: ShootManage) => void;
 }
 
 function StatusRecruitBox({
   shootManageInfo,
   onDelete,
-  onCancelApplication,
+  onOpenCancelModal,
 }: StatusRecruitBoxProps) {
   const [swiped, setSwiped] = useState(false);
   const [star, setStar] = useState(star_g);
@@ -65,7 +65,7 @@ function StatusRecruitBox({
           cancelText={deleteButtonText}
           onClick={() => {
             if (recruitStatus === ShootManageSelectStatus.APPLIED) {
-              onCancelApplication(shootManageInfo.id);
+              onOpenCancelModal(shootManageInfo);
             } else {
               onDelete(shootManageInfo.id);
             }

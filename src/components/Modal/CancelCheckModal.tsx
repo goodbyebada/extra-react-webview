@@ -1,24 +1,35 @@
 import styled from "styled-components";
 
-function CancelCheckModal() {
+interface CancelCheckModalProps {
+  title: string;
+  date: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+function CancelCheckModal({
+  title,
+  date,
+  onConfirm,
+  onCancel,
+}: CancelCheckModalProps) {
   return (
     <ModalContainer>
       <ModalText>
         해당 공고의 지원을 <br /> 취소하시겠어요?
       </ModalText>
       <HomeBox>
-        <Img />
         <InfoContainer>
-          <TitleTxt>title</TitleTxt>
+          <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>date</DateTxt>
+            <DateTxt>{date}</DateTxt>
             <DeadlineBox>D-0</DeadlineBox>
           </DateAndDeadlineContainer>
         </InfoContainer>
       </HomeBox>
       <ButtonContainer>
-        <BtnY>예</BtnY>
-        <BtnN>아니요</BtnN>
+        <BtnY onClick={onConfirm}>예</BtnY>
+        <BtnN onClick={onCancel}>아니요</BtnN>
       </ButtonContainer>
     </ModalContainer>
   );
@@ -101,18 +112,9 @@ const HomeBox = styled.div`
   position: relative;
   align-items: center;
   border-radius: 20px;
-  margin-left: 33px;
-  margin-top: 55px;
+  margin-left: 50px;
+  margin-top: 90px;
   margin-bottom: 115px;
-`;
-
-const Img = styled.img`
-  width: 110px;
-  height: 110px;
-  border-radius: 20px;
-  border: 3px solid #b9b9b9;
-  background: #e8e8e8;
-  margin-right: 17px;
 `;
 
 const InfoContainer = styled.div`
