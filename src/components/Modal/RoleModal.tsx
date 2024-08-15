@@ -135,7 +135,10 @@ const RoleBoxWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-top: 70px;
+  margin-top: 70px;
+  margin-bottom: 20px;
+  max-height: 380px;
+  overflow-y: auto;
 `;
 
 const Btn = styled.button`
