@@ -66,7 +66,7 @@ function StatusRecruitBox({
           onClick={() => {
             if (recruitStatus === ShootManageSelectStatus.APPLIED) {
               onOpenCancelModal(shootManageInfo);
-            } else {
+            } else if (recruitStatus === ShootManageSelectStatus.REJECTED) {
               onDelete(shootManageInfo.id);
             }
           }}

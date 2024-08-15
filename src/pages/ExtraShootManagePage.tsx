@@ -4,7 +4,6 @@
  *
  * 수정사항
  * 1. 로그인 api 연결은 추후 삭제 예정
- * 2. 삭제하기 api 아직 연결 안함
  */
 
 import StatusRecruitBox from "@components/StatusRecruitBox";
@@ -105,8 +104,37 @@ export default function ExtraShootManagePage() {
     setApplyStatusIdx(selectedIdx);
   };
 
-  const handleDelete = (id: number) => {
-    setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
+  const handleDeleteOrCancel = (id: number, isCancel: boolean) => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      console.error("No access token found");
+      return;
+    }
+
+    fetch(
+      `${import.meta.env.VITE_SERVER_URL}api/v1/application-request/member/application-requests/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`API call failed with status ${response.status}`);
+        }
+        if (isCancel) {
+          setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
+          closeCancelModal();
+          openCompleteModal();
+        } else {
+          setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
+        }
+      })
+      .catch((error) => {
+        console.error("Error handling delete request:", error);
+      });
   };
 
   const openCancelModal = (item: ShootManage) => {
@@ -127,38 +155,9 @@ export default function ExtraShootManagePage() {
     setIsCompleteModalOpen(false);
   };
 
-  const handleCancelApplication = (id: number) => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      console.error("No access token found");
-      return;
-    }
-
-    fetch(
-      `${import.meta.env.VITE_SERVER_URL}api/v1/application-request/member/application-requests/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`API call failed with status ${response.status}`);
-        }
-        setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
-        closeCancelModal(); // Close the CancelCheckModal
-        openCompleteModal(); // Open the CompleteModal
-      })
-      .catch((error) => {
-        console.error("Error deleting application:", error);
-      });
-  };
-
-  const handleCancel = () => {
+  const handleConfirmCancel = () => {
     if (modalData) {
-      handleCancelApplication(modalData.id);
+      handleDeleteOrCancel(modalData.id, true);
     }
   };
 
@@ -176,7 +175,7 @@ export default function ExtraShootManagePage() {
           <Wrapper key={box.id}>
             <StatusRecruitBox
               shootManageInfo={box}
-              onDelete={handleDelete}
+              onDelete={(id) => handleDeleteOrCancel(id, false)}
               onOpenCancelModal={openCancelModal}
             />
           </Wrapper>
@@ -186,7 +185,7 @@ export default function ExtraShootManagePage() {
         <CancelCheckModal
           title={modalData.title}
           date={modalData.gatheringTime}
-          onConfirm={handleCancel}
+          onConfirm={handleConfirmCancel}
           onCancel={closeCancelModal}
         />
       )}
