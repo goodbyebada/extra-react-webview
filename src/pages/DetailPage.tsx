@@ -5,6 +5,8 @@ import backIcon from '@assets/backIcon.png';
 import reviseIcon from '@assets/reviseIcon.png';
 import { dummyRoleList } from '@api/dummyData';
 import { Role } from '@api/interface';
+import CompanyModal from '@components/CompanyModal';
+import CompanyRoleModal from '@components/Modal/CompanyRoleModal';
 
 
 function DetailPage() {
@@ -36,6 +38,14 @@ function DetailPage() {
 
     const makeStatusDone = () => {
       setisStatusIng(false);
+    }
+
+    const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+    const handleRoleModalOpen = () => {
+      setIsRoleModalOpen(true);
+    }
+    const handleRoleModalClose = () => {
+      setIsRoleModalOpen(false);
     }
 
     // 이전페이지로 돌아가기
@@ -155,7 +165,7 @@ function DetailPage() {
                             </RoleInfo>
 
                             {isRevisionVisible && (
-                                    <DetailProfileButton >+ 역할 상세 프로필</DetailProfileButton>
+                                    <DetailProfileButton onClick={handleRoleModalOpen}>+ 역할 상세 프로필</DetailProfileButton>
                             )}
                         </>
                     )
@@ -163,6 +173,10 @@ function DetailPage() {
 
                 <RecruitDoneButton onClick={makeStatusDone}>마감</RecruitDoneButton>
                 
+                {isRoleModalOpen && (
+                  <CompanyRoleModal closeModal={handleRoleModalClose} />
+                )}
+
                 {isCompleteRevVisible && (
                     <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                         <CompleteRevButton onClick={handleCompleteRev}>수정완료</CompleteRevButton>
