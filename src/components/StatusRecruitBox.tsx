@@ -18,6 +18,63 @@ interface StatusRecruitBoxProps {
   onOpenCancelModal: (item: ShootManage) => void;
 }
 
+// 날짜 문자열 배열에서 가장 가까운 날짜를 찾는 함수 (촬영날짜가 여러날일 경우)
+const getClosestDate = (dates: string[]): Date => {
+  const today = new Date();
+  let closestDate = new Date(dates[0]);
+
+  dates.forEach((dateStr) => {
+    const date = new Date(dateStr);
+    if (date > today && (date < closestDate || closestDate <= today)) {
+      closestDate = date;
+    }
+  });
+
+  return closestDate;
+};
+
+// 디데이를 계산하는 함수
+const calculateDday = (calendarList: string[]): string => {
+  const today = new Date();
+  const target = getClosestDate(calendarList);
+
+  // 시간을 00:00:00으로 설정
+  today.setHours(0, 0, 0, 0);
+  target.setHours(0, 0, 0, 0);
+
+  // 날짜 차이 계산 (밀리초 단위)
+  const differenceInTime = target.getTime() - today.getTime();
+
+  // 밀리초를 일수로 변환
+  const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+  if (differenceInDays === 0) {
+    return "D-day";
+  } else if (differenceInDays > 0) {
+    return `D-${Math.ceil(differenceInDays)}`;
+  } else {
+    return "종료";
+  }
+};
+
+// 날짜를 MM/DD 형식으로 변환하는 함수
+const formatDate = (date: Date): string => {
+  const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
+  const day = date.getDate();
+  return `${month}/${day}`;
+};
+
+// 날짜 배열을 MM/DD - MM/DD 형식으로 변환하는 함수
+const formatDateRange = (dates: string[]): string => {
+  if (dates.length === 1) {
+    return formatDate(new Date(dates[0]));
+  } else {
+    const startDate = new Date(dates[0]);
+    const endDate = new Date(dates[dates.length - 1]);
+    return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+  }
+};
+
 function StatusRecruitBox({
   shootManageInfo,
   onDelete,
@@ -27,6 +84,12 @@ function StatusRecruitBox({
   const [star, setStar] = useState(star_g);
 
   const touchStartX = useRef(0);
+
+  const formattedDate = formatDateRange(shootManageInfo.calenderList);
+  const dday = calculateDday(shootManageInfo.calenderList);
+
+  // gatheringTime에서 시간 부분만 추출
+  const gatheringTime = shootManageInfo.gatheringTime.substring(11, 16);
 
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     touchStartX.current = e.touches[0].clientX;
@@ -82,8 +145,8 @@ function StatusRecruitBox({
           <MediaSelectorTxt>media</MediaSelectorTxt>
           <TitleTxt>{shootManageInfo.title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>{shootManageInfo.gatheringTime}</DateTxt>
-            <DeadlineBox>D-0</DeadlineBox>
+            <DateTxt>{formattedDate}</DateTxt>
+            <DeadlineBox>{dday}</DeadlineBox>
           </DateAndDeadlineContainer>
           <Team>{shootManageInfo.name}</Team>
         </InfoContainer>
@@ -115,8 +178,7 @@ function StatusRecruitBox({
           {ApplyStatusLabel[ShootManageSelectStatus.APPROVED]}
         </RecruitStatus>
         <TimePlace>
-          {shootManageInfo.gatheringTime} 예정 <br />{" "}
-          {shootManageInfo.gatheringLocation}
+          {gatheringTime} 예정 <br /> {shootManageInfo.gatheringLocation}
         </TimePlace>
         <StarIcon src={star} onClick={handleStarClick} />
       </RecruitBox>

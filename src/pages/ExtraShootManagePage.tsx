@@ -25,31 +25,6 @@ export default function ExtraShootManagePage() {
   const [isCancelCheckModalOpen, setIsCancelCheckModalOpen] = useState(false);
   const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
 
-  // 페이지 마운트 시 토큰을 받아오는 함수 실행
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_SERVER_URL}api/v1/members/login`, {
-      method: "POST",
-      headers: {
-        Accept: "*/*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: "email0",
-        password: "string",
-      }),
-    }).then((res) => {
-      if (res.status === 200) {
-        const token = res.headers.get("authorization");
-        if (token && token.startsWith("Bearer ")) {
-          const accesToken = token.slice(7);
-
-          localStorage.setItem("accessToken", accesToken);
-          console.log(accesToken);
-        }
-      }
-    });
-  }, []);
-
   // applyStatusIdx가 변경될 때마다 API 호출
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -184,7 +159,7 @@ export default function ExtraShootManagePage() {
       {isCancelCheckModalOpen && modalData && (
         <CancelCheckModal
           title={modalData.title}
-          date={modalData.gatheringTime}
+          date={modalData.calenderList}
           onConfirm={handleConfirmCancel}
           onCancel={closeCancelModal}
         />

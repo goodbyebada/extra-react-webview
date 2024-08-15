@@ -113,6 +113,7 @@ export type ShootManage = {
   title: string;
   gatheringTime: string;
   gatheringLocation: string;
+  calenderList: string[];
   name: string;
   applyStatus: ShootManageSelectStatus;
 };

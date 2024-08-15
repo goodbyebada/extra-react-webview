@@ -1,8 +1,4 @@
-import {
-  JobPostList,
-  ShootManageList,
-  ShootManageSelectStatus,
-} from "@api/interface";
+import { JobPostList } from "@api/interface";
 
 /**
  * JobPost 공고 전체 조회
@@ -144,58 +140,5 @@ export const dummyJobPostList: JobPostList = [
     currentPersonnelList: [0, 0, 0, 0, 0],
     seasonList: ["겨울", "겨울", "겨울", "겨울", "겨울"],
     checkTattooList: [true, true, false, false, false],
-  },
-];
-
-/**
- * 촬영관리 역할 조회
- * - 전체조회/지원상태별 조회
- */
-
-export const dummyShootManageList: ShootManageList = [
-  {
-    id: 1,
-    category: "드라마",
-    title: "UMC1",
-    gatheringTime: "2024-01-06T00:29:55",
-    gatheringLocation: "강남역",
-    name: "UMC1",
-    applyStatus: ShootManageSelectStatus.APPLIED,
-  },
-  {
-    id: 2,
-    category: "영화",
-    title: "UMC2",
-    gatheringTime: "2024-01-07T00:29:55",
-    gatheringLocation: "신논현역",
-    name: "UMC2",
-    applyStatus: ShootManageSelectStatus.REJECTED,
-  },
-  {
-    id: 3,
-    category: "영화",
-    title: "UMC3",
-    gatheringTime: "2024-01-08T00:29:55",
-    gatheringLocation: "고속 터미널역",
-    name: "UMC3",
-    applyStatus: ShootManageSelectStatus.APPROVED,
-  },
-  {
-    id: 4,
-    category: "드라마",
-    title: "UMC4",
-    gatheringTime: "2024-01-08T00:29:55",
-    gatheringLocation: "고속 터미널역",
-    name: "UMC4",
-    applyStatus: ShootManageSelectStatus.REJECTED,
-  },
-  {
-    id: 5,
-    category: "영화",
-    title: "UMC5",
-    gatheringTime: "2024-01-08T00:29:55",
-    gatheringLocation: "고속 터미널역",
-    name: "UMC5",
-    applyStatus: ShootManageSelectStatus.APPLIED,
   },
 ];
