@@ -4,6 +4,10 @@ body,
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  --__dateWidth: calc(100% / 7);
+  --__dateNumHeight: calc(100% / 4);
+  --__itemWidth: calc(100% + 2px);
+  --__scheduledItemHeigth: 17px;
 }
 
 html {

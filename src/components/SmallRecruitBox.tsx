@@ -1,58 +1,90 @@
-import React from "react";
 import styled from "styled-components";
 import RecruitStatus from "@components/custom/smallRecuitStatus";
-import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
+// import { useSelector } from "react-redux";
+// import { RootState } from "../redux/store";
+import { MemberRoleFront } from "@api/interface";
+import { ScheduleTypeStatusLabel } from "@api/interface";
+import gatheringTimeString from "@utills/returnGaterInfo";
 
-const StatusRecruitBox: React.FC = () => {
-  const recruitStatus = useSelector(
-    (state: RootState) => state.recruit.recruitStatus,
-  );
+const SmallRecruitBox = ({ elem }: { elem: MemberRoleFront }) => {
+  // const recruitStatus = useSelector(
+  //   (state: RootState) => state.recruit.recruitStatus,
+  // );
+
+  // 현재 jobList에서 이 날짜의 공고 리스트를 가져온다
+
+  const {
+    category,
+    title,
+    companyName,
+    status,
+    gatheringTime,
+    gatheringLocation,
+  } = elem;
+
+  const StatusUI = (label: string) => {
+    switch (label) {
+      case ScheduleTypeStatusLabel.APPLIED:
+        return (
+          <RecruitStatus
+            visible={true}
+            borderColor="#767676"
+            backgroundColor="#d9d9d9"
+            color="#000"
+            fontSize={"8px"}
+          >
+            승인 대기
+          </RecruitStatus>
+        );
+
+      case ScheduleTypeStatusLabel.APPROVED:
+        return (
+          <RecruitStatus
+            visible={true}
+            borderColor="#23D014"
+            backgroundColor="#23D014"
+            color="#FFF"
+            fontSize={"8px"}
+          >
+            승인 완료
+          </RecruitStatus>
+        );
+      case ScheduleTypeStatusLabel.REJECTED:
+        return (
+          <RecruitStatus
+            visible={true}
+            borderColor="#F00"
+            backgroundColor="#F00"
+            color="#FFF"
+            fontSize={"10px"}
+          >
+            미승인
+          </RecruitStatus>
+        );
+    }
+  };
 
   return (
     <RecruitContainer>
       <RecruitBox>
         <InfoContainer>
-          <MediaSelectorTxt>Media</MediaSelectorTxt>
-          <TitleTxt>Title</TitleTxt>
-          <Team>Team</Team>
+          <MediaSelectorTxt>{category}</MediaSelectorTxt>
+          <TitleTxt>{title}</TitleTxt>
+          <Team>{companyName}</Team>
         </InfoContainer>
-        <RecruitStatus
-          visible={recruitStatus.pending}
-          borderColor="#767676"
-          backgroundColor="#d9d9d9"
-          color="#000"
-          fontSize={"8px"}
-        >
-          승인 대기
-        </RecruitStatus>
-        <RecruitStatus
-          visible={recruitStatus.rejected}
-          borderColor="#F00"
-          backgroundColor="#F00"
-          color="#FFF"
-          fontSize={"10px"}
-        >
-          미승인
-        </RecruitStatus>
-        <RecruitStatus
-          visible={recruitStatus.approved}
-          borderColor="#23D014"
-          backgroundColor="#23D014"
-          color="#FFF"
-          fontSize={"8px"}
-        >
-          승인 완료
-        </RecruitStatus>
+
+        {StatusUI(status)}
+
         <TimePlace>
-          00:00 예정 <br /> place
+          {gatheringTimeString(gatheringTime)}
+          <br /> {gatheringLocation}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>
   );
 };
 
-export default StatusRecruitBox;
+export default SmallRecruitBox;
 
 const RecruitContainer = styled.div`
   font-variant-numeric: lining-nums proportional-nums;

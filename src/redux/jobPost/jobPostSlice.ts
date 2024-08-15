@@ -18,7 +18,7 @@ export interface JobPostState {
 }
 
 const defaultJobPost: JobPost = {
-  id: 0,
+  id: -1,
   title: "",
   gatheringLocation: "",
   gatheringTime: "",

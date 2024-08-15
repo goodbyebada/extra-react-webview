@@ -136,12 +136,52 @@ export enum ResponseStatus {
   "rejected" = "REJECTED",
 }
 
-export interface MemberRole {
+export interface MemberRoleServer {
   id: number;
+  jobPostId: number;
   category: string;
+  calenderList: number[];
   title: string;
-  gatheringTime: string;
+  gatheringTime: string; //시간
   gatheringLocation: string;
   name: string;
   applyStatus: string;
+}
+
+export interface MemberRoleFront {
+  id: number;
+  jobPostId: number;
+  category: string;
+  title: string;
+  gatheringTime: string; //시간
+  gatheringLocation: string;
+  companyName: string;
+  status: string;
+  calender: {
+    startDateNum: number;
+    endDateNum: number;
+  };
+  // 만약 1일이라면 startDateNum == endDateNum
+}
+
+// 객체 타입 정의
+export type ScheduleElemType = {
+  id: number; // id가 숫자나 문자열일 수 있음
+  title: string;
+  dateNum: number; // dateNum이 숫자형인 경우
+  status: string; // status는 문자열로 가정
+};
+
+export enum ScheduleTypeStatusLabel {
+  "APPLIED" = "APPLIED",
+  "REJECTED" = "REJECTED",
+  "APPROVED" = "APPROVED",
+  "DEFAULT" = "DEFAULT",
+}
+
+export enum ScheduleType {
+  "SINGLE" = 0,
+  "START" = 1,
+  "END" = 2,
+  "MIDDLE" = 3,
 }

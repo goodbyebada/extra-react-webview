@@ -4,6 +4,7 @@ import SmallRecruitBox from "@components/SmallRecruitBox";
 import { JobPost } from "@api/interface";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
+import { memberRoleFrontDummyData } from "@api/dummyData";
 
 /**
  * 추후 props 추가 통해,
@@ -24,9 +25,23 @@ function ScheduleModal({ closeModal }: ScheduleModalProps) {
   const selectedDate = useSelector(
     (state: RootState) => state.homeSelectedDate,
   );
+  // const appliedList = useSelector((state: RootState) => {
+  //   return state.appliedRoles;
+  // });
 
   const { year, month, dateNum, dayOfWeek } = selectedDate;
   const dateString = `${year}/${month}/${dateNum}  (${dayOfWeek})`;
+
+  let appliedList = memberRoleFrontDummyData;
+
+  let dateNumber = parseInt(dateNum);
+
+  let todayJobList = appliedList.filter(
+    (elem) =>
+      elem.calender.startDateNum === dateNumber ||
+      (elem.calender.startDateNum <= dateNumber &&
+        dateNumber <= elem.calender.endDateNum),
+  );
 
   return (
     <ModalContainer>
@@ -39,8 +54,10 @@ function ScheduleModal({ closeModal }: ScheduleModalProps) {
       </button>
       <ModalText>{dateString}</ModalText>
       <SmallRecruitBoxWrapper>
-        <SmallRecruitBox />
-        <SmallRecruitBox />
+        {todayJobList.map((elem, key) => {
+          console.log(elem);
+          return <SmallRecruitBox key={key} elem={elem} />;
+        })}
       </SmallRecruitBoxWrapper>
       <Edit>편집</Edit>
     </ModalContainer>
