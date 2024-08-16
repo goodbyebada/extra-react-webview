@@ -12,6 +12,7 @@ import CompanyHome from "@pages/CompanyHome";
 import ExtraShootManagePage from "@pages/ExtraShootManagePage";
 import CompanyShootManagePage from "@pages/CompanyShootManagePage";
 import CompanyDateSelectedPage from "@pages/CompanyDateSelectedPage";
+import { ApplicantDetail } from "@pages/ApplicantDetail";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
 
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/applicants" element={<ShowApplicant />} />
+          <Route path="/applicants/detail" element={<ApplicantDetail />} />
           <Route path="/add-notice" element={<AddNotice />} />
         </Routes>
       </BrowserRouter>

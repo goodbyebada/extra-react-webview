@@ -1,5 +1,8 @@
 import CryptoJS from "crypto-js";
 
+const SERVER_URL = import.meta.env.VITE_SERVER_URL;
+const API_URL = `${SERVER_URL}/api/v1/`;
+
 type MessageType = {
   type: string;
   payload?: object;
@@ -33,17 +36,17 @@ const decryptAccessToken = (
 };
 
 // signature
-const verifyHmacSignature = (
-  encryptedData: string,
-  receivedSignature: string,
-  secretKey: string,
-) => {
-  const expectedSignature = CryptoJS.HmacSHA256(
-    encryptedData,
-    secretKey,
-  ).toString();
-  return receivedSignature === expectedSignature;
-};
+// const verifyHmacSignature = (
+//   encryptedData: string,
+//   receivedSignature: string,
+//   secretKey: string,
+// ) => {
+//   const expectedSignature = CryptoJS.HmacSHA256(
+//     encryptedData,
+//     secretKey,
+//   ).toString();
+//   return receivedSignature === expectedSignature;
+// };
 
 type AuthorizationMessage = {
   type: "AUTHORIZATION";
@@ -55,9 +58,9 @@ type AuthorizationMessage = {
 };
 
 // get token from RN
-const requestToken = () => {
+const requestToken = (callback: (token: string) => void) => {
   const token = localStorage.getItem("token");
-  if (!token) {
+  if (token === null || token === "") {
     sendMessage({
       type: "REQUEST_AUTHORIZATION",
       version: "1.0",
@@ -66,33 +69,29 @@ const requestToken = () => {
     const messageHandler = (event: globalThis.MessageEvent) => {
       const data: AuthorizationMessage = JSON.parse(event.data);
       if (data.type === "AUTHORIZATION") {
-        const { iv, encryptedData, signature } = data.payload;
-        const secretKey = import.meta.env.VITE_SECRET_KEY;
-        if (verifyHmacSignature(encryptedData, signature, secretKey)) {
-          const accessToken = decryptAccessToken(encryptedData, iv, secretKey);
-          localStorage.setItem("token", accessToken);
-          return accessToken;
-        }
+        const { iv, encryptedData } = data.payload;
+        const secretKey = `${import.meta.env.VITE_SECRET_KEY}`;
+        const accessToken = decryptAccessToken(encryptedData, iv, secretKey);
+        localStorage.setItem("token", accessToken);
+        callback(accessToken);
       }
     };
 
-    if (window?.ReactNativeWebView) {
-      window.addEventListener("message", messageHandler as EventListener);
-      document.addEventListener("message", messageHandler as EventListener);
-    }
+    window.addEventListener("message", messageHandler);
+    document.addEventListener("message", messageHandler as EventListener);
   } else {
-    return token;
+    callback(token);
   }
 };
 
 const requestFetch = async (
   url: string,
   method: string,
+  callback: (res: Response) => void,
   data?: object,
   option?: object,
 ) => {
-  const token = await requestToken();
-  if (token !== null) {
+  requestToken((token) => {
     const requestHeaders: HeadersInit = new Headers();
     requestHeaders.set("Authorization", `Bearer ${token}`);
     requestHeaders.set("Accept", "*/*");
@@ -102,39 +101,57 @@ const requestFetch = async (
       });
     }
 
+    const URL = API_URL + url;
+
     if (data) {
-      return await fetch(url, {
+      fetch(URL, {
         method,
         headers: requestHeaders,
         body: JSON.stringify(data),
-      });
+      })
+        .then(callback)
+        .catch((err) => console.log(err));
     } else {
-      return await fetch(url, {
+      fetch(URL, {
         method,
         headers: requestHeaders,
-      });
+      })
+        .then(callback)
+        .catch((err) => console.log(err));
     }
-  }
-
-  return null;
+  });
 };
 
-export const requestPostFetch = async (url: string, data: object) => {
-  return await requestFetch(url, "POST", data, {
+export const requestPostFetch = (
+  url: string,
+  data: object,
+  callback: (res: Response) => void,
+) => {
+  return requestFetch(url, "POST", callback, data, {
     "Content-Type": "application/json",
   });
 };
 
-export const requestPutFetch = async (url: string, data: object) => {
-  return await requestFetch(url, "PUT", data, {
+export const requestPutFetch = async (
+  url: string,
+  data: object,
+  callback: (res: Response) => void,
+) => {
+  return await requestFetch(url, "PUT", callback, data, {
     "Content-Type": "application/json",
   });
 };
 
-export const requestGetFetch = async (url: string) => {
-  return await requestFetch(url, "GET");
+export const requestGetFetch = async (
+  url: string,
+  callback: (res: Response) => void,
+) => {
+  return await requestFetch(url, "GET", callback);
 };
 
-export const requestDeleteFetch = async (url: string) => {
-  return await requestFetch(url, "DELETE");
+export const requestDeleteFetch = async (
+  url: string,
+  callback: (res: Response) => void,
+) => {
+  return await requestFetch(url, "DELETE", callback);
 };

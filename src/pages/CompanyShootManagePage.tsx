@@ -4,12 +4,25 @@
  */
 
 import styled from "styled-components";
-import { dummyJobPostList } from "@api/dummyData";
 import AdminManageRecruitBox from "@components/AdminManageRecruitBox";
-import { sendMessage } from "@api/utils";
+import { sendMessage, requestGetFetch } from "@api/utils";
+import { useEffect, useState } from "react";
+import { JobPost } from "@api/interface";
 
 export default function CompanyShootManagePage() {
-  const jobPostList = dummyJobPostList;
+  const [jobPostList, setJobPostList] = useState<JobPost[]>([]);
+
+  useEffect(() => {
+    requestGetFetch("jobposts?page=1", (res) => {
+      if (res) {
+        if (res.status === 200) {
+          res.json().then((data) => {
+            setJobPostList(data);
+          });
+        }
+      }
+    });
+  }, []);
 
   return (
     <ItemWrapper>
@@ -22,7 +35,9 @@ export default function CompanyShootManagePage() {
               sendMessage({
                 type: "NAVIGATION_MANAGE",
                 payload: {
-                  job_post_id: 1,
+                  job_post_id: jobPostInfo.id,
+                  roleIdList: jobPostInfo.roleIdList,
+                  roleNameList: jobPostInfo.roleNameList,
                 },
                 version: "1.0",
               });
