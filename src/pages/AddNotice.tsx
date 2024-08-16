@@ -16,6 +16,7 @@ const Row = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-bottom: 10px;
 `;
 
 const Container = styled.div`
@@ -46,6 +47,8 @@ const PlusButton = styled.button`
   font-size: 30px;
   border-radius: 5px;
   padding: 0 8px 0;
+  background-color: #fff;
+  margin-bottom: 10px;
 `;
 
 const CheckButton = styled.button`
@@ -66,7 +69,7 @@ const CustomInput = styled.input`
   padding-left: 15px;
   color: white;
   margin-right: 10px;
-  width: 40%;
+  width: 60%;
 `;
 
 const CustomInput2 = styled.input`
@@ -101,17 +104,16 @@ function AddNotice() {
   const [place, setPlace] = useState("");
 
   const [role, setRole] = useState("");
-  // const [gender, setGender] = useState("");
-  // const [season, setSeason] = useState("");
-  // const [costume, setCostume] = useState("");
-  // const [tattoo, setTattoo] = useState("");
-  // const [people, setPeople] = useState(0);
 
   const goBackManager = () => {
-    navigate("/");
+    navigate("/manager-dashboard");
   };
 
   // 제목과 카테고리 설정을 위한
+  const handlePlusButtonClick1 = (type: 1) => {
+    setModalType(type);
+    setIsModalOpen1(true);
+  };
   const closeModal1 = () => {
     setIsModalOpen1(false);
   };
@@ -144,6 +146,7 @@ function AddNotice() {
     }
   };
 
+  // ?????????????????
   // 역할을 작성했을 때
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -151,9 +154,9 @@ function AddNotice() {
     }
   };
 
-  const openTitleCategoryModal = () => {
-    setIsModalOpen1(true);
-  };
+  // const openTitleCategoryModal = () => {
+  //   setIsModalOpen1(true);
+  // };
 
   const closeTitleCategoryModal = (title: string, category: string) => {
     setTitle(title);
@@ -164,9 +167,12 @@ function AddNotice() {
   const openRoleModal = () => {
     setIsRoleModalOpen(true);
   };
-
   const closeRoleModal = () => {
     setIsRoleModalOpen(false);
+  };
+
+  const handleConfirmToAdd = () => {
+    navigate(`/manager-dashboard`);
   };
 
   return (
@@ -186,16 +192,30 @@ function AddNotice() {
         {title.length > 0 && category.length > 0 ? (
           <Column style={{ background: "#000" }}>
             <p
-              style={{ color: "#F5C001", fontSize: "32px", fontWeight: "bold" }}
+              style={{
+                color: "#F5C001",
+                fontSize: "32px",
+                fontWeight: "bold",
+                marginBottom: "15px",
+              }}
             >
               {title}
             </p>
-            <p style={{ color: "#5A5A5A" }}>{category}</p>
+            <p
+              style={{
+                color: "#5A5A5A",
+                marginBottom: "10px",
+              }}
+            >
+              {category}
+            </p>
           </Column>
         ) : (
           <Container>
             <Column>
-              <PlusButton onClick={openTitleCategoryModal}>+</PlusButton>
+              <PlusButton onClick={() => handlePlusButtonClick1(1)}>
+                +
+              </PlusButton>
               <p style={{ color: "#5A5A5A" }}>제목, 카테고리</p>
             </Column>
           </Container>
@@ -208,13 +228,17 @@ function AddNotice() {
               borderTop: "1px solid white",
               borderBottom: "1px solid white",
               alignItems: "flex-start",
+              marginTop: "10px",
+              marginBottom: "20px",
             }}
           >
-            <div>
-              <p>{time} 예정</p>
-              <p>{place}</p>
+            <div style={{ margin: "10px 0" }}>
+              <div>
+                <p>{time} 예정</p>
+                <p>{place}</p>
+              </div>
+              <p>{date}</p>
             </div>
-            <p>{date}</p>
           </Column>
         ) : (
           <Container>
@@ -239,10 +263,12 @@ function AddNotice() {
             }}
           >
             <div style={{ marginTop: "15px", marginLeft: "15px" }}>
-              {/* // error  'e' is defined but never used
-                                <CustomInput2 type="text" onKeyDown={(e) => {handleKeyDown}}/> 
-                                */}
-              <CustomInput2 type="text" onKeyDown={handleKeyDown} />
+              <CustomInput2
+                type="text"
+                onKeyDown={() => {
+                  handleKeyDown;
+                }}
+              />
               역할
             </div>
             <div
@@ -263,11 +289,11 @@ function AddNotice() {
           </Container>
         )}
 
-        <CheckButton>확인</CheckButton>
+        <CheckButton onClick={handleConfirmToAdd}>확인</CheckButton>
       </Column>
 
-      {/* 제목과 카테고리 모달 내용 */}
-      {/* <Modal isVisible={isModalOpen1} onClose={closeModal1}>
+      {/* 제목과 카테고리 모달 내용
+      <Modal isVisible={isModalOpen1} onClose={closeModal1}>
         <Row>
           <p style={{ fontSize: "17px", fontWeight: "bold" }}>제목 : </p>
           <CustomInput

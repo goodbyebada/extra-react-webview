@@ -117,3 +117,18 @@ export const ApplyStatusLabel: { [key: number]: string } = {
   2: "미승인",
   3: "승인 완료",
 };
+
+export type Role = {
+  role_id: number;
+  role_name: string;
+  costume: string;
+  sex: boolean; // true: female, false: male
+  role_age: string;
+  limit_personnal: number;
+  current_personnal: number;
+  season: string;
+  check_tatto: boolean;
+  apply_status: string;
+};
+
+export type RoleList = Role[];
