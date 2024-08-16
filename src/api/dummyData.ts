@@ -1,4 +1,4 @@
-import { JobPostList } from "@api/interface";
+import { JobPostList, RoleList } from "@api/interface";
 
 /**
  * JobPost 공고 전체 조회
@@ -140,5 +140,44 @@ export const dummyJobPostList: JobPostList = [
     currentPersonnelList: [0, 0, 0, 0, 0],
     seasonList: ["겨울", "겨울", "겨울", "겨울", "겨울"],
     checkTattooList: [true, true, false, false, false],
+  },
+];
+
+export const dummyRoleList: RoleList = [
+  {
+    role_id: 1,
+    role_name: "학생 역할",
+    costume: "교복 지급",
+    sex: true, // 여
+    role_age: "20 - 25 세",
+    limit_personnal: 5,
+    current_personnal: 2,
+    season: "여름",
+    check_tatto: false,
+    apply_status: "신청 중",
+  },
+  {
+    role_id: 2,
+    role_name: "학생 역할",
+    costume: "정장 1, 세미 정장 1, 캐주얼 2",
+    sex: false, // 남
+    role_age: "20 - 25 세",
+    limit_personnal: 3,
+    current_personnal: 1,
+    season: "여름",
+    check_tatto: false,
+    apply_status: "신청 중",
+  },
+  {
+    role_id: 3,
+    role_name: "선생님 역할",
+    costume: "교복 지급",
+    sex: true, // 여
+    role_age: "20 - 25 세",
+    limit_personnal: 2,
+    current_personnal: 1,
+    season: "여름",
+    check_tatto: false,
+    apply_status: "신청 중",
   },
 ];
