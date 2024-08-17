@@ -174,7 +174,11 @@ function DetailPage() {
                 <RecruitDoneButton onClick={makeStatusDone}>마감</RecruitDoneButton>
                 
                 {isRoleModalOpen && (
-                  <CompanyRoleModal closeModal={handleRoleModalClose} />
+                  <ModalBackground onClick={handleRoleModalClose}>
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <CompanyRoleModal closeModal={handleRoleModalClose} />
+                    </div>
+                  </ModalBackground>
                 )}
 
                 {isCompleteRevVisible && (
@@ -279,7 +283,7 @@ const CompleteRevButton = styled.button`
     color: #fff;
     border-radius: 5px;
     border: none;
-    margin-top: 20px;
+    margin-top: 10px;
     padding: 3px 8px;
 `
 
@@ -293,4 +297,14 @@ const RecruitDoneButton = styled.button`
   background: #F5C001;
   padding: 5px;
   width: 70px;
+`
+
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
 `

@@ -6,84 +6,7 @@ import Modal from "../components/Modal";
 import CompanyRoleModal from "@/components/Modal/CompanyRoleModal";
 import CompanyTitleCategoryModal from "@components/Modal/CompanyTitleCategoryModal";
 
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
 
-const Row = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 10px;
-`
-
-const Container = styled.div`
-  background: #302e34;
-  width: 90%;
-  height: 150px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const Container2 = styled.div`
-  background-color: rgba(83, 82, 85, 0.7);
-  color: rgba(255, 255, 255, 0.7);
-  width: 90%;
-  height: 80px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 14px;
-`;
-
-const PlusButton = styled.button`
-    font-size: 30px;
-    border-radius: 5px;
-    padding: 0 8px 0;
-    background-color: #fff;
-    margin-bottom: 10px;
-`
-
-const CheckButton = styled.button`
-  background: #f5c001;
-  color: white;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: bold;
-  padding: 5px 14px 5px;
-`;
-
-const CustomInput = styled.input`
-    border: none;
-    outline: none; 
-    background: #302E34; 
-    height: 25px;
-    margin-left: 10px;
-    padding-left: 15px;
-    color: white;
-    margin-right: 10px;
-    width: 60%;
-`
-
-const CustomInput2 = styled.input`
-  border: none;
-  border-bottom: 1px solid white;
-  outline: none;
-  background: #302e34;
-  height: 25px;
-  margin-left: 10px;
-  padding-left: 10px;
-  color: white;
-  margin-right: 10px;
-  width: 40%;
-`;
 
 function AddNotice() {
     const navigate = useNavigate();
@@ -180,140 +103,116 @@ function AddNotice() {
 
     return(
         <>
-            <div style={{display: 'flex', alignItems: 'start', padding: '10px'}}>
-                <img src={backIcon} alt="back" onClick={goBackManager} style={{margin: '12px 10px 10px'}}/>
-                <p style={{margin: '12px 5px', fontSize: '25px', fontWeight: 'bold'}}>공고 등록</p>
-            </div>
-            <Column>
-                    {title.length > 0 && category.length > 0 ?
-                        <Column style={{background: '#000'}}>
-                            <p style={{
-                                color: '#F5C001', 
-                                fontSize: '32px', 
-                                fontWeight: 'bold',
-                                marginBottom: '15px'
-                                }}
-                            >
-                                {title}
-                            </p>
-                            <p style={{
-                                color: '#5A5A5A',
-                                marginBottom: '10px'
-                                }}
-                            >
-                                {category}
-                            </p>
-                        </Column>
-                        : 
-                        <Container>
-                            <Column>
-                                <PlusButton onClick={() => handlePlusButtonClick1(1)}>+</PlusButton>
-                                <p style={{color: '#5A5A5A'}}>제목, 카테고리</p>
-                            </Column>
-                        </Container>
-                    }
-                    {date.length > 0 && time.length && place.length > 0 ?
-                        <Column style={{
-                            background: '#000', 
-                            width: '90%', 
-                            borderTop: '1px solid white', 
-                            borderBottom: '1px solid white', 
-                            alignItems: 'flex-start',
-                            marginTop: '10px',
-                            marginBottom: '20px'
-                            }}
-                        >
-                            <div style={{ margin: '10px 0' }}>
-                                <div>
-                                    <p>{time} 예정</p>
-                                    <p>{place}</p>
-                                </div>
-                                <p>{date}</p>
-                            </div>
-                            
-                        </Column>
-                        : 
-                        <Container>
-                            <Column>
-                                <PlusButton onClick={() => handlePlusButtonClick2(2)}>+</PlusButton>
-                                <p style={{color: '#5A5A5A'}}>날짜, 시간, 장소</p>
-                            </Column>
-                        </Container>
-                    }
-                    {role.length > 0 ?
-                    // ??????????????????? role에 저장이 되는지 추적 불가 ㅜ
-                        <p>{role}</p>
-                        :
-                        <Container 
-                            style={{
-                                height: '200px', 
-                                alignItems: 'flex-start', 
-                                justifyContent: "flex-start", 
-                                flexDirection: "column",
-                            }}
-                        >
-                            <div style={{marginTop: "15px", marginLeft: '15px'}}>
-                                <CustomInput2 type="text" onKeyDown={(e) => {handleKeyDown}}/>
-                                역할
-                            </div>     
-                            <div style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                marginTop: '15px',
-                                width: '100%',
-                                height: '100%',
-                            }}>
+          <div style={{display: 'flex', alignItems: 'start', padding: '10px'}}>
+              <img src={backIcon} alt="back" onClick={goBackManager} style={{margin: '12px 10px 10px'}}/>
+              <p style={{margin: '12px 5px', fontSize: '25px', fontWeight: 'bold'}}>공고 등록</p>
+          </div>
+          <Column>
+            {title.length > 0 && category.length > 0 ?
+                <Column style={{background: '#000'}}>
+                    <p style={{
+                        color: '#F5C001', 
+                        fontSize: '32px', 
+                        fontWeight: 'bold',
+                        marginBottom: '15px'
+                        }}
+                    >
+                        {title}
+                    </p>
+                    <p style={{
+                        color: '#5A5A5A',
+                        marginBottom: '10px'
+                        }}
+                    >
+                        {category}
+                    </p>
+                </Column>
+                : 
+                <Container>
+                    <Column>
+                        <PlusButton onClick={() => handlePlusButtonClick1(1)}>+</PlusButton>
+                        <p style={{color: '#5A5A5A'}}>제목, 카테고리</p>
+                    </Column>
+                </Container>
+            }
+            {date.length > 0 && time.length && place.length > 0 ?
+              <Column style={{
+                  background: '#000', 
+                  width: '90%', 
+                  borderTop: '1px solid white', 
+                  borderBottom: '1px solid white', 
+                  alignItems: 'flex-start',
+                  marginTop: '10px',
+                  marginBottom: '20px'
+                  }}
+              >
+                  <div style={{ margin: '10px 0' }}>
+                      <div>
+                          <p>{time} 예정</p>
+                          <p>{place}</p>
+                      </div>
+                      <p>{date}</p>
+                  </div>
+                  
+              </Column>
+              : 
+              <Container>
+                  <Column>
+                      <PlusButton onClick={() => handlePlusButtonClick2(2)}>+</PlusButton>
+                      <p style={{color: '#5A5A5A'}}>날짜, 시간, 장소</p>
+                  </Column>
+              </Container>
+            }
+            {role.length > 0 ?
+            // ??????????????????? role에 저장이 되는지 추적 불가 ㅜ
+                <p>{role}</p>
+                :
+                <Container 
+                    style={{
+                        height: '200px', 
+                        alignItems: 'flex-start', 
+                        justifyContent: "flex-start", 
+                        flexDirection: "column",
+                    }}
+                >
+                    <div style={{marginTop: "15px", marginLeft: '15px'}}>
+                        <CustomInput2 type="text" onKeyDown={(e) => {handleKeyDown}}/>
+                        역할
+                    </div>     
+                    <div style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        marginTop: '15px',
+                        width: '100%',
+                        height: '100%',
+                    }}>
 
+                      {/* 눌렀을 때 7개의 조율 사항 모달이 뜨도록 구현해야함!!!! */}
 
-                                {/* 눌렀을 때 7개의 조율 사항 모달이 뜨도록 구현해야함!!!! */}
+                      <Container2 onClick={openRoleModal}>
+                              <p>+ 역할 상세 프로필</p>
+                      </Container2> 
+                    </div>
 
-                                <Container2 onClick={openRoleModal}>
-                                        <p>+ 역할 상세 프로필</p>
-                                </Container2> 
-                            </div>
-                            
-                        </Container>
-                    
-                    }
+                </Container>
+            }
 
-                <CheckButton onClick={handleConfirmToAdd}>확인</CheckButton>
-            </Column>
+          <FinalConfirmButton onClick={handleConfirmToAdd}>확인</FinalConfirmButton>
+      </Column>
 
-
-      {/* 제목과 카테고리 모달 내용
-      <Modal isVisible={isModalOpen1} onClose={closeModal1}>
-        <Row>
-          <p style={{ fontSize: "17px", fontWeight: "bold" }}>제목 : </p>
-          <CustomInput
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          ></CustomInput>
-        </Row>
-        <Row>
-          <p style={{ fontSize: "17px", fontWeight: "bold" }}>카테고리 : </p>
-          <CustomInput
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          ></CustomInput>
-        </Row>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "25px",
-          }}
-        >
-          <CheckButton onClick={handleConfirmClick}>확인</CheckButton>
-        </div>
-      </Modal> */}
+      {/* 제목 카테고리 모달의 내용 */}
+      {isModalOpen1 && (
+        <ModalBackground onClick={() => closeTitleCategoryModal("", "")}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <CompanyTitleCategoryModal closeModal={closeTitleCategoryModal} />
+          </div>
+        </ModalBackground>
+      )}
 
       {/* 날짜 시간 장소 모달의 내용 */}
       <Modal isVisible={isModalOpen2} onClose={closeModal2}>
         <Row>
-          <p style={{ fontSize: "17px", fontWeight: "bold" }}>날짜 : </p>
+          <Txt>날짜 : </Txt>
           <CustomInput
             type="date"
             value={date}
@@ -321,7 +220,7 @@ function AddNotice() {
           ></CustomInput>
         </Row>
         <Row>
-          <p style={{ fontSize: "17px", fontWeight: "bold" }}>시간 : </p>
+          <Txt>시간 : </Txt>
           <CustomInput
             type="time"
             value={time}
@@ -329,7 +228,7 @@ function AddNotice() {
           ></CustomInput>
         </Row>
         <Row>
-          <p style={{ fontSize: "17px", fontWeight: "bold" }}>장소 : </p>
+          <Txt>장소 : </Txt>
           <CustomInput
             type="text"
             value={place}
@@ -348,13 +247,127 @@ function AddNotice() {
         </div>
       </Modal>
 
+
       {/* 역할 상세 모달 */}
-      {isRoleModalOpen && <CompanyRoleModal closeModal={closeRoleModal} />}
-      {isModalOpen1 && (
-        <CompanyTitleCategoryModal closeModal={closeTitleCategoryModal} />
-      )}
+      {isRoleModalOpen && (
+        <ModalBackground onClick={closeRoleModal}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <CompanyRoleModal closeModal={closeRoleModal} />
+          </div>
+        </ModalBackground>
+        )}
+
     </>
   );
 }
 
 export default AddNotice;
+
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Row = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+`
+
+const Container = styled.div`
+  background: #302e34;
+  width: 90%;
+  height: 150px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const Container2 = styled.div`
+  background-color: rgba(83, 82, 85, 0.7);
+  color: rgba(255, 255, 255, 0.7);
+  width: 90%;
+  height: 80px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+`;
+
+const PlusButton = styled.button`
+    font-size: 30px;
+    border-radius: 5px;
+    padding: 0 8px 0;
+    background-color: #fff;
+    margin-bottom: 10px;
+`
+
+const CheckButton = styled.button`
+  background: #f5c001;
+  color: white;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight:  700;
+  padding: 5px 14px 5px;
+  width: 93px;
+  height: 40px;
+`;
+
+const FinalConfirmButton = styled.button`
+  background: #f5c001;
+  color: white;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 5px 14px 5px;
+`;
+
+const CustomInput = styled.input`
+    border: none;
+    outline: none; 
+    background: #302E34; 
+    height: 25px;
+    margin-left: 10px;
+    padding-left: 15px;
+    color: white;
+    margin-right: 10px;
+    width: 60%;
+`
+
+const CustomInput2 = styled.input`
+  border: none;
+  border-bottom: 1px solid white;
+  outline: none;
+  background: #302e34;
+  height: 25px;
+  margin-left: 10px;
+  padding-left: 10px;
+  color: white;
+  margin-right: 10px;
+  width: 40%;
+`;
+
+const Txt = styled.p`
+  color: #fff;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  margin-right: 20px;
+`
+
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+`
