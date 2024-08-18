@@ -14,6 +14,7 @@ import CompanyShootManagePage from "@pages/CompanyShootManagePage";
 import CompanyDateSelectedPage from "@pages/CompanyDateSelectedPage";
 import { ApplicantDetail } from "@pages/ApplicantDetail";
 import DetailPage from "@pages/DetailPage";
+import NotFound from "@pages/Error/NotFound";
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
           <Route path="/detail/:title" element={<DetailPage />} />
           <Route path="/detail/:title/applicants" element={<ShowApplicant />} />
           <Route path="/add-notice" element={<AddNotice />} />
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </>

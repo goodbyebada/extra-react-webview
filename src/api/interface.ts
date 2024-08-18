@@ -73,22 +73,27 @@ export type RoleBodyType = {
   roleName: string;
   costume: string;
   sex: boolean;
-  roleAge: string;
+  minAge: string;
+  maxAge: string;
   limitPersonnel: number;
   currentPersonnel: number;
   season: string;
-  checkTattoo: boolean;
+  checkTattoo: TattooList;
+};
+
+export type TattooList = {
+  face: boolean;
+  chest: boolean;
+  arm: boolean;
+  leg: boolean;
+  shoulder: boolean;
+  back: boolean;
+  hand: boolean;
+  feet: boolean;
 };
 
 /**
- * 역할 생성 / 역할 수정시
- * API put post 시 body type
- *
- * 역할 등록 === 역할 생성
- * roleBodyType으로 수정 부탁드립니다.
- */
-/**
- * 역할 등록 API 호출시,
+ * 촬영관리 API 호출시,
  * request
  */
 export type RoleRegister = {
@@ -111,6 +116,23 @@ export type RoleRegister = {
     feet: boolean;
   };
 };
+
+export type ShootManage = {
+  id: number;
+  category: string;
+  title: string;
+  gatheringTime: string;
+  gatheringLocation: string;
+  calenderList: string[];
+  name: string;
+  applyStatus: ShootManageSelectStatus;
+};
+
+/**
+ * 촬영관리 조회 API 호출시,
+ * response.data.shoot_manage_list type
+ */
+export type ShootManageList = ShootManage[];
 
 export enum ShootManageSelectStatus {
   "ALL" = 0,

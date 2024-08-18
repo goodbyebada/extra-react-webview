@@ -6,19 +6,91 @@ import star_g from "@assets/Star_g.png";
 import star_y from "@assets/Star_y.png";
 import { ShootManageSelectStatus, ApplyStatusLabel } from "@api/interface";
 import { sendMessage } from "@api/utils";
+import { ShootManage } from "@api/interface";
 
 /**
  * 촬영관리 컴포넌트
  *
- * 수정할 것
- * 현재 승인상태(승인대기, 미승인, 승인완료)는 데이터 연결 전이라 임시로 승인대기 상태. 추후 수정예정
  */
 
-function StatusRecruitBox() {
+interface StatusRecruitBoxProps {
+  shootManageInfo: ShootManage;
+  onDelete: (id: number) => void;
+  onOpenCancelModal: (item: ShootManage) => void;
+}
+
+// 날짜 문자열 배열에서 가장 가까운 날짜를 찾는 함수 (촬영날짜가 여러날일 경우)
+const getClosestDate = (dates: string[]): Date => {
+  const today = new Date();
+  let closestDate = new Date(dates[0]);
+
+  dates.forEach((dateStr) => {
+    const date = new Date(dateStr);
+    if (date > today && (date < closestDate || closestDate <= today)) {
+      closestDate = date;
+    }
+  });
+
+  return closestDate;
+};
+
+// 디데이를 계산하는 함수
+const calculateDday = (calendarList: string[]): string => {
+  const today = new Date();
+  const target = getClosestDate(calendarList);
+
+  // 시간을 00:00:00으로 설정
+  today.setHours(0, 0, 0, 0);
+  target.setHours(0, 0, 0, 0);
+
+  // 날짜 차이 계산 (밀리초 단위)
+  const differenceInTime = target.getTime() - today.getTime();
+
+  // 밀리초를 일수로 변환
+  const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+  if (differenceInDays === 0) {
+    return "D-day";
+  } else if (differenceInDays > 0) {
+    return `D-${Math.ceil(differenceInDays)}`;
+  } else {
+    return "종료";
+  }
+};
+
+// 날짜를 MM/DD 형식으로 변환하는 함수
+const formatDate = (date: Date): string => {
+  const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
+  const day = date.getDate();
+  return `${month}/${day}`;
+};
+
+// 날짜 배열을 MM/DD - MM/DD 형식으로 변환하는 함수
+const formatDateRange = (dates: string[]): string => {
+  if (dates.length === 1) {
+    return formatDate(new Date(dates[0]));
+  } else {
+    const startDate = new Date(dates[0]);
+    const endDate = new Date(dates[dates.length - 1]);
+    return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+  }
+};
+
+function StatusRecruitBox({
+  shootManageInfo,
+  onDelete,
+  onOpenCancelModal,
+}: StatusRecruitBoxProps) {
   const [swiped, setSwiped] = useState(false);
   const [star, setStar] = useState(star_g);
 
   const touchStartX = useRef(0);
+
+  const formattedDate = formatDateRange(shootManageInfo.calenderList);
+  const dday = calculateDday(shootManageInfo.calenderList);
+
+  // gatheringTime에서 시간 부분만 추출
+  const gatheringTime = shootManageInfo.gatheringTime.substring(11, 16);
 
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     touchStartX.current = e.touches[0].clientX;
@@ -37,28 +109,25 @@ function StatusRecruitBox() {
     setStar(star === star_g ? star_y : star_g);
   };
 
-  const recruitStatus = {
-    status: ShootManageSelectStatus.APPLIED, // 기본 상태, 데이터 연결시 수정
-  };
+  const recruitStatus = shootManageInfo.applyStatus;
 
   let deleteButtonText = "";
-  if (recruitStatus.status === ShootManageSelectStatus.APPLIED) {
+  if (recruitStatus === ShootManageSelectStatus.APPLIED) {
     deleteButtonText = "지원\n취소하기";
-  } else if (recruitStatus.status === ShootManageSelectStatus.REJECTED) {
+  } else if (recruitStatus === ShootManageSelectStatus.REJECTED) {
     deleteButtonText = "삭제하기";
   }
 
   const shouldShowDeleteButton =
-    recruitStatus.status !== ShootManageSelectStatus.APPROVED;
-  const swipeEnabled =
-    recruitStatus.status !== ShootManageSelectStatus.APPROVED;
+    recruitStatus !== ShootManageSelectStatus.APPROVED;
+  const swipeEnabled = recruitStatus !== ShootManageSelectStatus.APPROVED;
 
   return (
     <RecruitContainer
       onClick={() => {
-        if (recruitStatus.status !== ShootManageSelectStatus.REJECTED) {
+        if (recruitStatus !== ShootManageSelectStatus.REJECTED) {
           const payload =
-            recruitStatus.status === ShootManageSelectStatus.APPROVED
+            recruitStatus === ShootManageSelectStatus.APPROVED
               ? {
                   job_post_id: 1,
                 }
@@ -67,7 +136,7 @@ function StatusRecruitBox() {
                 };
           sendMessage({
             type:
-              recruitStatus.status === ShootManageSelectStatus.APPROVED
+              recruitStatus === ShootManageSelectStatus.APPROVED
                 ? "NAVIGATION_MANAGE"
                 : "NAVIGATION_DETAIL",
             payload: payload,
@@ -76,7 +145,18 @@ function StatusRecruitBox() {
         }
       }}
     >
-      {shouldShowDeleteButton && <DeleteButton cancelText={deleteButtonText} />}
+      {shouldShowDeleteButton && (
+        <DeleteButton
+          cancelText={deleteButtonText}
+          onClick={() => {
+            if (recruitStatus === ShootManageSelectStatus.APPLIED) {
+              onOpenCancelModal(shootManageInfo);
+            } else if (recruitStatus === ShootManageSelectStatus.REJECTED) {
+              onDelete(shootManageInfo.id);
+            }
+          }}
+        />
+      )}
       <RecruitBox
         $swiped={swiped}
         onTouchStart={swipeEnabled ? handleTouchStart : undefined}
@@ -85,15 +165,15 @@ function StatusRecruitBox() {
       >
         <InfoContainer>
           <MediaSelectorTxt>media</MediaSelectorTxt>
-          <TitleTxt>title</TitleTxt>
+          <TitleTxt>{shootManageInfo.title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>date</DateTxt>
-            <DeadlineBox>D-0</DeadlineBox>
+            <DateTxt>{formattedDate}</DateTxt>
+            <DeadlineBox>{dday}</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>team</Team>
+          <Team>{shootManageInfo.name}</Team>
         </InfoContainer>
         <RecruitStatus
-          visible={recruitStatus.status === ShootManageSelectStatus.APPLIED}
+          visible={recruitStatus === ShootManageSelectStatus.APPLIED}
           borderColor="#767676"
           backgroundColor="#d9d9d9"
           color="#000"
@@ -102,7 +182,7 @@ function StatusRecruitBox() {
           {ApplyStatusLabel[ShootManageSelectStatus.APPLIED]}
         </RecruitStatus>
         <RecruitStatus
-          visible={recruitStatus.status === ShootManageSelectStatus.REJECTED}
+          visible={recruitStatus === ShootManageSelectStatus.REJECTED}
           borderColor="#F00"
           backgroundColor="#F00"
           color="#FFF"
@@ -111,7 +191,7 @@ function StatusRecruitBox() {
           {ApplyStatusLabel[ShootManageSelectStatus.REJECTED]}
         </RecruitStatus>
         <RecruitStatus
-          visible={recruitStatus.status === ShootManageSelectStatus.APPROVED}
+          visible={recruitStatus === ShootManageSelectStatus.APPROVED}
           borderColor="#23D014"
           backgroundColor="#23D014"
           color="#FFF"
@@ -120,7 +200,7 @@ function StatusRecruitBox() {
           {ApplyStatusLabel[ShootManageSelectStatus.APPROVED]}
         </RecruitStatus>
         <TimePlace>
-          00:00 예정 <br /> place
+          {gatheringTime} 예정 <br /> {shootManageInfo.gatheringLocation}
         </TimePlace>
         <StarIcon src={star} onClick={handleStarClick} />
       </RecruitBox>
