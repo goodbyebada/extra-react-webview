@@ -59,99 +59,78 @@ type AuthorizationMessage = {
 
 // get token from RN
 const requestToken = (callback: (token: string) => void) => {
-  const token = localStorage.getItem("token");
-  if (token === null || token === "") {
-    sendMessage({
-      type: "REQUEST_AUTHORIZATION",
-      version: "1.0",
-    });
+  sendMessage({
+    type: "REQUEST_AUTHORIZATION",
+    version: "1.0",
+  });
 
-    const messageHandler = (event: globalThis.MessageEvent) => {
-      const data: AuthorizationMessage = JSON.parse(event.data);
-      if (data.type === "AUTHORIZATION") {
-        const { iv, encryptedData } = data.payload;
-        const secretKey = `${import.meta.env.VITE_SECRET_KEY}`;
-        const accessToken = decryptAccessToken(encryptedData, iv, secretKey);
-        localStorage.setItem("token", accessToken);
-        callback(accessToken);
-      }
-    };
+  const messageHandler = (event: globalThis.MessageEvent) => {
+    const data: AuthorizationMessage = JSON.parse(event.data);
+    if (data.type === "AUTHORIZATION") {
+      const { iv, encryptedData } = data.payload;
+      const secretKey = `${import.meta.env.VITE_SECRET_KEY}`;
+      const accessToken = decryptAccessToken(encryptedData, iv, secretKey);
+      localStorage.setItem("token", accessToken);
+      callback(accessToken);
+    }
+  };
 
-    window.addEventListener("message", messageHandler);
-    document.addEventListener("message", messageHandler as EventListener);
-  } else {
-    callback(token);
-  }
+  window.addEventListener("message", messageHandler);
+  document.addEventListener("message", messageHandler as EventListener);
 };
 
 const requestFetch = async (
   url: string,
   method: string,
-  callback: (res: Response) => void,
   data?: object,
   option?: object,
 ) => {
-  requestToken((token) => {
-    const requestHeaders: HeadersInit = new Headers();
-    requestHeaders.set("Authorization", `Bearer ${token}`);
-    requestHeaders.set("Accept", "*/*");
-    if (option) {
-      Object.entries(option).map(([key, value]) => {
-        requestHeaders.set(key, value);
-      });
-    }
-
-    const URL = API_URL + url;
-
-    if (data) {
-      fetch(URL, {
-        method,
-        headers: requestHeaders,
-        body: JSON.stringify(data),
-      })
-        .then(callback)
-        .catch((err) => console.log(err));
-    } else {
-      fetch(URL, {
-        method,
-        headers: requestHeaders,
-      })
-        .then(callback)
-        .catch((err) => console.log(err));
-    }
+  const token = await new Promise<string>((resolve) => {
+    requestToken(resolve);
   });
+
+  const requestHeaders: HeadersInit = new Headers();
+  requestHeaders.set("Authorization", `Bearer ${token}`);
+  requestHeaders.set("Accept", "*/*");
+  if (option) {
+    Object.entries(option).forEach(([key, value]) => {
+      requestHeaders.set(key, value);
+    });
+  }
+
+  const URL = API_URL + url;
+
+  try {
+    const res = await fetch(URL, {
+      method,
+      headers: requestHeaders,
+      body: data ? JSON.stringify(data) : undefined,
+    });
+
+    return res;
+  } catch (err) {
+    console.error(err);
+  }
+
+  return null;
 };
 
-export const requestPostFetch = (
-  url: string,
-  data: object,
-  callback: (res: Response) => void,
-) => {
-  return requestFetch(url, "POST", callback, data, {
+export const requestPostFetch = (url: string, data: object) => {
+  return requestFetch(url, "POST", data, {
     "Content-Type": "application/json",
   });
 };
 
-export const requestPutFetch = async (
-  url: string,
-  data: object,
-  callback: (res: Response) => void,
-) => {
-  return await requestFetch(url, "PUT", callback, data, {
+export const requestPutFetch = async (url: string, data: object) => {
+  return await requestFetch(url, "PUT", data, {
     "Content-Type": "application/json",
   });
 };
 
-export const requestGetFetch = async (
-  url: string,
-  callback: (res: Response) => void,
-) => {
-  return await requestFetch(url, "GET", callback);
+export const requestGetFetch = async (url: string) => {
+  return await requestFetch(url, "GET");
 };
 
-export const requestDeleteFetch = async (
-  url: string,
-  callback: (res: Response) => void,
-) => {
-  return await requestFetch(url, "DELETE", callback);
+export const requestDeleteFetch = async (url: string) => {
+  return await requestFetch(url, "DELETE");
 };

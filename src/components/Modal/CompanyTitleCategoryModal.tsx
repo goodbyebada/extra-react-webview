@@ -2,7 +2,8 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 
 interface CompanyTitleCategoryModalProps {
-  closeModal: (title: string, category: string) => void;
+  onSubmit: (title: string, category: string) => void;
+  closeModal: () => void;
 }
 
 export type TitleCategory = {
@@ -11,6 +12,7 @@ export type TitleCategory = {
 };
 
 function CompanyTitleCategoryModal({
+  onSubmit,
   closeModal,
 }: CompanyTitleCategoryModalProps) {
   const [formState, setFormState] = useState<TitleCategory>({
@@ -70,65 +72,89 @@ function CompanyTitleCategoryModal({
 
   const handleSubmit = () => {
     if (isFormValid) {
-      closeModal(formState.title, formState.category);
+      onSubmit(formState.title, formState.category);
+      closeModal();
     }
   };
 
   return (
-    <ModalContainer>
-      <RoleBoxWrapper>
-        <Row>
-          <Txt>제목 :</Txt>
-          <Input
-            name="title"
-            value={formState.title}
-            onChange={handleChange}
-            spellCheck="false"
-          />
-        </Row>
-        <Row>
-          <Txt>카테고리 :</Txt>
-          <Input
-            name="categoryInput"
-            value={categoryInput}
-            onChange={handleChange}
-            spellCheck="false"
-          />
-          <PlusBtn onClick={handlePlusClick}>+</PlusBtn>
-        </Row>
-        <BoxesContainer>
-          {boxes.map((box, index) => (
-            <Box
-              key={index}
-              onClick={() => handleCategoryClick(box)}
-              $isSelected={formState.category
-                .split(",")
-                .map((cat) => cat.trim())
-                .includes(box)}
-            >
-              <span>{box}</span>
-            </Box>
-          ))}
-        </BoxesContainer>
-        <Btn $isValid={isFormValid} onClick={handleSubmit}>
-          확인
-        </Btn>
-      </RoleBoxWrapper>
-    </ModalContainer>
+    <ModalOverlay>
+      <ModalBackground onClick={closeModal} />
+      <ModalContainer>
+        <RoleBoxWrapper>
+          <Row>
+            <Txt>제목 :</Txt>
+            <Input
+              name="title"
+              value={formState.title}
+              onChange={handleChange}
+              spellCheck="false"
+            />
+          </Row>
+          <Row>
+            <Txt>카테고리 :</Txt>
+            <Input
+              name="categoryInput"
+              value={categoryInput}
+              onChange={handleChange}
+              spellCheck="false"
+            />
+            <PlusBtn onClick={handlePlusClick}>+</PlusBtn>
+          </Row>
+          <BoxesContainer>
+            {boxes.map((box, index) => (
+              <Box
+                key={index}
+                onClick={() => handleCategoryClick(box)}
+                $isSelected={formState.category
+                  .split(",")
+                  .map((cat) => cat.trim())
+                  .includes(box)}
+              >
+                <span>{box}</span>
+              </Box>
+            ))}
+          </BoxesContainer>
+          <Btn $isValid={isFormValid} onClick={handleSubmit}>
+            확인
+          </Btn>
+        </RoleBoxWrapper>
+      </ModalContainer>
+    </ModalOverlay>
   );
 }
 
 export default CompanyTitleCategoryModal;
 
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+`;
+
 const ModalContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 329px;
   height: 320px;
   border-radius: 30px;
   background: #302e34;
+  position: relative;
+  z-index: 30;
 `;
 
 const RoleBoxWrapper = styled.div`

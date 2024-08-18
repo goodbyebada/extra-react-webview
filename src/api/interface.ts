@@ -98,9 +98,18 @@ export type RoleRegister = {
   max_age: number;
   season: string;
   costume: string;
-  check_tatto: string; // boolean -> string 변경
   etc: string;
   limit_personnal: number;
+  tattoo: {
+    face: boolean;
+    chest: boolean;
+    arm: boolean;
+    leg: boolean;
+    shoulder: boolean;
+    back: boolean;
+    hand: boolean;
+    feet: boolean;
+  };
 };
 
 export enum ShootManageSelectStatus {

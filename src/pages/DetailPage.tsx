@@ -161,7 +161,10 @@ function DetailPage() {
         <RecruitDoneButton onClick={makeStatusDone}>마감</RecruitDoneButton>
 
         {isRoleModalOpen && (
-          <CompanyRoleModal closeModal={handleRoleModalClose} />
+          <CompanyRoleModal
+            onSubmit={() => {}}
+            closeModal={handleRoleModalClose}
+          />
         )}
 
         {isCompleteRevVisible && (
