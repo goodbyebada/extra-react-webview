@@ -73,34 +73,23 @@ export type RoleBodyType = {
   roleName: string;
   costume: string;
   sex: boolean;
-  roleAge: string;
+  minAge: string;
+  maxAge: string;
   limitPersonnel: number;
   currentPersonnel: number;
   season: string;
-  checkTattoo: boolean;
+  checkTattoo: TattooList;
 };
 
-/**
- * 역할 생성 / 역할 수정시
- * API put post 시 body type
- *
- * 역할 등록 === 역할 생성
- * roleBodyType으로 수정 부탁드립니다.
- */
-/**
- * 역할 등록 API 호출시,
- * request
- */
-export type RoleRegister = {
-  job_post_id: number;
-  sex: boolean; // true: female, false: male
-  min_age: number;
-  max_age: number;
-  season: string;
-  costume: string;
-  check_tatto: string; // boolean -> string 변경
-  etc: string;
-  limit_personnal: number;
+export type TattooList = {
+  face: boolean;
+  chest: boolean;
+  arm: boolean;
+  leg: boolean;
+  shoulder: boolean;
+  back: boolean;
+  hand: boolean;
+  feet: boolean;
 };
 
 /**
