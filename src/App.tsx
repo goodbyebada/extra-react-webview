@@ -10,7 +10,7 @@ import DateSelectedNoticeList from "@pages/DateSelectedNoticeList";
 import Scheduler from "@pages/Scheduler";
 import CompanyHome from "@pages/CompanyHome";
 import ExtraShootManagePage from "@pages/ExtraShootManagePage";
-import NotFound from "@pages/NotFound";
+import NotFound from "@pages/Error/NotFound";
 
 function App() {
   return (
