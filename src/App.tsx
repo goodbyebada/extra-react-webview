@@ -11,6 +11,7 @@ import Scheduler from "@pages/Scheduler";
 import CompanyHome from "@pages/CompanyHome";
 import ExtraShootManagePage from "@pages/ExtraShootManagePage";
 import NotFound from "@pages/Error/NotFound";
+import CompanyShootManagePage from "@pages/CompanyShootManagePage";
 
 function App() {
   return (
@@ -42,6 +43,9 @@ function App() {
           <Route path="/detail" element={<DetailPage />} />
           <Route path="/applicants" element={<ShowApplicant />} />
           <Route path="/add-notice" element={<AddNotice />} />
+
+          <Route path="/company/manage" element={<CompanyShootManagePage />} />
+
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

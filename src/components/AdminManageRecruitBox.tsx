@@ -7,41 +7,68 @@ type Props = {
   jobPostInfo: JobPost;
 };
 
-function AdminManageRecruitBox({ navigate, jobPostInfo }: Props) {
-  // calendar가 '2020-01-01'일 경우로 구현
+// 날짜 문자열 배열에서 가장 가까운 날짜를 찾는 함수 (촬영날짜가 여러날일 경우)
+const getClosestDate = (dates: string[]): Date => {
+  const today = new Date();
+  let closestDate = new Date(dates[0]);
 
-  // 01/01 형태로 받아오기
-  const getMMDD = (calendar: string) => {
-    const date = new Date(calendar);
-
-    const mm = date.getMonth();
-    const dd = date.getDate();
-
-    return mm + "/" + dd;
-  };
-
-  // D-Day 계산
-  const getDaysUntil = (calender: string) => {
-    // 오늘 날짜 가져오기
-    const today = new Date();
-
-    // 입력받은 날짜 Date 타입으로 변환
-    const targetDate = new Date(calender);
-
-    // 날짜 차이 계산 (밀리초 단위로 계산 후 일 단위로 변환)
-    const differenceInTime = targetDate.getTime() - today.getTime();
-    const differenceInDays = Math.ceil(
-      differenceInTime / (1000 * 60 * 60 * 24),
-    );
-
-    if (differenceInDays > 0) {
-      return `D-${differenceInDays}`;
-    } else if (differenceInDays === 0) {
-      return `D-Day`;
-    } else {
-      return `D+${Math.abs(differenceInDays)}`;
+  dates.forEach((dateStr) => {
+    const date = new Date(dateStr);
+    if (date > today && (date < closestDate || closestDate <= today)) {
+      closestDate = date;
     }
-  };
+  });
+
+  return closestDate;
+};
+
+// 디데이를 계산하는 함수
+const calculateDday = (calendarList: string[]): string => {
+  const today = new Date();
+  const target = getClosestDate(calendarList);
+
+  // 시간을 00:00:00으로 설정
+  today.setHours(0, 0, 0, 0);
+  target.setHours(0, 0, 0, 0);
+
+  // 날짜 차이 계산 (밀리초 단위)
+  const differenceInTime = target.getTime() - today.getTime();
+
+  // 밀리초를 일수로 변환
+  const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+  if (differenceInDays === 0) {
+    return "D-day";
+  } else if (differenceInDays > 0) {
+    return `D-${Math.ceil(differenceInDays)}`;
+  } else {
+    return "종료";
+  }
+};
+
+// 날짜를 MM/DD 형식으로 변환하는 함수
+const formatDate = (date: Date): string => {
+  const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
+  const day = date.getDate();
+  return `${month}/${day}`;
+};
+
+// 날짜 배열을 MM/DD - MM/DD 형식으로 변환하는 함수
+const formatDateRange = (dates: string[]): string => {
+  if (dates.length === 1) {
+    return formatDate(new Date(dates[0]));
+  } else {
+    const startDate = new Date(dates[0]);
+    const endDate = new Date(dates[dates.length - 1]);
+    return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+  }
+};
+
+function AdminManageRecruitBox({ navigate, jobPostInfo }: Props) {
+  // 촬영날짜가 여러 날일 경우 가장 가까운 날짜를 기준으로 디데이 계산
+  const formattedDate = formatDateRange(jobPostInfo.calenderList);
+  const dday = calculateDday(jobPostInfo.calenderList);
+  const gatheringTime = jobPostInfo.gatheringTime.substring(11, 16);
 
   return (
     <RecruitContainer onClick={navigate}>
@@ -50,13 +77,12 @@ function AdminManageRecruitBox({ navigate, jobPostInfo }: Props) {
           <MediaSelectorTxt>{jobPostInfo.category}</MediaSelectorTxt>
           <TitleTxt>{jobPostInfo.title}</TitleTxt>
           <DateAndDeadlineContainer>
-            {/* calendar가 '2001-01-01'일 경우로 구현함 */}
-            {/* calendarList일 경우 => getMMDD(jobPostInfo.calendarList[0]) + " - " + getMMDD(jobPostInfo.calendarList[jobPostInfo.calendarList.length - 1])  */}
-            <DateTxt>{getMMDD(jobPostInfo.calendar)}</DateTxt>
-            {/* calendarList일 경우 => getDaysUntil(jobPostInfo.calendarList[0])  */}
-            <DeadlineBox>{getDaysUntil(jobPostInfo.calendar)}</DeadlineBox>
+            {/* calendarList를 사용하여 처음과 마지막 날짜 표시 */}
+            <DateTxt>{formattedDate}</DateTxt>
+            {/* 가장 첫 번째 날짜에 대해 D-Day 계산 */}
+            <DeadlineBox>{dday}</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>{jobPostInfo.company_name}</Team>
+          <Team>{jobPostInfo.companyName}</Team>
         </InfoContainer>
         <button
           style={{
@@ -74,8 +100,7 @@ function AdminManageRecruitBox({ navigate, jobPostInfo }: Props) {
           />
         </button>
         <TimePlace>
-          {jobPostInfo.gathering_time} 예정 <br />{" "}
-          {jobPostInfo.gathering_location}
+          {gatheringTime} 예정 <br /> {jobPostInfo.gatheringLocation}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>
