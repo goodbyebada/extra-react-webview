@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 interface CompanyTitleCategoryModalProps {
   closeModal: (title: string, category: string) => void;
@@ -17,55 +17,17 @@ function CompanyTitleCategoryModal({
     title: "",
     category: "",
   });
-  const [categoryInput, setCategoryInput] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
-  const [boxes, setBoxes] = useState<string[]>([]);
 
   useEffect(() => {
     setIsFormValid(formState.title !== "" && formState.category !== "");
   }, [formState]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === "title") {
-      setFormState((prevState) => ({
-        ...prevState,
-        title: value,
-      }));
-    } else if (name === "categoryInput") {
-      setCategoryInput(value);
-    }
-  };
-
-  const handlePlusClick = () => {
-    if (categoryInput.trim() !== "" && !boxes.includes(categoryInput.trim())) {
-      setBoxes((prevBoxes) => [...prevBoxes, categoryInput.trim()]);
-      setCategoryInput("");
-    }
-  };
-
   const handleCategoryClick = (category: string) => {
-    setFormState((prevState) => {
-      const newCategories = prevState.category
-        .split(",")
-        .map((cat) => cat.trim());
-      if (newCategories.includes(category)) {
-        // 이미 선택된 카테고리인 경우 제거
-        const updatedCategories = newCategories.filter(
-          (cat) => cat !== category,
-        );
-        return {
-          ...prevState,
-          category: updatedCategories.join(", "),
-        };
-      } else {
-        // 선택되지 않은 카테고리인 경우 추가
-        return {
-          ...prevState,
-          category: [...newCategories, category].join(", "),
-        };
-      }
-    });
+    setFormState((prevState) => ({
+      ...prevState,
+      category: prevState.category === category ? "" : category,
+    }));
   };
 
   const handleSubmit = () => {
@@ -82,34 +44,55 @@ function CompanyTitleCategoryModal({
           <Input
             name="title"
             value={formState.title}
-            onChange={handleChange}
+            onChange={(e) =>
+              setFormState((prevState) => ({
+                ...prevState,
+                title: e.target.value,
+              }))
+            }
             spellCheck="false"
           />
         </Row>
         <Row>
           <Txt>카테고리 :</Txt>
-          <Input
-            name="categoryInput"
-            value={categoryInput}
-            onChange={handleChange}
-            spellCheck="false"
-          />
-          <PlusBtn onClick={handlePlusClick}>+</PlusBtn>
-        </Row>
-        <BoxesContainer>
-          {boxes.map((box, index) => (
-            <Box
-              key={index}
-              onClick={() => handleCategoryClick(box)}
-              $isSelected={formState.category
-                .split(",")
-                .map((cat) => cat.trim())
-                .includes(box)}
+          <ButtonsContainer>
+            <CategoryButton
+              $isSelected={formState.category === "드라마"}
+              onClick={() => handleCategoryClick("드라마")}
             >
-              <span>{box}</span>
-            </Box>
-          ))}
-        </BoxesContainer>
+              드라마
+            </CategoryButton>
+            <CategoryButton
+              $isSelected={formState.category === "뮤비촬영"}
+              onClick={() => handleCategoryClick("뮤비촬영")}
+            >
+              뮤비촬영
+            </CategoryButton>
+          </ButtonsContainer>
+        </Row>
+        <AlignedRow>
+          <ButtonsContainer>
+            <CategoryButton
+              $isSelected={formState.category === "광고"}
+              onClick={() => handleCategoryClick("광고")}
+            >
+              광고
+            </CategoryButton>
+            <CategoryButton
+              $isSelected={formState.category === "영화"}
+              onClick={() => handleCategoryClick("영화")}
+            >
+              영화
+            </CategoryButton>
+            <CategoryButton
+              $isSelected={formState.category === "기타"}
+              onClick={() => handleCategoryClick("기타")}
+              style={{ width: "36px", height: "22px" }}
+            >
+              +
+            </CategoryButton>
+          </ButtonsContainer>
+        </AlignedRow>
         <Btn $isValid={isFormValid} onClick={handleSubmit}>
           확인
         </Btn>
@@ -145,7 +128,12 @@ const RoleBoxWrapper = styled.div`
 const Row = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+`;
+
+const AlignedRow = styled(Row)`
+  margin-left: 114px;
+  margin-top: -20px;
 `;
 
 const Txt = styled.div`
@@ -162,7 +150,7 @@ const Input = styled.input`
   border-radius: 5px;
   background: #302e34;
   color: #fff;
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 900;
   border: none;
   outline: none;
@@ -170,50 +158,25 @@ const Input = styled.input`
   margin-right: 10px;
 `;
 
-const PlusBtn = styled.div`
-  width: 36px;
-  height: 22px;
-  border-radius: 5px;
-  background: rgba(116, 116, 116, 0.4);
+const ButtonsContainer = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 17px;
-  font-weight: 700;
-`;
-
-const BoxesContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
   gap: 10px;
-  margin-left: 120px;
-  width: calc(100% - 120px);
 `;
 
-const Box = styled.div<{ $isSelected: boolean }>`
-  width: 66px;
+const CategoryButton = styled.div<{ $isSelected: boolean }>`
+  width: 56px;
   height: 23px;
   border-radius: 5px;
   background: ${(props) =>
-    props.$isSelected ? "rgba(116, 116, 116, 0.4)" : "#747474"};
+    props.$isSelected ? "#747474" : "rgba(116, 116, 116, 0.4)"};
   display: flex;
   align-items: center;
   justify-content: center;
   color: ${(props) =>
-    props.$isSelected ? "rgba(255, 255, 255, 0.4)" : "#fff"};
+    props.$isSelected ? "#fff" : "rgba(255, 255, 255, 0.4)"};
   font-size: 13px;
   font-weight: 700;
   text-align: center;
-
-  span {
-    width: 50px;
-    height: 20px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: inline-block;
-    text-align: center;
-  }
 `;
 
 const Btn = styled.button<{ $isValid: boolean }>`
