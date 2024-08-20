@@ -37,12 +37,13 @@ export default function CompanyShootManagePage() {
         }
       })
       .then((data: JobPost[]) => {
+        console.log("Job posts fetched successfully:", data);
         setJobPostList(data);
       })
       .catch((error) => {
         console.error("Failed to fetch job posts", error);
       });
-  });
+  }, []);
 
   return (
     <ItemWrapper>
