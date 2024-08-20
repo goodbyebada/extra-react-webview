@@ -38,9 +38,9 @@ export interface JobPost {
   calenderList: string[];
   roleIdList: number[];
   roleNameList: string[];
-  costumeList: string[][]; // ? 백에서 구현됐는지 확인 필요
+  costumeList: string[]; // ? 백에서 구현됐는지 확인 필요
   sexList: boolean[];
-  roleAgeList: string[][]; // ? roleAgeList 백과 합의 안됨 추후 수정예정
+  roleAgeList: string[]; // ? roleAgeList 백과 합의 안됨 추후 수정예정
   limitPersonnelList: number[];
   currentPersonnelList: number[];
   seasonList: string[];
@@ -185,3 +185,12 @@ export enum ScheduleType {
   "END" = 2,
   "MIDDLE" = 3,
 }
+
+export const SeasonLabel: { [key: string]: string } = {
+  SPRING: "봄",
+  SUMMER: "여름",
+  AUTUMN: "가을",
+  WINTER: "겨울",
+};
+
+export type QueryType = { year: number; month: number };

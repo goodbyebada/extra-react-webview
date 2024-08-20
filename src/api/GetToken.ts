@@ -6,19 +6,20 @@ import { BASE_URL } from "@api/interface";
  */
 export const GetToken = (status: number) => {
   if (status === 0) {
-    fetch(`${BASE_URL}/members/login`, {
+    fetch(`${BASE_URL}/account/login`, {
       method: "POST",
       headers: {
         Accept: "*/*",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: "test@test.com",
-        password: "qwer1234",
+        email: "apply-test-user@naver.com",
+        password: "string",
       }),
     }).then((res) => {
       if (res.status === 200) {
         const token = res.headers.get("authorization");
+
         if (token && token.startsWith("Bearer ")) {
           const accesToken = token.slice(7);
 

@@ -2,20 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import jobPostAPI from "@api/jobPostAPI";
 import { JobPost, JobPostList } from "@api/interface";
 import { ResponseStatus } from "@api/interface";
+import { QueryType } from "@api/interface";
 
 // 상태의 타입 정의
-export interface JobPostState {
-  jobPostAll: {
-    status: string;
-    data: JobPostList;
-    error: string;
-  };
-  jobPostItem: {
-    status: string;
-    data: JobPost;
-    error: string;
-  };
-}
 
 const defaultJobPost: JobPost = {
   id: -1,
@@ -40,17 +29,60 @@ const defaultJobPost: JobPost = {
   checkTattooList: [],
 };
 
+type ObjectType = {
+  [key: string]: number[];
+};
+
+function transformAndSortDates(input: ObjectType): ObjectType {
+  const transformedObject: ObjectType = {};
+
+  for (const date in input) {
+    const day = date.split("-")[2]; // "YYYY-MM-DD"에서 "DD" 추출
+    transformedObject[day] = input[date];
+  }
+
+  const sortedKeys = Object.keys(transformedObject).sort(
+    (a, b) => Number(a) - Number(b),
+  );
+
+  const sortedObject: ObjectType = {};
+  for (const key of sortedKeys) {
+    sortedObject[key] = transformedObject[key];
+  }
+
+  return sortedObject;
+}
+
+export interface JobPostState {
+  jobPostByCalender: {
+    status: string;
+    data: ObjectType;
+    error: string;
+  };
+  jobPostItem: {
+    status: string;
+    data: JobPost;
+    error: string;
+  };
+}
+
+const initdata: ObjectType = {
+  "-1": [],
+};
+
 // 초기 상태
 const initialState: JobPostState = {
-  jobPostAll: { status: "", data: [], error: "" },
+  jobPostByCalender: { status: "", data: initdata, error: "" },
   jobPostItem: { status: "", data: defaultJobPost, error: "" },
 };
 
-// 모든 공고를 가져오는 GET 요청
-export const fetchAllJobPosts = createAsyncThunk<JobPostList>(
+/**
+ * 캘린더에서 JobPost를 가져온다.
+ */
+export const fetchJobPostByCalender = createAsyncThunk(
   "jobPosts/fetchAll",
-  async () => {
-    const data = await jobPostAPI.getAllJobPost();
+  async ({ year, month }: QueryType) => {
+    const data = await jobPostAPI.getAllJobPostByCalender(year, month);
     return data;
   },
 );
@@ -70,41 +102,44 @@ const jobPostSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllJobPosts.pending, (state) => {
-        state.jobPostAll.status = ResponseStatus.loading;
-        state.jobPostAll.error = "";
+      .addCase(fetchJobPostByCalender.pending, (state) => {
+        state.jobPostByCalender.status = ResponseStatus.loading;
+        state.jobPostByCalender.error = "";
       })
-      .addCase(fetchAllJobPosts.fulfilled, (state, action) => {
-        state.jobPostAll.status = ResponseStatus.fullfilled;
-        state.jobPostAll.data = action.payload;
-        state.jobPostAll.error = "";
+      .addCase(fetchJobPostByCalender.fulfilled, (state, action) => {
+        state.jobPostByCalender.status = ResponseStatus.fullfilled;
+        state.jobPostByCalender.data = transformAndSortDates(action.payload);
+
+        state.jobPostByCalender.error = "";
       })
-      .addCase(fetchAllJobPosts.rejected, (state, action) => {
-        state.jobPostAll.status = ResponseStatus.rejected;
+      .addCase(fetchJobPostByCalender.rejected, (state, action) => {
+        state.jobPostByCalender.status = ResponseStatus.rejected;
 
         // action.error.message는 API에서 전달된 에러 메시지를 포함
-        state.jobPostAll.error =
+        state.jobPostByCalender.error =
           action.error.message || "Failed to fetch all job posts";
       });
 
     builder
       .addCase(fetchJobPostById.pending, (state) => {
         state.jobPostItem.status = ResponseStatus.loading;
-        console.log("ㄴㅇㄹㄴㅇ");
+
+        // 초기화
+        state.jobPostItem.data = defaultJobPost;
       })
       .addCase(fetchJobPostById.fulfilled, (state, action) => {
-        console.log("ㄴㅇㄹㄴㅇ");
         state.jobPostItem.status = ResponseStatus.fullfilled;
 
         state.jobPostItem.data = action.payload;
       })
       .addCase(fetchJobPostById.rejected, (state, action) => {
         state.jobPostItem.status = ResponseStatus.rejected;
-        console.log("ㄴㅇㄹㄴㅇ");
+        // 초기화
+        state.jobPostItem.data = defaultJobPost;
 
-        // state.jobPostItem.error =
-        //   action.error.message ||
-        //   `Failed to fetch job post with id ${action.meta.arg}`;
+        state.jobPostItem.error =
+          action.error.message ||
+          `Failed to fetch job post with id ${action.meta.arg}`;
       });
   },
 });

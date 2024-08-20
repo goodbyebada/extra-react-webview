@@ -20,12 +20,26 @@ const jobPostAPI = {
       const errorData = await response.json();
       throw new Error(errorData.message || "Unknown error occurred");
     }
-
     return await response.json();
   },
 
-  async getAllJobPost() {
-    const response = await requestGetFetch(jobPostURL);
+  /**
+   *
+   * @param year
+   * @param month UI보다 -1인 값이 와야한다.
+   * @returns
+   */
+
+  async getAllJobPostByCalender(year: number, month: number) {
+    const response = await requestGetFetch(
+      jobPostURL + `/calenders?year=${year}&month=${month + 1}`,
+    );
+
+    return await this.handleResponse(response);
+  },
+
+  async getAllJobPostByList(page: number) {
+    const response = await requestGetFetch(jobPostURL + `/page=${page}`);
     return await this.handleResponse(response);
   },
 
