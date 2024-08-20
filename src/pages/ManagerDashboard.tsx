@@ -3,21 +3,21 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Modal from "@components/Modal";
 import HomeRecruitBox from "@components/HomeRecruitBox";
-import { dummyMonthJobList } from "@api/dummyData";
+import { dummyJobPostList } from "@api/dummyData";
 import { JobPost } from "@api/interface";
 
 
 function ManagerDashboard() {
   const navigate = useNavigate();
 
-    const goToDetail = ({title, gathering_time, gathering_location}: JobPost) => {
-        localStorage.setItem('gathering_time', gathering_time);
-        localStorage.setItem('gathering_location', gathering_location);
+    const goToDetail = ({title, gatheringTime, gatheringLocation}: JobPost) => {
+        localStorage.setItem('gatheringTime', gatheringTime);
+        localStorage.setItem('gatheringLocation', gatheringLocation);
 
         navigate(`/detail/${title}`);
     };
 
-    const jobPostList = dummyMonthJobList;
+    const jobPostList = dummyJobPostList;
 
     const goToAdd = () => {
         navigate('/add-notice');
@@ -65,12 +65,12 @@ function ManagerDashboard() {
                 </div>
             </div>
 
-            {jobPostList.map((elem, key) => {
+            {jobPostList.map((elem) => {
                 return (
                     <Column>
                         <HomeRecruitBox
                             navigate = {() => goToDetail(elem)}
-                            key={key}
+                            key={elem.id}
                             recruitInfo = {elem}
                         />
                     </Column>

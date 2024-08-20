@@ -1,9 +1,9 @@
-import { Role } from "@api/interface";
+import { RoleItemToShow } from "@api/interface";
 import styled from "styled-components";
 
 interface RoleBoxProps {
   styled: { color: string; borderColor: string; backgroundColor: string };
-  roleInfo: Role;
+  roleInfo: RoleItemToShow;
   isSelected: boolean;
   handleClick: (idx: number) => void;
   index: number;
@@ -25,7 +25,7 @@ const RoleBox = ({
   isSelected,
   index,
 }: RoleBoxProps) => {
-  const { role_name, role_age, sex } = roleInfo;
+  const { roleName, roleAge, sex } = roleInfo;
   const { borderColor, backgroundColor, color } = styled;
 
   const selectedStyled = {
@@ -44,9 +44,9 @@ const RoleBox = ({
         }
       >
         <InfoContainer color={isSelected ? selectedStyled.color : color}>
-          <RoleTxt>{role_name}</RoleTxt>
+          <RoleTxt>{roleName}</RoleTxt>
           <Line />
-          <AgeTxt>{role_age}</AgeTxt>
+          <AgeTxt>{roleAge}</AgeTxt>
           <Line />
 
           <GenderTxt>{sex ? "여" : "남"}</GenderTxt>

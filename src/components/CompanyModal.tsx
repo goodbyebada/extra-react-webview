@@ -45,9 +45,6 @@ export default function CompanyModal({ jobList }: CompanyModalType) {
           <circle cx="6" cy="6" r="5.3333" fill="white" />
           <line x1="6" y1="6" x2="100%" y2="6" stroke="white" strokeWidth="2" />
         </svg>
-
-        {/* 추후 수정 예정 */}
-        <div className="lunar-calendar">음력 6월 15일</div>
       </Top>
 
       <JobListContainer className="job-list-container">
@@ -56,7 +53,7 @@ export default function CompanyModal({ jobList }: CompanyModalType) {
             <Wrapper key={key}>
               <HomeRecruitBox
                 navigate={() => {
-                  navigate(path + `${elem.job_post_id}`);
+                  navigate(path + `${elem.id}`);
                 }}
                 recruitInfo={elem}
               />

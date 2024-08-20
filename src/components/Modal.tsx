@@ -30,11 +30,12 @@ const ModalContent = styled.div`
   padding-top: 48px;
   padding-left: 32px;
   padding-right: 32px;
+  padding-bottom: 10%;
   border-radius: 30px;
   position: relative;
   z-index: 1001;
   width: 300px;
-  height: 270px;
+  
 `;
 
 const Modal = ({ isVisible, onClose, children }: ModalProps) => {

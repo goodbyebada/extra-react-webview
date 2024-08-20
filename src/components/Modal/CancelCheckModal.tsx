@@ -1,25 +1,95 @@
-import React from "react";
 import styled from "styled-components";
 
-function CancelCheckModal() {
+interface CancelCheckModalProps {
+  title: string;
+  date: string[];
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+// 날짜 문자열 배열에서 가장 가까운 날짜를 찾는 함수 (촬영날짜가 여러날일 경우)
+const getClosestDate = (dates: string[]): Date => {
+  const today = new Date();
+  let closestDate = new Date(dates[0]);
+
+  dates.forEach((dateStr) => {
+    const date = new Date(dateStr);
+    if (date > today && (date < closestDate || closestDate <= today)) {
+      closestDate = date;
+    }
+  });
+
+  return closestDate;
+};
+
+// 디데이를 계산하는 함수
+const calculateDday = (calendarList: string[]): string => {
+  const today = new Date();
+  const target = getClosestDate(calendarList);
+
+  // 시간을 00:00:00으로 설정
+  today.setHours(0, 0, 0, 0);
+  target.setHours(0, 0, 0, 0);
+
+  // 날짜 차이 계산 (밀리초 단위)
+  const differenceInTime = target.getTime() - today.getTime();
+
+  // 밀리초를 일수로 변환
+  const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+  if (differenceInDays === 0) {
+    return "D-day";
+  } else if (differenceInDays > 0) {
+    return `D-${Math.ceil(differenceInDays)}`;
+  } else {
+    return "종료";
+  }
+};
+
+// 날짜를 MM/DD 형식으로 변환하는 함수
+const formatDate = (date: Date): string => {
+  const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
+  const day = date.getDate();
+  return `${month}/${day}`;
+};
+
+// 날짜 배열을 MM/DD - MM/DD 형식으로 변환하는 함수
+const formatDateRange = (dates: string[]): string => {
+  if (dates.length === 1) {
+    return formatDate(new Date(dates[0]));
+  } else {
+    const startDate = new Date(dates[0]);
+    const endDate = new Date(dates[dates.length - 1]);
+    return `${formatDate(startDate)} - ${formatDate(endDate)}`;
+  }
+};
+
+function CancelCheckModal({
+  title,
+  date,
+  onConfirm,
+  onCancel,
+}: CancelCheckModalProps) {
+  const formattedDate = formatDateRange(date);
+  const dDay = calculateDday(date);
+
   return (
     <ModalContainer>
       <ModalText>
         해당 공고의 지원을 <br /> 취소하시겠어요?
       </ModalText>
       <HomeBox>
-        <Img />
         <InfoContainer>
-          <TitleTxt>title</TitleTxt>
+          <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>date</DateTxt>
-            <DeadlineBox>D-0</DeadlineBox>
+            <DateTxt>{formattedDate}</DateTxt>
+            <DeadlineBox>{dDay}</DeadlineBox>
           </DateAndDeadlineContainer>
         </InfoContainer>
       </HomeBox>
       <ButtonContainer>
-        <BtnY>예</BtnY>
-        <BtnN>아니요</BtnN>
+        <BtnY onClick={onConfirm}>예</BtnY>
+        <BtnN onClick={onCancel}>아니요</BtnN>
       </ButtonContainer>
     </ModalContainer>
   );
@@ -102,18 +172,9 @@ const HomeBox = styled.div`
   position: relative;
   align-items: center;
   border-radius: 20px;
-  margin-left: 33px;
-  margin-top: 55px;
+  margin-left: 50px;
+  margin-top: 90px;
   margin-bottom: 115px;
-`;
-
-const Img = styled.img`
-  width: 110px;
-  height: 110px;
-  border-radius: 20px;
-  border: 3px solid #b9b9b9;
-  background: #e8e8e8;
-  margin-right: 17px;
 `;
 
 const InfoContainer = styled.div`

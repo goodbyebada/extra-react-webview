@@ -78,9 +78,9 @@ function AddNotice() {
       }
     };
 
-    const openTitleCategoryModal = () => {
-      setIsModalOpen1(true);
-    };
+    // const openTitleCategoryModal = () => {
+    //   setIsModalOpen1(true);
+    // };
 
     const closeTitleCategoryModal = (title: string, category: string) => {
       setTitle(title);

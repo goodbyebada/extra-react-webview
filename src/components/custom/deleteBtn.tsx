@@ -3,10 +3,13 @@ import styled from "styled-components";
 
 interface DeleteButtonProps {
   cancelText: string;
+  onClick: () => void;
 }
 
-const DeleteButton: React.FC<DeleteButtonProps> = ({ cancelText }) => {
-  return <StyledDeleteButton>{cancelText}</StyledDeleteButton>;
+const DeleteButton: React.FC<DeleteButtonProps> = ({ cancelText, onClick }) => {
+  return (
+    <StyledDeleteButton onClick={onClick}>{cancelText}</StyledDeleteButton>
+  );
 };
 
 export default DeleteButton;

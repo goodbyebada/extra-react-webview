@@ -61,10 +61,10 @@ const ShowApplicant = () => {
 
     const {title} = useParams();
 
-    const [roleName, setRoleName] = useState(localStorage.getItem('role_name') || '');
+    const [roleName, setRoleName] = useState(localStorage.getItem('roleName') || '');
 
     useEffect(() => {
-        const savedRoleName = localStorage.getItem('role_name');
+        const savedRoleName = localStorage.getItem('roleName');
 
         if (savedRoleName) setRoleName(savedRoleName);
     }, []);
@@ -181,7 +181,7 @@ const ShowApplicant = () => {
 
                 <div style={{marginBottom: '10px', fontSize: '10px'}}>
                     <Row>
-                        <div style={{display: 'flex', gap: '12px', marginLeft: '8px', marginBottom: '10px'}}>
+                        <div style={{display: 'flex', gap: '12px', marginLeft: '8px', marginBottom: '5px'}}>
                             <p style={{borderBottom: '1px solid white'}}>시간순</p>
                             <p style={{borderBottom: '1px solid white'}}>온도순</p>
                             <p style={{borderBottom: '1px solid white'}}>경력순</p>
@@ -267,7 +267,7 @@ const ShowApplicant = () => {
                     }
                 </div>
 
-                <Row>
+                <Row style={{marginTop: '30px', marginBottom: '-40px'}}>
                     <CustomButton onClick={handleApprove}>승인</CustomButton>
                     <CustomButton onClick={handleReject}>미승인</CustomButton>
                 </Row>

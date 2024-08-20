@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import RoleBox from "@components/RoleBox";
-import { RoleList } from "@api/interface";
+import { RoleListToShow } from "@api/interface";
 import { useState } from "react";
 
 type ModalProps = {
   handleApply: (value: boolean) => void;
   closeModal: () => void;
-  roleList: RoleList;
+  roleList: RoleListToShow;
 };
 
 /**
@@ -135,7 +135,10 @@ const RoleBoxWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding-top: 70px;
+  margin-top: 70px;
+  margin-bottom: 20px;
+  max-height: 380px;
+  overflow-y: auto;
 `;
 
 const Btn = styled.button`

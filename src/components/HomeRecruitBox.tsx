@@ -18,30 +18,60 @@ type Props = {
  * 2. D-0, D-day 기준 필요, 8/1-8/4와 같이 여러 날일 경우 기준 필요
  */
 
-/**
- * @param param0
- *  navigate props 예시 : ()=>navigate("/")
- *  recruitInfo :  JobPost 객체
- *  recommand : 추천 공고리스트일 경우 true 넣어야함
- *   일반 공고 리스트라면 navigate, recruitInfo만 작성하면 됨
- * @returns 공고 기본 컴포넌트 + 즐겨찾기 기능
- */
-
-const calculateDday = (calendar: string) => {
+// 날짜 문자열 배열에서 가장 가까운 날짜를 찾는 함수 (촬영날짜가 여러날일 경우)
+const getClosestDate = (dates: string[]): Date => {
   const today = new Date();
-  const [startCal, endCal] = calendar
-    .split("-")
-    .map((date) => new Date(`2024/${date.trim()}`));
+  let closestDate = new Date(dates[0]);
 
-  const startDiff = Math.ceil((+startCal - +today) / (1000 * 60 * 60 * 24));
-  const endDiff = Math.ceil((+endCal - +today) / (1000 * 60 * 60 * 24));
+  dates.forEach((dateStr) => {
+    const date = new Date(dateStr);
+    if (date > today && (date < closestDate || closestDate <= today)) {
+      closestDate = date;
+    }
+  });
 
-  if (startDiff <= 0 && endDiff >= 0) {
+  return closestDate;
+};
+
+// 디데이를 계산하는 함수
+const calculateDday = (calendarList: string[]): string => {
+  const today = new Date();
+  const target = getClosestDate(calendarList);
+
+  // 시간을 00:00:00으로 설정
+  today.setHours(0, 0, 0, 0);
+  target.setHours(0, 0, 0, 0);
+
+  // 날짜 차이 계산 (밀리초 단위)
+  const differenceInTime = target.getTime() - today.getTime();
+
+  // 밀리초를 일수로 변환
+  const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+
+  if (differenceInDays === 0) {
     return "D-day";
-  } else if (startDiff > 0) {
-    return `D-${startDiff}`;
+  } else if (differenceInDays > 0) {
+    return `D-${Math.ceil(differenceInDays)}`;
   } else {
     return "종료";
+  }
+};
+
+// 날짜를 MM/DD 형식으로 변환하는 함수
+const formatDate = (date: Date): string => {
+  const month = date.getMonth() + 1; // 월은 0부터 시작하므로 +1 필요
+  const day = date.getDate();
+  return `${month}/${day}`;
+};
+
+// 날짜 배열을 MM/DD - MM/DD 형식으로 변환하는 함수
+const formatDateRange = (dates: string[]): string => {
+  if (dates.length === 1) {
+    return formatDate(new Date(dates[0]));
+  } else {
+    const startDate = new Date(dates[0]);
+    const endDate = new Date(dates[dates.length - 1]);
+    return `${formatDate(startDate)} - ${formatDate(endDate)}`;
   }
 };
 
@@ -55,14 +85,16 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
   const {
     category,
     title,
-    calendar,
-    company_name,
-    gathering_time,
-    gathering_location,
+    calenderList,
+    companyName,
+    gatheringTime,
+    gatheringLocation,
     status,
   } = recruitInfo;
 
-  const dday = calculateDday(calendar);
+  // 촬영날짜가 여러 날일 경우 가장 가까운 날짜를 기준으로 디데이 계산
+  const formattedDate = formatDateRange(calenderList);
+  const dday = calculateDday(calenderList);
 
   return (
     <RecruitContainer className={`${!recommand ? "" : "recommand"}`}>
@@ -75,10 +107,10 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
           <MediaSelectorTxt>{category}</MediaSelectorTxt>
           <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>{calendar}</DateTxt>
+            <DateTxt>{formattedDate}</DateTxt>
             <DeadlineBox>{dday}</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>{company_name}</Team>
+          <Team>{companyName}</Team>
         </InfoContainer>
         <RecruitStatus
           visible={true}
@@ -90,7 +122,7 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
           {status ? "모집중" : "모집마감"}
         </RecruitStatus>
         <TimePlace>
-          {gathering_time} 예정 <br /> {gathering_location}
+          {gatheringTime} 예정 <br /> {gatheringLocation}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>

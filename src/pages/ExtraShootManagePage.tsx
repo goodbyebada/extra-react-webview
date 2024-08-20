@@ -1,29 +1,139 @@
 /**
  * 보조출연자 촬영관리 화면
  * @returns
+ *
+ * 수정사항
+ * 1. 로그인 api 연결은 추후 삭제 예정
  */
 
 import StatusRecruitBox from "@components/StatusRecruitBox";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DropDownSelector from "@components/DropDownSelector";
-
-// {
-//   "id": 1,
-//   "category": "공고 카테고리",
-//   "title": "공고 제목",
-//   "gatheringTime": "2024-01-06T00:29:55",
-//   "gatheringLocation": "어디어디",
-//   "name": “업체 이름",
-//   "applyStatus": "APPLIED(지원 상태 enum- APPLIED, REJECTED, APPROVED)"
-//   }
+import CancelCheckModal from "@components/Modal/CancelCheckModal";
+import CompleteModal from "@components/Modal/CompleteModal";
+import {
+  ShootManageList,
+  ShootManageSelectStatus,
+  ShootManage,
+} from "@api/interface";
 
 export default function ExtraShootManagePage() {
   const [applyStatusIdx, setApplyStatusIdx] = useState(0);
+  const [recruitBoxes, setRecruitBoxes] = useState<ShootManageList>([]);
+  const [modalData, setModalData] = useState<ShootManage | null>(null);
+  const [isCancelCheckModalOpen, setIsCancelCheckModalOpen] = useState(false);
+  const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
+
+  // applyStatusIdx가 변경될 때마다 API 호출
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      console.error("No access token found");
+      return;
+    }
+
+    const status = ShootManageSelectStatus[applyStatusIdx];
+    const statusUrl =
+      applyStatusIdx === 0
+        ? "" // 전체 목록은 /roles만 호출
+        : `/${status.toLowerCase()}`;
+
+    fetch(
+      `${import.meta.env.VITE_SERVER_URL}api/v1/application-request/member/roles${statusUrl}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`API call failed with status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data: ShootManage[]) => {
+        const mappedData = data.map((item) => ({
+          ...item,
+          applyStatus:
+            ShootManageSelectStatus[
+              item.applyStatus as unknown as keyof typeof ShootManageSelectStatus
+            ],
+        }));
+
+        setRecruitBoxes(mappedData);
+        const status =
+          ShootManageSelectStatus[applyStatusIdx] || "Unknown status";
+        console.log(`Data fetched successfully for ${status}:`, data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [applyStatusIdx]);
+
   // 1~3까지의 배열
-  const selcetorList = Array.from({ length: 4 }, (v, i) => i);
+  const selcetorList = Array.from({ length: 4 }, (_, i) => i);
   const handler = (selectedIdx: number) => {
     setApplyStatusIdx(selectedIdx);
+  };
+
+  const handleDeleteOrCancel = (id: number, isCancel: boolean) => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      console.error("No access token found");
+      return;
+    }
+
+    fetch(
+      `${import.meta.env.VITE_SERVER_URL}api/v1/application-request/member/application-requests/${id}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`API call failed with status ${response.status}`);
+        }
+        if (isCancel) {
+          setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
+          closeCancelModal();
+          openCompleteModal();
+        } else {
+          setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
+        }
+      })
+      .catch((error) => {
+        console.error("Error handling delete request:", error);
+      });
+  };
+
+  const openCancelModal = (item: ShootManage) => {
+    setModalData(item);
+    setIsCancelCheckModalOpen(true);
+  };
+
+  const closeCancelModal = () => {
+    setIsCancelCheckModalOpen(false);
+    setModalData(null);
+  };
+
+  const openCompleteModal = () => {
+    setIsCompleteModalOpen(true);
+  };
+
+  const closeCompleteModal = () => {
+    setIsCompleteModalOpen(false);
+  };
+
+  const handleConfirmCancel = () => {
+    if (modalData) {
+      handleDeleteOrCancel(modalData.id, true);
+    }
   };
 
   return (
@@ -34,30 +144,29 @@ export default function ExtraShootManagePage() {
           modalIdxList={selcetorList}
           handler={handler}
         />
-      </Top>{" "}
+      </Top>
       <ListContainer>
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>{" "}
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>{" "}
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>{" "}
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>{" "}
-        <Wrapper>
-          <StatusRecruitBox />
-        </Wrapper>
+        {recruitBoxes.map((box) => (
+          <Wrapper key={box.id}>
+            <StatusRecruitBox
+              shootManageInfo={box}
+              onDelete={(id) => handleDeleteOrCancel(id, false)}
+              onOpenCancelModal={openCancelModal}
+            />
+          </Wrapper>
+        ))}
       </ListContainer>
+      {isCancelCheckModalOpen && modalData && (
+        <CancelCheckModal
+          title={modalData.title}
+          date={modalData.calenderList}
+          onConfirm={handleConfirmCancel}
+          onCancel={closeCancelModal}
+        />
+      )}
+      {isCompleteModalOpen && (
+        <CompleteModal type="supportCancel" closeModal={closeCompleteModal} />
+      )}
     </div>
   );
 }

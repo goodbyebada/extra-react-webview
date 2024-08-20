@@ -63,8 +63,8 @@ export default function Calender({
   let i = -1;
 
   // 2024 ~ 2053년(30년)
-  const yearItemList = Array.from({ length: 30 }, (v, i) => 2024 + i);
-  const monthItemList = Array.from({ length: 12 }, (v, i) => 1 + i);
+  const yearItemList = Array.from({ length: 30 }, (_, i) => 2024 + i);
+  const monthItemList = Array.from({ length: 12 }, (_, i) => 1 + i);
 
   const dateOnClick = (dateNum: number, key: number) => {
     if (gotJob[dateNum]) {

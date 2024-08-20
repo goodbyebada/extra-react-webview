@@ -3,9 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import backIcon from '@assets/backIcon.png';
 import reviseIcon from '@assets/reviseIcon.png';
-import { dummyRoleList } from '@api/dummyData';
-import { Role } from '@api/interface';
-import CompanyModal from '@components/CompanyModal';
+import { dummyJobPostList } from '@api/dummyData';
+import { RoleBodyType } from '@api/interface';
 import CompanyRoleModal from '@components/Modal/CompanyRoleModal';
 
 
@@ -14,24 +13,25 @@ function DetailPage() {
 
     const { title } = useParams();
 
-    const [gatheringTime, setGatheringTime] = useState(localStorage.getItem('gathering_time') || '');
-    const [gatheringLocation, setGatheringLocation] = useState(localStorage.getItem('gathering_location') || '');
+    const [gatheringTime, setGatheringTime] = useState(localStorage.getItem('gatheringTime') || '');
+    const [gatheringLocation, setGatheringLocation] = useState(localStorage.getItem('gatheringLocation') || '');
 
     useEffect(() => {
         // localStorage에 모이는 시간과 장소를 저장하여 ShowApplicant 페이지에서 돌아올 때 정보 유지
-        const savedGatheringTime = localStorage.getItem('gathering_time');
-        const savedGatheringLocation = localStorage.getItem('gathering_location');
+        const savedGatheringTime = localStorage.getItem('gatheringTime');
+        const savedGatheringLocation = localStorage.getItem('gatheringLocation');
 
         if (savedGatheringTime) setGatheringTime(savedGatheringTime);
         if (savedGatheringLocation) setGatheringLocation(savedGatheringLocation);
     }, []);
 
-    const roleList = dummyRoleList;
+    const jobPost = dummyJobPostList;
     
-    const goToCheckApplicant = ({role_name}: Role) => {
-        localStorage.setItem('role_name', role_name);
+    const goToCheckApplicant = (roleName: string, index: number) => {
+        localStorage.setItem('roleName', roleName);
 
-        navigate(`/detail/${title}/applicants`)
+        navigate(`/detail/${title}/applicants`, {state: {roleName, index}})
+
     };
 
     const [isStatusIng, setisStatusIng] = useState(true);
@@ -138,38 +138,42 @@ function DetailPage() {
             
             <Column>
                
-                {roleList.map((elem, key) => {
-                    const {role_name, sex, role_age, season, costume} = elem;
+            {jobPost.map((post) => (
+              <React.Fragment key={post.id}>
+                {post.roleNameList && post.roleNameList.map((roleName, index) => {
+                  const sex = post.sexList[index];
+                  const roleAge = post.roleAgeList[index];
+                  const season = post.seasonList[index];
+                  const costume = post.costumeList[index];
 
-                    const DisplayRoleName = role_name !== previousRoleName;
-                    previousRoleName = role_name;
-                    return(
-                        <>
-                            {DisplayRoleName && (
-                                <RoleName>
-                                    {role_name}
-                                </RoleName>
-                            )}
+                  const displayRoleName = roleName !== previousRoleName;
+                  previousRoleName = roleName;
 
-                            <RoleInfo 
-                                onClick={() => goToCheckApplicant(elem)}
-                                key={key}
-                            >
-                                <RoleDetail style={{fontSize: '12px'}}>
-                                    <p>1. 성별 : {sex === true ? '여' : '남'}</p>
-                                    <p>2. 나이 : {role_age}</p>
-                                    <p>3. 계절 : {season}</p>
-                                    <p>4. 의상 : {costume}</p>
-                                </RoleDetail>
+                  return (
+                      <React.Fragment key={`${post.id}-${index}`}>
+                          {displayRoleName && (
+                              <RoleName>
+                                  {roleName}
+                              </RoleName>
+                          )}
 
-                            </RoleInfo>
+                          <RoleInfo onClick={() => goToCheckApplicant(roleName, index)}>
+                              <RoleDetail style={{ fontSize: '12px' }}>
+                                  <p>1. 성별 : {sex === true ? '여' : '남'}</p>
+                                  <p>2. 나이 : {roleAge}</p>
+                                  <p>3. 계절 : {season}</p>
+                                  <p>4. 의상 : {costume.join(', ')}</p>
+                              </RoleDetail>
+                          </RoleInfo>
 
-                            {isRevisionVisible && (
-                                    <DetailProfileButton onClick={handleRoleModalOpen}>+ 역할 상세 프로필</DetailProfileButton>
-                            )}
-                        </>
-                    )
+                          {isRevisionVisible && (
+                              <DetailProfileButton onClick={handleRoleModalOpen}>+ 역할 상세 프로필</DetailProfileButton>
+                          )}
+                      </React.Fragment>
+                  );
                 })}
+              </React.Fragment>
+            ))}
 
                 <RecruitDoneButton onClick={makeStatusDone}>마감</RecruitDoneButton>
                 

@@ -10,6 +10,7 @@ import DateSelectedNoticeList from "@pages/DateSelectedNoticeList";
 import Scheduler from "@pages/Scheduler";
 import CompanyHome from "@pages/CompanyHome";
 import ExtraShootManagePage from "@pages/ExtraShootManagePage";
+import NotFound from "@pages/Error/NotFound";
 
 function App() {
   return (
@@ -38,9 +39,11 @@ function App() {
           <Route path="/member/manage" element={<ExtraShootManagePage />} />
 
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
-              <Route path="/detail/:title" element={<DetailPage />} /> 
-              <Route path="/detail/:title/applicants" element={<ShowApplicant />} />
-              <Route path="/add-notice" element={<AddNotice />} />
+          <Route path="/detail/:title" element={<DetailPage />} /> 
+          <Route path="/detail/:title/applicants" element={<ShowApplicant />} />
+          <Route path="/add-notice" element={<AddNotice />} />
+          
+          <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </>
