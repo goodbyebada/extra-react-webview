@@ -6,82 +6,6 @@ import Modal from "../components/Modal";
 import CompanyRoleModal from "@/components/Modal/CompanyRoleModal";
 import CompanyTitleCategoryModal from "@components/Modal/CompanyTitleCategoryModal";
 
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const Container = styled.div`
-  background: #302e34;
-  width: 90%;
-  height: 150px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const Container2 = styled.div`
-  background-color: rgba(83, 82, 85, 0.7);
-  color: rgba(255, 255, 255, 0.7);
-  width: 90%;
-  height: 80px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 14px;
-`;
-
-const PlusButton = styled.button`
-  font-size: 30px;
-  border-radius: 5px;
-  padding: 0 8px 0;
-`;
-
-const CheckButton = styled.button`
-  background: #f5c001;
-  color: white;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: bold;
-  padding: 5px 14px 5px;
-`;
-
-const CustomInput = styled.input`
-  border: none;
-  outline: none;
-  background: #302e34;
-  height: 25px;
-  margin-left: 10px;
-  padding-left: 15px;
-  color: white;
-  margin-right: 10px;
-  width: 40%;
-`;
-
-const CustomInput2 = styled.input`
-  border: none;
-  border-bottom: 1px solid white;
-  outline: none;
-  background: #302e34;
-  height: 25px;
-  margin-left: 10px;
-  padding-left: 10px;
-  color: white;
-  margin-right: 10px;
-  width: 40%;
-`;
-
 function AddNotice() {
   const navigate = useNavigate();
   // 제목과 카테고리 모달
@@ -101,17 +25,16 @@ function AddNotice() {
   const [place, setPlace] = useState("");
 
   const [role, setRole] = useState("");
-  // const [gender, setGender] = useState("");
-  // const [season, setSeason] = useState("");
-  // const [costume, setCostume] = useState("");
-  // const [tattoo, setTattoo] = useState("");
-  // const [people, setPeople] = useState(0);
 
   const goBackManager = () => {
-    navigate("/");
+    navigate("/manager-dashboard");
   };
 
   // 제목과 카테고리 설정을 위한
+  const handlePlusButtonClick1 = (type: 1) => {
+    setModalType(type);
+    setIsModalOpen1(true);
+  };
   const closeModal1 = () => {
     setIsModalOpen1(false);
   };
@@ -144,6 +67,7 @@ function AddNotice() {
     }
   };
 
+  // ?????????????????
   // 역할을 작성했을 때
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -151,9 +75,9 @@ function AddNotice() {
     }
   };
 
-  const openTitleCategoryModal = () => {
-    setIsModalOpen1(true);
-  };
+  // const openTitleCategoryModal = () => {
+  //   setIsModalOpen1(true);
+  // };
 
   const closeTitleCategoryModal = (title: string, category: string) => {
     setTitle(title);
@@ -164,9 +88,12 @@ function AddNotice() {
   const openRoleModal = () => {
     setIsRoleModalOpen(true);
   };
-
   const closeRoleModal = () => {
     setIsRoleModalOpen(false);
+  };
+
+  const handleConfirmToAdd = () => {
+    navigate(`/manager-dashboard`);
   };
 
   return (
@@ -186,16 +113,30 @@ function AddNotice() {
         {title.length > 0 && category.length > 0 ? (
           <Column style={{ background: "#000" }}>
             <p
-              style={{ color: "#F5C001", fontSize: "32px", fontWeight: "bold" }}
+              style={{
+                color: "#F5C001",
+                fontSize: "32px",
+                fontWeight: "bold",
+                marginBottom: "15px",
+              }}
             >
               {title}
             </p>
-            <p style={{ color: "#5A5A5A" }}>{category}</p>
+            <p
+              style={{
+                color: "#5A5A5A",
+                marginBottom: "10px",
+              }}
+            >
+              {category}
+            </p>
           </Column>
         ) : (
           <Container>
             <Column>
-              <PlusButton onClick={openTitleCategoryModal}>+</PlusButton>
+              <PlusButton onClick={() => handlePlusButtonClick1(1)}>
+                +
+              </PlusButton>
               <p style={{ color: "#5A5A5A" }}>제목, 카테고리</p>
             </Column>
           </Container>
@@ -208,13 +149,17 @@ function AddNotice() {
               borderTop: "1px solid white",
               borderBottom: "1px solid white",
               alignItems: "flex-start",
+              marginTop: "10px",
+              marginBottom: "20px",
             }}
           >
-            <div>
-              <p>{time} 예정</p>
-              <p>{place}</p>
+            <div style={{ margin: "10px 0" }}>
+              <div>
+                <p>{time} 예정</p>
+                <p>{place}</p>
+              </div>
+              <p>{date}</p>
             </div>
-            <p>{date}</p>
           </Column>
         ) : (
           <Container>
@@ -239,10 +184,12 @@ function AddNotice() {
             }}
           >
             <div style={{ marginTop: "15px", marginLeft: "15px" }}>
-              {/* // error  'e' is defined but never used
-                                <CustomInput2 type="text" onKeyDown={(e) => {handleKeyDown}}/> 
-                                */}
-              <CustomInput2 type="text" onKeyDown={handleKeyDown} />
+              <CustomInput2
+                type="text"
+                onKeyDown={() => {
+                  handleKeyDown;
+                }}
+              />
               역할
             </div>
             <div
@@ -263,43 +210,24 @@ function AddNotice() {
           </Container>
         )}
 
-        <CheckButton>확인</CheckButton>
+        <FinalConfirmButton onClick={handleConfirmToAdd}>
+          확인
+        </FinalConfirmButton>
       </Column>
 
-      {/* 제목과 카테고리 모달 내용 */}
-      {/* <Modal isVisible={isModalOpen1} onClose={closeModal1}>
-        <Row>
-          <p style={{ fontSize: "17px", fontWeight: "bold" }}>제목 : </p>
-          <CustomInput
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          ></CustomInput>
-        </Row>
-        <Row>
-          <p style={{ fontSize: "17px", fontWeight: "bold" }}>카테고리 : </p>
-          <CustomInput
-            type="text"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          ></CustomInput>
-        </Row>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "25px",
-          }}
-        >
-          <CheckButton onClick={handleConfirmClick}>확인</CheckButton>
-        </div>
-      </Modal> */}
+      {/* 제목 카테고리 모달의 내용 */}
+      {isModalOpen1 && (
+        <ModalBackground onClick={() => closeTitleCategoryModal("", "")}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <CompanyTitleCategoryModal closeModal={closeTitleCategoryModal} />
+          </div>
+        </ModalBackground>
+      )}
 
       {/* 날짜 시간 장소 모달의 내용 */}
       <Modal isVisible={isModalOpen2} onClose={closeModal2}>
         <Row>
-          <p style={{ fontSize: "17px", fontWeight: "bold" }}>날짜 : </p>
+          <Txt>날짜 : </Txt>
           <CustomInput
             type="date"
             value={date}
@@ -307,7 +235,7 @@ function AddNotice() {
           ></CustomInput>
         </Row>
         <Row>
-          <p style={{ fontSize: "17px", fontWeight: "bold" }}>시간 : </p>
+          <Txt>시간 : </Txt>
           <CustomInput
             type="time"
             value={time}
@@ -315,7 +243,7 @@ function AddNotice() {
           ></CustomInput>
         </Row>
         <Row>
-          <p style={{ fontSize: "17px", fontWeight: "bold" }}>장소 : </p>
+          <Txt>장소 : </Txt>
           <CustomInput
             type="text"
             value={place}
@@ -335,12 +263,123 @@ function AddNotice() {
       </Modal>
 
       {/* 역할 상세 모달 */}
-      {isRoleModalOpen && <CompanyRoleModal closeModal={closeRoleModal} />}
-      {isModalOpen1 && (
-        <CompanyTitleCategoryModal closeModal={closeTitleCategoryModal} />
+      {isRoleModalOpen && (
+        <ModalBackground onClick={closeRoleModal}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <CompanyRoleModal closeModal={closeRoleModal} />
+          </div>
+        </ModalBackground>
       )}
     </>
   );
 }
 
 export default AddNotice;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const Container = styled.div`
+  background: #302e34;
+  width: 90%;
+  height: 150px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const Container2 = styled.div`
+  background-color: rgba(83, 82, 85, 0.7);
+  color: rgba(255, 255, 255, 0.7);
+  width: 90%;
+  height: 80px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+`;
+
+const PlusButton = styled.button`
+  font-size: 30px;
+  border-radius: 5px;
+  padding: 0 8px 0;
+  background-color: #fff;
+  margin-bottom: 10px;
+`;
+
+const CheckButton = styled.button`
+  background: #f5c001;
+  color: white;
+  border-radius: 10px;
+  font-size: 24px;
+  font-weight: 700;
+  padding: 5px 14px 5px;
+  width: 93px;
+  height: 40px;
+`;
+
+const FinalConfirmButton = styled.button`
+  background: #f5c001;
+  color: white;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 5px 14px 5px;
+`;
+
+const CustomInput = styled.input`
+  border: none;
+  outline: none;
+  background: #302e34;
+  height: 25px;
+  margin-left: 10px;
+  padding-left: 15px;
+  color: white;
+  margin-right: 10px;
+  width: 60%;
+`;
+
+const CustomInput2 = styled.input`
+  border: none;
+  border-bottom: 1px solid white;
+  outline: none;
+  background: #302e34;
+  height: 25px;
+  margin-left: 10px;
+  padding-left: 10px;
+  color: white;
+  margin-right: 10px;
+  width: 40%;
+`;
+
+const Txt = styled.p`
+  color: #fff;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  margin-right: 20px;
+`;
+
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 99;
+`;

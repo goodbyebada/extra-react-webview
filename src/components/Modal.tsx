@@ -7,10 +7,10 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-const ModalBackdrop = styled.div.attrs<{ isVisible: boolean }>(
-  ({ isVisible }) => ({
+const ModalBackdrop = styled.div.attrs<{ $isVisible: boolean }>(
+  ({ $isVisible }) => ({
     style: {
-      display: isVisible ? "flex" : "none",
+      display: $isVisible ? "flex" : "none",
     },
   }),
 )`
@@ -27,8 +27,11 @@ const ModalBackdrop = styled.div.attrs<{ isVisible: boolean }>(
 
 const ModalContent = styled.div`
   background: #302e34;
-  padding: 20px;
-  border-radius: 8px;
+  padding-top: 48px;
+  padding-left: 32px;
+  padding-right: 32px;
+  padding-bottom: 10%;
+  border-radius: 30px;
   position: relative;
   z-index: 1001;
   width: 300px;
@@ -45,7 +48,7 @@ const Modal = ({ isVisible, onClose, children }: ModalProps) => {
   };
 
   return (
-    <ModalBackdrop isVisible={isVisible} onClick={handleBackdropClick}>
+    <ModalBackdrop $isVisible={isVisible} onClick={handleBackdropClick}>
       <ModalContent onClick={handleContentClick}>{children}</ModalContent>
     </ModalBackdrop>
   );

@@ -1,48 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Modal from "../components/Modal";
-import HomeRecruitBox from "../components/AdminRecruitBox";
-
-const Column = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
-// const Announcement = styled.div`
-//     background-color: #302E34;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-//     width: 380px;
-//     height: 100px;
-//     margin: 20px 0;
-//     cursor: pointer;
-// `
-
-const PlusButton = styled.button`
-  font-size: 30px;
-  border-radius: 5px;
-  padding: 0 8px 0;
-`;
-
-const CreateNewButton = styled.button`
-  background: #858585;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  width: 284px;
-  padding: 5px 0 5px;
-  font-size: 20px;
-  font-weight: bold;
-`;
+import Modal from "@components/Modal";
+import HomeRecruitBox from "@components/HomeRecruitBox";
+import { dummyJobPostList } from "@api/dummyData";
+import { JobPost } from "@api/interface";
 
 function ManagerDashboard() {
   const navigate = useNavigate();
 
-  // const goToDetail = () => {
-  //     navigate('/detail');
-  // }
+  const goToDetail = ({ title, gatheringTime, gatheringLocation }: JobPost) => {
+    localStorage.setItem("gatheringTime", gatheringTime);
+    localStorage.setItem("gatheringLocation", gatheringLocation);
+
+    navigate(`/detail/${title}`);
+  };
+
+  const jobPostList = dummyJobPostList;
+
   const goToAdd = () => {
     navigate("/add-notice");
   };
@@ -71,14 +46,7 @@ function ManagerDashboard() {
             paddingTop: "50px",
           }}
         >
-          <p
-            style={{
-              fontWeight: "900",
-              fontSize: "32px",
-            }}
-          >
-            우리 회사 공고
-          </p>
+          <p style={{ fontWeight: "900", fontSize: "32px" }}>우리 회사 공고</p>
           <PlusButton onClick={handleAdd}>+</PlusButton>
         </div>
         <div
@@ -86,6 +54,7 @@ function ManagerDashboard() {
             display: "flex",
             alignItems: "end",
             justifyContent: "flex-end",
+            marginTop: "10px",
             marginBottom: "15px",
             fontSize: "12px",
           }}
@@ -94,17 +63,35 @@ function ManagerDashboard() {
           <p style={{ margin: "0 0" }}>내게만 보기</p>
         </div>
       </div>
-      <Column>
-        <HomeRecruitBox></HomeRecruitBox>
-      </Column>
+
+      {jobPostList.map((elem) => {
+        return (
+          // eslint-disable-next-line react/jsx-key
+          <Column>
+            <HomeRecruitBox
+              navigate={() => goToDetail(elem)}
+              key={elem.id}
+              recruitInfo={elem}
+            />
+          </Column>
+        );
+      })}
 
       <Modal isVisible={isMOdalOPen} onClose={closeModal}>
-        <p style={{ fontSize: "20px", fontWeight: "bold" }}>이전 양식</p>
+        <p
+          style={{
+            fontSize: "20px",
+            fontWeight: "bold",
+          }}
+        >
+          이전 양식
+        </p>
         <div
           style={{
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            marginTop: "10px",
           }}
         >
           <CreateNewButton onClick={goToAdd}>새로 만들기</CreateNewButton>
@@ -115,3 +102,26 @@ function ManagerDashboard() {
 }
 
 export default ManagerDashboard;
+
+const Column = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+const PlusButton = styled.button`
+  font-size: 30px;
+  border-radius: 5px;
+  padding: 0 8px 0;
+  background-color: #fff;
+`;
+
+const CreateNewButton = styled.button`
+  background: #858585;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  width: 284px;
+  padding: 5px 0 5px;
+  font-size: 20px;
+  font-weight: bold;
+`;
