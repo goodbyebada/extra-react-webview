@@ -39,7 +39,7 @@ const showTypeConfig = {
 const jobPostConfig = {
   key: "jobPosts",
   storage,
-  whitelist: ["jobPostAll", "jobPostItem"],
+  whitelist: ["jobPostByCalender", "jobPostItem"],
 };
 
 // 새로 추가된 appliedRole slice에 대한 persist 설정
