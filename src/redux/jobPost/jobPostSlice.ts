@@ -24,7 +24,7 @@ const defaultJobPost: JobPost = {
   gatheringTime: "",
   imageUrl: "",
   status: false,
-  hourPay: 0,
+  hourPay: -1,
   category: "",
   companyName: "",
   scheduleIdList: [],

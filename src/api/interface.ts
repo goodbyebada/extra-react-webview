@@ -1,4 +1,4 @@
-export const BASE_URL = "http://3.34.74.22:8080/api/v1";
+export const BASE_URL = "https://test-server.store/api/v1";
 
 /**
  * JobPost API 관련 인터페이스

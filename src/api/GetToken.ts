@@ -1,10 +1,12 @@
+import { BASE_URL } from "@api/interface";
+
 /**
  *
  * @param status  0 이면 accesToken 요청, 1이면 localStroage에 저장된 accessToken 가져오기
  */
 export const GetToken = (status: number) => {
   if (status === 0) {
-    fetch("http://3.34.74.22:8080/api/v1/members/login", {
+    fetch(`${BASE_URL}/members/login`, {
       method: "POST",
       headers: {
         Accept: "*/*",

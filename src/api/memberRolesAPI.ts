@@ -1,7 +1,7 @@
 // jobPostAPI.js
 import { GetToken } from "@api/GetToken";
 import { BASE_URL } from "@api/interface";
-import { requestGetFetch, requestPostFetch } from "@api/utils";
+import { requestGetFetch } from "@api/utils";
 
 const memberRolesURL = `${BASE_URL}/application-request/member/roles`;
 
@@ -13,6 +13,7 @@ const memberRolesAPI = {
 
     if (!response.ok) {
       const errorData = await response.json();
+      console.log(errorData);
       throw new Error(errorData.message || "Unknown error occurred");
     }
 
@@ -20,8 +21,17 @@ const memberRolesAPI = {
   },
 
   // 역할 전체 조회
-  async getAllmemberRoles() {
-    const response = await requestGetFetch(memberRolesURL);
+  /**
+   *
+   * @param year
+   * @param month dateYm month로 접근해야함 실제 월 -1
+   * @returns
+   */
+  async getAllmemberRoles(year: number, month: number) {
+    const response = await requestGetFetch(
+      memberRolesURL + "?" + `year=${year}&month=${month + 1}`,
+    );
+
     return await this.handleResponse(response);
   },
 

@@ -24,7 +24,7 @@ const initDate: MemberRoleFront = {
 };
 
 const Convert = (arr: MemberRoleServer[]): MemberRoleFront[] => {
-  let myScheduledList = arr.map((elem: MemberRoleServer) => {
+  const myScheduledList = arr.map((elem: MemberRoleServer) => {
     const newElem: MemberRoleFront = {
       id: elem.id,
       jobPostId: elem.jobPostId,
@@ -57,8 +57,9 @@ const initialState = { status: "", data: [initDate], error: "" };
 // [회원]: 역할 전체 조회
 export const getMemberAppliedRoles = createAsyncThunk(
   "member/getMyAppliedRoles",
-  async () => {
-    const data = await memberRolesAPI.getAllmemberRoles();
+  async ({ year, month }: { year: number; month: number }) => {
+    const data = await memberRolesAPI.getAllmemberRoles(year, month);
+    console.log(`data 반환 : ${data}`);
     return data;
   },
 );
@@ -75,6 +76,7 @@ const appliedRoleSlice = createSlice({
       })
       .addCase(getMemberAppliedRoles.fulfilled, (state, action) => {
         state.status = ResponseStatus.fullfilled;
+        console.log(action.payload.data);
         state.data = Convert(action.payload.data);
         state.error = "";
       })
