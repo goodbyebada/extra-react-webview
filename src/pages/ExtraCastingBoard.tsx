@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -7,7 +7,7 @@ import { RootState } from "@redux/store";
 
 import { fetchJobPostById } from "@redux/jobPost/jobPostSlice";
 import { AppDispatch } from "@redux/store";
-import { Loading } from "@components/Loading";
+import Loading from "@components/Loading";
 import { Err } from "@components/Err";
 
 import ExtraCastsComponent from "@components/ExtraCastsCopmponent";
@@ -47,7 +47,7 @@ export default function ExtraCastingBoard() {
   const Component = () => {
     switch (jobPostItem.status) {
       case ResponseStatus.loading:
-        return <Loading />;
+        return <Loading loading={true} />;
       case ResponseStatus.fullfilled:
         return (
           <ExtraCastsComponent selectedJobPostItem={selectedJobPostItem} />

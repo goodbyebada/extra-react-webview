@@ -18,7 +18,7 @@ import { fetchAllJobPosts } from "@redux/jobPost/jobPostSlice";
 
 import { AppDispatch } from "@redux/store";
 import { GetToken } from "@api/GetToken";
-import { Loading } from "@components/Loading";
+import Loading from "@components/Loading";
 import { Err } from "@components/Err";
 
 /**임시
@@ -106,7 +106,7 @@ export default function ExtrasHome() {
   const ReturnComponent = () => {
     switch (jobpost.status) {
       case ResponseStatus.loading:
-        return <Loading />;
+        return <Loading loading={true} />;
 
       case ResponseStatus.fullfilled:
         switch (showAsCalender) {
