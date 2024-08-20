@@ -11,32 +11,42 @@ import { memberRoleFrontDummyData } from "@api/dummyData";
  * 모달 창 props 추가 통해 데이터 연결 예정
  *
  *
- * @param param0s
+ * @param param0
  * @returns
  */
 
 // dayOfJobList 해당 날짜의 공고일정들 추후 ? 삭제 예정
 interface ScheduleModalProps {
   dayOfJobList?: JobPost;
+  selectedDateInfo: {
+    year: number;
+    month: number;
+    dateNum: number;
+    dayOfWeek: string;
+  };
   closeModal: () => void;
 }
 
-function ScheduleModal({ closeModal }: ScheduleModalProps) {
-  const selectedDate = useSelector(
-    (state: RootState) => state.homeSelectedDate,
-  );
-  // const appliedList = useSelector((state: RootState) => {
-  //   return state.appliedRoles;
-  // });
+/**
+ * 현재 서버 문제로,더미데이터로 적용되어있음
+ * @param param0
+ * @returns
+ */
+function ScheduleModal({ selectedDateInfo, closeModal }: ScheduleModalProps) {
+  const appliedListData = useSelector((state: RootState) => {
+    return state.appliedRoles.data;
+  });
+  //  더미데이터 적용되어있음 -> 연도 & 월의 일정 store에서 탐색한다.
+  //  initData id가 -1,0이라면 불러온 데이터가없다.
+  const appliedList =
+    appliedListData[0].id <= 0 ? memberRoleFrontDummyData : appliedListData;
 
-  const { year, month, dateNum, dayOfWeek } = selectedDate;
-  const dateString = `${year}/${month}/${dateNum}  (${dayOfWeek})`;
+  const { year, month, dateNum, dayOfWeek } = selectedDateInfo;
+  const dateString = `${year}/${month + 1}/${dateNum}  (${dayOfWeek})`;
 
-  let appliedList = memberRoleFrontDummyData;
+  const dateNumber = dateNum;
 
-  let dateNumber = parseInt(dateNum);
-
-  let todayJobList = appliedList.filter(
+  const todayJobList = appliedList.filter(
     (elem) =>
       elem.calender.startDateNum === dateNumber ||
       (elem.calender.startDateNum <= dateNumber &&

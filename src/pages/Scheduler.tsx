@@ -4,18 +4,18 @@ import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
 import ScheduleModal from "@components/Modal/ScheduleModal";
 import { useRef } from "react";
-
-import { setDate } from "@redux/home/homeSelectedDateSlice";
 import { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
-// import { RootState } from "@redux/store";
+import { RootState } from "@redux/store";
 import { AppDispatch } from "@redux/store";
 import returnSchduleItemComponent from "@utills/returnScheduleItemComponent";
 
 import { MemberRoleFront, ScheduleType } from "@api/interface";
 import { memberRoleFrontDummyData } from "@api/dummyData";
 import Ellipsis from "@components/custom/Ellipsis";
+import { GetToken } from "@api/GetToken";
+import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
 
 /**
  *
@@ -25,15 +25,23 @@ import Ellipsis from "@components/custom/Ellipsis";
  * 1. 스케줄러(일정)이 주가 다르게 연속으로 이어져있을때 UI fix
  * 2. 스케줄러 일정 map으로 컴포넌트 반환 로직 fix
  * status  에따라 에러 로딩 로직 추가
+ *
+ *
+ *
+ * 보조 출연자는 setData 접근하지 않는다 -> home이랑 날짜 분리 위해서
+ * props로 전달한다
  */
 
 export default function Scheduler() {
   const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
+  const dispatch = useDispatch<AppDispatch>();
 
   //모달창 state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  // 모달창에 전달할 정보
 
   const [clicketCnt, setClickedCnt] = useState<number>(1);
 
@@ -48,9 +56,14 @@ export default function Scheduler() {
    * useCaleder에 들어가는 값도 원래  month보다 -1 이어야한다.
    */
   const [dateYM, setDateYM] = useState(today);
-
   const weeklists = useCalendar(dateYM.year, dateYM.month);
-
+  const INIT_DATA = {
+    year: today.year,
+    month: today.month,
+    dateNum: 0,
+    dayOfWeek: "",
+  };
+  const [selectedDateInfo, setSelectedDateInfo] = useState(INIT_DATA);
   let i = -1;
 
   /**
@@ -70,42 +83,50 @@ export default function Scheduler() {
 
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const dispatch = useDispatch<AppDispatch>();
-
   const selectedDateEvent = (elem: number, idx: number) => {
     const selectedDateInfo = {
-      year: dateYM.year.toString(),
-      month: (dateYM.month + 1).toString(),
-      dateNum: elem.toString(),
+      year: dateYM.year,
+      month: dateYM.month,
+      dateNum: elem,
       dayOfWeek: DAY_LIST[idx % 7],
     };
-
-    dispatch(setDate(selectedDateInfo));
+    setSelectedDateInfo(selectedDateInfo);
     openModal();
   };
 
-  // const appliedList = useSelector((state: RootState) => {
-  //   return state.appliedRoles;
-  // });
+  const appliedListData = useSelector((state: RootState) => {
+    return state.appliedRoles.data;
+  });
+
+  const appliedList =
+    appliedListData[0].id <= 0 ? memberRoleFrontDummyData : appliedListData;
 
   // 날짜 바꿀때마다 get 요청
   useEffect(() => {
     // YEAR , MONTH로 요청 보냈을떄 그에 대한 값만 준다는 가정, 백에 문의해봐야함
     // 임시처리
-    // dispatch(getMemberAppliedRoles());
+
+    /**
+     * test 코드 삭제해야함
+     */
+    if (!localStorage.getItem("token")) {
+      GetToken(0);
+    }
+
+    dispatch(getMemberAppliedRoles(dateYM));
   }, [clicketCnt]);
 
   const CheckGotJob = (dateNum: number) => {
     // 계속 순회중 추후 리팩토링 필요
     // 오름차순 정렬이니까
 
-    let ComponentList = [];
-    const appliedList: MemberRoleFront[] = memberRoleFrontDummyData.sort(
+    const ComponentList = [];
+    const convertedList: MemberRoleFront[] = appliedList.sort(
       (a: MemberRoleFront, b: MemberRoleFront) =>
         a.calender.startDateNum - b.calender.startDateNum,
     );
 
-    const ShootJobList = appliedList.filter(
+    const ShootJobList = convertedList.filter(
       (elem) =>
         elem.calender.startDateNum === dateNum ||
         (elem.calender.endDateNum >= dateNum &&
@@ -203,7 +224,10 @@ export default function Scheduler() {
               }
             }}
           >
-            <ScheduleModal closeModal={closeModal} />
+            <ScheduleModal
+              selectedDateInfo={selectedDateInfo}
+              closeModal={closeModal}
+            />
           </ModalOverlay>
         </>
       ) : (
