@@ -4,6 +4,7 @@ import RecruitStatus from "@components/custom/recruitStatus";
 import { JobPost } from "@api/interface";
 import star_g from "@assets/Star_g.png";
 import star_y from "@assets/Star_y.png";
+import { SeasonLabel } from "@api/interface";
 // import returnGatherInfo from "@utills/returnGaterInfo";
 
 type Props = {

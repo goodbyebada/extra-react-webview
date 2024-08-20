@@ -2,8 +2,9 @@ import { styled } from "styled-components";
 import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
 import { JobPostList } from "@api/interface";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setDate } from "@redux/home/homeSelectedDateSlice";
+import { RootState } from "@redux/store";
 
 type dateYM = {
   year: number;
@@ -13,7 +14,7 @@ type dateYM = {
 type CalenderProps = {
   dateYM: dateYM;
   dateYMHandler: (type: string, value: number) => void;
-  jobPostList: JobPostList;
+  jobPostList?: JobPostList;
   showRecommand: boolean;
   clickedDateEvent: () => void;
 };
@@ -29,34 +30,22 @@ type CalenderProps = {
 // let -> const 수정
 // Array.from v,i
 
+/**
+ * status에 따른 분기처리 yet
+ */
+
 export default function Calender({
   dateYM,
   dateYMHandler,
-  // jobPostList,
   showRecommand,
   clickedDateEvent,
 }: CalenderProps) {
   const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
 
-  /** test 위해 임시로 구현
-   * jobPostList calender 형식 서버와 협의한 후 수정 예정
-   */
-
-  // // 한 date의 공고 일정 개수 list
-  // let jobCnt = Array.from({ length: 30 }, (v, i) => 1);
-  // // 공고의 유무 flag list
-  // let gotJob = Array.from({ length: 30 }, (v, i) => {
-  //   if (i % 2 === 0) return true;
-  //   return false;
-  // });
-
-  // 한 date의 공고 일정 개수 list
-  const jobCnt = Array.from({ length: 30 }, () => 1);
-  // 공고의 유무 flag list
-  const gotJob = Array.from({ length: 30 }, (_, i) => {
-    if (i % 2 === 0) return true;
-    return false;
-  });
+  const gotJob = useSelector(
+    (state: RootState) => state.jobPosts.jobPostByCalender,
+  );
+  const gotJobDataList = gotJob.data;
 
   const weeklists = useCalendar(dateYM.year, dateYM.month);
 
@@ -67,7 +56,13 @@ export default function Calender({
   const monthItemList = Array.from({ length: 12 }, (_, i) => 1 + i);
 
   const dateOnClick = (dateNum: number, key: number) => {
-    if (gotJob[dateNum]) {
+    const stringDate = dateNum.toString();
+    const jobLength = gotJobDataList[stringDate].length;
+
+    if (!jobLength) {
+      return;
+    }
+    if (jobLength > 0) {
       const data = {
         year: dateYM.year.toString(),
         month: (dateYM.month + 1).toString(),
@@ -75,7 +70,6 @@ export default function Calender({
         dayOfWeek: DAY_LIST[key % 7],
       };
       dispatch(setDate(data));
-
       clickedDateEvent();
     }
   };
@@ -132,15 +126,18 @@ export default function Calender({
 
                     return (
                       <div
-                        className={`date ${gotJob[elem] ? "got-drama" : ""} ${showRecommand ? "recommand" : ""}`}
+                        className={`date ${!gotJobDataList[elem] ? "" : "got-drama"} ${showRecommand ? "recommand" : ""}`}
                         key={key + i * 7}
                         onClick={() => dateOnClick(elem, key)}
                       >
                         <div id="date-num">{elem}</div>
-                        {gotJob[elem] ? (
-                          <div id="drama-num">{jobCnt[elem]}</div>
-                        ) : (
+                        {!gotJobDataList[elem] ||
+                        gotJobDataList[elem].length <= 0 ? (
                           ""
+                        ) : (
+                          <div id="drama-num">
+                            {gotJobDataList[elem].length}
+                          </div>
                         )}
                       </div>
                     );
