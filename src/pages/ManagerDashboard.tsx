@@ -1,13 +1,47 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Modal from "@components/Modal";
 import HomeRecruitBox from "@components/HomeRecruitBox";
-import { dummyJobPostList } from "@api/dummyData";
 import { JobPost } from "@api/interface";
+import { useEffect, useState } from "react";
 
 function ManagerDashboard() {
   const navigate = useNavigate();
+  const [jobPostList, setJobPostList] = useState<JobPost[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // jobPost API 호출
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      console.error("No access token found");
+      return;
+    }
+
+    fetch(`${import.meta.env.VITE_SERVER_URL}api/v1/jobposts?page=0`, {
+      method: "GET",
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          console.error("Failed to fetch job posts", response.statusText);
+          return [];
+        }
+      })
+      .then((data: JobPost[]) => {
+        console.log("Job posts fetched successfully:", data);
+        setJobPostList(data);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch job posts", error);
+      });
+  }, []);
 
   const goToDetail = ({ title, gatheringTime, gatheringLocation }: JobPost) => {
     localStorage.setItem("gatheringTime", gatheringTime);
@@ -16,16 +50,14 @@ function ManagerDashboard() {
     navigate(`/detail/${title}`);
   };
 
-  const jobPostList = dummyJobPostList;
-
   const goToAdd = () => {
     navigate("/add-notice");
   };
 
-  const [isMOdalOPen, setIsModalOpen] = useState(false);
   const handleAdd = () => {
     setIsModalOpen(true);
   };
+
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -64,20 +96,16 @@ function ManagerDashboard() {
         </div>
       </div>
 
-      {jobPostList.map((elem) => {
-        return (
-          // eslint-disable-next-line react/jsx-key
-          <Column>
-            <HomeRecruitBox
-              navigate={() => goToDetail(elem)}
-              key={elem.id}
-              recruitInfo={elem}
-            />
-          </Column>
-        );
-      })}
+      {jobPostList.map((elem) => (
+        <Column key={elem.id}>
+          <HomeRecruitBox
+            navigate={() => goToDetail(elem)}
+            recruitInfo={elem}
+          />
+        </Column>
+      ))}
 
-      <Modal isVisible={isMOdalOPen} onClose={closeModal}>
+      <Modal isVisible={isModalOpen} onClose={closeModal}>
         <p
           style={{
             fontSize: "20px",
