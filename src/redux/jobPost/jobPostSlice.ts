@@ -1,10 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import jobPostAPI from "@api/jobPostAPI";
-import { JobPost, JobPostList } from "@api/interface";
+import { JobPost } from "@api/interface";
 import { ResponseStatus } from "@api/interface";
 import { dateYM, QuryTypesWithPage } from "@api/interface";
 import { ObjectType } from "@api/interface";
-import { act } from "react";
 
 // 상태의 타입 정의
 
@@ -98,6 +97,7 @@ export const fetchJobPostByList = createAsyncThunk(
   "jobPosts/fetchAllbyList",
   async ({ year, month, pageNum }: QuryTypesWithPage) => {
     const data = await jobPostAPI.getAllJobPostByList(year, month, pageNum);
+
     return data;
   },
 );
@@ -118,22 +118,27 @@ const jobPostSlice = createSlice({
     builder
       .addCase(fetchJobPostByCalender.pending, (state) => {
         state.jobPostByCalender.status = ResponseStatus.loading;
+        state.jobPostByCalender.data = initdata;
         state.jobPostByCalender.error = "";
       })
       .addCase(fetchJobPostByCalender.fulfilled, (state, action) => {
         state.jobPostByCalender.status = ResponseStatus.fullfilled;
+
         state.jobPostByCalender.data = transformAndSortDates(action.payload);
 
         state.jobPostByCalender.error = "";
       })
       .addCase(fetchJobPostByCalender.rejected, (state, action) => {
         state.jobPostByCalender.status = ResponseStatus.rejected;
-
+        state.jobPostByCalender.data = initdata;
         // action.error.message는 API에서 전달된 에러 메시지를 포함
         state.jobPostByCalender.error =
           action.error.message || "Failed to fetch all job posts";
       });
 
+    /**
+     * [{}]값이 하나만 오고 있다.
+     */
     builder
       .addCase(fetchJobPostByList.pending, (state) => {
         state.jobPostByList.status = ResponseStatus.loading;
@@ -141,9 +146,7 @@ const jobPostSlice = createSlice({
       })
       .addCase(fetchJobPostByList.fulfilled, (state, action) => {
         state.jobPostByList.status = ResponseStatus.fullfilled;
-
-        console.log(action.payload);
-        state.jobPostByList.status = action.payload;
+        state.jobPostByList.data = action.payload;
         state.jobPostByList.error = "";
       })
       .addCase(fetchJobPostByList.rejected, (state, action) => {

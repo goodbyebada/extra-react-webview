@@ -29,7 +29,7 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
    */
   const DummyUser = {
     name: "미뇽",
-    sex: true,
+    sex: false,
   };
 
   const user = DummyUser;

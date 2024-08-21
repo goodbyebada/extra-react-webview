@@ -42,7 +42,6 @@ export default function ExtraCastingBoard() {
   }, [dispatch, jobPostId]);
 
   const Component = () => {
-    console.log(jobPostItem.status);
     switch (jobPostItem.status) {
       case ResponseStatus.loading:
         return <Loading loading={true} />;

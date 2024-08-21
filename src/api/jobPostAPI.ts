@@ -20,6 +20,7 @@ const jobPostAPI = {
       const errorData = await response.json();
       throw new Error(errorData.message || "Unknown error occurred");
     }
+
     return await response.json();
   },
 
@@ -38,8 +39,11 @@ const jobPostAPI = {
     return await this.handleResponse(response);
   },
 
-  async getAllJobPostByList(page: number) {
-    const response = await requestGetFetch(jobPostURL + `/page=${page}`);
+  async getAllJobPostByList(year: number, month: number, page: number) {
+    const response = await requestGetFetch(
+      jobPostURL + `/calender?year=${year}&month=${month + 1}&page=${page}`,
+    );
+
     return await this.handleResponse(response);
   },
 
@@ -47,21 +51,6 @@ const jobPostAPI = {
     const response = await requestGetFetch(`${jobPostURL}/${jobPostId}`);
     return await this.handleResponse(response);
   },
-
-  // async deleteJobPostById(jobPostId: number) {
-  //   const response = await requestDeleteFetch(`${jobPostURL}/${jobPostId}`);
-  //   return await this.handleResponse(response);
-  // },
-
-  // async putJobPostById(jobPostId: number, data: JobPostRequest) {
-  //   const response = await requestPutFetch(`${jobPostURL}/${jobPostId}`, data);
-  //   return await this.handleResponse(response);
-  // },
-
-  // async postJobPost(data: JobPostRequest) {
-  //   const response = await requestPostFetch(jobPostURL, data);
-  //   return await this.handleResponse(response);
-  // },
 };
 
 export default jobPostAPI;

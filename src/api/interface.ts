@@ -205,3 +205,7 @@ export interface QuryTypesWithPage extends dateYM {
 export type ObjectType = {
   [key: string]: number[];
 };
+export enum CalenderTypeFor {
+  "user" = 0,
+  "company" = 1,
+}
