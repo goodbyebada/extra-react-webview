@@ -7,7 +7,7 @@ import {
 import { MemberRoleServer } from "@api/interface";
 import memberRolesAPI from "@api/memberRolesAPI";
 import gatheringTimeString from "@utills/returnGaterInfo";
-import { QueryType } from "@api/interface";
+import { dateYM } from "@api/interface";
 
 const initDate: MemberRoleFront = {
   id: -1,
@@ -61,7 +61,7 @@ const initialState = {
 // [회원]: 역할 전체 조회
 export const getMemberAppliedRoles = createAsyncThunk(
   "member/getMyAppliedRoles",
-  async ({ year, month }: QueryType) => {
+  async ({ year, month }: dateYM) => {
     const data = await memberRolesAPI.getAllmemberRoles(year, month);
     console.log(`data 반환 : ${data}`);
     return data;

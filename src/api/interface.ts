@@ -193,4 +193,15 @@ export const SeasonLabel: { [key: string]: string } = {
   WINTER: "겨울",
 };
 
-export type QueryType = { year: number; month: number };
+export interface dateYM {
+  year: number;
+  month: number;
+}
+
+export interface QuryTypesWithPage extends dateYM {
+  pageNum: number;
+}
+
+export type ObjectType = {
+  [key: string]: number[];
+};
