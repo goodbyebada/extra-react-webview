@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import { GetToken } from "@api/GetToken";
 
-import ListComponent from "@pages/ListComponent";
+import List from "@pages/List";
 
 /**
  * 회원 정보 수정할 것
@@ -93,7 +93,7 @@ export default function ExtrasHome() {
             clickedDateEvent={navigateToSelectedNoticeList}
           />
         ) : (
-          <ListComponent dateYM={dateYM} showRecommand={showRecommand} />
+          <List dateYM={dateYM} showRecommand={showRecommand} />
         )}
       </Content>
     </Container>

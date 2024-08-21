@@ -14,7 +14,7 @@ import NotFoundPage from "@pages/Error/NotFound";
  * 날짜 선택시 화면
  * @returns
  */
-export default function DateSelectedNoticeList() {
+export default function DateSelectedNoticeListForCom() {
   const INIT_LOCAL_INFOLIST = [] as JobPost[];
   const [localJobInfoLists, setLocalJobInfoLists] =
     useState<JobPost[]>(INIT_LOCAL_INFOLIST);
@@ -28,20 +28,15 @@ export default function DateSelectedNoticeList() {
   const { dateNum } = selectedDate;
 
   const jobListAboutYM = useSelector(
-    (state: RootState) => state.jobPosts.jobPostByCalender.data,
+    (state: RootState) => state.companyJobpost.jobPostByCalenderForCom.data,
   );
 
   const selectedDataIdList = jobListAboutYM[dateNum];
 
-  // const dateString = `${year}/${month}/${dateNum}`;
-  // const navContent = `${dateString} 에 모집 중인 공고예요.`;
-  // month에 따른 데이터들중 해당 날짜에 맞는 joblist만 고르는 로직 추가 필요
-  // dummydata
-
   const navigate = useNavigate();
 
   const navigateToExtraCastingBoard = (jobPostId: number) => {
-    const basePath = "/extra-casting-board";
+    const basePath = "/detail";
     navigate(`${basePath}/${jobPostId}`);
   };
 

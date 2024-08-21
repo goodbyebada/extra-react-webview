@@ -2,18 +2,13 @@ import { TopBar } from "@pages/ExtrasHome";
 import { styled } from "styled-components";
 import TypeSelector from "@components/TypeSelector";
 import { useEffect, useState } from "react";
-import Calender from "@components/Calender";
-import { dummyJobPostList } from "@api/dummyData";
-import HomeRecruitBox from "@components/HomeRecruitBox";
-import { useRef } from "react";
-import {
-  fetchJobPostByCalenderForCom,
-  fetchJobPostByListForCom,
-} from "@redux/company/companyJobPostSlice";
 import { useNavigate } from "react-router-dom";
 
-import { AppDispatch, RootState } from "@redux/store";
-import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@redux/store";
+import { useSelector } from "react-redux";
+import CompanyCalender from "@components/CompanyCalender";
+import CompanyList from "@components/CompanyList";
+import { GetToken } from "@api/GetToken";
 
 /**
  *추후 수정 예정
@@ -29,14 +24,6 @@ export default function CompanyHome() {
     month: date.getMonth(),
   };
 
-  const dispatch = useDispatch<AppDispatch>();
-  const calender = useSelector((state: RootState) => {
-    state.companyJobpost.jobPostByCalenderForCom;
-  });
-  const list = useSelector((state: RootState) => {
-    state.companyJobpost.jobPostByListForCom;
-  });
-
   /**
    * date.getMonth는 항상 원래 월보다 -1이다.
    * useCaleder에 들어가는 값도 원래  month보다 -1 이어야한다.
@@ -51,23 +38,10 @@ export default function CompanyHome() {
     });
   };
 
-  // dummydata
-  const jobList = dummyJobPostList;
-
   // 캘린더 || 리스트
   const showAsCalender = useSelector(
     (state: RootState) => state.showType.showAsCalender,
   );
-
-  // 임시 경로
-  const path = "company-job-list/";
-
-  // 모달창 state
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-
-  const modalRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
 
@@ -76,34 +50,17 @@ export default function CompanyHome() {
    */
   const clickedDateEvent = () => {
     // 모달창을 연다
-    openModal();
+    const path = "/date-selected-notice-list-company";
+    navigate(path);
   };
 
-  useEffect(() => {
-    dispatch(fetchJobPostByCalenderForCom(dateYM));
-  }, [dispatch]);
-
-  
+  /**
+   * test용
+   */
 
   useEffect(() => {
-    dispatch(
-      fetchJobPostByListForCom({
-        year: dateYM.year,
-        month: dateYM.month,
-        pageNum: 0,
-      }),
-    );
-  }, [dispatch]);
-
-  useEffect(() => {
-    console.log("calender=====");
-    console.log(calender);
-  }, [calender]);
-
-  useEffect(() => {
-    console.log("list=====");
-    console.log(list);
-  }, [list]);
+    GetToken(0);
+  }, []);
 
   return (
     <div className="company-home-container">
@@ -117,28 +74,14 @@ export default function CompanyHome() {
       <div className="content">
         {showAsCalender ? (
           // 항상 전체 추천 UI
-          <Calender
+          <CompanyCalender
             dateYM={dateYM}
             dateYMHandler={dateYMHandler}
-            jobPostList={jobList}
             showRecommand={false}
             clickedDateEvent={clickedDateEvent}
           />
         ) : (
-          <ItemWrapper>
-            {jobList.map((elem, key) => {
-              return (
-                <HomeRecruitBox
-                  navigate={() => {
-                    navigate(path + `${elem.id}`);
-                  }}
-                  key={key}
-                  recruitInfo={elem}
-                  recommand={false}
-                />
-              );
-            })}
-          </ItemWrapper>
+          <CompanyList dateYM={dateYM} showRecommand={false} />
         )}
       </div>
     </div>
@@ -161,24 +104,4 @@ const CompanyHomeTopBar = styled(TopBar)`
     margin: 0px;
     padding-top: 20px;
   }
-`;
-
-const ItemWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 30px;
-`;
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
 `;
