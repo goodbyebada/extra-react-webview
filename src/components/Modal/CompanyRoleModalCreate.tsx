@@ -177,6 +177,7 @@ const CompanyRoleModalCreate: React.FC<CompanyRoleModalCreateProps> = ({
   };
 
   useEffect(() => {
+    console.log("test:", jobPostId, roleName);
     const { minAge, maxAge, season, costume, limitPersonnel } = formState;
     const isValid =
       parseInt(minAge, 10) > 0 &&
@@ -185,7 +186,7 @@ const CompanyRoleModalCreate: React.FC<CompanyRoleModalCreateProps> = ({
       costume !== "" &&
       limitPersonnel > 0;
     setIsFormValid(isValid);
-  }, [formState]);
+  }, [formState, jobPostId, roleName]);
 
   return (
     <ModalContainer>

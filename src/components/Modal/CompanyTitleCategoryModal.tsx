@@ -57,14 +57,14 @@ function CompanyTitleCategoryModal({
           <Txt>카테고리 :</Txt>
           <ButtonsContainer>
             <CategoryButton
-              $isSelected={formState.category === "드라마"}
-              onClick={() => handleCategoryClick("드라마")}
+              $isSelected={formState.category === "DRAMA"}
+              onClick={() => handleCategoryClick("DRAMA")}
             >
               드라마
             </CategoryButton>
             <CategoryButton
-              $isSelected={formState.category === "뮤비촬영"}
-              onClick={() => handleCategoryClick("뮤비촬영")}
+              $isSelected={formState.category === "MUSIC_VIDEO"}
+              onClick={() => handleCategoryClick("MUSIC_VIDEO")}
             >
               뮤비촬영
             </CategoryButton>
@@ -73,23 +73,23 @@ function CompanyTitleCategoryModal({
         <AlignedRow>
           <ButtonsContainer>
             <CategoryButton
-              $isSelected={formState.category === "광고"}
-              onClick={() => handleCategoryClick("광고")}
+              $isSelected={formState.category === "ADVERTISEMENT"}
+              onClick={() => handleCategoryClick("ADVERTISEMENT")}
             >
               광고
             </CategoryButton>
             <CategoryButton
-              $isSelected={formState.category === "영화"}
-              onClick={() => handleCategoryClick("영화")}
+              $isSelected={formState.category === "MOVIE"}
+              onClick={() => handleCategoryClick("MOVIE")}
             >
               영화
             </CategoryButton>
             <CategoryButton
-              $isSelected={formState.category === "기타"}
-              onClick={() => handleCategoryClick("기타")}
+              $isSelected={formState.category === "ETC"}
+              onClick={() => handleCategoryClick("ETC")}
               style={{ width: "36px", height: "22px" }}
             >
-              +
+              기타
             </CategoryButton>
           </ButtonsContainer>
         </AlignedRow>

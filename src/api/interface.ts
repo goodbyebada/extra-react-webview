@@ -128,3 +128,19 @@ export const ApplyStatusLabel: { [key: number]: string } = {
   2: "미승인",
   3: "승인 완료",
 };
+
+export enum Category {
+  "DRAMA" = 0,
+  "MUSIC_VIDEO" = 1,
+  "ADVERTISEMENT" = 2,
+  "MOVIE" = 3,
+  "ETC" = 4,
+}
+
+export const CategoryLabel: { [key: string]: string } = {
+  0: "드라마",
+  1: "뮤비촬영",
+  2: "광고",
+  3: "영화",
+  4: "기타",
+};

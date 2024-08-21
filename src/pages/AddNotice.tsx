@@ -3,81 +3,64 @@ import { useNavigate } from "react-router-dom";
 import backIcon from "@assets/backIcon.png";
 import styled from "styled-components";
 import Modal from "../components/Modal";
-import CompanyRoleModal from "@/components/Modal/CompanyRoleModal";
+import CompanyRoleModal from "@/components/Modal/CompanyRoleModalCreate";
 import CompanyTitleCategoryModal from "@components/Modal/CompanyTitleCategoryModal";
 
 function AddNotice() {
   const navigate = useNavigate();
-  // 제목과 카테고리 모달
   const [isModalOpen1, setIsModalOpen1] = useState(false);
-  // 날짜 시간 장소 모달
   const [isModalOpen2, setIsModalOpen2] = useState(false);
-  // 모달의 종류 지정 ( 1: 제목 카테고리 / 2: 날짜 시간 장소 )
   const [modalType, setModalType] = useState(0);
-
-  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false); // 역할 모달 열림 상태 추가
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
 
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
-
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [place, setPlace] = useState("");
+  const [roleName, setRoleName] = useState("");
 
-  const [role, setRole] = useState("");
+  const [jobId, setJobId] = useState<string | undefined>(undefined);
 
   const goBackManager = () => {
     navigate("/manager-dashboard");
   };
 
-  // 제목과 카테고리 설정을 위한
   const handlePlusButtonClick1 = (type: 1) => {
     setModalType(type);
     setIsModalOpen1(true);
   };
+
   const closeModal1 = () => {
     setIsModalOpen1(false);
   };
 
-  // 날짜 시간 장소 설정을 위한
   const handlePlusButtonClick2 = (type: 2) => {
     setModalType(type);
     setIsModalOpen2(true);
   };
+
   const closeModal2 = () => {
     setIsModalOpen2(false);
+    handleConfirmToAdd(); // 날짜 시간 장소 모달을 닫을 때 jobposts API 호출
   };
 
-  // 확인 버튼 구현
   const handleConfirmClick = () => {
-    // 제목과 카테고리 모달의 경우
     if (modalType === 1) {
       setTitle(title);
       setCategory(category);
-
       closeModal1();
-    }
-    // 날짜 시간 장소 모달의 경우
-    else if (modalType === 2) {
+    } else if (modalType === 2) {
       setDate(date);
       setTime(time);
       setPlace(place);
-
-      closeModal2();
+      closeModal2(); // 모달을 닫고 jobposts API 호출
     }
   };
 
-  // ?????????????????
-  // 역할을 작성했을 때
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      setRole(e.currentTarget.value);
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRoleName(e.currentTarget.value);
   };
-
-  // const openTitleCategoryModal = () => {
-  //   setIsModalOpen1(true);
-  // };
 
   const closeTitleCategoryModal = (title: string, category: string) => {
     setTitle(title);
@@ -88,12 +71,50 @@ function AddNotice() {
   const openRoleModal = () => {
     setIsRoleModalOpen(true);
   };
+
   const closeRoleModal = () => {
     setIsRoleModalOpen(false);
   };
 
   const handleConfirmToAdd = () => {
-    navigate(`/manager-dashboard`);
+    const newJobPost = {
+      title,
+      gatheringLocation: place,
+      gatheringTime: `${time} 예정`,
+      hourPay: 9860,
+      category,
+    };
+
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      console.error("No access token found");
+      return;
+    }
+
+    fetch(`${import.meta.env.VITE_SERVER_URL}api/v1/jobposts`, {
+      method: "POST",
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(newJobPost),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Failed to create job post");
+        }
+      })
+      .then((data) => {
+        const jobId = String(data.id);
+        console.log("Job Post created with ID:", jobId);
+        setJobId(jobId);
+      })
+      .catch((error) => {
+        console.error("An error occurred while creating job post:", error);
+      });
   };
 
   return (
@@ -171,51 +192,42 @@ function AddNotice() {
             </Column>
           </Container>
         )}
-        {role.length > 0 ? (
-          // ??????????????????? role에 저장이 되는지 추적 불가 ㅜ
-          <p>{role}</p>
-        ) : (
-          <Container
+        <Container
+          style={{
+            height: "200px",
+            alignItems: "flex-start",
+            justifyContent: "flex-start",
+            flexDirection: "column",
+          }}
+        >
+          <div style={{ marginTop: "15px", marginLeft: "15px" }}>
+            <CustomInput2
+              type="text"
+              value={roleName}
+              onChange={handleInputChange}
+            />
+            역할
+          </div>
+          <div
             style={{
-              height: "200px",
-              alignItems: "flex-start",
-              justifyContent: "flex-start",
-              flexDirection: "column",
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "15px",
+              width: "100%",
+              height: "100%",
             }}
           >
-            <div style={{ marginTop: "15px", marginLeft: "15px" }}>
-              <CustomInput2
-                type="text"
-                onKeyDown={() => {
-                  handleKeyDown;
-                }}
-              />
-              역할
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "15px",
-                width: "100%",
-                height: "100%",
-              }}
-            >
-              {/* 눌렀을 때 7개의 조율 사항 모달이 뜨도록 구현해야함!!!! */}
-
-              <Container2 onClick={openRoleModal}>
-                <p>+ 역할 상세 프로필</p>
-              </Container2>
-            </div>
-          </Container>
-        )}
+            <Container2 onClick={openRoleModal}>
+              <p>+ 역할 상세 프로필</p>
+            </Container2>
+          </div>
+        </Container>
 
         <FinalConfirmButton onClick={handleConfirmToAdd}>
           확인
         </FinalConfirmButton>
       </Column>
 
-      {/* 제목 카테고리 모달의 내용 */}
       {isModalOpen1 && (
         <ModalBackground onClick={() => closeTitleCategoryModal("", "")}>
           <div onClick={(e) => e.stopPropagation()}>
@@ -224,7 +236,6 @@ function AddNotice() {
         </ModalBackground>
       )}
 
-      {/* 날짜 시간 장소 모달의 내용 */}
       <Modal isVisible={isModalOpen2} onClose={closeModal2}>
         <Row>
           <Txt>날짜 : </Txt>
@@ -262,11 +273,14 @@ function AddNotice() {
         </div>
       </Modal>
 
-      {/* 역할 상세 모달 */}
       {isRoleModalOpen && (
         <ModalBackground onClick={closeRoleModal}>
           <div onClick={(e) => e.stopPropagation()}>
-            <CompanyRoleModal closeModal={closeRoleModal} />
+            <CompanyRoleModal
+              closeModal={closeRoleModal}
+              roleName={roleName}
+              jobPostId={jobId}
+            />
           </div>
         </ModalBackground>
       )}
