@@ -3,17 +3,17 @@ import ToggleBar from "@components/ToggleBar";
 import TypeSelector from "@components/TypeSelector";
 import Calender from "@components/Calender";
 
-import HomeRecruitBox from "@components/HomeRecruitBox";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { dummyJobPostList } from "@api/dummyData";
-import { JobPost } from "@api/interface";
-
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
+import { GetToken } from "@api/GetToken";
 
+import List from "@pages/List";
+
+/**
+ * 회원 정보 수정할 것
+ */
 /**임시
  * API 개발 후 처리할 예정
  */
@@ -46,11 +46,6 @@ export default function ExtrasHome() {
     });
   };
 
-  // 월 기준으로 API 호출 로직 추가 예정
-  //  list로 보기 시,infiniteScrolling으로 구현 해야함
-  // dummydata
-  const jobPostList = dummyJobPostList;
-
   // navigate
   const navigate = useNavigate();
 
@@ -73,11 +68,25 @@ export default function ExtrasHome() {
     navigate(path);
   };
 
-  // 리스트 보기 선택시 navigate
-  const navigateToExtraCastingBoard = (elem: JobPost) => {
-    const path = `/extra-casting-board/${elem.id}`;
-    navigate(path);
-  };
+  // const ReturnComponent = () => {
+  //   switch (jobPost.status) {
+  //     case ResponseStatus.loading:
+  //       return <Loading loading={true} />;
+
+  //     case ResponseStatus.fullfilled:
+
+  //     case ResponseStatus.rejected:
+  //       return <NotFoundPage />;
+
+  //     default:
+  //       return "";
+  //   }
+  // };
+
+  useEffect(() => {
+    // web일때
+    GetToken(0);
+  }, []);
 
   return (
     <Container className="extras-home">
@@ -95,23 +104,11 @@ export default function ExtrasHome() {
           <Calender
             dateYM={dateYM}
             dateYMHandler={dateYMHandler}
-            jobPostList={jobPostList}
             showRecommand={showRecommand}
             clickedDateEvent={navigateToSelectedNoticeList}
           />
         ) : (
-          <ItemWrapper>
-            {jobPostList.map((elem, key) => {
-              return (
-                <HomeRecruitBox
-                  navigate={() => navigateToExtraCastingBoard(elem)}
-                  key={key}
-                  recruitInfo={elem}
-                  recommand={showRecommand}
-                />
-              );
-            })}
-          </ItemWrapper>
+          <List dateYM={dateYM} showRecommand={showRecommand} />
         )}
       </Content>
     </Container>
@@ -121,13 +118,6 @@ export default function ExtrasHome() {
 const Container = styled.div``;
 
 const Content = styled.div``;
-
-const ItemWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 30px;
-`;
 
 export const TopBar = styled.div`
   padding: 0 22px;

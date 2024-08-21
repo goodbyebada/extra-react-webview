@@ -2,18 +2,22 @@ import { styled } from "styled-components";
 import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
 import { JobPostList } from "@api/interface";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setDate } from "@redux/home/homeSelectedDateSlice";
-
-type dateYM = {
-  year: number;
-  month: number;
-};
+import { AppDispatch, RootState } from "@redux/store";
+import { dateYM } from "@api/interface";
+import { CalenderTypeFor } from "@api/interface";
+import { useEffect } from "react";
+import { fetchJobPostByCalender } from "@redux/jobPost/jobPostSlice";
+import { ResponseStatus } from "@api/interface";
+import Loading from "@components/Loading";
+import NotFoundPage from "@pages/Error/NotFound";
 
 type CalenderProps = {
+  type?: CalenderTypeFor;
   dateYM: dateYM;
   dateYMHandler: (type: string, value: number) => void;
-  jobPostList: JobPostList;
+  jobPostList?: JobPostList;
   showRecommand: boolean;
   clickedDateEvent: () => void;
 };
@@ -23,40 +27,27 @@ type CalenderProps = {
  * @returns 사용자/ 업체 홈 화면 캘린더 UI
  */
 
-//수정 사항 추후 삭제
-// merge 과정에서 오류로 인해 commit이 안되는 문제 발생. error, warning 부분 주석 처리 후 임시 작성.
-// jobPostList 주석처리
-// let -> const 수정
-// Array.from v,i
+/**
+ * status에 따른 분기처리 yet
+ */
 
 export default function Calender({
   dateYM,
   dateYMHandler,
-  // jobPostList,
   showRecommand,
   clickedDateEvent,
 }: CalenderProps) {
   const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
 
-  /** test 위해 임시로 구현
-   * jobPostList calender 형식 서버와 협의한 후 수정 예정
-   */
+  const dispatch = useDispatch<AppDispatch>();
+  const gotJob = useSelector(
+    (state: RootState) => state.jobPosts.jobPostByCalender,
+  );
+  const gotJobDataList = gotJob.data;
 
-  // // 한 date의 공고 일정 개수 list
-  // let jobCnt = Array.from({ length: 30 }, (v, i) => 1);
-  // // 공고의 유무 flag list
-  // let gotJob = Array.from({ length: 30 }, (v, i) => {
-  //   if (i % 2 === 0) return true;
-  //   return false;
-  // });
-
-  // 한 date의 공고 일정 개수 list
-  const jobCnt = Array.from({ length: 30 }, () => 1);
-  // 공고의 유무 flag list
-  const gotJob = Array.from({ length: 30 }, (_, i) => {
-    if (i % 2 === 0) return true;
-    return false;
-  });
+  useEffect(() => {
+    dispatch(fetchJobPostByCalender(dateYM));
+  }, [dispatch, dateYM]);
 
   const weeklists = useCalendar(dateYM.year, dateYM.month);
 
@@ -67,7 +58,13 @@ export default function Calender({
   const monthItemList = Array.from({ length: 12 }, (_, i) => 1 + i);
 
   const dateOnClick = (dateNum: number, key: number) => {
-    if (gotJob[dateNum]) {
+    const stringDate = dateNum.toString();
+    const jobLength = gotJobDataList[stringDate].length;
+
+    if (!jobLength) {
+      return;
+    }
+    if (jobLength > 0) {
       const data = {
         year: dateYM.year.toString(),
         month: (dateYM.month + 1).toString(),
@@ -75,84 +72,109 @@ export default function Calender({
         dayOfWeek: DAY_LIST[key % 7],
       };
       dispatch(setDate(data));
-
       clickedDateEvent();
     }
   };
 
-  const dispatch = useDispatch();
+  const Component = () => {
+    switch (gotJob.status) {
+      case ResponseStatus.loading:
+        return <Loading loading={true} />;
 
-  return (
-    <Container>
-      {/* 년도 월일 선택 바 */}
-      <DateSelector>
-        <DateSelectorItem
-          type="year"
-          value={dateYM.year}
-          modalList={yearItemList}
-          dateHandler={dateYMHandler}
-        />
-        <DateSelectorItem
-          type="month"
-          value={dateYM.month + 1}
-          modalList={monthItemList}
-          dateHandler={dateYMHandler}
-        />
-      </DateSelector>
+      case ResponseStatus.rejected:
+        return <NotFoundPage />;
 
-      {/* 캘린더 */}
-      <CalenderContainer className="calender-container" $daylistHeight={8}>
-        <div className="calender-wrapper">
-          <div className="day-list">
-            {DAY_LIST.map((elem, key) => {
-              return (
-                <span className="day-item" key={key}>
-                  {elem}
-                </span>
-              );
-            })}
-          </div>
+      case ResponseStatus.fullfilled:
+        return (
+          <>
+            <Container>
+              {/* 년도 월일 선택 바 */}
+              <DateSelector>
+                <DateSelectorItem
+                  type="year"
+                  value={dateYM.year}
+                  modalList={yearItemList}
+                  dateHandler={dateYMHandler}
+                />
+                <DateSelectorItem
+                  type="month"
+                  value={dateYM.month + 1}
+                  modalList={monthItemList}
+                  dateHandler={dateYMHandler}
+                />
+              </DateSelector>
 
-          <div className="dates">
-            {weeklists.map((item, key) => {
-              i++;
-
-              return (
-                <Week $weekcnt={weeklists.length} className="week" key={key}>
-                  {item.map((elem, key) => {
-                    if (!elem) {
+              {/* 캘린더 */}
+              <CalenderContainer
+                className="calender-container"
+                $daylistHeight={8}
+              >
+                <div className="calender-wrapper">
+                  <div className="day-list">
+                    {DAY_LIST.map((elem, key) => {
                       return (
-                        <div
-                          key={key + i * 7}
-                          className="date"
-                          style={{ visibility: "hidden" }}
-                        ></div>
+                        <span className="day-item" key={key}>
+                          {elem}
+                        </span>
                       );
-                    }
+                    })}
+                  </div>
 
-                    return (
-                      <div
-                        className={`date ${gotJob[elem] ? "got-drama" : ""} ${showRecommand ? "recommand" : ""}`}
-                        key={key + i * 7}
-                        onClick={() => dateOnClick(elem, key)}
-                      >
-                        <div id="date-num">{elem}</div>
-                        {gotJob[elem] ? (
-                          <div id="drama-num">{jobCnt[elem]}</div>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    );
-                  })}
-                </Week>
-              );
-            })}
-          </div>
-        </div>
-      </CalenderContainer>
-    </Container>
-  );
+                  <div className="dates">
+                    {weeklists.map((item, key) => {
+                      i++;
+
+                      return (
+                        <Week
+                          $weekcnt={weeklists.length}
+                          className="week"
+                          key={key}
+                        >
+                          {item.map((elem, key) => {
+                            if (!elem) {
+                              return (
+                                <div
+                                  key={key + i * 7}
+                                  className="date"
+                                  style={{ visibility: "hidden" }}
+                                ></div>
+                              );
+                            }
+
+                            return (
+                              <div
+                                className={`date ${!gotJobDataList[elem] ? "" : "got-drama"} ${showRecommand ? "recommand" : ""}`}
+                                key={key + i * 7}
+                                onClick={() => dateOnClick(elem, key)}
+                              >
+                                <div id="date-num">{elem}</div>
+                                {!gotJobDataList[elem] ||
+                                gotJobDataList[elem].length <= 0 ? (
+                                  ""
+                                ) : (
+                                  <div id="drama-num">
+                                    {gotJobDataList[elem].length}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </Week>
+                      );
+                    })}
+                  </div>
+                </div>
+              </CalenderContainer>
+            </Container>
+          </>
+        );
+
+      default:
+        return;
+    }
+  };
+
+  return <>{Component()}</>;
 }
 
 const Container = styled.div`

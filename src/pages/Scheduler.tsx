@@ -4,8 +4,18 @@ import useCalendar from "@utills/useCalendar";
 import DateSelectorItem from "@components/DateSelectorItem";
 import ScheduleModal from "@components/Modal/ScheduleModal";
 import { useRef } from "react";
-import { useDispatch } from "react-redux";
-import { setDate } from "@redux/home/homeSelectedDateSlice";
+import { useEffect } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@redux/store";
+import { AppDispatch } from "@redux/store";
+import returnSchduleItemComponent from "@utills/returnScheduleItemComponent";
+
+import { MemberRoleFront, ScheduleType } from "@api/interface";
+import { memberRoleFrontDummyData } from "@api/dummyData";
+import Ellipsis from "@components/custom/Ellipsis";
+import { GetToken } from "@api/GetToken";
+import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
 
 /**
  *
@@ -14,15 +24,26 @@ import { setDate } from "@redux/home/homeSelectedDateSlice";
  * 추후 수정 예정
  * 1. 스케줄러(일정)이 주가 다르게 연속으로 이어져있을때 UI fix
  * 2. 스케줄러 일정 map으로 컴포넌트 반환 로직 fix
+ * status  에따라 에러 로딩 로직 추가
+ *
+ *
+ *
+ * 보조 출연자는 setData 접근하지 않는다 -> home이랑 날짜 분리 위해서
+ * props로 전달한다
  */
 
 export default function Scheduler() {
   const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
+  const dispatch = useDispatch<AppDispatch>();
 
   //모달창 state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  // 모달창에 전달할 정보
+
+  const [clicketCnt, setClickedCnt] = useState<number>(1);
 
   const date = new Date();
   const today = {
@@ -35,8 +56,14 @@ export default function Scheduler() {
    * useCaleder에 들어가는 값도 원래  month보다 -1 이어야한다.
    */
   const [dateYM, setDateYM] = useState(today);
-
   const weeklists = useCalendar(dateYM.year, dateYM.month);
+  const INIT_DATA = {
+    year: today.year,
+    month: today.month,
+    dateNum: 0,
+    dayOfWeek: "",
+  };
+  const [selectedDateInfo, setSelectedDateInfo] = useState(INIT_DATA);
   let i = -1;
 
   /**
@@ -45,72 +72,86 @@ export default function Scheduler() {
   const yearItemList = Array.from({ length: 6 }, (_, i) => 2024 + i);
   const monthItemList = Array.from({ length: 12 }, (_, i) => 1 + i);
 
-  // test 위해 임시 구현 11일 ~ 14일동안 진행되는 드라마 공고
-  const dummyCalender = [
-    { startDay: 11, endDay: 14, approve: true },
-    { startDay: 15, endDay: 15, aprrove: false },
-  ];
-
   const dateHandler = (type: string, value: number) => {
     setDateYM((prev) => {
       return type === "month"
         ? { ...prev, [type]: value - 1 }
         : { ...prev, [type]: value };
     });
+    setClickedCnt((prev) => prev + 1);
   };
 
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const dispatch = useDispatch();
-
   const selectedDateEvent = (elem: number, idx: number) => {
     const selectedDateInfo = {
-      year: dateYM.year.toString(),
-      month: (dateYM.month + 1).toString(),
-      dateNum: elem.toString(),
+      year: dateYM.year,
+      month: dateYM.month,
+      dateNum: elem,
       dayOfWeek: DAY_LIST[idx % 7],
     };
-
-    dispatch(setDate(selectedDateInfo));
+    setSelectedDateInfo(selectedDateInfo);
     openModal();
   };
 
-  /**
-   *
-   * 미완성 임시 구현
-   *
-   * @param date 일
-   * @param title 드라마 제목
-   * @returns 스케줄 표시 item
-   */
-  const returnSchduleItemComponent = (date: number, title: string) => {
-    for (const obj of dummyCalender) {
-      const approve = obj.approve;
+  const appliedListData = useSelector((state: RootState) => {
+    return state.appliedRoles.getMemberApplies.data;
+  });
 
-      if (date == obj.startDay && date === obj.endDay) {
-        return (
-          <SingleScheduleItem className={`${approve ? "approve" : ""} `}>
-            {title}
-          </SingleScheduleItem>
-        );
-      }
-      if (date == obj.startDay) {
-        return <StartScheduleItem className={`${approve ? "approve" : ""} `} />;
-      }
-      if (date === obj.endDay) {
-        return <EndScheduleItem className={`${approve ? "approve" : ""} `} />;
-      }
-      if (Math.ceil((obj.startDay + obj.endDay) / 2) === date) {
-        return (
-          <ScheduleItem className={`${approve ? "approve" : ""} `}>
-            {title}
-          </ScheduleItem>
-        );
-      }
-      if (obj.startDay < date && date < obj.endDay) {
-        return <ScheduleItem className={`${approve ? "approve" : ""} `} />;
-      }
+  const appliedList =
+    appliedListData[0].id <= 0 ? memberRoleFrontDummyData : appliedListData;
+
+  // 날짜 바꿀때마다 get 요청
+  useEffect(() => {
+    // YEAR , MONTH로 요청 보냈을떄 그에 대한 값만 준다는 가정, 백에 문의해봐야함
+    // 임시처리
+
+    /**
+     * test 코드 삭제해야함
+     */
+    if (!localStorage.getItem("token")) {
+      GetToken(0);
     }
+
+    dispatch(getMemberAppliedRoles(dateYM));
+  }, [clicketCnt]);
+
+  const CheckGotJob = (dateNum: number) => {
+    // 계속 순회중 추후 리팩토링 필요
+    // 오름차순 정렬이니까
+
+    const ComponentList = [];
+    const convertedList: MemberRoleFront[] = appliedList.sort(
+      (a: MemberRoleFront, b: MemberRoleFront) =>
+        a.calender.startDateNum - b.calender.startDateNum,
+    );
+
+    const ShootJobList = convertedList.filter(
+      (elem) =>
+        elem.calender.startDateNum === dateNum ||
+        (elem.calender.endDateNum >= dateNum &&
+          elem.calender.startDateNum <= dateNum),
+    );
+
+    // 들어갈 수 있는 컴포넌트 수 2로 고정 추후 리팩토링
+
+    for (let i = 0; i < ShootJobList.length; i++) {
+      if (i == 2) {
+        ComponentList.push(<Ellipsis />);
+        break;
+      }
+      ComponentList.push(
+        returnSchduleItemComponent(ScheduleType.SINGLE, ShootJobList[i]),
+      );
+    }
+
+    return (
+      <>
+        {ComponentList.map((elem, idx) => {
+          return <div key={idx}>{elem}</div>;
+        })}
+      </>
+    );
   };
 
   return (
@@ -148,16 +189,12 @@ export default function Scheduler() {
           <div className="dates">
             {weeklists.map((item, key) => {
               i++;
-
               return (
-                <Week $weekcnt={weeklists.length} className="week" key={key}>
+                <Week key={key} $weekcnt={weeklists.length} className="week">
                   {item.map((elem, key) => {
                     if (!elem) {
                       return <div key={key + i * 7} className="date"></div>;
                     }
-
-                    // 공고 없을때 returnSchduleItemComponent 로직 안타게 추가해야함
-                    // 확인하는 로직 필요
 
                     return (
                       <div
@@ -166,7 +203,7 @@ export default function Scheduler() {
                         onClick={() => selectedDateEvent(elem, key)}
                       >
                         <div id="date-num">{!elem ? "" : elem}</div>
-                        {returnSchduleItemComponent(elem, "title")}
+                        {CheckGotJob(elem)}
                       </div>
                     );
                   })}
@@ -187,7 +224,10 @@ export default function Scheduler() {
               }
             }}
           >
-            <ScheduleModal closeModal={closeModal} />
+            <ScheduleModal
+              selectedDateInfo={selectedDateInfo}
+              closeModal={closeModal}
+            />
           </ModalOverlay>
         </>
       ) : (
@@ -270,6 +310,7 @@ const CalenderContainer = styled.div<{ $daylistHeight: number }>`
 
   .dates {
     height: ${(props) => `${100 - props.$daylistHeight}%`};
+    overflow-y: hidden;
   }
 `;
 
@@ -281,14 +322,17 @@ const Week = styled.div<{ $weekcnt: number }>`
   width: 100%;
 
   .date {
-    width: calc(100% / 7);
+    position: relative;
+    /* width: var(--__dateWidth); */
+    width: var(--__dateWidth);
+
     box-sizing: border-box;
     border: none;
     border-right: solid 2px #333;
     background-color: transparent;
 
     font-weight: 900;
-
+    overflow-y: hidden;
     > * {
       box-sizing: border-box;
     }
@@ -298,75 +342,15 @@ const Week = styled.div<{ $weekcnt: number }>`
     }
 
     #date-num {
-      width: 100%;
+      height: 20px;
+      /* width: 100%; */
       padding-top: ${(props) => (props.$weekcnt > 5 ? "0em" : "0.3em")};
       padding-left: 0.3em;
       text-align: left;
       color: #fff;
+      box-sizing: content-box;
     }
   }
-`;
-
-const ScheduleItem = styled.div`
-  /* 스케줄표 border width 만큼 늘림 */
-  z-index: 2;
-  width: calc(100% + 2px);
-  height: 17px;
-
-  display: flex;
-  justify-content: center;
-  justify-items: center;
-  text-align: center;
-
-  background: #4f4f4f;
-
-  /* margin: 3px; */
-
-  color: #a7a7a7;
-  text-align: center;
-
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 900;
-  line-height: 153.846%;
-  letter-spacing: 0.13px;
-
-  position: relative;
-
-  #drama-title {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateY(-50%) translateX(-50%);
-    text-align: center;
-  }
-
-  &.approve {
-    background: #49e300;
-    color: #fff;
-  }
-
-  /* 시작하는 날 css */
-  .start {
-  }
-
-  /* 끝나는 날 css */
-  .end {
-  }
-`;
-
-const StartScheduleItem = styled(ScheduleItem)`
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-`;
-
-const EndScheduleItem = styled(ScheduleItem)`
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-`;
-
-const SingleScheduleItem = styled(ScheduleItem)`
-  border-radius: 20px;
 `;
 
 const ModalOverlay = styled.div`
@@ -381,3 +365,36 @@ const ModalOverlay = styled.div`
   justify-content: center;
   z-index: 10;
 `;
+
+// // 추후
+// const TestScheduleItem = styled.div<{ $dateCnt: number }>`
+//   /* 스케줄표 border width 만큼 늘림 */
+//   position: relative;
+//   z-index: 2;
+//   height: 20px;
+
+//   width: ${(props) => `calc( 100% * ${props.$dateCnt})`};
+
+//   justify-content: center;
+//   justify-items: center;
+
+//   background: #4f4f4f;
+//   text-overflow: ellipsis;
+//   overflow-y: hidden;
+//   overflow-x: hidden;
+//   text-overflow: ellipsis;
+
+//   color: #a7a7a7;
+
+//   font-size: 13px;
+//   font-style: normal;
+//   font-weight: 900;
+
+//   &.approve {
+//     background: #49e300;
+//     color: #fff;
+//   }
+//   span {
+//     width: 100%;
+//   }
+// `;

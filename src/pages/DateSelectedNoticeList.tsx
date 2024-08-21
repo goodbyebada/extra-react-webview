@@ -1,49 +1,107 @@
 import { styled } from "styled-components";
-import NavBar from "@components/custom/NavBar";
+
 import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useNavigate } from "react-router-dom";
-import { dummyJobPostList } from "@api/dummyData";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
+import { useEffect, useState } from "react";
+import jobPostAPI from "@api/jobPostAPI";
+import { JobPost } from "@api/interface";
+import Loading from "@components/Loading";
+import NotFoundPage from "@pages/Error/NotFound";
 
 /**
  * 날짜 선택시 화면
  * @returns
  */
 export default function DateSelectedNoticeList() {
+  const INIT_LOCAL_INFOLIST = [] as JobPost[];
+  const [localJobInfoLists, setLocalJobInfoLists] =
+    useState<JobPost[]>(INIT_LOCAL_INFOLIST);
+  const [loading, setIsLoading] = useState<boolean>(true);
+  const [notFound, setNotFound] = useState<boolean>(false);
+  // Nav Bar Content 삭제
   const selectedDate = useSelector(
     (state: RootState) => state.homeSelectedDate,
   );
 
-  const { year, month, dateNum } = selectedDate;
+  const { dateNum } = selectedDate;
 
-  const dateString = `${year}/${month}/${dateNum}`;
-  const navContent = `${dateString} 에 모집 중인 공고예요.`;
+  const jobListAboutYM = useSelector(
+    (state: RootState) => state.jobPosts.jobPostByCalender.data,
+  );
 
+  const selectedDataIdList = jobListAboutYM[dateNum];
+
+  // const dateString = `${year}/${month}/${dateNum}`;
+  // const navContent = `${dateString} 에 모집 중인 공고예요.`;
   // month에 따른 데이터들중 해당 날짜에 맞는 joblist만 고르는 로직 추가 필요
   // dummydata
-  const jobPostList = dummyJobPostList;
+
   const navigate = useNavigate();
 
   const navigateToExtraCastingBoard = (jobPostId: number) => {
+    console.log(jobPostId);
     const basePath = "/extra-casting-board";
     navigate(`${basePath}/${jobPostId}`);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      let finalList: (JobPost | null)[] = []; // 에러일 경우 null을 넣도록 변경
+
+      const fetch = async (id: number) => {
+        try {
+          const data = await jobPostAPI.getJobPostById(id);
+          return data;
+        } catch (error) {
+          console.error(`Error fetching job post with ID ${id}:`, error);
+          return null; // 에러 발생 시 null 반환
+        }
+      };
+
+      if (selectedDataIdList && selectedDataIdList.length > 0) {
+        finalList = await Promise.all(
+          selectedDataIdList.map((id) => fetch(id)),
+        );
+      }
+
+      // null 값(에러)을 제거하고 성공한 데이터만 남김
+      const filteredList = finalList.filter(
+        (item) => item !== null,
+      ) as JobPost[];
+
+      if (filteredList.length === 0) {
+        setNotFound(true);
+      } else {
+        setNotFound(false);
+        setLocalJobInfoLists(filteredList);
+      }
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [selectedDataIdList]);
+
   return (
     <Container>
-      <NavBar content={navContent} />
+      {/* <NavBar content={navContent} /> */}
 
       <ItemWrapper>
-        {jobPostList.map((elem, key) => {
-          return (
-            <HomeRecruitBox
-              navigate={() => navigateToExtraCastingBoard(elem.id)}
-              key={key}
-              recruitInfo={elem}
-            />
-          );
-        })}
+        {loading ? <Loading loading={loading} /> : ""}
+
+        {localJobInfoLists.length > 0 &&
+          localJobInfoLists.map((elem, key) => {
+            return (
+              <HomeRecruitBox
+                navigate={() => navigateToExtraCastingBoard(elem.id)}
+                key={key}
+                recruitInfo={elem}
+              />
+            );
+          })}
+
+        {!loading && notFound ? <NotFoundPage /> : ""}
       </ItemWrapper>
     </Container>
   );

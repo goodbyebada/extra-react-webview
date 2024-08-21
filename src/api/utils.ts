@@ -56,7 +56,7 @@ type AuthorizationMessage = {
 
 // get token from RN
 const requestToken = () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("accessToken");
   if (!token) {
     sendMessage({
       type: "REQUEST_AUTHORIZATION",
@@ -70,7 +70,7 @@ const requestToken = () => {
         const secretKey = import.meta.env.VITE_SECRET_KEY;
         if (verifyHmacSignature(encryptedData, signature, secretKey)) {
           const accessToken = decryptAccessToken(encryptedData, iv, secretKey);
-          localStorage.setItem("token", accessToken);
+          localStorage.setItem("accessToken", accessToken);
           return accessToken;
         }
       }

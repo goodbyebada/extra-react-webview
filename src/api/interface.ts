@@ -1,3 +1,5 @@
+export const BASE_URL = "https://test-server.store/api/v1";
+
 /**
  * JobPost API 관련 인터페이스
  * - 공고 생성
@@ -36,9 +38,9 @@ export interface JobPost {
   calenderList: string[];
   roleIdList: number[];
   roleNameList: string[];
-  costumeList: string[][]; // ? 백에서 구현됐는지 확인 필요
+  costumeList: string[]; // ? 백에서 구현됐는지 확인 필요
   sexList: boolean[];
-  roleAgeList: string[][]; // ? roleAgeList 백과 합의 안됨 추후 수정예정
+  roleAgeList: string[]; // ? roleAgeList 백과 합의 안됨 추후 수정예정
   limitPersonnelList: number[];
   currentPersonnelList: number[];
   seasonList: string[];
@@ -127,3 +129,83 @@ export const ApplyStatusLabel: { [key: number]: string } = {
   2: "미승인",
   3: "승인 완료",
 };
+
+export enum ResponseStatus {
+  "loading" = "LOAIDNG",
+  "fullfilled" = "FULFILLED",
+  "rejected" = "REJECTED",
+}
+
+export interface MemberRoleServer {
+  id: number;
+  jobPostId: number;
+  category: string;
+  calenderList: number[];
+  title: string;
+  gatheringTime: string; //시간
+  gatheringLocation: string;
+  name: string;
+  applyStatus: string;
+}
+
+export interface MemberRoleFront {
+  id: number;
+  jobPostId: number;
+  category: string;
+  title: string;
+  gatheringTime: string; //시간
+  gatheringLocation: string;
+  companyName: string;
+  status: string;
+  calender: {
+    startDateNum: number;
+    endDateNum: number;
+  };
+  // 만약 1일이라면 startDateNum == endDateNum
+}
+
+// 객체 타입 정의
+export type ScheduleElemType = {
+  id: number; // id가 숫자나 문자열일 수 있음
+  title: string;
+  dateNum: number; // dateNum이 숫자형인 경우
+  status: string; // status는 문자열로 가정
+};
+
+export enum ScheduleTypeStatusLabel {
+  "APPLIED" = "APPLIED",
+  "REJECTED" = "REJECTED",
+  "APPROVED" = "APPROVED",
+  "DEFAULT" = "DEFAULT",
+}
+
+export enum ScheduleType {
+  "SINGLE" = 0,
+  "START" = 1,
+  "END" = 2,
+  "MIDDLE" = 3,
+}
+
+export const SeasonLabel: { [key: string]: string } = {
+  SPRING: "봄",
+  SUMMER: "여름",
+  AUTUMN: "가을",
+  WINTER: "겨울",
+};
+
+export interface dateYM {
+  year: number;
+  month: number;
+}
+
+export interface QuryTypesWithPage extends dateYM {
+  pageNum: number;
+}
+
+export type ObjectType = {
+  [key: string]: number[];
+};
+export enum CalenderTypeFor {
+  "user" = 0,
+  "company" = 1,
+}

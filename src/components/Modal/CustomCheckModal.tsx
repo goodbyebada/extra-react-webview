@@ -1,69 +1,72 @@
-import React from "react";
-import PropTypes from "prop-types";
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import approval from "@assets/Approval.png";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/store";
+import { ResponseStatus } from "@api/interface";
+import Loading from "@components/Loading";
 
-interface ModalContent {
-  prefix: string;
-}
-
-const modalContent: Record<string, ModalContent> = {
-  supportComplete: {
-    prefix: "지원이",
-  },
-  supportCancel: {
-    prefix: "지원 취소가",
-  },
-};
-
-interface CompleteModalProps {
-  type: keyof typeof modalContent;
+interface customProps {
   closeModal: () => void;
 }
 
-const CompleteModal: React.FC<CompleteModalProps> = ({ type, closeModal }) => {
-  const content = modalContent[type];
+const CustomCheckModal = ({ closeModal }: customProps) => {
   const navigate = useNavigate();
+  const appliedData = useSelector(
+    (state: RootState) => state.appliedRoles.appliedRole,
+  );
 
-  // web에서는 정상작동
-  // RN 구현 따로 해야함
   const homePath = "/";
   const mySupportStatusPath = "/member/manage";
 
+  function ReturnMessage() {
+    switch (appliedData.status) {
+      case ResponseStatus.fullfilled:
+        return (
+          <>
+            지원이 <br /> 완료되었습니다!
+          </>
+        );
+      case ResponseStatus.rejected:
+        return <>{appliedData.error}</>;
+      default:
+        return <Loading loading={true} />;
+    }
+  }
+
   return (
-    <ModalContainer>
-      <MultiplyIcon src={multiply} onClick={closeModal} />
-      <ModalText>
-        {content.prefix} <br /> 완료되었어요!
-      </ModalText>
-      <ApprovalIcon src={approval} />
-      <ButtonContainer>
-        <Btn
-          onClick={() => {
-            navigate(homePath);
-          }}
-        >
-          홈 화면 가기
-        </Btn>
-        <Btn
-          onClick={() => {
-            navigate(mySupportStatusPath);
-          }}
-        >
-          내 지원 현황 보기
-        </Btn>
-      </ButtonContainer>
-    </ModalContainer>
+    <>
+      {appliedData.status === ResponseStatus.loading ? (
+        <Loading loading={true} />
+      ) : (
+        <ModalContainer>
+          <MultiplyIcon src={multiply} onClick={closeModal} />
+          <ModalText> {ReturnMessage()}</ModalText>
+          <ApprovalIcon src={approval} />
+          <ButtonContainer>
+            <Btn
+              onClick={() => {
+                navigate(homePath);
+              }}
+            >
+              홈 화면 가기
+            </Btn>
+            <Btn
+              onClick={() => {
+                navigate(mySupportStatusPath);
+              }}
+            >
+              내 지원 현황 보기
+            </Btn>
+          </ButtonContainer>
+        </ModalContainer>
+      )}
+    </>
   );
 };
 
-CompleteModal.propTypes = {
-  type: PropTypes.oneOf(Object.keys(modalContent)).isRequired,
-};
-
-export default CompleteModal;
+export default CustomCheckModal;
 
 const ModalContainer = styled.div`
   position: absolute;
