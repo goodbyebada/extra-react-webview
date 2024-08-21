@@ -43,7 +43,7 @@ function ManagerDashboard() {
       return;
     }
 
-    fetch(`${import.meta.env.VITE_SERVER_URL}api/v1/jobposts?page=0`, {
+    fetch(`${import.meta.env.VITE_SERVER_URL}api/v1/jobposts?page=2`, {
       method: "GET",
       headers: {
         Accept: "*/*",

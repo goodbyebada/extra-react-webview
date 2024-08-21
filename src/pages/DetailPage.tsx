@@ -6,7 +6,7 @@ import reviseIcon from "@assets/reviseIcon.png";
 import CompanyRoleModalUpdate from "@components/Modal/CompanyRoleModalUpdate";
 import CompanyRoleModalCreate from "@components/Modal/CompanyRoleModalCreate";
 import { JobPost } from "@api/interface";
-import RoleInfoComponent from "@components/custom/RoleInfo"; // Import the new component
+import RoleInfoComponent from "@components/custom/RoleInfo";
 
 interface RoleInfo {
   index: number;
@@ -55,40 +55,40 @@ function DetailPage() {
   const [selectedRoleName, setSelectedRoleName] = useState<string | null>(null);
   const [modalType, setModalType] = useState<"update" | "create">("update");
 
-  useEffect(() => {
-    const fetchJobPost = async () => {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        console.error("No access token found");
-        return;
-      }
+  const fetchJobPost = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      console.error("No access token found");
+      return;
+    }
 
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${id}`,
-          {
-            method: "GET",
-            headers: {
-              Accept: "*/*",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Accept: "*/*",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
-        );
+        },
+      );
 
-        if (!response.ok) {
-          throw new Error(`Failed to fetch job posts: ${response.statusText}`);
-        }
-
-        const data: JobPost = await response.json();
-        console.log("Job post fetched successfully:", data);
-        setJobPost(data);
-        setIsStatusIng(data.status);
-      } catch (error) {
-        console.error("Failed to fetch job posts", error);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch job posts: ${response.statusText}`);
       }
-    };
 
+      const data: JobPost = await response.json();
+      console.log("Job post fetched successfully:", data);
+      setJobPost(data);
+      setIsStatusIng(data.status);
+    } catch (error) {
+      console.error("Failed to fetch job posts", error);
+    }
+  };
+
+  useEffect(() => {
     fetchJobPost();
   }, [id]);
 
@@ -97,8 +97,50 @@ function DetailPage() {
     navigate(`/detail/${id}/applicants`, { state: { roleName, index } });
   };
 
-  const makeStatusDone = () => {
-    setIsStatusIng(false);
+  const makeStatusDone = async () => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      console.error("No access token found");
+      return;
+    }
+
+    try {
+      const updatedJobPost = {
+        ...jobPost,
+        status: false,
+      };
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            Accept: "*/*",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(updatedJobPost),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update job post status: ${response.statusText}`,
+        );
+      }
+
+      setJobPost((prevJobPost) => {
+        if (prevJobPost) {
+          return { ...prevJobPost, status: false };
+        }
+        return prevJobPost;
+      });
+
+      setIsStatusIng(false);
+      console.log("Job post status updated successfully.");
+    } catch (error) {
+      console.error("Failed to update job post status", error);
+    }
   };
 
   const handleRoleModalOpen = (
@@ -135,13 +177,18 @@ function DetailPage() {
   const handleRoleInfoClick = (roleName: string, index: number) => {
     const roleId = jobPost?.roleIdList[index];
     if (isRevisionVisible && roleId !== undefined) {
-      handleRoleModalOpen(roleId, roleName, "update"); // 수정 모달 오픈
+      handleRoleModalOpen(roleId, roleName, "update");
     } else {
       goToCheckApplicant(roleName, index);
     }
   };
 
-  const gatheringTime = jobPost?.gatheringTime?.substring(11, 16) || "Unknown";
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더함
+    const day = date.getDate();
+    return `${month}/${day}`;
+  };
 
   const roleGroups = jobPost ? groupRolesByName(jobPost) : {};
 
@@ -172,17 +219,36 @@ function DetailPage() {
         >
           {jobPost?.title}
         </p>
+        <p
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            borderRadius: "5px",
+            padding: "5px 10px",
+          }}
+        >
+          {jobPost?.category || "Unknown"}
+        </p>
       </div>
 
       <CustomBorder>
-        <p style={{ margin: 0, marginBottom: "5px" }}>{gatheringTime} 예정</p>
+        <p style={{ margin: 0, marginBottom: "5px" }}>
+          {jobPost?.gatheringTime}
+        </p>
         <Row>
           <p style={{ margin: 0, marginRight: "auto" }}>
             {jobPost?.gatheringLocation}
           </p>
-          <StatusBadge $status={isStatusIng}>
-            {jobPost?.status ? "모집중" : "모집마감"}
-          </StatusBadge>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <p style={{ margin: "0 10px 0 0" }}>
+              {jobPost?.calenderList?.map(formatDate).join(", ") ||
+                "캘린더 정보 없음"}
+            </p>
+            <StatusBadge $status={isStatusIng}>
+              {jobPost?.status ? "모집중" : "모집마감"}
+            </StatusBadge>
+          </div>
         </Row>
       </CustomBorder>
 
@@ -242,12 +308,14 @@ function DetailPage() {
                     roleId={selectedRoleId}
                     jobPostId={id}
                     roleName={selectedRoleName}
+                    onRoleUpdated={fetchJobPost}
                   />
                 ) : (
                   <CompanyRoleModalCreate
                     closeModal={handleRoleModalClose}
                     jobPostId={id}
                     roleName={selectedRoleName}
+                    onRoleCreated={fetchJobPost}
                   />
                 )}
               </div>
@@ -354,6 +422,7 @@ const CompleteRevButton = styled.button`
   border: none;
   margin-top: 10px;
   padding: 3px 8px;
+  margin-bottom: 30px;
 `;
 
 const RecruitDoneButton = styled.button`

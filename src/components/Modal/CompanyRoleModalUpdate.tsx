@@ -7,6 +7,7 @@ interface CompanyRoleModalUpdateProps {
   roleId: number;
   jobPostId?: string;
   roleName: string;
+  onRoleUpdated: () => void;
 }
 
 function CompanyRoleModalUpdate({
@@ -14,6 +15,7 @@ function CompanyRoleModalUpdate({
   roleId,
   jobPostId,
   roleName,
+  onRoleUpdated,
 }: CompanyRoleModalUpdateProps) {
   const [formState, setFormState] = useState<RoleBodyType>({
     id: roleId,
@@ -216,6 +218,7 @@ function CompanyRoleModalUpdate({
 
         if (response.status === 201) {
           console.log("PUT request successful, resource created.");
+          onRoleUpdated();
           closeModal();
         } else {
           console.error(`Failed to update role, status: ${response.status}`);

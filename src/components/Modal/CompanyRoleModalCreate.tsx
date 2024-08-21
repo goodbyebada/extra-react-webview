@@ -6,12 +6,14 @@ interface CompanyRoleModalCreateProps {
   closeModal: () => void;
   roleName: string;
   jobPostId?: string;
+  onRoleCreated: () => void;
 }
 
 const CompanyRoleModalCreate: React.FC<CompanyRoleModalCreateProps> = ({
   closeModal,
   roleName,
   jobPostId,
+  onRoleCreated,
 }) => {
   const [formState, setFormState] = useState<RoleBodyType>({
     id: 0,
@@ -166,6 +168,7 @@ const CompanyRoleModalCreate: React.FC<CompanyRoleModalCreateProps> = ({
 
         if (response.status === 201) {
           console.log("POST request successful, resource created.");
+          onRoleCreated();
           closeModal();
         } else {
           console.error(`Failed to create role, status: ${response.status}`);
