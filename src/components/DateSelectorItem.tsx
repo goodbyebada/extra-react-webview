@@ -135,4 +135,8 @@ const Container = styled.span`
       }
     }
   }
+
+  @media all and (max-width: 375px) {
+    font-size: 28px;
+  }
 `;

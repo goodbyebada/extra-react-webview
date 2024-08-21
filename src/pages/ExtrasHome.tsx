@@ -110,8 +110,8 @@ export const TopBar = styled.div`
   top: 0;
   z-index: 9;
   background-color: #000000;
-  padding-top: 43px;
-  width: 100vw;
+  padding-top: 25px;
+
   padding-bottom: 23px;
 
   nav {
@@ -128,5 +128,11 @@ export const TopBar = styled.div`
     letter-spacing: 0.2px;
     margin-top: 21px;
     top: 30px;
+  }
+
+  @media all and (max-width: 375px) {
+    h1 {
+      font-size: 18px;
+    }
   }
 `;

@@ -303,6 +303,11 @@ const CalenderContainer = styled.div<{ $daylistHeight: number }>`
     height: ${(props) => `${100 - props.$daylistHeight}%`};
     overflow-y: hidden;
   }
+
+  @media all and (max-width: 375px) {
+    width: 300px;
+    //스타일 설정
+  }
 `;
 
 const Week = styled.div<{ $weekcnt: number }>`

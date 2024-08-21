@@ -237,6 +237,10 @@ const CalenderContainer = styled.div<{ $daylistHeight: number }>`
   .dates {
     height: ${(props) => `${100 - props.$daylistHeight}%`};
   }
+  @media all and (max-width: 375px) {
+    width: 300px;
+    //스타일 설정
+  }
 `;
 
 const Week = styled.div<{ $weekcnt: number }>`
@@ -315,6 +319,23 @@ const Week = styled.div<{ $weekcnt: number }>`
 
     > * {
       box-sizing: border-box;
+    }
+  }
+
+  @media all and (max-width: 375px) {
+    .date {
+      width: 40px;
+      height: 40px;
+    }
+    #drama-num {
+      left: 20px !important;
+      bottom: 25px !important;
+      width: 20px !important;
+      height: 20px !important;
+      font-size: 13px !important;
+    }
+    #date-num {
+      font-size: 16px !important;
     }
   }
 `;
