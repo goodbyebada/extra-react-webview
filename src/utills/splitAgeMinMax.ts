@@ -1,5 +1,10 @@
 export default function splitAgeMinMax(roleAgeString: string) {
-  const [minAge, maxAge] = roleAgeString.split("~");
+  const list = roleAgeString.split("~");
+  const result = list
+    .map(function (x) {
+      return parseInt(x, 10);
+    })
+    .sort();
 
-  return { minAge: minAge, maxAge: maxAge };
+  return { minAge: result[0], maxAge: result[1] };
 }
