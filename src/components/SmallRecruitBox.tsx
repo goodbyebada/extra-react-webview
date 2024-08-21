@@ -4,7 +4,6 @@ import RecruitStatus from "@components/custom/smallRecuitStatus";
 // import { RootState } from "../redux/store";
 import { MemberRoleFront } from "@api/interface";
 import { ScheduleTypeStatusLabel } from "@api/interface";
-import gatheringTimeString from "@utills/returnGaterInfo";
 
 const SmallRecruitBox = ({ elem }: { elem: MemberRoleFront }) => {
   // const recruitStatus = useSelector(
@@ -76,7 +75,7 @@ const SmallRecruitBox = ({ elem }: { elem: MemberRoleFront }) => {
         {StatusUI(status)}
 
         <TimePlace>
-          {gatheringTimeString(gatheringTime)}
+          {gatheringTime}
           <br /> {gatheringLocation}
         </TimePlace>
       </RecruitBox>
