@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import dropDownBtn from "@assets/more-than-button.png";
 import { styled } from "styled-components";
 
@@ -14,6 +14,18 @@ export default function DateSelectorItem({
   dateHandler: (type: string, value: number) => void;
 }) {
   const [clicked, setClicked] = useState(false);
+  const ulRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    if (clicked && ulRef.current) {
+      const selectedIndex = modalList.findIndex((date) => date === value);
+      if (selectedIndex - 2 !== -1 && ulRef.current.children.length > 0) {
+        ulRef.current.scrollTo({
+          top: (selectedIndex - 2) * 24,
+        });
+      }
+    }
+  }, [clicked, value, modalList]);
 
   return (
     <Container>
@@ -28,8 +40,8 @@ export default function DateSelectorItem({
           <img src={dropDownBtn} alt="dropDownBtn" />
         </button>
 
-        {clicked ? (
-          <ul className="dropDown-list">
+        {clicked && (
+          <ul className="dropDown-list" ref={ulRef}>
             {modalList.map((date, key) => {
               return (
                 <li
@@ -39,13 +51,11 @@ export default function DateSelectorItem({
                     setClicked(false);
                   }}
                 >
-                  {date}
+                  <div className={date === value ? "selected" : ""}>{date}</div>
                 </li>
               );
             })}
           </ul>
-        ) : (
-          ""
         )}
       </span>
     </Container>
@@ -60,6 +70,15 @@ const Container = styled.span`
 
   > * {
     padding: 5px;
+  }
+
+  li {
+    display: flex;
+    justify-content: center;
+  }
+  .selected {
+    width: 50px;
+    border: 1px solid white;
   }
 
   .date-item {
