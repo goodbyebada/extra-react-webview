@@ -7,7 +7,7 @@ import { SeasonLabel } from "@api/interface";
  * @param selectedJobPostItem
  * @returns 역할 UI를 담은 UILIST 반환
  */
-const useRoleItemList = (selectedJobPostItem: JobPost) => {
+const RoleItemComponentList = (selectedJobPostItem: JobPost) => {
   const {
     roleNameList,
     costumeList,
@@ -43,4 +43,4 @@ const useRoleItemList = (selectedJobPostItem: JobPost) => {
   return <>{roleComponents}</>;
 };
 
-export default useRoleItemList;
+export default RoleItemComponentList;

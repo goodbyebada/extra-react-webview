@@ -8,7 +8,7 @@ import { RootState } from "@redux/store";
 import { fetchJobPostById } from "@redux/jobPost/jobPostSlice";
 import { AppDispatch } from "@redux/store";
 import Loading from "@components/Loading";
-import { Err } from "@components/Err";
+import NotFoundPage from "@pages/Error/NotFound";
 
 import ExtraCastsComponent from "@components/ExtraCastsCopmponent";
 import { ResponseStatus } from "@api/interface";
@@ -41,19 +41,15 @@ export default function ExtraCastingBoard() {
     fetch();
   }, [dispatch, jobPostId]);
 
-  const selectedJobPostItem = jobPostItem.data;
-  // console.log(jobPostItem);
-
   const Component = () => {
+    console.log(jobPostItem.status);
     switch (jobPostItem.status) {
       case ResponseStatus.loading:
         return <Loading loading={true} />;
       case ResponseStatus.fullfilled:
-        return (
-          <ExtraCastsComponent selectedJobPostItem={selectedJobPostItem} />
-        );
+        return <ExtraCastsComponent selectedJobPostItem={jobPostItem.data} />;
       case ResponseStatus.rejected:
-        return <Err />;
+        return <NotFoundPage />;
 
       default:
         return;

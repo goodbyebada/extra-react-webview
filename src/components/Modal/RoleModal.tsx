@@ -3,7 +3,10 @@ import multiply from "@assets/Multiply.png";
 import RoleBox from "@components/RoleBox";
 import { RoleListToShow } from "@api/interface";
 import { useState } from "react";
-import memberRolesAPI from "@api/memberRolesAPI";
+
+import { useDispatch } from "react-redux";
+import { appliedRole } from "@redux/memberRoles/memberRolesSlice";
+import { AppDispatch } from "@redux/store";
 
 type ModalProps = {
   handleApply: (value: boolean) => void;
@@ -26,28 +29,33 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
    */
   const DummyUser = {
     name: "미뇽",
-    sex: false,
+    sex: true,
   };
 
   const user = DummyUser;
+  const dispatch = useDispatch<AppDispatch>();
 
   const [isSelected, setSelected] = useState<boolean[]>(
     new Array(roleList.length).fill(false),
   );
+  const [selectedRoleId, setSelectedRoleId] = useState<number>(-1);
 
   // !!! 데이터 연결 문제 있음
   // !! 이미 접수 완료 되었을 시 모달 추가 해야함
-  const handleClick = async (idx: number) => {
+
+  /**
+   * 역할에 지원신청하고자 하는 유저 인터랙션 있을때마다 해당 역할에 대한 유저의 상태 확인한다.
+   * 정확하겠지만, 서버 부하 증가 예상
+   * @param idx
+   */
+
+  /**
+   * 여러개의 역할 중 하나만 선택될 수 있는 로직
+   */
+  const handleClick = (idx: number) => {
     const newArr = Array(roleList.length).fill(false);
     newArr[idx] = true;
     setSelected(newArr);
-
-    const fetch = async (roleId: number) => {
-      return await memberRolesAPI.postMemberRoles(roleId);
-    };
-
-    const res = await fetch(roleList[idx].roleId);
-    console.log(res);
   };
 
   /**
@@ -55,12 +63,16 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
    * roleList[idx].role_id로 접근 예정
    */
 
+  const postEvent = (id: number) => {
+    dispatch(appliedRole(id));
+  };
+
   return (
     <ModalContainer>
       <MultiplyIcon src={multiply} onClick={closeModal} />
 
       <RoleBoxWrapper>
-        {roleList.length &&
+        {roleList.length > 0 &&
           roleList.map((elem, idx) => {
             let styled = {
               borderColor: "#fff",
@@ -77,7 +89,10 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
                   key={idx}
                   index={idx}
                   roleInfo={elem}
-                  handleClick={handleClick}
+                  handleClick={() => {
+                    handleClick(idx);
+                    setSelectedRoleId(elem.roleId);
+                  }}
                   isSelected={isSelected[idx]}
                   styled={styled}
                 />
@@ -108,7 +123,12 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
         className={
           isSelected.find((elem) => elem === true) ? "" : "non-selected"
         }
-        onClick={() => handleApply(!!isSelected.find((elem) => elem === true))}
+        onClick={() => {
+          handleApply(!!isSelected.find((elem) => elem === true));
+          if (selectedRoleId > 0) {
+            postEvent(selectedRoleId);
+          }
+        }}
       >
         지원하기
       </Btn>

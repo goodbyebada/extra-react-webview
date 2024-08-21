@@ -39,10 +39,10 @@ const memberRolesAPI = {
   async postMemberRoles(roleId: number) {
     const requestHeaders: HeadersInit = new Headers();
 
-    if (!localStorage.getItem("token")) {
+    if (!localStorage.getItem("accessToken")) {
       GetToken(0);
     }
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem("accessToken");
 
     requestHeaders.set("Authorization", `Bearer ${token}`);
     requestHeaders.set("Accept", "*/*");
@@ -53,7 +53,17 @@ const memberRolesAPI = {
       headers: requestHeaders,
     });
 
-    return await this.handleResponse(response);
+    if (!response) {
+      throw new Error("No response from server");
+    }
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log(errorData);
+      throw new Error(errorData.message || "Unknown error occurred");
+    }
+
+    return { response: "good" };
   },
 };
 

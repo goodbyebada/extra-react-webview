@@ -24,8 +24,8 @@ export default function DateSelectedNoticeList() {
   const selectedDate = useSelector(
     (state: RootState) => state.homeSelectedDate,
   );
+
   const { dateNum } = selectedDate;
-  console.log(dateNum);
 
   const jobListAboutYM = useSelector(
     (state: RootState) => state.jobPosts.jobPostByCalender.data,

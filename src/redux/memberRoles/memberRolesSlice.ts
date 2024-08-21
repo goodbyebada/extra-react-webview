@@ -108,6 +108,7 @@ export const appliedRoleSlice = createSlice({
       })
       .addCase(appliedRole.rejected, (state, action) => {
         state.appliedRole.status = ResponseStatus.rejected;
+
         // 초기화
         state.appliedRole.error =
           action.error.message ||

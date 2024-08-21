@@ -6,7 +6,6 @@ import NavBar from "@components/custom/NavBar";
 import { JobPost } from "@api/interface";
 import RoleModal from "@components/Modal/RoleModal";
 import { useRef } from "react";
-import CompleteModal from "@components/Modal/CompleteModal";
 import { ReturnDateOfShooting } from "@utills/returnDateOfShooting";
 
 import { useDispatch } from "react-redux";
@@ -14,7 +13,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 
 import makeRoleList from "@utills/makeRoleList";
-import useRoleItemList from "@utills/useRoleItemList";
+import RoleItemComponentList from "@utills/RoleItemComponentList";
+
+import CustomCheckModal from "@components/Modal/CustomCheckModal";
 
 export default function ExtraCastsComponent({
   selectedJobPostItem,
@@ -22,6 +23,7 @@ export default function ExtraCastsComponent({
   selectedJobPostItem: JobPost;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -85,7 +87,7 @@ export default function ExtraCastsComponent({
       {/* 역할 / 상세정보 리스트 */}
       {/* 한 item, RoleItem 컴포넌트 */}
       <div className="role-list">
-        {selectedJobPostItem && useRoleItemList(selectedJobPostItem)}
+        {selectedJobPostItem && RoleItemComponentList(selectedJobPostItem)}
       </div>
 
       {/* 지원하기 버튼  */}
@@ -115,10 +117,7 @@ export default function ExtraCastsComponent({
                   roleList={makeRoleList(selectedJobPostItem)}
                 />
               ) : (
-                <CompleteModal
-                  closeModal={closeModal}
-                  type={"supportComplete"}
-                />
+                <CustomCheckModal closeModal={closeModal} />
               )}
             </Wrapper>
           </ModalOverlay>
