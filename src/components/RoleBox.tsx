@@ -1,5 +1,6 @@
 import { RoleItemToShow } from "@api/interface";
 import styled from "styled-components";
+import splitAgeMinMax from "@utills/splitAgeMinMax";
 
 interface RoleBoxProps {
   styled: { color: string; borderColor: string; backgroundColor: string };
@@ -28,6 +29,14 @@ const RoleBox = ({
   const { roleName, roleAge, sex } = roleInfo;
   const { borderColor, backgroundColor, color } = styled;
 
+  const roleString = (roleAge: string | null) => {
+    if (!roleAge) {
+      return "나이 무관";
+    }
+    const { minAge, maxAge } = splitAgeMinMax(roleAge);
+    return `${minAge}세 ~ ${maxAge}세`;
+  };
+
   const selectedStyled = {
     borderColor: "transparent",
     backgroundColor: `linear-gradient(#000, #000) padding-box,
@@ -46,7 +55,7 @@ const RoleBox = ({
         <InfoContainer color={isSelected ? selectedStyled.color : color}>
           <RoleTxt>{roleName}</RoleTxt>
           <Line />
-          <AgeTxt>{roleAge}</AgeTxt>
+          <AgeTxt>{roleString(roleAge)}</AgeTxt>
           <Line />
 
           <GenderTxt>{sex ? "여" : "남"}</GenderTxt>

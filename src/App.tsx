@@ -65,6 +65,7 @@ function App() {
             element={<ShowApplicant />}
           />
           <Route path="/add-notice" element={<AddNotice />} />
+
           <Route path="/*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

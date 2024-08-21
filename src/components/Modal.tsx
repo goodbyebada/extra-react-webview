@@ -27,8 +27,11 @@ const ModalBackdrop = styled.div.attrs<{ isVisible: boolean }>(
 
 const ModalContent = styled.div`
   background: #302e34;
-  padding: 20px;
-  border-radius: 8px;
+  padding-top: 48px;
+  padding-left: 32px;
+  padding-right: 32px;
+  padding-bottom: 10%;
+  border-radius: 30px;
   position: relative;
   z-index: 1001;
   width: 300px;

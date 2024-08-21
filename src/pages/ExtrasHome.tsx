@@ -3,30 +3,27 @@ import ToggleBar from "@components/ToggleBar";
 import TypeSelector from "@components/TypeSelector";
 import Calender from "@components/Calender";
 
-import HomeRecruitBox from "@components/HomeRecruitBox";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
-
-import { dummyJobPostList } from "@api/dummyData";
-import { JobPost } from "@api/interface";
-
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
+// import { GetToken } from "@api/GetToken";
 
 import { sendMessage } from "@api/utils";
 
-/**임시
- * API 개발 후 처리할 예정
- */
-const name = "미뇽";
+import List from "@pages/List";
 
+/**
+ * 회원 정보 수정할 것
+ */
 /**
  * 보조 출연자 홈화면
  *
  * @returns 보조 출연자 홈화면 UI
  */
 export default function ExtrasHome() {
+  const [name, setName] = useState("");
+
   // date 관련
   const date = new Date();
   const today = {
@@ -47,14 +44,6 @@ export default function ExtrasHome() {
         : { ...prev, [type]: value };
     });
   };
-
-  // 월 기준으로 API 호출 로직 추가 예정
-  //  list로 보기 시,infiniteScrolling으로 구현 해야함
-  // dummydata
-  const jobPostList = dummyJobPostList;
-
-  // navigate
-  //  const navigate = useNavigate();
 
   // 전체 || 추천
   const showRecommand = useSelector(
@@ -82,18 +71,35 @@ export default function ExtrasHome() {
     });
   };
 
-  // 리스트 보기 선택시 navigate
-  const navigateToExtraCastingBoard = (elem: JobPost) => {
-    const path = `/extra-casting-board/${elem.id}`;
-    //navigate(path);
-    sendMessage({
-      type: "NAVIGATION_DETAIL",
-      payload: {
-        uri: path,
-      },
-      version: "1.0",
-    });
-  };
+  useEffect(() => {
+    const userAgent = navigator.userAgent || navigator.vendor;
+
+    const listener = (event: MessageEvent) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "POST_DATA") {
+        setName(data.payload.name);
+      }
+    };
+
+    const isAndroid = /android/i.test(userAgent);
+    const isIOS = /iPad|iPhone|iPod/.test(userAgent);
+
+    if (isAndroid) {
+      document.addEventListener("message", listener as EventListener);
+    }
+    if (isIOS) {
+      window.addEventListener("message", listener);
+    }
+
+    return () => {
+      if (isAndroid) {
+        document.removeEventListener("message", listener as EventListener);
+      }
+      if (isIOS) {
+        window.removeEventListener("message", listener);
+      }
+    };
+  }, []);
 
   return (
     <Container className="extras-home">
@@ -111,25 +117,11 @@ export default function ExtrasHome() {
           <Calender
             dateYM={dateYM}
             dateYMHandler={dateYMHandler}
-            jobPostList={jobPostList}
             showRecommand={showRecommand}
             clickedDateEvent={navigateToSelectedNoticeList}
           />
         ) : (
-          <ItemWrapper>
-            {jobPostList.map((elem, key) => {
-              return (
-                <HomeRecruitBox
-                  navigate={() => {
-                    navigateToExtraCastingBoard(elem);
-                  }}
-                  key={key}
-                  recruitInfo={elem}
-                  recommand={showRecommand}
-                />
-              );
-            })}
-          </ItemWrapper>
+          <List dateYM={dateYM} showRecommand={showRecommand} />
         )}
       </Content>
     </Container>
@@ -139,13 +131,6 @@ export default function ExtrasHome() {
 const Container = styled.div``;
 
 const Content = styled.div``;
-
-const ItemWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 30px;
-`;
 
 export const TopBar = styled.div`
   padding: 0 22px;

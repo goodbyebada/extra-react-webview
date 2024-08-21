@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-// import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Modal from "../components/Modal";
+import Modal from "@components/Modal";
 import backIcon from "@assets/backIcon.png";
 import forwardIcon from "@assets/forwardIcon.png";
 import checkIcon from "@assets/checkIcon.png";
 // import { sendMessage } from "@api/utils";
-import { useNavigate } from "react-router-dom";
 
 const Row = styled.div`
   display: flex;
@@ -69,11 +68,11 @@ const ShowApplicant = () => {
   //   const { title } = useParams();
 
   const [roleName, setRoleName] = useState(
-    localStorage.getItem("role_name") || "",
+    localStorage.getItem("roleName") || "",
   );
 
   useEffect(() => {
-    const savedRoleName = localStorage.getItem("role_name");
+    const savedRoleName = localStorage.getItem("roleName");
 
     if (savedRoleName) setRoleName(savedRoleName);
   }, []);
@@ -186,7 +185,7 @@ const ShowApplicant = () => {
                   display: "flex",
                   gap: "12px",
                   marginLeft: "8px",
-                  marginBottom: "10px",
+                  marginBottom: "5px",
                 }}
               >
                 <p style={{ borderBottom: "1px solid white" }}>시간순</p>
@@ -283,7 +282,7 @@ const ShowApplicant = () => {
             )}
           </div>
 
-          <Row>
+          <Row style={{ marginTop: "30px", marginBottom: "-40px" }}>
             <CustomButton onClick={handleApprove}>승인</CustomButton>
             <CustomButton onClick={handleReject}>미승인</CustomButton>
           </Row>

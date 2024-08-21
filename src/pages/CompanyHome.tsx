@@ -3,8 +3,8 @@ import { styled } from "styled-components";
 import TypeSelector from "@components/TypeSelector";
 import { useState } from "react";
 import Calender from "@components/Calender";
-import { dummyJobPostList } from "@api/dummyData";
-import HomeRecruitBox from "@components/HomeRecruitBox";
+// import { dummyJobPostList } from "@api/dummyData";
+// import HomeRecruitBox from "@components/HomeRecruitBox";
 
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
@@ -39,7 +39,7 @@ export default function CompanyHome() {
   };
 
   // dummydata
-  const jobList = dummyJobPostList;
+  // const jobList = dummyJobPostList;
 
   // 캘린더 || 리스트
   const showAsCalender = useSelector(
@@ -75,13 +75,13 @@ export default function CompanyHome() {
           <Calender
             dateYM={dateYM}
             dateYMHandler={dateYMHandler}
-            jobPostList={jobList}
+            // jobPostList={jobList}
             showRecommand={false}
             clickedDateEvent={clickedDateEvent}
           />
         ) : (
           <ItemWrapper>
-            {jobList.map((elem, key) => {
+            {/* {jobList.map((elem, key) => {
               return (
                 <HomeRecruitBox
                   navigate={() => {
@@ -99,7 +99,7 @@ export default function CompanyHome() {
                   recommand={false}
                 />
               );
-            })}
+            })} */}
           </ItemWrapper>
         )}
       </div>
