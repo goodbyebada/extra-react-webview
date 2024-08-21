@@ -6,7 +6,7 @@ import {
 } from "@api/interface";
 import { MemberRoleServer } from "@api/interface";
 import memberRolesAPI from "@api/memberRolesAPI";
-import gatheringTimeString from "@utills/returnGaterInfo";
+import convertToDateNum from "@utills/convertToDateNum";
 import { dateYM } from "@api/interface";
 
 const initDate: MemberRoleFront = {
@@ -26,15 +26,18 @@ const initDate: MemberRoleFront = {
 
 const Convert = (arr: MemberRoleServer[]): MemberRoleFront[] => {
   const myScheduledList = arr.map((elem: MemberRoleServer) => {
+    console.log(elem.calenderList[0]);
     const newElem: MemberRoleFront = {
       id: elem.id,
       jobPostId: elem.jobPostId,
       category: elem.category,
       title: elem.title,
-      gatheringTime: gatheringTimeString(elem.gatheringTime),
+      gatheringTime: elem.gatheringTime,
       calender: {
-        startDateNum: elem.calenderList[0],
-        endDateNum: elem.calenderList[elem.calenderList.length - 1],
+        startDateNum: convertToDateNum(elem.calenderList[0].toString()),
+        endDateNum: convertToDateNum(
+          elem.calenderList[elem.calenderList.length - 1].toString(),
+        ),
       },
       gatheringLocation: elem.gatheringLocation,
       companyName: elem.name,
@@ -63,7 +66,7 @@ export const getMemberAppliedRoles = createAsyncThunk(
   "member/getMyAppliedRoles",
   async ({ year, month }: dateYM) => {
     const data = await memberRolesAPI.getAllmemberRoles(year, month);
-    console.log(`data 반환 : ${data}`);
+
     return data;
   },
 );
@@ -72,7 +75,7 @@ export const appliedRole = createAsyncThunk(
   "member/postMyAppliedRoles",
   async (roleId: number) => {
     const data = await memberRolesAPI.postMemberRoles(roleId);
-    console.log(`data 반환 : ${data}`);
+
     return data;
   },
 );
@@ -89,8 +92,8 @@ export const appliedRoleSlice = createSlice({
       })
       .addCase(getMemberAppliedRoles.fulfilled, (state, action) => {
         state.getMemberApplies.status = ResponseStatus.fullfilled;
-        console.log(action.payload.data);
-        state.getMemberApplies.data = Convert(action.payload.data);
+        console.log(action.payload);
+        state.getMemberApplies.data = Convert(action.payload);
         state.getMemberApplies.error = "";
       })
       .addCase(getMemberAppliedRoles.rejected, (state, action) => {

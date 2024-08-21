@@ -12,9 +12,7 @@ import { AppDispatch } from "@redux/store";
 import returnSchduleItemComponent from "@utills/returnScheduleItemComponent";
 
 import { MemberRoleFront, ScheduleType } from "@api/interface";
-import { memberRoleFrontDummyData } from "@api/dummyData";
 import Ellipsis from "@components/custom/Ellipsis";
-import { GetToken } from "@api/GetToken";
 import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
 
 /**
@@ -95,33 +93,26 @@ export default function Scheduler() {
   };
 
   const appliedListData = useSelector((state: RootState) => {
-    return state.appliedRoles.getMemberApplies.data;
+    return state.appliedRoles.getMemberApplies;
   });
 
-  const appliedList =
-    appliedListData[0].id <= 0 ? memberRoleFrontDummyData : appliedListData;
+  const appliedList = appliedListData.data;
 
   // 날짜 바꿀때마다 get 요청
   useEffect(() => {
     // YEAR , MONTH로 요청 보냈을떄 그에 대한 값만 준다는 가정, 백에 문의해봐야함
     // 임시처리
-
-    /**
-     * test 코드 삭제해야함
-     */
-    if (!localStorage.getItem("token")) {
-      GetToken(0);
-    }
-
     dispatch(getMemberAppliedRoles(dateYM));
-  }, [clicketCnt]);
+  }, [dispatch, clicketCnt, dateYM]);
 
   const CheckGotJob = (dateNum: number) => {
     // 계속 순회중 추후 리팩토링 필요
     // 오름차순 정렬이니까
 
     const ComponentList = [];
-    const convertedList: MemberRoleFront[] = appliedList.sort(
+
+    const updatedToDo = [...appliedList];
+    const convertedList: MemberRoleFront[] = updatedToDo.sort(
       (a: MemberRoleFront, b: MemberRoleFront) =>
         a.calender.startDateNum - b.calender.startDateNum,
     );
