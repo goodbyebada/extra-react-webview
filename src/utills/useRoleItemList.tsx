@@ -1,5 +1,6 @@
 import { JobPost } from "@api/interface";
 import RoleDetailItem from "@utills/RoleDetailItem";
+import { SeasonLabel } from "@api/interface";
 
 /**
  *
@@ -21,20 +22,20 @@ const useRoleItemList = (selectedJobPostItem: JobPost) => {
 
   // 서버 나이 현재 null 로 되어있음 나이 임시처리
   for (let i = 0; i < selectedJobPostItem.roleNameList.length; i++) {
-    let roleDefaultList = "나이 무관";
+    let roleDefaultList = null;
 
     if (roleAgeList !== null) {
-      roleDefaultList = selectedJobPostItem.roleAgeList[i][0];
+      roleDefaultList = selectedJobPostItem.roleAgeList[i];
     }
 
     roleComponents.push(
       RoleDetailItem(
         i,
         roleNameList[i],
-        costumeList[i],
+        costumeList[i].split(","),
         sexList[i],
         roleDefaultList,
-        seasonList[i],
+        SeasonLabel[seasonList[i]],
       ),
     );
   }

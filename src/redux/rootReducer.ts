@@ -46,7 +46,7 @@ const jobPostConfig = {
 const appliedRoleConfig = {
   key: "appliedRoles",
   storage,
-  whitelist: ["data"], // 상태 중 유지하고자 하는 값만 설정
+  whitelist: ["getMemberApplies","appliedRole"], // 상태 중 유지하고자 하는 값만 설정
 };
 
 // reducer 통합

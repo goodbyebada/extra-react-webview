@@ -95,7 +95,7 @@ export default function Scheduler() {
   };
 
   const appliedListData = useSelector((state: RootState) => {
-    return state.appliedRoles.data;
+    return state.appliedRoles.getMemberApplies.data;
   });
 
   const appliedList =

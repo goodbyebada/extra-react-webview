@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import splitAgeMinMax from "@utills/splitAgeMinMax";
 
 /*
  * return 한 역할 / 상세정보에 대한 UI
@@ -7,11 +8,19 @@ import { styled } from "styled-components";
 const RoleDetailItem = (
   idx: number,
   roleName: string,
-  costumeList: string[] | string,
+  costumeList: string[],
   sex: boolean,
-  roleAge: string,
+  roleAge: string | null,
   season: string,
 ) => {
+  const roleString = (roleAge: string | null) => {
+    if (!roleAge) {
+      return "나이 무관";
+    }
+    const { minAge, maxAge } = splitAgeMinMax(roleAge);
+    return `${minAge}세 ~ ${maxAge}세`;
+  };
+
   return (
     <RoleItem key={idx}>
       <h1 id="role-name">
@@ -28,7 +37,7 @@ const RoleDetailItem = (
 
             <li className="item">
               <div id="notice-num">2</div>
-              <p>나이 : {roleAge}</p>
+              <p>나이 : {roleString(roleAge)}</p>
             </li>
 
             <li className="item">
@@ -40,15 +49,13 @@ const RoleDetailItem = (
               <div id="notice-num">4</div>
               <p>
                 의상:
-                {/* {costumeList.length > 0 &&
-                    costumeList.map((elem, idx) => {
-                      if (costumeList.length === idx + 1) {
-                        return <span key={idx}>{elem}</span>;
-                      }
-                      return <span key={idx}>{elem},</span>;
-                    })} */}
-                <>{costumeList}</>
-                ~~예상 서버 값과 다름
+                {costumeList.length > 0 &&
+                  costumeList.map((elem, idx) => {
+                    if (costumeList.length === idx + 1) {
+                      return <span key={idx}>&nbsp;{elem}</span>;
+                    }
+                    return <span key={idx}> {elem},</span>;
+                  })}
               </p>
             </li>
           </ol>

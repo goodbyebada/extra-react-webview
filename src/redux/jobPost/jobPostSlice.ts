@@ -20,9 +20,9 @@ const defaultJobPost: JobPost = {
   calenderList: [],
   roleIdList: [],
   roleNameList: [],
-  costumeList: [[]], // 빈 배열을 감싼 배열로 초기화
+  costumeList: [], // 빈 배열을 감싼 배열로 초기화
   sexList: [],
-  roleAgeList: [[]], // 빈 배열을 감싼 배열로 초기화
+  roleAgeList: [], // 빈 배열을 감싼 배열로 초기화
   limitPersonnelList: [],
   currentPersonnelList: [],
   seasonList: [],

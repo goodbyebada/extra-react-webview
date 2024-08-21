@@ -53,7 +53,10 @@ const Convert = (arr: MemberRoleServer[]): MemberRoleFront[] => {
 };
 
 // 초기 상태
-const initialState = { status: "", data: [initDate], error: "" };
+const initialState = {
+  getMemberApplies: { status: "", data: [initDate], error: "" },
+  appliedRole: { status: "", error: "" },
+};
 
 // [회원]: 역할 전체 조회
 export const getMemberAppliedRoles = createAsyncThunk(
@@ -65,25 +68,50 @@ export const getMemberAppliedRoles = createAsyncThunk(
   },
 );
 
-const appliedRoleSlice = createSlice({
+export const appliedRole = createAsyncThunk(
+  "member/postMyAppliedRoles",
+  async (roleId: number) => {
+    const data = await memberRolesAPI.postMemberRoles(roleId);
+    console.log(`data 반환 : ${data}`);
+    return data;
+  },
+);
+
+export const appliedRoleSlice = createSlice({
   name: "appliedRoles",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getMemberAppliedRoles.pending, (state) => {
-        state.status = ResponseStatus.loading;
-        state.error = "";
+        state.getMemberApplies.status = ResponseStatus.loading;
+        state.getMemberApplies.error = "";
       })
       .addCase(getMemberAppliedRoles.fulfilled, (state, action) => {
-        state.status = ResponseStatus.fullfilled;
+        state.getMemberApplies.status = ResponseStatus.fullfilled;
         console.log(action.payload.data);
-        state.data = Convert(action.payload.data);
-        state.error = "";
+        state.getMemberApplies.data = Convert(action.payload.data);
+        state.getMemberApplies.error = "";
       })
       .addCase(getMemberAppliedRoles.rejected, (state, action) => {
-        state.status = ResponseStatus.rejected;
-        state.error = action.error.message || "Failed to fetch all job posts";
+        state.getMemberApplies.status = ResponseStatus.rejected;
+        state.getMemberApplies.error =
+          action.error.message || "Failed to fetch all job posts";
+      });
+
+    builder
+      .addCase(appliedRole.pending, (state) => {
+        state.appliedRole.status = ResponseStatus.loading;
+      })
+      .addCase(appliedRole.fulfilled, (state) => {
+        state.appliedRole.status = ResponseStatus.fullfilled;
+      })
+      .addCase(appliedRole.rejected, (state, action) => {
+        state.appliedRole.status = ResponseStatus.rejected;
+        // 초기화
+        state.appliedRole.error =
+          action.error.message ||
+          `Failed to fetch job post with id ${action.meta.arg}`;
       });
   },
 });

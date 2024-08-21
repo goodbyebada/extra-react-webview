@@ -23,7 +23,7 @@ export const GetToken = (status: number) => {
         if (token && token.startsWith("Bearer ")) {
           const accesToken = token.slice(7);
 
-          localStorage.setItem("token", accesToken);
+          localStorage.setItem("accessToken", accesToken);
         }
       }
     });

@@ -17,7 +17,7 @@ const makeRoleList = (selectedJobPostItem: JobPost) => {
     // 현재 서버 값에 대한 임시처리
     let roleDefaultList = "나이 무관";
     if (roleAgeList !== null) {
-      roleDefaultList = selectedJobPostItem.roleAgeList[i][0];
+      roleDefaultList = selectedJobPostItem.roleAgeList[i];
     }
 
     const Role: RoleItemToShow = {
