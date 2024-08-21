@@ -18,7 +18,7 @@ type ListProps = {
   showRecommand: boolean;
 };
 
-export default function List({ dateYM, showRecommand }: ListProps) {
+export default function ListComponent({ dateYM, showRecommand }: ListProps) {
   // 리스트 보기 선택시 navigate
 
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ export default function List({ dateYM, showRecommand }: ListProps) {
       fetchJobPostByList({
         year: dateYM.year,
         month: dateYM.month,
-        pageNum: 1,
+        pageNum: 0,
       }),
     );
 

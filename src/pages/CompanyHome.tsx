@@ -1,16 +1,19 @@
 import { TopBar } from "@pages/ExtrasHome";
 import { styled } from "styled-components";
 import TypeSelector from "@components/TypeSelector";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Calender from "@components/Calender";
 import { dummyJobPostList } from "@api/dummyData";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useRef } from "react";
-import CompanyModal from "@components/CompanyModal";
+import {
+  fetchJobPostByCalenderForCom,
+  fetchJobPostByListForCom,
+} from "@redux/company/companyJobPostSlice";
 import { useNavigate } from "react-router-dom";
 
-import { useSelector } from "react-redux";
-import { RootState } from "@redux/store";
+import { AppDispatch, RootState } from "@redux/store";
+import { useDispatch, useSelector } from "react-redux";
 
 /**
  *추후 수정 예정
@@ -25,6 +28,14 @@ export default function CompanyHome() {
     year: date.getFullYear(),
     month: date.getMonth(),
   };
+
+  const dispatch = useDispatch<AppDispatch>();
+  const calender = useSelector((state: RootState) => {
+    state.companyJobpost.jobPostByCalenderForCom;
+  });
+  const list = useSelector((state: RootState) => {
+    state.companyJobpost.jobPostByListForCom;
+  });
 
   /**
    * date.getMonth는 항상 원래 월보다 -1이다.
@@ -68,6 +79,32 @@ export default function CompanyHome() {
     openModal();
   };
 
+  useEffect(() => {
+    dispatch(fetchJobPostByCalenderForCom(dateYM));
+  }, [dispatch]);
+
+  
+
+  useEffect(() => {
+    dispatch(
+      fetchJobPostByListForCom({
+        year: dateYM.year,
+        month: dateYM.month,
+        pageNum: 0,
+      }),
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log("calender=====");
+    console.log(calender);
+  }, [calender]);
+
+  useEffect(() => {
+    console.log("list=====");
+    console.log(list);
+  }, [list]);
+
   return (
     <div className="company-home-container">
       <CompanyHomeTopBar>
@@ -102,21 +139,6 @@ export default function CompanyHome() {
               );
             })}
           </ItemWrapper>
-        )}
-
-        {isModalOpen && (
-          <>
-            <ModalOverlay
-              ref={modalRef}
-              onClick={(e) => {
-                if (modalRef !== null && e.target === modalRef.current) {
-                  closeModal();
-                }
-              }}
-            >
-              <CompanyModal jobList={jobList} />
-            </ModalOverlay>
-          </>
         )}
       </div>
     </div>

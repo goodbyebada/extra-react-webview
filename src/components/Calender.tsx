@@ -76,6 +76,8 @@ export default function Calender({
     }
   };
 
+  // 인피니트 스크롤링 관련
+
   const Component = () => {
     switch (gotJob.status) {
       case ResponseStatus.loading:

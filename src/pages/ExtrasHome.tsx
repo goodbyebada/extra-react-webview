@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import { GetToken } from "@api/GetToken";
 
-import List from "@pages/List";
+import ListComponent from "@pages/ListComponent";
 
 /**
  * 회원 정보 수정할 것
@@ -68,21 +68,6 @@ export default function ExtrasHome() {
     navigate(path);
   };
 
-  // const ReturnComponent = () => {
-  //   switch (jobPost.status) {
-  //     case ResponseStatus.loading:
-  //       return <Loading loading={true} />;
-
-  //     case ResponseStatus.fullfilled:
-
-  //     case ResponseStatus.rejected:
-  //       return <NotFoundPage />;
-
-  //     default:
-  //       return "";
-  //   }
-  // };
-
   useEffect(() => {
     // web일때
     GetToken(0);
@@ -108,7 +93,7 @@ export default function ExtrasHome() {
             clickedDateEvent={navigateToSelectedNoticeList}
           />
         ) : (
-          <List dateYM={dateYM} showRecommand={showRecommand} />
+          <ListComponent dateYM={dateYM} showRecommand={showRecommand} />
         )}
       </Content>
     </Container>
