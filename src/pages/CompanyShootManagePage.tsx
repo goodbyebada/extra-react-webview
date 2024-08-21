@@ -46,37 +46,68 @@ export default function CompanyShootManagePage() {
       { threshold: 1.0 },
     );
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
+    const currentObserverRef = observerRef.current;
+
+    if (currentObserverRef) {
+      observer.observe(currentObserverRef);
     }
 
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
+      if (currentObserverRef) {
+        observer.unobserve(currentObserverRef);
       }
     };
   }, [hasMore]);
 
   return (
     <ItemWrapper>
-      {jobPostList.map((jobPostInfo, index) => (
-        <AdminManageRecruitBox
-          key={index}
-          jobPostInfo={jobPostInfo}
-          navigate={() => {
-            sendMessage({
-              type: "NAVIGATION_MANAGE",
-              payload: {
-                job_post_id: jobPostInfo.id,
-                roleIdList: jobPostInfo.roleIdList,
-                roleNameList: jobPostInfo.roleNameList,
-                seasonList: jobPostInfo.seasonList,
-              },
-              version: "1.0",
-            });
-          }}
-        />
-      ))}
+      {jobPostList.map((jobPostInfo, index) => {
+        const today = new Date(Date.now());
+        today.setHours(0, 0, 0, 0); // 시간을 00:00:00으로 초기화하여 날짜 비교에만 집중
+
+        const isTargetDate = jobPostInfo.calenderList.some((dateStr) => {
+          const targetDate = new Date(dateStr);
+          targetDate.setHours(0, 0, 0, 0); // 시간을 00:00:00으로 초기화하여 날짜 비교에만 집중
+
+          const oneDayBefore = new Date(targetDate);
+          oneDayBefore.setDate(targetDate.getDate() - 1); // 전날 계산
+
+          // 전날 또는 당일인지 확인
+          return (
+            today.getTime() === targetDate.getTime() ||
+            today.getTime() === oneDayBefore.getTime()
+          );
+        });
+
+        return (
+          <AdminManageRecruitBox
+            key={index}
+            jobPostInfo={jobPostInfo}
+            navigate={() => {
+              if (isTargetDate) {
+                sendMessage({
+                  type: "NAVIGATION_MANAGE",
+                  payload: {
+                    jobPostId: jobPostInfo.id,
+                    roleIdList: jobPostInfo.roleIdList,
+                    roleNameList: jobPostInfo.roleNameList,
+                    seasonList: jobPostInfo.seasonList,
+                  },
+                  version: "1.0",
+                });
+              } else {
+                sendMessage({
+                  type: "NAVIGATION_DETAIL", // 다른 데이터로 전송하는 경우
+                  payload: {
+                    uri: `/detail/${jobPostInfo.id}`,
+                  },
+                  version: "1.0",
+                });
+              }
+            }}
+          />
+        );
+      })}{" "}
       {/* 감시 대상 요소 */}
       {hasMore && <div ref={observerRef} style={{ height: "20px" }} />}
     </ItemWrapper>

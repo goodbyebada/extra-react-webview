@@ -4,13 +4,13 @@ body,
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  overscroll-behavior: none;
+  overflow-x: hidden;
 }
 
 html {
   width: 100vw;
   height: 100vh;
-  overscroll-behavior: none;
+  overflow-x: hidden;
 }
 
 :root {

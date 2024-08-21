@@ -59,8 +59,11 @@ function App() {
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/applicants" element={<ShowApplicant />} />
           <Route path="/applicants/detail" element={<ApplicantDetail />} />
-          <Route path="/detail/:title" element={<DetailPage />} />
-          <Route path="/detail/:title/applicants" element={<ShowApplicant />} />
+          <Route path="/detail/:jobPostId" element={<DetailPage />} />
+          <Route
+            path="/detail/:jobPostId/applicants"
+            element={<ShowApplicant />}
+          />
           <Route path="/add-notice" element={<AddNotice />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>

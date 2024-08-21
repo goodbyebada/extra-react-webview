@@ -210,23 +210,36 @@ export default function ExtraCastingBoard() {
     openModal();
   };
 
+  const convertTime = (time: string) => {
+    const date = new Date(time);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${hours}:${minutes}`;
+  };
+
+  const convertDate = (date: string) => {
+    const dateObj = new Date(date);
+    const month = dateObj.getMonth() + 1;
+    const day = dateObj.getDate();
+    return `${month}/${day}`;
+  };
+
   return (
     <Container>
       <NavBar content={title} />
 
       <ShootingSchedule className="shooting-schedule">
         <div className="time-location-set">
-          <div>{gatheringTime} 예정</div>
+          <div>{convertTime(gatheringTime)} 예정</div>
           <div>{gatheringLocation}</div>
         </div>
         <div className="date-status-set">
           <StarIcon id="star" src={star} onClick={handleStarClick} />
 
           <div>
-            <span> {dateOfShotting}</span>
-
+            <span> {convertDate(dateOfShotting)}</span>
             {/* 추후 공통 컴포넌트의 모집중 컴포넌트로 통일 예정 */}
-            <span id="status"> {status ? "모집중" : "모집완료"}</span>
+            <span id="status">{status ? "모집중" : "모집완료"}</span>
           </div>
         </div>
       </ShootingSchedule>
@@ -309,7 +322,8 @@ const Container = styled.div`
 
 const ShootingSchedule = styled.div`
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 5px 20px;
   height: 120px;
 
   border: 1px solid #bababa;
@@ -326,7 +340,11 @@ const ShootingSchedule = styled.div`
   line-height: 100%;
 
   .time-location-set {
+    height: 50%;
     align-self: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
   }
   .date-status-set {
     height: 100%;
@@ -361,7 +379,7 @@ const ShootingSchedule = styled.div`
 
       width: min-content;
 
-      padding: 3px;
+      padding: 3px 5px;
       margin-left: 8px;
     }
   }

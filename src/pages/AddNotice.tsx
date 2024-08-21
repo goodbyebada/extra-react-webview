@@ -4,7 +4,11 @@ import styled from "styled-components";
 import CompanyRoleModal from "@/components/Modal/CompanyRoleModal";
 import CompanyTitleCategoryModal from "@components/Modal/CompanyTitleCategoryModal";
 import CompanyDateTimePlaceModal from "@components/Modal/CompanyDateTimePlaceModal";
-import type { RoleRegister } from "@api/interface";
+import {
+  SeasonEnum,
+  type CategoryEnum,
+  type RoleRegister,
+} from "@api/interface";
 import { requestPostFetch } from "@api/utils";
 import { useNavigate } from "react-router-dom";
 
@@ -96,7 +100,6 @@ const RoleInfo = styled.div`
   padding: 15px 20px;
   position: relative;
 `;
-
 function AddNotice() {
   const navigate = useNavigate();
 
@@ -106,7 +109,9 @@ function AddNotice() {
   );
 
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<
+    [keyof typeof CategoryEnum | null, string]
+  >([null, ""]);
 
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -128,7 +133,10 @@ function AddNotice() {
     setOpenModal(newOpenModal);
   };
 
-  const submitTitleCategoryModal = (title: string, category: string) => {
+  const submitTitleCategoryModal = (
+    title: string,
+    category: [keyof typeof CategoryEnum | null, string],
+  ) => {
     setTitle(title);
     setCategory(category);
   };
@@ -160,6 +168,7 @@ function AddNotice() {
     if (e.key === "Enter" && e.currentTarget.value !== "") {
       setRoleName([...roleName, e.currentTarget.value]);
       setRoleValue("");
+      setRoleList([...roleList, []]);
     }
   };
 
@@ -196,15 +205,16 @@ function AddNotice() {
     if (isSubmitting) return; // 이미 요청 중이면 실행하지 않음
     setIsSubmitting(true);
 
-    if (title && category && date && time && place) {
+    if (title && category[0] !== null && date && time && place) {
       try {
         const jobPostResponse = await requestPostFetch("jobposts", {
           title,
           gatheringLocation: place,
           gatheringTime: convertTime(date, time),
           imageUrl: "",
+          status: false,
           hourPay: 0,
-          category,
+          category: category[0],
         });
 
         if (jobPostResponse !== null) {
@@ -218,23 +228,34 @@ function AddNotice() {
             );
 
             if (scheduleResponse !== null) {
-              alert(`s: ${scheduleResponse.status}`);
               if (scheduleResponse.status === 201) {
                 const roleRequests = roleList.map((roles, index) =>
                   Promise.all(
-                    roles.map((r) =>
-                      requestPostFetch(`jobposts/${id}/roles`, {
-                        roleName: roleName[index],
-                        costume: r.costume,
-                        sex: r.sex,
-                        minAge: ageToBirthdate(r.min_age),
-                        maxAge: ageToBirthdate(r.max_age),
-                        limitPersonnal: r.limit_personnal,
-                        currentPersonnal: 0,
-                        season: r.season,
-                        tattoo: r.tattoo,
-                      }),
-                    ),
+                    roles.map(async (r) => {
+                      const postRole = async () => {
+                        const roleResponse = await requestPostFetch(
+                          `jobposts/${id}/roles`,
+                          {
+                            roleName: roleName[index],
+                            costume: r.costume,
+                            sex: r.sex,
+                            minAge: ageToBirthdate(r.min_age),
+                            maxAge: ageToBirthdate(r.max_age),
+                            limitPersonnel: r.limit_personnal,
+                            currentPersonnel: 0,
+                            season: r.season,
+                            tattoo: r.tattoo,
+                          },
+                        );
+
+                        if (roleResponse !== null) {
+                          if (roleResponse.status === 201) {
+                            return true;
+                          }
+                        }
+                      };
+                      postRole();
+                    }),
                   ),
                 );
                 await Promise.all(roleRequests);
@@ -309,7 +330,7 @@ function AddNotice() {
           width: "100%",
         }}
       >
-        {title.length > 0 && category.length > 0 ? (
+        {title.length > 0 && category[0] !== null ? (
           <Column
             style={{
               width: "90%",
@@ -345,7 +366,7 @@ function AddNotice() {
                   모집공고
                 </span>
               </button>
-              <div>{category}</div>
+              <div>{category[1]}</div>
             </div>
             <div
               style={{
@@ -436,58 +457,53 @@ function AddNotice() {
         {roleName.length > 0 &&
           roleName.map((name, index) => (
             <>
-              {roleList.length > 0 ? (
-                <>
-                  <p
-                    key={index}
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-start",
-                      alignItems: "center",
-                      width: "100%",
-                      textAlign: "left",
-                      marginLeft: "50px",
-                      marginBottom: "20px",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {index + 1}) {name} 역할
+              <p
+                key={index}
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  alignItems: "center",
+                  width: "100%",
+                  textAlign: "left",
+                  marginLeft: "50px",
+                  marginTop: "20px",
+                  marginBottom: "20px",
+                  fontWeight: "bold",
+                }}
+              >
+                {index + 1}) {name} 역할
+              </p>
+              {roleList[index].map((role, key) => (
+                <RoleInfo key={key}>
+                  <p>1. 성별: {role.sex ? "남" : "여"}</p>
+                  <p>
+                    2. 나이: {role.min_age}~{role.max_age}세
                   </p>
-                  {roleList[index].map((role, key) => (
-                    <RoleInfo key={key}>
-                      <p>1. 성별: {role.sex ? "남" : "여"}</p>
-                      <p>
-                        2. 나이: {role.min_age}~{role.max_age}세
-                      </p>
-                      <p>3. 계절: {role.season}</p>
-                      <p>4. 의상: {role.costume}</p>
-                      <p
-                        style={{
-                          position: "absolute",
-                          right: "10px",
-                          top: "15px",
-                          width: "50px",
-                          height: "50px",
-                          fontSize: "12px",
-                        }}
-                      >
-                        (0/{role.limit_personnal})
-                      </p>
-                    </RoleInfo>
-                  ))}
-                  <Container3
-                    onClick={() => {
-                      setCurrentIndex(index);
-                      handlePlusButtonClick(3);
+                  <p>3. 계절: {SeasonEnum[role.season]}</p>
+                  <p>4. 의상: {role.costume}</p>
+                  <p
+                    style={{
+                      position: "absolute",
+                      right: "10px",
+                      top: "15px",
+                      width: "50px",
+                      height: "50px",
+                      fontSize: "12px",
                     }}
                   >
-                    <p>+</p>
-                    <p>역할 상세 프로필</p>
-                  </Container3>
-                </>
-              ) : (
-                RoleRegisterContainer(index)
-              )}
+                    (0/{role.limit_personnal})
+                  </p>
+                </RoleInfo>
+              ))}
+              <Container3
+                onClick={() => {
+                  setCurrentIndex(index);
+                  handlePlusButtonClick(3);
+                }}
+              >
+                <p>+</p>
+                <p>역할 상세 프로필</p>
+              </Container3>
             </>
           ))}
         {RoleRegisterContainer(roleName.length)}

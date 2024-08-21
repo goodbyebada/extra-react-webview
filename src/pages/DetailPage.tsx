@@ -1,45 +1,79 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import backIcon from "@assets/backIcon.png";
 import reviseIcon from "@assets/reviseIcon.png";
-import { dummyRoleList } from "@api/dummyData";
-import { Role } from "@api/interface";
+// import { dummyRoleList } from "@api/dummyData";
+// import { JobPost } from "@api/interface";
 import CompanyRoleModal from "@components/Modal/CompanyRoleModal";
+import { requestGetFetch, sendMessage } from "@api/utils";
+import { RoleList } from "@api/interface";
 
 function DetailPage() {
   const navigate = useNavigate();
 
-  const { title } = useParams();
+  const { jobPostId } = useParams();
 
-  const [gatheringTime, setGatheringTime] = useState(
-    localStorage.getItem("gathering_time") || "",
-  );
-  const [gatheringLocation, setGatheringLocation] = useState(
-    localStorage.getItem("gathering_location") || "",
-  );
+  const [jobPost, setJobPost] = useState<{
+    id: number;
+    title: string;
+    gatheringLocation: string;
+    gatheringTime: string;
+    imageUrl: string;
+    status: boolean;
+    hourPay: number;
+    category: string;
+    companyName: string;
+  }>({
+    id: 0,
+    title: "",
+    gatheringLocation: "",
+    gatheringTime: "",
+    imageUrl: "",
+    status: true,
+    hourPay: 0,
+    category: "",
+    companyName: "",
+  });
+  const [roleList, setRoleList] = useState<RoleList>([]);
+
+  const loadData = useCallback(async () => {
+    await requestGetFetch(`jobposts/${jobPostId}`).then((res) => {
+      if (res !== null) {
+        if (res.status === 200) {
+          res.json().then((data) => {
+            setJobPost({
+              id: data.id,
+              title: data.title,
+              gatheringLocation: data.gatheringLocation,
+              gatheringTime: data.gatheringTime,
+              imageUrl: data.imageUrl,
+              status: data.status,
+              hourPay: data.hourPay,
+              category: data.category,
+              companyName: data.companyName,
+            });
+          });
+        }
+      }
+    });
+    await requestGetFetch(`jobposts/${jobPostId}/roles`).then((res) => {
+      if (res !== null) {
+        if (res.status === 200) {
+          res.json().then((data) => {
+            setRoleList(data);
+          });
+        }
+      }
+    });
+  }, [jobPostId]);
 
   useEffect(() => {
-    // localStorage에 모이는 시간과 장소를 저장하여 ShowApplicant 페이지에서 돌아올 때 정보 유지
-    const savedGatheringTime = localStorage.getItem("gathering_time");
-    const savedGatheringLocation = localStorage.getItem("gathering_location");
+    loadData();
+  }, [loadData]);
 
-    if (savedGatheringTime) setGatheringTime(savedGatheringTime);
-    if (savedGatheringLocation) setGatheringLocation(savedGatheringLocation);
-  }, []);
-
-  const roleList = dummyRoleList;
-
-  const goToCheckApplicant = ({ role_name }: Role) => {
-    localStorage.setItem("role_name", role_name);
-
-    navigate(`/detail/${title}/applicants`);
-  };
-
-  const [isStatusIng, setisStatusIng] = useState(true);
-
-  const makeStatusDone = () => {
-    setisStatusIng(false);
+  const goToCheckApplicant = (roleId: number) => {
+    navigate(`/detail/${roleId}/applicants`);
   };
 
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
@@ -52,7 +86,11 @@ function DetailPage() {
 
   // 이전페이지로 돌아가기
   const goBackManager = () => {
-    navigate("/manager-dashboard");
+    // navigate("/manager-dashboard");
+    sendMessage({
+      type: "HISTORY_BACK",
+      version: "1.0",
+    });
   };
 
   // 수정버튼을 누르면 나오는 "+역할 상세 프로필"이 보이는 유무
@@ -71,43 +109,78 @@ function DetailPage() {
     setCompleteRevVisible(false);
   };
 
-  let previousRoleName = "";
+  const convertTime = (time: string) => {
+    const date = new Date(time);
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+
+    return `${hour}:${minute}`;
+  };
 
   return (
     <>
-      <div
+      <Column
         style={{
-          display: "flex",
-          alignItems: "start",
-          padding: "10px",
-          position: "relative",
-          paddingTop: "50px",
+          width: "100%",
         }}
       >
-        <img
-          src={backIcon}
-          alt="back"
-          style={{ margin: "12px 10px 10px" }}
-          onClick={goBackManager}
-        />
-        <p
+        <div
           style={{
-            margin: "0 5px",
-            fontSize: "36px",
-            fontWeight: "600",
-            color: "#F5C001",
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-between",
           }}
         >
-          {title}
-        </p>
-      </div>
+          <button
+            onClick={goBackManager}
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <img
+              src={backIcon}
+              alt="back"
+              style={{
+                height: "1.5rem",
+                marginRight: "1rem",
+              }}
+            />
+            <span
+              style={{
+                color: "#fff",
+              }}
+            >
+              모집공고
+            </span>
+          </button>
+          <div>{jobPost.category}</div>
+        </div>
+        <div
+          style={{
+            marginTop: "2rem",
+            fontSize: "2rem",
+            fontWeight: "600",
+            color: "#F5C001",
+            marginBottom: ".5rem",
+            textAlign: "center",
+          }}
+        >
+          {jobPost.title}
+        </div>
+      </Column>
 
       <CustomBorder>
-        <p style={{ margin: 0, marginBottom: "5px" }}>{gatheringTime} 예정</p>
+        <p style={{ margin: 0, marginBottom: "5px" }}>
+          {jobPost.gatheringTime !== "" && convertTime(jobPost.gatheringTime)}{" "}
+          예정
+        </p>
         <Row>
-          <p style={{ margin: 0, marginRight: "auto" }}>{gatheringLocation}</p>
+          <p style={{ margin: 0, marginRight: "auto" }}>
+            {jobPost.gatheringLocation}
+          </p>
 
-          {isStatusIng ? (
+          {jobPost.status ? (
             <StatusBadge>모집중</StatusBadge>
           ) : (
             <StatusBadge>모집마감</StatusBadge>
@@ -131,34 +204,52 @@ function DetailPage() {
       </div>
 
       <Column>
-        {roleList.map((elem, key) => {
-          const { role_name, sex, role_age, season, costume } = elem;
+        {roleList.map((role, index) => {
+          const showRoleName =
+            index === 0 || roleList[index - 1].roleName !== role.roleName;
+          const showProfileButton =
+            index === roleList.length - 1 ||
+            roleList[index].roleName !== roleList[index + 1].roleName;
 
-          const DisplayRoleName = role_name !== previousRoleName;
-          previousRoleName = role_name;
           return (
-            <>
-              {DisplayRoleName && <RoleName>{role_name}</RoleName>}
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              {showRoleName && (
+                <RoleName>
+                  {index + 1}) {role.roleName} 역할
+                </RoleName>
+              )}
 
-              <RoleInfo onClick={() => goToCheckApplicant(elem)} key={key}>
+              <RoleInfo onClick={() => goToCheckApplicant(role.id)}>
                 <RoleDetail style={{ fontSize: "12px" }}>
-                  <p>1. 성별 : {sex === true ? "여" : "남"}</p>
-                  <p>2. 나이 : {role_age}</p>
-                  <p>3. 계절 : {season}</p>
-                  <p>4. 의상 : {costume}</p>
+                  <p>1. 성별 : {role.sex ? "남" : "여"}</p>
+                  <p>
+                    2. 나이 : {role.minAge}~{role.maxAge}
+                  </p>
+                  <p>3. 계절 : {role.season}</p>
+                  <p>4. 의상 : {role.costume}</p>
                 </RoleDetail>
               </RoleInfo>
 
-              {isRevisionVisible && (
+              {showProfileButton && isRevisionVisible && (
                 <DetailProfileButton onClick={handleRoleModalOpen}>
                   + 역할 상세 프로필
                 </DetailProfileButton>
               )}
-            </>
+            </div>
           );
         })}
 
-        <RecruitDoneButton onClick={makeStatusDone}>마감</RecruitDoneButton>
+        {jobPost.status && !isRevisionVisible && (
+          <RecruitDoneButton onClick={() => {}}>마감</RecruitDoneButton>
+        )}
 
         {isRoleModalOpen && (
           <CompanyRoleModal
@@ -222,10 +313,9 @@ const StatusBadge = styled.div`
 
 const RoleInfo = styled.div`
   background-color: #535255;
-  width: 380px;
+  width: 90%;
   height: 100px;
   margin-top: 20px;
-  margin-bottom: 10px;
   padding-left: 20px;
   cursor: pointer;
   font-size: 12px;
@@ -261,6 +351,8 @@ const DetailProfileButton = styled.button`
   height: 40px;
   text-align: center;
   margin-bottom: 15px;
+  margin: 0 auto;
+  margin-top: 20px;
 `;
 
 const CompleteRevButton = styled.button`
@@ -274,7 +366,7 @@ const CompleteRevButton = styled.button`
 
 const RecruitDoneButton = styled.button`
   color: #fff;
-  font-size: 20px;
+  font-size: 13px;
   font-weight: 700;
   margin-top: 30px;
   margin-bottom: 20px;

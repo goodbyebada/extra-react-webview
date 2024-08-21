@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import { RoleBodyType, TattooList } from "@api/interface";
+import { RoleRegister, SeasonEnum } from "@api/interface";
+// import { dummyRoleResister } from "@api/dummyData";
 
 /**
  * 관리자 공고 화면 역할 상세 프로필(역할 등록) 모달
@@ -9,23 +10,51 @@ import { RoleBodyType, TattooList } from "@api/interface";
  * 1. API 연결 시 역할 상세 프로필 등록과 수정 구분
  * 2. 데이터가 있다면 수정, 없다면 등록
  *
+ * 역할 등록 === 역할 생성
+ * roleBodyType으로 수정 부탁드립니다.
  */
 
 interface CompanyRoleModalProps {
+  onSubmit: (role: RoleRegister) => void;
   closeModal: () => void;
 }
 
-function CompanyRoleModal({ closeModal }: CompanyRoleModalProps) {
-  const [formState, setFormState] = useState<RoleBodyType>({
-    roleName: "",
+type TattooPart =
+  | "face"
+  | "chest"
+  | "arm"
+  | "leg"
+  | "shoulder"
+  | "back"
+  | "hand"
+  | "feet";
+
+type TattooNames = {
+  [key in TattooPart]: string;
+};
+
+const tattooNames: TattooNames = {
+  face: "얼굴",
+  chest: "가슴",
+  arm: "팔",
+  leg: "다리",
+  shoulder: "어깨",
+  back: "등",
+  hand: "손",
+  feet: "발",
+};
+
+function CompanyRoleModal({ onSubmit, closeModal }: CompanyRoleModalProps) {
+  const [formState, setFormState] = useState<RoleRegister>({
+    job_post_id: 1, // 임시, API 연결 시 수정
+    sex: true, // 남: true, 여: false
+    min_age: 0,
+    max_age: 0,
+    season: "SPRING",
     costume: "",
-    sex: false,
-    minAge: "00",
-    maxAge: "00",
-    limitPersonnel: 0,
-    currentPersonnel: 0,
-    season: "봄",
-    checkTattoo: {
+    etc: "",
+    limit_personnal: 0,
+    tattoo: {
       face: false,
       chest: false,
       arm: false,
@@ -46,11 +75,11 @@ function CompanyRoleModal({ closeModal }: CompanyRoleModalProps) {
   const handleGenderClick = (gender: string) => {
     setFormState((prevState) => ({
       ...prevState,
-      sex: gender === "여",
+      sex: gender === "남",
     }));
   };
 
-  const handleSeasonClick = (season: string) => {
+  const handleSeasonClick = (season: keyof typeof SeasonEnum) => {
     setFormState((prevState) => ({
       ...prevState,
       season,
@@ -58,259 +87,246 @@ function CompanyRoleModal({ closeModal }: CompanyRoleModalProps) {
   };
 
   const handleIncrement = (
-    field: keyof Pick<RoleBodyType, "minAge" | "maxAge" | "limitPersonnel">,
+    field: "min_age" | "max_age" | "limit_personnal",
   ) => {
-    setFormState((prevState) => {
-      const newValue = parseInt(prevState[field] as string, 10) + 1;
-      return {
-        ...prevState,
-        [field]:
-          field === "limitPersonnel"
-            ? newValue
-            : newValue.toString().padStart(2, "0"),
-      };
-    });
-  };
-
-  const handleDecrement = (
-    field: keyof Pick<RoleBodyType, "minAge" | "maxAge" | "limitPersonnel">,
-  ) => {
-    setFormState((prevState) => {
-      const newValue = Math.max(
-        parseInt(prevState[field] as string, 10) - 1,
-        0,
-      );
-      return {
-        ...prevState,
-        [field]:
-          field === "limitPersonnel"
-            ? newValue
-            : newValue.toString().padStart(2, "0"),
-      };
-    });
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-
-    if (name === "costume") {
+    setFormState((prevState) => ({
+      ...prevState,
+      [field]: prevState[field] + 1,
+    }));
+    if (field === "min_age" && formState.min_age >= formState.max_age) {
       setFormState((prevState) => ({
         ...prevState,
-        [name]: value,
-      }));
-    } else if (name === "minAge" || name === "maxAge") {
-      setFormState((prevState) => ({
-        ...prevState,
-        [name]: value.padStart(2, "0").slice(-2), // 한자리 숫자도 두자리로 변환, 최대 두자리로 제한
-      }));
-    } else if (name === "limitPersonnel") {
-      setFormState((prevState) => ({
-        ...prevState,
-        [name]: Math.max(parseInt(value, 10), 0),
+        max_age: prevState["max_age"] + 1,
       }));
     }
   };
 
-  const handleTattooClick = (part: keyof TattooList) => {
+  const handleDecrement = (
+    field: "min_age" | "max_age" | "limit_personnal",
+  ) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      [field]: prevState[field] > 0 ? prevState[field] - 1 : 0,
+    }));
+    if (field === "max_age" && formState.max_age <= formState.min_age) {
+      setFormState((prevState) => ({
+        ...prevState,
+        min_age: prevState["min_age"] > 0 ? prevState["min_age"] - 1 : 0,
+      }));
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleTattooClick = (part: TattooPart) => {
     setFormState((prevState) => {
-      const updatedTattoo = {
-        ...prevState.checkTattoo,
-        [part]: !prevState.checkTattoo[part],
-      };
+      const newTattoo = { ...prevState.tattoo };
+      newTattoo[part] = !newTattoo[part];
       return {
         ...prevState,
-        checkTattoo: updatedTattoo,
+        tattoo: newTattoo,
       };
     });
   };
 
   const handleSubmit = () => {
     if (isFormValid) {
-      console.log(formState);
+      onSubmit(formState);
       closeModal();
     }
   };
 
   useEffect(() => {
-    const { minAge, maxAge, season, costume, limitPersonnel } = formState;
+    const { min_age, max_age, costume, limit_personnal } = formState;
     const isValid =
-      parseInt(minAge, 10) > 0 &&
-      parseInt(maxAge, 10) > 0 &&
-      season !== "" &&
-      costume !== "" &&
-      limitPersonnel > 0;
+      min_age > 0 && max_age > 0 && costume !== "" && limit_personnal > 0;
     setIsFormValid(isValid);
   }, [formState]);
 
   return (
-    <ModalContainer>
-      <RoleBoxWrapper>
-        <Row>
-          <Txt>1.성별: </Txt>
-          <GenderButton
-            selected={!formState.sex}
-            onClick={() => handleGenderClick("남")}
-          >
-            남
-          </GenderButton>
-          <GenderButton
-            selected={formState.sex}
-            onClick={() => handleGenderClick("여")}
-          >
-            여
-          </GenderButton>
-        </Row>
-        <Row>
-          <Txt>2.나이: </Txt>
-          <CountInput
-            type="number"
-            name="minAge"
-            value={formState.minAge}
-            onChange={handleChange}
-          />
-          <CountControls>
-            <CountButton onClick={() => handleIncrement("minAge")}>
-              &lt;
-            </CountButton>
-            <LineSeparator />
-            <CountButton onClick={() => handleDecrement("minAge")}>
-              &gt;
-            </CountButton>
-          </CountControls>
-          <AgeSeparator>~</AgeSeparator>
-          <CountInput
-            type="number"
-            name="maxAge"
-            value={formState.maxAge}
-            onChange={handleChange}
-          />
-          <CountControls>
-            <CountButton onClick={() => handleIncrement("maxAge")}>
-              &lt;
-            </CountButton>
-            <LineSeparator />
-            <CountButton onClick={() => handleDecrement("maxAge")}>
-              &gt;
-            </CountButton>
-          </CountControls>
-        </Row>
-        <Row>
-          <Txt>3.계절: </Txt>
-          <SeasonButton
-            selected={formState.season === "봄"}
-            onClick={() => handleSeasonClick("봄")}
-            $first
-          >
-            봄
-          </SeasonButton>
-          <SeasonButton
-            selected={formState.season === "여름"}
-            onClick={() => handleSeasonClick("여름")}
-          >
-            여름
-          </SeasonButton>
-          <SeasonButton
-            selected={formState.season === "가을"}
-            onClick={() => handleSeasonClick("가을")}
-          >
-            가을
-          </SeasonButton>
-          <SeasonButton
-            selected={formState.season === "겨울"}
-            onClick={() => handleSeasonClick("겨울")}
-            $last
-          >
-            겨울
-          </SeasonButton>
-        </Row>
-        <Row>
-          <Txt>4.의상: </Txt>
-          <Input
-            name="costume"
-            spellCheck="false"
-            value={formState.costume}
-            onChange={handleChange}
-          />
-        </Row>
-        <Row>
-          <RowWithTattoo>
-            <Txt>5.문신여부: </Txt>
-            <TattooContainer>
-              <TattooRow>
-                {["face", "chest", "arm", "leg"].map((part, index) => (
-                  <TattooBox
-                    key={index}
-                    onClick={() => handleTattooClick(part as keyof TattooList)}
-                    selected={formState.checkTattoo[part as keyof TattooList]}
-                  >
-                    {part === "face"
-                      ? "얼굴"
-                      : part === "chest"
-                        ? "가슴"
-                        : part === "arm"
-                          ? "팔"
-                          : "다리"}
-                  </TattooBox>
-                ))}
-              </TattooRow>
-              <TattooRow>
-                {["shoulder", "back", "hand", "feet"].map((part, index) => (
-                  <TattooBox
-                    key={index}
-                    onClick={() => handleTattooClick(part as keyof TattooList)}
-                    selected={formState.checkTattoo[part as keyof TattooList]}
-                  >
-                    {part === "shoulder"
-                      ? "어깨"
-                      : part === "back"
-                        ? "등"
-                        : part === "hand"
-                          ? "손"
-                          : "발"}
-                  </TattooBox>
-                ))}
-              </TattooRow>
-            </TattooContainer>
-          </RowWithTattoo>
-        </Row>
-        <Row>
-          <Txt>6.인원: </Txt>
-          <CountInput
-            type="number"
-            name="limitPersonnel"
-            value={formState.limitPersonnel.toString().padStart(2, "0")}
-            onChange={handleChange}
-          />
-          <CountControls>
-            <CountButton onClick={() => handleIncrement("limitPersonnel")}>
-              &lt;
-            </CountButton>
-            <LineSeparator />
-            <CountButton onClick={() => handleDecrement("limitPersonnel")}>
-              &gt;
-            </CountButton>
-          </CountControls>
-        </Row>
-      </RoleBoxWrapper>
-      <Btn onClick={handleSubmit} $isValid={isFormValid}>
-        확인
-      </Btn>
-    </ModalContainer>
+    <ModalOverlay>
+      <ModalBackground onClick={closeModal} />
+      <ModalContainer>
+        <RoleBoxWrapper>
+          <Row>
+            <Txt>1.성별: </Txt>
+            <GenderButton
+              selected={formState.sex}
+              onClick={() => handleGenderClick("남")}
+            >
+              남
+            </GenderButton>
+            <GenderButton
+              selected={!formState.sex}
+              onClick={() => handleGenderClick("여")}
+            >
+              여
+            </GenderButton>
+          </Row>
+          <Row>
+            <Txt>2.나이: </Txt>
+            <CountDisplay>
+              {formState.min_age.toString().padStart(2, "0")}
+            </CountDisplay>
+            <CountControls>
+              <CountButton onClick={() => handleIncrement("min_age")}>
+                &lt;
+              </CountButton>
+              <LineSeparator />
+              <CountButton onClick={() => handleDecrement("min_age")}>
+                &gt;
+              </CountButton>
+            </CountControls>
+            <AgeSeparator>~</AgeSeparator>
+            <CountDisplay>
+              {formState.max_age.toString().padStart(2, "0")}
+            </CountDisplay>
+            <CountControls>
+              <CountButton onClick={() => handleIncrement("max_age")}>
+                &lt;
+              </CountButton>
+              <LineSeparator />
+              <CountButton onClick={() => handleDecrement("max_age")}>
+                &gt;
+              </CountButton>
+            </CountControls>
+          </Row>
+          <Row>
+            <Txt>3.계절: </Txt>
+            {Object.entries(SeasonEnum).map(([key, value], index) => (
+              <SeasonButton
+                key={index}
+                selected={formState.season === key}
+                onClick={() =>
+                  handleSeasonClick(key as keyof typeof SeasonEnum)
+                }
+                {...(index === 0 ? { $first: true } : {})}
+                {...(index === Object.keys(SeasonEnum).length - 1
+                  ? { $last: true }
+                  : {})}
+              >
+                {value}
+              </SeasonButton>
+            ))}
+          </Row>
+          <Row>
+            <Txt>4.의상: </Txt>
+            <Input
+              name="costume"
+              spellCheck="false"
+              value={formState.costume}
+              onChange={handleChange}
+            />
+          </Row>
+          <Row>
+            <RowWithTattoo>
+              <Txt>5.문신여부: </Txt>
+              <TattooContainer>
+                <TattooRow>
+                  {Object.keys(tattooNames)
+                    .splice(0, 4)
+                    .map((part, index) => {
+                      const typedPart = part as TattooPart;
+                      return (
+                        <TattooBox
+                          key={index}
+                          onClick={() => handleTattooClick(typedPart)}
+                          selected={formState.tattoo[typedPart]}
+                        >
+                          {tattooNames[typedPart]}
+                        </TattooBox>
+                      );
+                    })}
+                </TattooRow>
+                <TattooRow>
+                  {Object.keys(tattooNames)
+                    .splice(4, 8)
+                    .map((part, index) => {
+                      const typedPart = part as TattooPart;
+                      return (
+                        <TattooBox
+                          key={index}
+                          onClick={() => handleTattooClick(typedPart)}
+                          selected={formState.tattoo[typedPart]}
+                        >
+                          {tattooNames[typedPart]}
+                        </TattooBox>
+                      );
+                    })}
+                </TattooRow>
+              </TattooContainer>
+            </RowWithTattoo>
+          </Row>
+          <Row>
+            <Txt>6.기타사항: </Txt>
+            <Input
+              name="etc"
+              spellCheck="false"
+              value={formState.etc}
+              onChange={handleChange}
+            />
+          </Row>
+          <Row>
+            <Txt>7.인원: </Txt>
+            <CountDisplay>
+              {formState.limit_personnal.toString().padStart(2, "0")}
+            </CountDisplay>
+            <CountControls>
+              <CountButton onClick={() => handleIncrement("limit_personnal")}>
+                &lt;
+              </CountButton>
+              <LineSeparator />
+              <CountButton onClick={() => handleDecrement("limit_personnal")}>
+                &gt;
+              </CountButton>
+            </CountControls>
+          </Row>
+        </RoleBoxWrapper>
+        <Btn onClick={handleSubmit} $isValid={isFormValid}>
+          확인
+        </Btn>
+      </ModalContainer>
+    </ModalOverlay>
   );
 }
 
 export default CompanyRoleModal;
 
-const ModalContainer = styled.div`
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalBackground = styled.div`
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+`;
+
+const ModalContainer = styled.div`
   width: 343px;
   height: 518px;
   border-radius: 30px;
   background: #302e34;
-  z-index: 10;
+  z-index: 20;
+  position: relative;
 `;
 
 const RoleBoxWrapper = styled.div`
@@ -404,16 +420,10 @@ const Input = styled.input`
   box-sizing: border-box;
 `;
 
-const CountInput = styled.input`
-  width: 40px;
-  height: 25px;
-  border-radius: 5px;
-  background: #302e34;
+const CountDisplay = styled.div`
   color: #fff;
   font-size: 20px;
   font-weight: 900;
-  border: none;
-  text-align: center;
   margin-right: 8px;
 `;
 

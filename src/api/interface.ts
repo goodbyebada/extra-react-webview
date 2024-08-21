@@ -19,6 +19,17 @@ export interface JobPostRequest {
   category: string;
 }
 
+type Tattoo = {
+  face: boolean;
+  chest: boolean;
+  arm: boolean;
+  leg: boolean;
+  shoulder: boolean;
+  back: boolean;
+  hand: boolean;
+  feet: boolean;
+};
+
 /**
  * JobPost 단건 조회
  */
@@ -36,13 +47,13 @@ export interface JobPost {
   calenderList: string[];
   roleIdList: number[];
   roleNameList: string[];
-  costumeList: string[][]; // ? 백에서 구현됐는지 확인 필요
+  costumeList: string[]; // ? 백에서 구현됐는지 확인 필요
   sexList: boolean[];
-  roleAgeList: string[][]; // ? roleAgeList 백과 합의 안됨 추후 수정예정
+  roleAgeList: string[][] | null; // ? roleAgeList 백과 합의 안됨 추후 수정예정
   limitPersonnelList: number[];
   currentPersonnelList: number[];
   seasonList: string[];
-  checkTattooList: boolean[];
+  tattooList: Tattoo[];
 }
 
 /**
@@ -101,7 +112,7 @@ export type RoleRegister = {
   sex: boolean; // true: female, false: male
   min_age: number;
   max_age: number;
-  season: string;
+  season: keyof typeof SeasonEnum;
   costume: string;
   etc: string;
   limit_personnal: number;
@@ -150,16 +161,38 @@ export const ApplyStatusLabel: { [key: number]: string } = {
 };
 
 export type Role = {
-  role_id: number;
-  role_name: string;
+  id: number;
+  roleName: string;
   costume: string;
-  sex: boolean; // true: female, false: male
-  role_age: string;
-  limit_personnal: number;
-  current_personnal: number;
+  sex: boolean;
+  minAge: number;
+  maxAge: number;
+  limitPersonnel: number;
+  currentPersonnel: number;
   season: string;
-  check_tatto: boolean;
-  apply_status: string;
+  tattoo: Tattoo;
 };
 
 export type RoleList = Role[];
+
+export type CategoryEnumType = {
+  DRAMA: "드라마";
+  MOVIE: "영화";
+  ADVERTISEMENT: "광고";
+  MUSIC_VIDEO: "뮤비촬영";
+  ETC?: string;
+};
+
+export const CategoryEnum: CategoryEnumType = {
+  DRAMA: "드라마",
+  MOVIE: "영화",
+  ADVERTISEMENT: "광고",
+  MUSIC_VIDEO: "뮤비촬영",
+};
+
+export const SeasonEnum = {
+  SPRING: "봄",
+  SUMMER: "여름",
+  AUTUMN: "가을",
+  WINTER: "겨울",
+};

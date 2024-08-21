@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Modal from "@components/Modal";
+import { requestGetFetch, sendMessage } from "@api/utils";
+import { JobPost } from "@api/interface";
+import AdminManageRecruitBox from "@components/AdminManageRecruitBox";
 // import HomeRecruitBox from "@components/HomeRecruitBox";
 // import { dummyMonthJobList } from "@api/dummyData";
 // import { JobPost } from "@api/interface";
@@ -9,18 +12,59 @@ import Modal from "@components/Modal";
 function ManagerDashboard() {
   const navigate = useNavigate();
 
-  //   const goToDetail = ({
-  //     title,
-  //     gathering_time,
-  //     gathering_location,
-  //   }: JobPost) => {
-  //     localStorage.setItem("gathering_time", gathering_time);
-  //     localStorage.setItem("gathering_location", gathering_location);
+  const [jobPostList, setJobPostList] = useState<JobPost[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(0);
+  const observerRef = useRef<HTMLDivElement | null>(null);
 
-  //     navigate(`/detail/${title}`);
-  //   };
+  const loadData = useCallback(async () => {
+    try {
+      const res = await requestGetFetch(`jobposts?page=${page}`);
+      if (res !== null) {
+        if (res.status === 200) {
+          res.json().then((data) => {
+            if (data.length === 0) {
+              setHasMore(false); // 더 이상 데이터가 없으면 hasMore를 false로 설정
+            } else {
+              setJobPostList((prevList) => [...prevList, ...data]);
+            }
+          });
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [page]);
 
-  //   const jobPostList = dummyMonthJobList;
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  // IntersectionObserver 설정
+  useEffect(() => {
+    if (!hasMore) return; // 더 이상 로드할 데이터가 없을 때 실행 방지
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      },
+      { threshold: 1.0 },
+    );
+
+    const currentObserverRef = observerRef.current;
+
+    if (currentObserverRef) {
+      observer.observe(currentObserverRef);
+    }
+
+    return () => {
+      if (currentObserverRef) {
+        observer.unobserve(currentObserverRef);
+      }
+    };
+  }, [hasMore]);
 
   const goToAdd = () => {
     navigate("/add-notice");
@@ -74,19 +118,57 @@ function ManagerDashboard() {
           <p style={{ margin: "0 0" }}>내게만 보기</p>
         </div>
       </div>
+      <ItemWrapper>
+        {jobPostList.map((jobPostInfo, index) => {
+          const today = new Date(Date.now());
+          today.setHours(0, 0, 0, 0); // 시간을 00:00:00으로 초기화하여 날짜 비교에만 집중
 
-      {/* {jobPostList.map((elem, key) => {
-        return (
-          <Column>
-            <HomeRecruitBox
-              navigate={() => goToDetail(elem)}
-              key={key}
-              recruitInfo={elem}
+          const isTargetDate = jobPostInfo.calenderList.some((dateStr) => {
+            const targetDate = new Date(dateStr);
+            targetDate.setHours(0, 0, 0, 0); // 시간을 00:00:00으로 초기화하여 날짜 비교에만 집중
+
+            const oneDayBefore = new Date(targetDate);
+            oneDayBefore.setDate(targetDate.getDate() - 1); // 전날 계산
+
+            // 전날 또는 당일인지 확인
+            return (
+              today.getTime() === targetDate.getTime() ||
+              today.getTime() === oneDayBefore.getTime()
+            );
+          });
+
+          return (
+            <AdminManageRecruitBox
+              key={index}
+              jobPostInfo={jobPostInfo}
+              navigate={() => {
+                if (isTargetDate) {
+                  sendMessage({
+                    type: "NAVIGATION_MANAGE",
+                    payload: {
+                      jobPostId: jobPostInfo.id,
+                      roleIdList: jobPostInfo.roleIdList,
+                      roleNameList: jobPostInfo.roleNameList,
+                      seasonList: jobPostInfo.seasonList,
+                    },
+                    version: "1.0",
+                  });
+                } else {
+                  sendMessage({
+                    type: "NAVIGATION_DETAIL", // 다른 데이터로 전송하는 경우
+                    payload: {
+                      uri: `/detail/${jobPostInfo.id}`,
+                    },
+                    version: "1.0",
+                  });
+                }
+              }}
             />
-          </Column>
-        );
-      })}
- */}
+          );
+        })}{" "}
+        {/* 감시 대상 요소 */}
+        {hasMore && <div ref={observerRef} style={{ height: "20px" }} />}
+      </ItemWrapper>
       <Modal isVisible={isMOdalOPen} onClose={closeModal}>
         <p
           style={{
@@ -113,10 +195,14 @@ function ManagerDashboard() {
 
 export default ManagerDashboard;
 
-// const Column = styled.div`
-//   display: flex;
-//   justify-content: center;
-// `;
+const ItemWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+`;
 
 const PlusButton = styled.button`
   font-size: 30px;

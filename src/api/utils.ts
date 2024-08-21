@@ -70,7 +70,6 @@ const requestToken = (callback: (token: string) => void) => {
       const { iv, encryptedData } = data.payload;
       const secretKey = `${import.meta.env.VITE_SECRET_KEY}`;
       const accessToken = decryptAccessToken(encryptedData, iv, secretKey);
-      localStorage.setItem("token", accessToken);
       callback(accessToken);
     }
   };
@@ -101,13 +100,19 @@ const requestFetch = async (
   const URL = API_URL + url;
 
   try {
-    const res = await fetch(URL, {
-      method,
-      headers: requestHeaders,
-      body: data ? JSON.stringify(data) : undefined,
-    });
-
-    return res;
+    if (data !== undefined) {
+      requestHeaders.set("Content-Type", "application/json");
+      return await fetch(URL, {
+        method,
+        headers: requestHeaders,
+        body: JSON.stringify(data),
+      });
+    } else {
+      return await fetch(URL, {
+        method,
+        headers: requestHeaders,
+      });
+    }
   } catch (err) {
     console.error(err);
   }
@@ -115,16 +120,102 @@ const requestFetch = async (
   return null;
 };
 
-export const requestPostFetch = (url: string, data: object) => {
-  return requestFetch(url, "POST", data, {
-    "Content-Type": "application/json",
-  });
+// const requestFetch = async (
+//   url: string,
+//   method: string,
+//   data?: object,
+//   option?: object,
+// ) => {
+//   const loadCompanyToken = async () => {
+//     // 업체 로그인
+//     const res = await fetch(`${SERVER_URL}/api/v1/account/login`, {
+//       headers: {
+//         accept: "*/*",
+//         "Content-Type": "application/json",
+//       },
+//       method: "POST",
+//       body: JSON.stringify({
+//         email: "company@test.com",
+//         password: "qwer1234",
+//       }),
+//     });
+
+//     if (res.ok) {
+//       const token = res.headers.get("Authorization");
+//       if (token && token.startsWith("Bearer ")) {
+//         return token.slice(7);
+//       }
+//     }
+
+//     return null;
+//   };
+
+//   // const loadMemberToken = async () => {
+//   //   // 업체 로그인
+//   //   const res = await fetch(`${SERVER_URL}/api/v1/account/login`, {
+//   //     headers: {
+//   //       accept: "*/*",
+//   //       "Content-Type": "application/json",
+//   //     },
+//   //     method: "POST",
+//   //     body: JSON.stringify({
+//   //       email: "test@test.com",
+//   //       password: "qwer1234",
+//   //     }),
+//   //   });
+
+//   //   if (res.ok) {
+//   //     const token = res.headers.get("Authorization");
+//   //     if (token && token.startsWith("Bearer ")) {
+//   //       return token.slice(7);
+//   //     }
+//   //   }
+
+//   //   return null;
+//   // };
+
+//   const token = await loadCompanyToken();
+//   // const token = await loadMemberToken();
+
+//   if (token !== null) {
+//     const requestHeaders: HeadersInit = new Headers();
+//     requestHeaders.set("Authorization", `Bearer ${token}`);
+//     requestHeaders.set("Accept", "*/*");
+//     if (option) {
+//       Object.entries(option).forEach(([key, value]) => {
+//         requestHeaders.set(key, value);
+//       });
+//     }
+
+//     const URL = API_URL + url;
+
+//     try {
+//       if (data !== undefined) {
+//         requestHeaders.set("Content-Type", "application/json");
+//         return await fetch(URL, {
+//           method,
+//           headers: requestHeaders,
+//           body: JSON.stringify(data),
+//         });
+//       } else {
+//         return await fetch(URL, {
+//           method,
+//           headers: requestHeaders,
+//         });
+//       }
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   }
+//   return null;
+// };
+
+export const requestPostFetch = async (url: string, data: object) => {
+  return await requestFetch(url, "POST", data);
 };
 
 export const requestPutFetch = async (url: string, data: object) => {
-  return await requestFetch(url, "PUT", data, {
-    "Content-Type": "application/json",
-  });
+  return await requestFetch(url, "PUT", data);
 };
 
 export const requestGetFetch = async (url: string) => {

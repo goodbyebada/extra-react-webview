@@ -5,7 +5,8 @@ import Modal from "../components/Modal";
 import backIcon from "@assets/backIcon.png";
 import forwardIcon from "@assets/forwardIcon.png";
 import checkIcon from "@assets/checkIcon.png";
-import { sendMessage } from "@api/utils";
+// import { sendMessage } from "@api/utils";
+import { useNavigate } from "react-router-dom";
 
 const Row = styled.div`
   display: flex;
@@ -58,11 +59,10 @@ const CustomButton = styled.button`
 `;
 
 const ShowApplicant = () => {
+  const navigate = useNavigate();
+
   const goBackDetailPage = () => {
-    sendMessage({
-      type: "HISTORY_BACK",
-      version: "1.0",
-    });
+    navigate(-1);
   };
   //   const navigate = useNavigate();
 

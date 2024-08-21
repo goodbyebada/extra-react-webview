@@ -1,62 +1,90 @@
+import { useEffect } from "react";
 import { styled } from "styled-components";
+// import NavBar from "@components/custom/NavBar";
+import HomeRecruitBox from "@components/HomeRecruitBox";
+// import { useNavigate } from "react-router-dom";
+import { dummyJobPostList } from "@api/dummyData";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { dummyJobPostList } from "@api/dummyData";
-import { useEffect } from "react";
 import { sendMessage } from "@api/utils";
-import CompanyRecruitMiniBox from "@components/CompanyRecruitMiniBox";
 
-export default function CompanyDateSelectedPage() {
-  const jobList = dummyJobPostList;
-
-  // 선택된 날짜
+/**
+ * 날짜 선택시 화면
+ * @returns
+ */
+export default function DateSelectedNoticeList() {
   const selectedDate = useSelector(
     (state: RootState) => state.homeSelectedDate,
   );
+
+  const { year, month, dateNum } = selectedDate;
+
+  const dateString = `${year}/${month}/${dateNum}`;
+  const navContent = `${dateString} 에 모집 중인 공고예요.`;
+
+  // month에 따른 데이터들중 해당 날짜에 맞는 joblist만 고르는 로직 추가 필요
+  // dummydata
+  const jobPostList = dummyJobPostList;
+  // const navigate = useNavigate();
+
+  const navigateToExtraCastingBoard = (jobPostId: number) => {
+    const basePath = "/extra-casting-board";
+    // navigate(`${basePath}/${jobPostId}`);
+    sendMessage({
+      type: "NAVIGATION_DETAIL",
+      payload: {
+        uri: `${basePath}/${jobPostId}`,
+      },
+      version: "1.0",
+    });
+  };
 
   useEffect(() => {
     sendMessage({
       type: "POST_DATA",
       payload: {
-        date: selectedDate,
+        title: navContent,
       },
       version: "1.0",
     });
-  }, [selectedDate]);
+  }, [navContent]);
 
   return (
-    <JobListContainer>
-      {jobList.map((elem, key) => {
-        return (
-          <Wrapper key={key}>
-            <CompanyRecruitMiniBox
-              navigate={() => {
-                sendMessage({
-                  type: "NAVIGATION_DETAIL",
-                  payload: {
-                    uri: "/company-home/company-job-list/" + elem.id,
-                  },
-                  version: "1.0",
-                });
-              }}
+    <Container>
+      {/* <NavBar content={navContent} /> */}
+
+      <ItemWrapper>
+        {jobPostList.map((elem, key) => {
+          return (
+            <HomeRecruitBox
+              navigate={() => navigateToExtraCastingBoard(elem.id)}
+              key={key}
               recruitInfo={elem}
             />
-          </Wrapper>
-        );
-      })}
-    </JobListContainer>
+          );
+        })}
+      </ItemWrapper>
+    </Container>
   );
 }
 
-const JobListContainer = styled.ol`
-  overflow-y: scroll;
-  box-sizing: border-box;
-  background: #302e34;
-  padding: 0 20px;
+const Container = styled.div`
+  nav {
+    height: 95px;
+    background: #191919;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 111.111%;
+    letter-spacing: 0.18px;
+  }
 `;
 
-const Wrapper = styled.li`
-  list-style-type: none;
+const ItemWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  /* width: 100%; */
+  /* height: 100%; */
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
 `;

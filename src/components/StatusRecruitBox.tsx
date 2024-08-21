@@ -129,7 +129,7 @@ function StatusRecruitBox({
           const payload =
             recruitStatus === ShootManageSelectStatus.APPROVED
               ? {
-                  job_post_id: 1,
+                  roleId: shootManageInfo.id,
                 }
               : {
                   url: `/extra-casting-board/1`,

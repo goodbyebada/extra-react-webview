@@ -1,14 +1,18 @@
 import styled from "styled-components";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { CategoryEnum } from "@api/interface";
 
 interface CompanyTitleCategoryModalProps {
-  onSubmit: (title: string, category: string) => void;
+  onSubmit: (
+    title: string,
+    category: [keyof typeof CategoryEnum | null, string],
+  ) => void;
   closeModal: () => void;
 }
 
 export type TitleCategory = {
   title: string;
-  category: string;
+  category: [keyof typeof CategoryEnum | null, string];
 };
 
 function CompanyTitleCategoryModal({
@@ -17,15 +21,10 @@ function CompanyTitleCategoryModal({
 }: CompanyTitleCategoryModalProps) {
   const [formState, setFormState] = useState<TitleCategory>({
     title: "",
-    category: "",
+    category: [null, ""],
   });
   const [categoryInput, setCategoryInput] = useState("");
-  const [isFormValid, setIsFormValid] = useState(false);
-  const [boxes, setBoxes] = useState<string[]>([]);
-
-  useEffect(() => {
-    setIsFormValid(formState.title !== "" && formState.category !== "");
-  }, [formState]);
+  const [categoryList, setCategoryList] = useState(CategoryEnum);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -40,38 +39,25 @@ function CompanyTitleCategoryModal({
   };
 
   const handlePlusClick = () => {
-    if (categoryInput.trim() !== "" && !boxes.includes(categoryInput.trim())) {
-      setBoxes((prevBoxes) => [...prevBoxes, categoryInput.trim()]);
-      setCategoryInput("");
-    }
+    if (categoryInput === "") return;
+    const newCategoryList = { ...categoryList };
+    newCategoryList["ETC"] = categoryInput;
+    setCategoryList(newCategoryList);
+    setCategoryInput("");
   };
 
-  const handleCategoryClick = (category: string) => {
-    setFormState((prevState) => {
-      const newCategories = prevState.category
-        .split(",")
-        .map((cat) => cat.trim());
-      if (newCategories.includes(category)) {
-        // 이미 선택된 카테고리인 경우 제거
-        const updatedCategories = newCategories.filter(
-          (cat) => cat !== category,
-        );
-        return {
-          ...prevState,
-          category: updatedCategories.join(", "),
-        };
-      } else {
-        // 선택되지 않은 카테고리인 경우 추가
-        return {
-          ...prevState,
-          category: [...newCategories, category].join(", "),
-        };
-      }
-    });
+  const handleCategoryClick = (
+    key: keyof typeof CategoryEnum,
+    value: string,
+  ) => {
+    setFormState((prevState) => ({
+      title: prevState.title,
+      category: key === prevState.category[0] ? [null, ""] : [key, value],
+    }));
   };
 
   const handleSubmit = () => {
-    if (isFormValid) {
+    if (formState.title !== "" && formState.category[0] !== null) {
       onSubmit(formState.title, formState.category);
       closeModal();
     }
@@ -102,20 +88,25 @@ function CompanyTitleCategoryModal({
             <PlusBtn onClick={handlePlusClick}>+</PlusBtn>
           </Row>
           <BoxesContainer>
-            {boxes.map((box, index) => (
+            {Object.entries(categoryList).map(([key, value], index) => (
               <Box
                 key={index}
-                onClick={() => handleCategoryClick(box)}
-                $isSelected={formState.category
-                  .split(",")
-                  .map((cat) => cat.trim())
-                  .includes(box)}
+                onClick={() =>
+                  handleCategoryClick(key as keyof typeof CategoryEnum, value)
+                }
+                $isSelected={
+                  formState.category[0] !== null &&
+                  key === formState.category[0]
+                }
               >
-                <span>{box}</span>
+                <span>{value}</span>
               </Box>
             ))}
           </BoxesContainer>
-          <Btn $isValid={isFormValid} onClick={handleSubmit}>
+          <Btn
+            $isValid={formState.title !== "" && formState.category !== null}
+            onClick={handleSubmit}
+          >
             확인
           </Btn>
         </RoleBoxWrapper>
@@ -213,13 +204,13 @@ const BoxesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-left: 120px;
-  width: calc(100% - 120px);
+  width: 50%;
+  margin-left: 20px;
 `;
 
 const Box = styled.div<{ $isSelected: boolean }>`
-  width: 66px;
-  height: 23px;
+  width: 45%;
+  height: 20px;
   border-radius: 5px;
   background: ${(props) =>
     props.$isSelected ? "rgba(116, 116, 116, 0.4)" : "#747474"};
