@@ -35,9 +35,13 @@ export default function DateSelectedNoticeListForCom() {
 
   const navigate = useNavigate();
 
+  /**
+   * navigate하고 싶은 url 추가
+   * @param jobPostId
+   */
   const navigateToExtraCastingBoard = (jobPostId: number) => {
-    const basePath = "/detail";
-    navigate(`${basePath}/${jobPostId}`);
+    // const basePath = "/detail";
+    // navigate(`${basePath}/${jobPostId}`);
   };
 
   useEffect(() => {
@@ -88,7 +92,9 @@ export default function DateSelectedNoticeListForCom() {
           localJobInfoLists.map((elem, key) => {
             return (
               <HomeRecruitBox
-                navigate={() => navigateToExtraCastingBoard(elem.id)}
+                navigate={() => {
+                  navigateToExtraCastingBoard(elem.id);
+                }}
                 key={key}
                 recruitInfo={elem}
               />
