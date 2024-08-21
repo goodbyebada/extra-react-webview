@@ -130,6 +130,7 @@ export type RoleRegister = {
 
 export type ShootManage = {
   id: number;
+  jobPostId: number;
   category: string;
   title: string;
   gatheringTime: string;

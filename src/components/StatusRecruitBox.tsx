@@ -132,7 +132,7 @@ function StatusRecruitBox({
                   roleId: shootManageInfo.id,
                 }
               : {
-                  url: `/extra-casting-board/1`,
+                  url: `/extra-casting-board/${shootManageInfo.jobPostId}`,
                 };
           sendMessage({
             type:

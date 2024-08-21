@@ -340,7 +340,7 @@ const ShootingSchedule = styled.div`
   line-height: 100%;
 
   .time-location-set {
-    height: 50%;
+    height: "0px";
     align-self: center;
     display: flex;
     flex-direction: column;
