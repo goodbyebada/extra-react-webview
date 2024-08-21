@@ -226,6 +226,12 @@ const ShootingSchedule = styled.div`
   }
 
   @media all and (max-width: 400px) {
+    #star {
+      width: 30px !important;
+      height: 30px !important;
+      margin-top: 20px;
+    }
+
     .time-location-set {
       font-size: 15px;
       padding-left: 3px;
