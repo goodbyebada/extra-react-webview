@@ -10,6 +10,31 @@ function ManagerDashboard() {
   const [jobPostList, setJobPostList] = useState<JobPost[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // 페이지 마운트 시 토큰을 받아오는 함수 실행
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_SERVER_URL}api/v1/account/login`, {
+      method: "POST",
+      headers: {
+        Accept: "*/*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: "company1@naver.com",
+        password: "password",
+      }),
+    }).then((res) => {
+      if (res.status === 200) {
+        const token = res.headers.get("authorization");
+        if (token && token.startsWith("Bearer ")) {
+          const accesToken = token.slice(7);
+
+          localStorage.setItem("accessToken", accesToken);
+          console.log(accesToken);
+        }
+      }
+    });
+  }, []);
+
   // jobPost API 호출
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
@@ -43,11 +68,9 @@ function ManagerDashboard() {
       });
   }, []);
 
-  const goToDetail = ({ title, gatheringTime, gatheringLocation }: JobPost) => {
-    localStorage.setItem("gatheringTime", gatheringTime);
-    localStorage.setItem("gatheringLocation", gatheringLocation);
-
-    navigate(`/detail/${title}`);
+  const goToDetail = (jobPost: JobPost) => {
+    // 클릭한 아이템의 ID를 URL에 포함
+    navigate(`/detail/${jobPost.id}`);
   };
 
   const goToAdd = () => {

@@ -70,7 +70,8 @@ export type RoleListToShow = RoleItemToShow[];
  * - 역할 수정
  */
 export type RoleBodyType = {
-  roleName: string;
+  id: number;
+  roleName?: string;
   costume: string;
   sex: boolean;
   minAge: string;
@@ -78,7 +79,7 @@ export type RoleBodyType = {
   limitPersonnel: number;
   currentPersonnel: number;
   season: string;
-  checkTattoo: TattooList;
+  tattoo: TattooList;
 };
 
 export type TattooList = {

@@ -3,74 +3,146 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import backIcon from "@assets/backIcon.png";
 import reviseIcon from "@assets/reviseIcon.png";
-import { dummyJobPostList } from "@api/dummyData";
-import CompanyRoleModal from "@components/Modal/CompanyRoleModal";
+import CompanyRoleModalUpdate from "@components/Modal/CompanyRoleModalUpdate";
+import CompanyRoleModalCreate from "@components/Modal/CompanyRoleModalCreate";
+import { JobPost } from "@api/interface";
+
+interface RoleInfo {
+  index: number;
+  sex: boolean;
+  roleAge: string[];
+  season: string;
+  costume: string[];
+  currentPersonnel: number;
+  limitPersonnel: number;
+  roleId: number;
+}
+
+const groupRolesByName = (jobPost: JobPost): { [key: string]: RoleInfo[] } => {
+  const roleGroups: { [key: string]: RoleInfo[] } = {};
+
+  jobPost.roleNameList.forEach((roleName, index) => {
+    if (!roleGroups[roleName]) {
+      roleGroups[roleName] = [];
+    }
+
+    roleGroups[roleName].push({
+      index,
+      sex: jobPost.sexList[index],
+      roleAge: jobPost.roleAgeList[index] || [],
+      season: jobPost.seasonList[index],
+      costume: jobPost.costumeList[index] || [],
+      currentPersonnel: jobPost.currentPersonnelList[index],
+      limitPersonnel: jobPost.limitPersonnelList[index],
+      roleId: jobPost.roleIdList[index],
+    });
+  });
+
+  return roleGroups;
+};
 
 function DetailPage() {
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  const { title } = useParams();
-
-  const [gatheringTime, setGatheringTime] = useState(
-    localStorage.getItem("gatheringTime") || "",
-  );
-  const [gatheringLocation, setGatheringLocation] = useState(
-    localStorage.getItem("gatheringLocation") || "",
-  );
+  const [jobPost, setJobPost] = useState<JobPost | null>(null);
+  const [isStatusIng, setIsStatusIng] = useState(true);
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+  const [isRevisionVisible, setIsRevisionVisible] = useState(false);
+  const [isCompleteRevVisible, setCompleteRevVisible] = useState(false);
+  const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
+  const [selectedRoleName, setSelectedRoleName] = useState<string | null>(null);
+  const [modalType, setModalType] = useState<"update" | "create">("update");
 
   useEffect(() => {
-    // localStorage에 모이는 시간과 장소를 저장하여 ShowApplicant 페이지에서 돌아올 때 정보 유지
-    const savedGatheringTime = localStorage.getItem("gatheringTime");
-    const savedGatheringLocation = localStorage.getItem("gatheringLocation");
+    const fetchJobPost = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        console.error("No access token found");
+        return;
+      }
 
-    if (savedGatheringTime) setGatheringTime(savedGatheringTime);
-    if (savedGatheringLocation) setGatheringLocation(savedGatheringLocation);
-  }, []);
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${id}`,
+          {
+            method: "GET",
+            headers: {
+              Accept: "*/*",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
 
-  const jobPost = dummyJobPostList;
+        if (!response.ok) {
+          throw new Error(`Failed to fetch job posts: ${response.statusText}`);
+        }
+
+        const data: JobPost = await response.json();
+        console.log("Job post fetched successfully:", data);
+        setJobPost(data);
+        setIsStatusIng(data.status);
+      } catch (error) {
+        console.error("Failed to fetch job posts", error);
+      }
+    };
+
+    fetchJobPost();
+  }, [id]);
 
   const goToCheckApplicant = (roleName: string, index: number) => {
     localStorage.setItem("roleName", roleName);
-
-    navigate(`/detail/${title}/applicants`, { state: { roleName, index } });
+    navigate(`/detail/${id}/applicants`, { state: { roleName, index } });
   };
-
-  const [isStatusIng, setisStatusIng] = useState(true);
 
   const makeStatusDone = () => {
-    setisStatusIng(false);
+    setIsStatusIng(false);
   };
 
-  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
-  const handleRoleModalOpen = () => {
+  const handleRoleModalOpen = (
+    roleId: number,
+    roleName: string,
+    type: "update" | "create",
+  ) => {
+    setSelectedRoleId(roleId);
+    setSelectedRoleName(roleName);
+    setModalType(type);
     setIsRoleModalOpen(true);
   };
+
   const handleRoleModalClose = () => {
     setIsRoleModalOpen(false);
+    setSelectedRoleId(null);
+    setSelectedRoleName(null);
   };
 
-  // 이전페이지로 돌아가기
   const goBackManager = () => {
     navigate("/manager-dashboard");
   };
 
-  // 수정버튼을 누르면 나오는 "+역할 상세 프로필"이 보이는 유무
-  const [isRevisionVisible, setIsRevisionVisible] = useState(false);
-  // 수정완료 버튼 보이는 유무
-  const [isCompleteRevVisible, setCompleteRevVisible] = useState(false);
-
-  // 수정버튼을 눌렀을 때
   const handleReviseClick = () => {
     setIsRevisionVisible(true);
     setCompleteRevVisible(true);
   };
-  // 수정완료 버튼을 눌렀을 때
+
   const handleCompleteRev = () => {
     setIsRevisionVisible(false);
     setCompleteRevVisible(false);
   };
 
-  let previousRoleName = "";
+  const handleRoleInfoClick = (roleName: string, index: number) => {
+    const roleId = jobPost?.roleIdList[index];
+    if (isRevisionVisible && roleId !== undefined) {
+      handleRoleModalOpen(roleId, roleName, "update"); // 수정 모달 오픈
+    } else {
+      goToCheckApplicant(roleName, index);
+    }
+  };
+
+  const gatheringTime = jobPost?.gatheringTime?.substring(11, 16) || "Unknown";
+
+  const roleGroups = jobPost ? groupRolesByName(jobPost) : {};
 
   return (
     <>
@@ -97,20 +169,19 @@ function DetailPage() {
             color: "#F5C001",
           }}
         >
-          {title}
+          {jobPost?.title}
         </p>
       </div>
 
       <CustomBorder>
         <p style={{ margin: 0, marginBottom: "5px" }}>{gatheringTime} 예정</p>
         <Row>
-          <p style={{ margin: 0, marginRight: "auto" }}>{gatheringLocation}</p>
-
-          {isStatusIng ? (
-            <StatusBadge>모집중</StatusBadge>
-          ) : (
-            <StatusBadge>모집마감</StatusBadge>
-          )}
+          <p style={{ margin: 0, marginRight: "auto" }}>
+            {jobPost?.gatheringLocation}
+          </p>
+          <StatusBadge $status={isStatusIng}>
+            {jobPost?.status ? "모집중" : "모집마감"}
+          </StatusBadge>
         </Row>
       </CustomBorder>
       <div></div>
@@ -130,53 +201,65 @@ function DetailPage() {
       </div>
 
       <Column>
-        {jobPost.map((post) => (
-          <React.Fragment key={post.id}>
-            {post.roleNameList &&
-              post.roleNameList.map((roleName, index) => {
-                const sex = post.sexList[index];
-                const roleAge = post.roleAgeList[index];
-                const season = post.seasonList[index];
-                const costume = post.costumeList[index];
+        {Object.keys(roleGroups).map((roleName, roleIndex) => (
+          <React.Fragment key={roleName}>
+            <RoleName>
+              {roleIndex + 1}) {roleName}
+            </RoleName>
+            {roleGroups[roleName].map((role, index, array) => (
+              <React.Fragment key={role.index}>
+                <RoleInfo
+                  onClick={() => handleRoleInfoClick(roleName, role.index)}
+                >
+                  <RoleDetail style={{ fontSize: "12px" }}>
+                    <p>1. 성별 : {role.sex === true ? "여" : "남"}</p>
+                    <p>2. 나이 : {role.roleAge}</p>
+                    <p>3. 계절 : {role.season}</p>
+                    <p>4. 의상 : {role.costume}</p>
+                  </RoleDetail>
+                  <RolePersonnel>
+                    ({role.currentPersonnel}/{role.limitPersonnel})
+                  </RolePersonnel>
+                </RoleInfo>
 
-                const displayRoleName = roleName !== previousRoleName;
-                previousRoleName = roleName;
-
-                return (
-                  <React.Fragment key={`${post.id}-${index}`}>
-                    {displayRoleName && <RoleName>{roleName}</RoleName>}
-
-                    <RoleInfo
-                      onClick={() => goToCheckApplicant(roleName, index)}
-                    >
-                      <RoleDetail style={{ fontSize: "12px" }}>
-                        <p>1. 성별 : {sex === true ? "여" : "남"}</p>
-                        <p>2. 나이 : {roleAge}</p>
-                        <p>3. 계절 : {season}</p>
-                        <p>4. 의상 : {costume.join(", ")}</p>
-                      </RoleDetail>
-                    </RoleInfo>
-
-                    {isRevisionVisible && (
-                      <DetailProfileButton onClick={handleRoleModalOpen}>
-                        + 역할 상세 프로필
-                      </DetailProfileButton>
-                    )}
-                  </React.Fragment>
-                );
-              })}
+                {isRevisionVisible && index === array.length - 1 && (
+                  <DetailProfileButton
+                    onClick={() =>
+                      handleRoleModalOpen(role.roleId, roleName, "create")
+                    }
+                  >
+                    + 역할 상세 프로필
+                  </DetailProfileButton>
+                )}
+              </React.Fragment>
+            ))}
           </React.Fragment>
         ))}
 
         <RecruitDoneButton onClick={makeStatusDone}>마감</RecruitDoneButton>
 
-        {isRoleModalOpen && (
-          <ModalBackground onClick={handleRoleModalClose}>
-            <div onClick={(e) => e.stopPropagation()}>
-              <CompanyRoleModal closeModal={handleRoleModalClose} />
-            </div>
-          </ModalBackground>
-        )}
+        {isRoleModalOpen &&
+          selectedRoleId !== null &&
+          selectedRoleName !== null && (
+            <ModalBackground onClick={handleRoleModalClose}>
+              <div onClick={(e) => e.stopPropagation()}>
+                {modalType === "update" ? (
+                  <CompanyRoleModalUpdate
+                    closeModal={handleRoleModalClose}
+                    roleId={selectedRoleId}
+                    jobPostId={id}
+                    roleName={selectedRoleName}
+                  />
+                ) : (
+                  <CompanyRoleModalCreate
+                    closeModal={handleRoleModalClose}
+                    jobPostId={id}
+                    roleName={selectedRoleName}
+                  />
+                )}
+              </div>
+            </ModalBackground>
+          )}
 
         {isCompleteRevVisible && (
           <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -217,11 +300,11 @@ const Column = styled.div`
   align-items: center;
 `;
 
-const StatusBadge = styled.div`
+const StatusBadge = styled.div<{ $status: boolean }>`
   margin-left: auto;
   border-radius: 20px;
-  background-color: white;
-  color: black;
+  background-color: ${({ $status }) => ($status ? "#d9d9d9" : "#F00")};
+  color: ${({ $status }) => ($status ? "#000" : "#fff")};
   width: 42px;
   height: 20px;
   font-weight: bold;
@@ -229,6 +312,7 @@ const StatusBadge = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  border: 1px solid ${({ $status }) => ($status ? "#767676" : "#F00")};
 `;
 
 const RoleInfo = styled.div`
@@ -244,11 +328,21 @@ const RoleInfo = styled.div`
   border-radius: 10px;
   display: flex;
   align-items: center;
+  position: relative;
 `;
 
 const RoleDetail = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const RolePersonnel = styled.div`
+  position: absolute;
+  top: 7px;
+  right: 15px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
 `;
 
 const RoleName = styled.div`

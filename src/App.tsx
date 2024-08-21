@@ -40,8 +40,8 @@ function App() {
           <Route path="/member/manage" element={<ExtraShootManagePage />} />
 
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
-          <Route path="/detail/:title" element={<DetailPage />} />
-          <Route path="/detail/:title/applicants" element={<ShowApplicant />} />
+          <Route path="/detail/:id" element={<DetailPage />} />
+          <Route path="/detail/:id/applicants" element={<ShowApplicant />} />
           <Route path="/add-notice" element={<AddNotice />} />
 
           <Route path="/company/manage" element={<CompanyShootManagePage />} />

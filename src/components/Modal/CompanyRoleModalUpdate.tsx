@@ -2,37 +2,30 @@ import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import { RoleBodyType, TattooList } from "@api/interface";
 
-/**
- * 관리자 공고 화면 역할 상세 프로필(역할 등록) 모달
- *
- * 수정할 것
- * 1. API 연결 시 역할 상세 프로필 등록과 수정 구분
- * 2. 데이터가 있다면 수정, 없다면 등록
- *
- */
-
-interface CompanyRoleModalProps {
+interface CompanyRoleModalUpdateProps {
   closeModal: () => void;
-  roleId?: number; // 역할 ID를 prop으로 받기
+  roleId: number;
   jobPostId?: string;
+  roleName: string;
 }
 
-function CompanyRoleModal({
+function CompanyRoleModalUpdate({
   closeModal,
   roleId,
   jobPostId,
-}: CompanyRoleModalProps) {
+  roleName,
+}: CompanyRoleModalUpdateProps) {
   const [formState, setFormState] = useState<RoleBodyType>({
-    id: 0,
-    roleName: "",
+    id: roleId,
+    roleName: roleName,
     costume: "",
     sex: false,
     minAge: "00",
     maxAge: "00",
     limitPersonnel: 0,
     currentPersonnel: 0,
-    season: "봄",
-    checkTattoo: {
+    season: "SPRING",
+    tattoo: {
       face: false,
       chest: false,
       arm: false,
@@ -53,47 +46,45 @@ function CompanyRoleModal({
       return;
     }
 
-    if (roleId) {
-      fetch(
-        `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${jobPostId}/roles/${roleId}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
+    fetch(
+      `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${jobPostId}/roles/${roleId}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      )
-        .then((response) => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            console.error("Failed to fetch role data", response.statusText);
-            return null;
-          }
-        })
-        .then((data) => {
-          if (data) {
-            setFormState({
-              ...data,
-              checkTattoo: data.tattoo || {
-                face: false,
-                chest: false,
-                arm: false,
-                leg: false,
-                shoulder: false,
-                back: false,
-                hand: false,
-                feet: false,
-              },
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Failed to fetch role data", error);
-        });
-    }
+      },
+    )
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          console.error("Failed to fetch role data", response.statusText);
+          return null;
+        }
+      })
+      .then((data) => {
+        if (data) {
+          setFormState({
+            ...data,
+            tattoo: data.tattoo || {
+              face: false,
+              chest: false,
+              arm: false,
+              leg: false,
+              shoulder: false,
+              back: false,
+              hand: false,
+              feet: false,
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to fetch role data", error);
+      });
   }, [roleId, jobPostId]);
 
   const handleGenderClick = (gender: string) => {
@@ -154,7 +145,7 @@ function CompanyRoleModal({
     } else if (name === "minAge" || name === "maxAge") {
       setFormState((prevState) => ({
         ...prevState,
-        [name]: value.padStart(2, "0").slice(-2), // 한자리 숫자도 두자리로 변환, 최대 두자리로 제한
+        [name]: value.padStart(2, "0").slice(-2),
       }));
     } else if (name === "limitPersonnel") {
       setFormState((prevState) => ({
@@ -167,43 +158,71 @@ function CompanyRoleModal({
   const handleTattooClick = (part: keyof TattooList) => {
     setFormState((prevState) => {
       const updatedTattoo = {
-        ...prevState.checkTattoo,
-        [part]: !prevState.checkTattoo[part],
+        ...prevState.tattoo,
+        [part]: !prevState.tattoo[part],
       };
       return {
         ...prevState,
-        checkTattoo: updatedTattoo,
+        tattoo: updatedTattoo,
       };
     });
   };
 
-  const handleSubmit = () => {
+  const ageToBirthdate = (age: number): string => {
+    const currentYear = new Date().getFullYear();
+    const birthYear = currentYear - age;
+    return `${birthYear}-01-01`;
+  };
+
+  const handleSubmit = async () => {
     if (isFormValid) {
       const token = localStorage.getItem("accessToken");
       if (!token) {
         console.error("No access token found");
         return;
       }
-      const method = roleId ? "PUT" : "POST"; // 역할 ID가 있으면 수정, 없으면 등록
-      fetch(
-        `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${jobPostId}/roles/${roleId ? `${roleId}` : ""}`,
-        {
-          method,
-          headers: {
-            Accept: "*/*",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+
+      const minAge = parseInt(formState.minAge, 10);
+      const maxAge = parseInt(formState.maxAge, 10);
+
+      const minAgeBirthdate = ageToBirthdate(minAge);
+      const maxAgeBirthdate = ageToBirthdate(maxAge);
+
+      const dataToSend = {
+        roleName: formState.roleName,
+        costume: formState.costume,
+        sex: formState.sex,
+        minAge: minAgeBirthdate,
+        maxAge: maxAgeBirthdate,
+        limitPersonnel: formState.limitPersonnel,
+        currentPersonnel: formState.currentPersonnel,
+        season: formState.season,
+        tattoo: formState.tattoo,
+      };
+
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${jobPostId}/roles/${roleId}`,
+          {
+            method: "PUT",
+            headers: {
+              Accept: "*/*",
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(dataToSend),
           },
-          body: JSON.stringify(formState),
-        },
-      )
-        .then((response) => response.json())
-        .then(() => {
+        );
+
+        if (response.status === 201) {
+          console.log("PUT request successful, resource created.");
           closeModal();
-        })
-        .catch((error) => {
-          console.error("Failed to save role data", error);
-        });
+        } else {
+          console.error(`Failed to update role, status: ${response.status}`);
+        }
+      } catch (error) {
+        console.error("Failed to save role data", error);
+      }
     }
   };
 
@@ -317,7 +336,7 @@ function CompanyRoleModal({
                   <TattooBox
                     key={index}
                     onClick={() => handleTattooClick(part as keyof TattooList)}
-                    selected={formState.checkTattoo[part as keyof TattooList]}
+                    selected={formState.tattoo[part as keyof TattooList]}
                   >
                     {part === "face"
                       ? "얼굴"
@@ -334,7 +353,7 @@ function CompanyRoleModal({
                   <TattooBox
                     key={index}
                     onClick={() => handleTattooClick(part as keyof TattooList)}
-                    selected={formState.checkTattoo[part as keyof TattooList]}
+                    selected={formState.tattoo[part as keyof TattooList]}
                   >
                     {part === "shoulder"
                       ? "어깨"
@@ -375,7 +394,7 @@ function CompanyRoleModal({
   );
 }
 
-export default CompanyRoleModal;
+export default CompanyRoleModalUpdate;
 
 const ModalContainer = styled.div`
   position: absolute;
