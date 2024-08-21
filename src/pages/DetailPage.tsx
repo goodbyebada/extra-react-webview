@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import backIcon from "@assets/backIcon.png";
@@ -55,7 +55,7 @@ function DetailPage() {
   const [selectedRoleName, setSelectedRoleName] = useState<string | null>(null);
   const [modalType, setModalType] = useState<"update" | "create">("update");
 
-  const fetchJobPost = async () => {
+  const fetchJobPost = useCallback(async () => {
     const token = localStorage.getItem("accessToken");
     if (!token) {
       console.error("No access token found");
@@ -86,11 +86,11 @@ function DetailPage() {
     } catch (error) {
       console.error("Failed to fetch job posts", error);
     }
-  };
+  }, [id]);
 
   useEffect(() => {
     fetchJobPost();
-  }, [id]);
+  }, [id, fetchJobPost]);
 
   const goToCheckApplicant = (roleName: string, index: number) => {
     localStorage.setItem("roleName", roleName);
