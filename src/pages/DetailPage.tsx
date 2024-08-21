@@ -6,6 +6,7 @@ import reviseIcon from "@assets/reviseIcon.png";
 import CompanyRoleModalUpdate from "@components/Modal/CompanyRoleModalUpdate";
 import CompanyRoleModalCreate from "@components/Modal/CompanyRoleModalCreate";
 import { JobPost } from "@api/interface";
+import RoleInfoComponent from "@components/custom/RoleInfo"; // Import the new component
 
 interface RoleInfo {
   index: number;
@@ -184,7 +185,7 @@ function DetailPage() {
           </StatusBadge>
         </Row>
       </CustomBorder>
-      <div></div>
+
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <img
           src={reviseIcon}
@@ -208,20 +209,12 @@ function DetailPage() {
             </RoleName>
             {roleGroups[roleName].map((role, index, array) => (
               <React.Fragment key={role.index}>
-                <RoleInfo
-                  onClick={() => handleRoleInfoClick(roleName, role.index)}
-                >
-                  <RoleDetail style={{ fontSize: "12px" }}>
-                    <p>1. 성별 : {role.sex === true ? "여" : "남"}</p>
-                    <p>2. 나이 : {role.roleAge}</p>
-                    <p>3. 계절 : {role.season}</p>
-                    <p>4. 의상 : {role.costume}</p>
-                  </RoleDetail>
-                  <RolePersonnel>
-                    ({role.currentPersonnel}/{role.limitPersonnel})
-                  </RolePersonnel>
-                </RoleInfo>
-
+                <RoleInfoComponent
+                  role={role}
+                  roleName={roleName}
+                  index={role.index}
+                  onClick={handleRoleInfoClick}
+                />
                 {isRevisionVisible && index === array.length - 1 && (
                   <DetailProfileButton
                     onClick={() =>
@@ -329,20 +322,6 @@ const RoleInfo = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-`;
-
-const RoleDetail = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const RolePersonnel = styled.div`
-  position: absolute;
-  top: 7px;
-  right: 15px;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
 `;
 
 const RoleName = styled.div`
