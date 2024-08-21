@@ -56,54 +56,102 @@ const CustomButton = styled.button`
   color: white;
 `;
 
-const ShowApplicant = () => {
+const ShowApplicant = () => {   
     const navigate = useNavigate();
-
     const {title} = useParams();
-
-    const [roleName, setRoleName] = useState(localStorage.getItem('roleName') || '');
-
-    useEffect(() => {
-        const savedRoleName = localStorage.getItem('roleName');
-
-        if (savedRoleName) setRoleName(savedRoleName);
-    }, []);
-
 
     const goBackDetailPage = () => {
         navigate(`/detail/${title}`);
     }
 
+    // 무슨 역할인지 표시하기 위함
+    const [roleName, setRoleName] = useState(localStorage.getItem('roleName') || '');
+    // 지원자들
+    const [applicants, setApplicants] = useState<{ id: number; name: string }[]>([]);
+
+    useEffect(() => {
+        const savedRoleName = localStorage.getItem('roleName');
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            console.error("NO access token found");
+            return;
+        }
+
+        // 무슨 역할인지 표시하기 위함
+        if (savedRoleName) setRoleName(savedRoleName);
+
+        const fetchApplicants = async () => {
+            try {
+                const response = await fetch(
+                    `${import.meta.env.VITE_SERVER_URL}api/v1/application-request/company/roles/26/members`,
+                    {
+                        method: "GET",
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        }
+                    }
+                );
+
+
+                function parseJwt (token : string) {
+                    var base64Url = token.split('.')[1];
+                    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+                
+                    return JSON.parse(jsonPayload);
+                }
+                // 유효한 토큰인지 확인
+                const decodedToken = parseJwt(token);
+                if (decodedToken.exp * 1000 < Date.now()){
+                    console.error("token is expired");
+                } else {
+                    console.log("valid token");
+                }
+
+
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+
+                const data = await response.json();
+                setApplicants(data);
+
+            } catch (error) {
+                console.error("Failed to fetch applicants:", error);
+            }
+        };
+
+        fetchApplicants();
+    }, []);
+
+
+
     // 지원현황에서 각각의 지원자에 대한 상세 프로필을 보여주기 위한 모달
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
-    // 지원자들 전체
-    const [selectedApplicants, setSelectedApplicants] = useState<string[]>([]);
+    // 지원자들 전체 (id로 지원자들을 구분)
+    const [selectedApplicants, setSelectedApplicants] = useState<number[]>([]);
     // 상세 프로필을 위한 single applicant
-    const [selectedApplicant, setSelectedApplicant] = useState<string | null>(
-        null,
-    );
-    // 지원자들
-    const [applicants, setApplicants] = useState([
-        "Applicant 1",
-        "Applicant 2",
-        "Applicant 3",
-    ]);
+    const [selectedSingleApplicant, setSelectedSingleApplicant] = useState< {id: number; name: string} | null>(null);
 
-    // 선택된 지원자의 상세 프로필(이름)을 보여주기 위한 함수
-    const showApplicantDetail = (applicant: string) => {
-        setSelectedApplicant(applicant);
-        setIsDetailModalVisible(true);
-    };
+
+    // // 선택된 지원자의 상세 프로필(이름)을 보여주기 위한 함수
+    // const showApplicantDetail = (applicant: string) => {
+    //     setSelectedSingleApplicant(applicant);
+    //     setIsDetailModalVisible(true);
+    // };
+
     const closeApplicantDetail = () => {
         setIsDetailModalVisible(false);
     };
 
     // 지원현황에서 지원자들을 선택할 때
-    const toggleApplicantSelection = (applicant: string) => {
+    const toggleApplicantSelection = (id: number) => {
         setSelectedApplicants((prev) =>
-        prev.includes(applicant)
-            ? prev.filter((a) => a !== applicant)
-            : [...prev, applicant],
+        prev.includes(id)
+            ? prev.filter((id_) => id_ !== id)
+            : [...prev, id],
         );
     };
 
@@ -112,7 +160,7 @@ const ShowApplicant = () => {
         if (selectedApplicants.length === applicants.length) {
         setSelectedApplicants([]);
         } else {
-        setSelectedApplicants(applicants);
+        setSelectedApplicants(applicants.map((applicant) => applicant.id));
         }
     };
 
@@ -121,7 +169,8 @@ const ShowApplicant = () => {
         if (selectedApplicants.length === 0) {
         alert("지원자를 선택해주세요.");
         } else {
-        const approvedNames = selectedApplicants
+        const approvedNames = applicants
+            .filter((applicant) => selectedApplicants.includes(applicant.id))
             .map((applicant) => applicant)
             .join(", ");
         alert(`${approvedNames} 승인 완료!`);
@@ -131,7 +180,7 @@ const ShowApplicant = () => {
     // 미승인 버튼 구현
     const handleReject = () => {
         setApplicants((prev) =>
-        prev.filter((applicant) => !selectedApplicants.includes(applicant)),
+        prev.filter((applicant) => !selectedApplicants.includes(applicant.id)),
         );
         setSelectedApplicants([]);
     };
@@ -201,8 +250,8 @@ const ShowApplicant = () => {
                 <Column>
                     {applicants.map(applicant => (
                         <Applicant
-                            key={applicant}
-                            isSelected={selectedApplicants.includes(applicant)}
+                            key={applicant.id}
+                            isSelected={selectedApplicants.includes(applicant.id)}
                         >
                             <div style={{
                                 display: 'flex',
@@ -211,17 +260,17 @@ const ShowApplicant = () => {
                                 <img 
                                     src={checkIcon} 
                                     alt="selected"  
-                                    onClick={() => toggleApplicantSelection(applicant)}
+                                    onClick={() => toggleApplicantSelection(applicant.id)}
                                     style={{width: '15%', height: '15%', paddingRight: '10px'}}
                                 />
-                                {applicant}
+                                {applicant.name}
                             </div>
                             <img 
                                 src={forwardIcon} 
                                 alt="forward" 
                                 onClick={(e) => { 
                                     e.stopPropagation(); 
-                                    showApplicantDetail(applicant);
+                                    //showApplicantDetail(applicant);
                                 }}/>
                         </Applicant>
                     ))}
@@ -256,13 +305,14 @@ const ShowApplicant = () => {
                     marginBottom: '15px',
                     }}
                 >
-                    {selectedApplicant && 
-                        <p style={{
+                    {selectedSingleApplicant && 
+                        <p 
+                        style={{
                             fontSize: '18px', 
                             fontWeight: '600',
                             }}
                         >
-                            이름 : {selectedApplicant}
+                            이름 : {selectedSingleApplicant.name}
                         </p>
                     }
                 </div>

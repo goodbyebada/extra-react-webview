@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Modal from "@components/Modal";
@@ -8,6 +8,31 @@ import { JobPost } from "@api/interface";
 
 
 function ManagerDashboard() {
+
+  // useEffect(() => {
+  //   fetch(`${import.meta.env.VITE_SERVER_URL}api/v1/account/login`, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "*/*",
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       email: "company2@naver.com",
+  //       password: "password",
+  //     }),
+  //   }).then((res) => {
+  //     if (res.status === 200) {
+  //       const token = res.headers.get("authorization");
+  //       if (token && token.startsWith("Bearer ")) {
+  //         const accesToken = token.slice(7);
+
+  //         localStorage.setItem("accessToken", accesToken);
+  //         //console.log(accesToken);
+  //       }
+  //     }
+  //   });
+  // }, []);
+
   const navigate = useNavigate();
 
     const goToDetail = ({title, gatheringTime, gatheringLocation}: JobPost) => {
