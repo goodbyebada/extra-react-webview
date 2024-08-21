@@ -1,14 +1,13 @@
 import { TopBar } from "@pages/ExtrasHome";
 import { styled } from "styled-components";
 import TypeSelector from "@components/TypeSelector";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { RootState } from "@redux/store";
 import { useSelector } from "react-redux";
 import CompanyCalender from "@components/CompanyCalender";
 import CompanyList from "@components/CompanyList";
-import { GetToken } from "@api/GetToken";
 
 /**
  *추후 수정 예정
@@ -58,9 +57,9 @@ export default function CompanyHome() {
    * test용
    */
 
-  useEffect(() => {
-    GetToken(0);
-  }, []);
+  // useEffect(() => {
+  //   GetToken(0);
+  // }, []);
 
   return (
     <div className="company-home-container">

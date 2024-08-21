@@ -4,7 +4,7 @@ import { BASE_URL } from "@api/interface";
  *
  * @param status  0 이면 accesToken 요청, 1이면 localStroage에 저장된 accessToken 가져오기
  */
-export const GetToken = (status: number) => {
+export const GetToken = () => {
   const token = localStorage.getItem("accessToken");
   if (!token) {
     fetch(`${BASE_URL}/account/login`, {
@@ -14,7 +14,7 @@ export const GetToken = (status: number) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: "company1@naver.com",
+        email: "user1@naver.com",
         password: "password",
       }),
     }).then((res) => {

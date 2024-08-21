@@ -1,5 +1,4 @@
 // jobPostAPI.js
-import { GetToken } from "@api/GetToken";
 import { BASE_URL } from "@api/interface";
 import { requestGetFetch } from "@api/utils";
 
@@ -39,9 +38,6 @@ const memberRolesAPI = {
   async postMemberRoles(roleId: number) {
     const requestHeaders: HeadersInit = new Headers();
 
-    if (!localStorage.getItem("accessToken")) {
-      GetToken(0);
-    }
     const token = localStorage.getItem("accessToken");
 
     requestHeaders.set("Authorization", `Bearer ${token}`);
