@@ -97,6 +97,8 @@ export const fetchJobPostByList = createAsyncThunk(
   "jobPosts/fetchAllbyList",
   async ({ year, month, pageNum }: QuryTypesWithPage) => {
     const data = await jobPostAPI.getAllJobPostByList(year, month, pageNum);
+    console.log(`pageNum:${pageNum}`);
+    console.log(`data`);
 
     return data;
   },

@@ -7,7 +7,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-// import { GetToken } from "@api/GetToken";
+import { GetToken } from "@api/GetToken";
+import { useEffect } from "react";
 
 import List from "@pages/List";
 
@@ -68,10 +69,10 @@ export default function ExtrasHome() {
     navigate(path);
   };
 
-  // useEffect(() => {
-  //   // web일때
-  //   GetToken(0);
-  // }, []);
+  useEffect(() => {
+    // web일때
+    GetToken(0);
+  }, []);
 
   return (
     <Container className="extras-home">

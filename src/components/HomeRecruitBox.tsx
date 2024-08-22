@@ -95,7 +95,8 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
   } = recruitInfo;
 
   // 촬영날짜가 여러 날일 경우 가장 가까운 날짜를 기준으로 디데이 계산
-  const formattedDate = formatDateRange(calenderList);
+  const formattedDate =
+    calenderList.length > 0 ? formatDateRange(calenderList) : "미정";
   const dday = calculateDday(calenderList);
   // 촬영날짜가 1일이라는 가정하에 작성됨
   // 추후 논의 예정

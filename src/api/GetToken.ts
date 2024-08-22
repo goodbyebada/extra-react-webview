@@ -14,7 +14,7 @@ export const GetToken = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: "user1@naver.com",
+        email: "company1@naver.com",
         password: "password",
       }),
     }).then((res) => {
