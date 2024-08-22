@@ -55,7 +55,7 @@ export interface JobPost {
   limitPersonnelList: number[];
   currentPersonnelList: number[];
   seasonList: string[];
-  tattoList: Tattoo[];
+  tattooList: Tattoo[];
 }
 
 /**
