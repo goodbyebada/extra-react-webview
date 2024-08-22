@@ -132,7 +132,10 @@ function StatusRecruitBox({
     }
   };
 
-  const handleStarClick = () => {
+  const handleStarClick = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+  ) => {
+    event.stopPropagation();
     setStar(star === star_g ? star_y : star_g);
   };
 
