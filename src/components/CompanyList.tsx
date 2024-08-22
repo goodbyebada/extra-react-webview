@@ -26,14 +26,26 @@ export default function CompanyList({ dateYM, showRecommand }: ListProps) {
    */
   const navigateToExtraCastingBoard = (elem: JobPost) => {
     // const basePath = ``;
-    const path = `/detail/${elem.id}`;
-    sendMessage({
-      type: "NAVIGATION_DETAIL",
-      payload: {
-        uri: path,
-      },
-      version: "1.0",
-    });
+    if (!elem.status) {
+      sendMessage({
+        type: "NAVIGATION_MANAGE",
+        payload: {
+          jobPostId: elem.id,
+          roleIdList: elem.roleIdList,
+          roleNameList: elem.roleNameList,
+          seasonList: elem.seasonList,
+        },
+        version: "1.0",
+      });
+    } else {
+      sendMessage({
+        type: "NAVIGATION_DETAIL", // 다른 데이터로 전송하는 경우
+        payload: {
+          uri: `/detail/${elem.id}`,
+        },
+        version: "1.0",
+      });
+    }
     // navigate(path);
   };
 
@@ -63,6 +75,7 @@ export default function CompanyList({ dateYM, showRecommand }: ListProps) {
       setStatus(ResponseStatus.fullfilled);
     } catch (error) {
       setStatus(ResponseStatus.rejected);
+      console.error(error);
     } finally {
       isFetching.current = false; // fetch가 끝난 후 false로 설정
     }

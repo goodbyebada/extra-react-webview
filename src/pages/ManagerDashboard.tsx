@@ -144,7 +144,7 @@ function ManagerDashboard() {
               key={index}
               recruitInfo={jobPostInfo}
               navigate={() => {
-                if (isTargetDate) {
+                if (isTargetDate || !jobPostInfo.status) {
                   sendMessage({
                     type: "NAVIGATION_MANAGE",
                     payload: {
