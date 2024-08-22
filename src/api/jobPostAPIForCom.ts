@@ -40,7 +40,8 @@ const jobPostAPIForCom = {
 
   async getAllJobPostByList(year: number, month: number, page: number) {
     const response = await requestGetFetch(
-      jobPostURL + `/companies/company?page=${page}`,
+      jobPostURL +
+        `/companies/company?page=${page}?year=${year}&month=${month + 1}`,
     );
 
     return await this.handleResponse(response);
