@@ -31,9 +31,13 @@ const groupRolesByName = (jobPost: JobPost): { [key: string]: RoleInfo[] } => {
     roleGroups[roleName].push({
       index,
       sex: jobPost.sexList[index],
-      roleAge: jobPost.roleAgeList[index] || [],
+      roleAge: Array.isArray(jobPost.roleAgeList[index])
+        ? jobPost.roleAgeList[index]
+        : [jobPost.roleAgeList[index] as string], // Ensures roleAge is always string[]
+      costume: Array.isArray(jobPost.costumeList[index])
+        ? jobPost.costumeList[index]
+        : [jobPost.costumeList[index] as string], // Ensures costume is always string[]
       season: jobPost.seasonList[index],
-      costume: jobPost.costumeList[index] || [],
       currentPersonnel: jobPost.currentPersonnelList[index],
       limitPersonnel: jobPost.limitPersonnelList[index],
       roleId: jobPost.roleIdList[index],
