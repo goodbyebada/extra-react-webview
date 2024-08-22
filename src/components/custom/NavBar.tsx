@@ -81,4 +81,13 @@ const NavContainer = styled.nav`
       transform: rotate(-180deg);
     }
   }
+  @media all and (max-width: 400px) {
+    font-size: 25px;
+    height: 70px;
+    //스타일 설정
+
+    .wrapper {
+      padding-left: 10px;
+    }
+  }
 `;

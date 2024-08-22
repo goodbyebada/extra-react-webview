@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import { ResponseStatus } from "@api/interface";
+import { useState } from "react";
 import Loading from "@components/Loading";
+import { useEffect } from "react";
 
 interface customProps {
   closeModal: () => void;
@@ -16,9 +18,16 @@ const CustomCheckModal = ({ closeModal }: customProps) => {
   const appliedData = useSelector(
     (state: RootState) => state.appliedRoles.appliedRole,
   );
+  const [fullfilled, setFullFilled] = useState(false);
 
   const homePath = "/";
   const mySupportStatusPath = "/member/manage";
+
+  useEffect(() => {
+    if (appliedData.status === ResponseStatus.fullfilled) {
+      setFullFilled(true);
+    }
+  }, [appliedData.status]);
 
   function ReturnMessage() {
     switch (appliedData.status) {
@@ -43,7 +52,8 @@ const CustomCheckModal = ({ closeModal }: customProps) => {
         <ModalContainer>
           <MultiplyIcon src={multiply} onClick={closeModal} />
           <ModalText> {ReturnMessage()}</ModalText>
-          <ApprovalIcon src={approval} />
+          {fullfilled ? <ApprovalIcon src={approval} /> : <Default />}
+
           <ButtonContainer>
             <Btn
               onClick={() => {
@@ -73,7 +83,7 @@ const ModalContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 345px;
+  /* width: 345px; */
   height: 537px;
   flex-shrink: 0;
   border-radius: 18px;
@@ -99,6 +109,7 @@ const ModalText = styled.div`
   font-weight: 700;
   line-height: 45px;
   margin-top: 105px;
+  padding: 0px 20px;
 `;
 
 const ApprovalIcon = styled.img`
@@ -108,7 +119,15 @@ const ApprovalIcon = styled.img`
   padding-bottom: 68px;
 `;
 
+const Default = styled.div`
+  display: block;
+  margin: 0px auto;
+  padding-top: 24px;
+  padding-bottom: 98px;
+`;
+
 const ButtonContainer = styled.div`
+  min-width: 289px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -116,7 +135,8 @@ const ButtonContainer = styled.div`
 `;
 
 const Btn = styled.button`
-  width: 299px;
+  width: 259px;
+  /* margin: 0px 10px; */
   height: 53px;
   flex-shrink: 0;
   border-radius: 18px;

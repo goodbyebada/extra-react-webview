@@ -37,16 +37,13 @@ const memberRolesAPI = {
 
   // 역할에 지원 요청
   async postMemberRoles(roleId: number) {
-    const requestHeaders: HeadersInit = new Headers();
+    // const requestHeaders: HeadersInit = new Headers();
 
-    // if (!localStorage.getItem("accessToken")) {
-    //   GetToken(0);
-    // }
-    const token = localStorage.getItem("accessToken");
+    // const token = localStorage.getItem("accessToken");
 
-    requestHeaders.set("Authorization", `Bearer ${token}`);
-    requestHeaders.set("Accept", "*/*");
-    requestHeaders.set("Content-Type", "application/json");
+    // requestHeaders.set("Authorization", `Bearer ${token}`);
+    // requestHeaders.set("Accept", "*/*");
+    // requestHeaders.set("Content-Type", "application/json");
 
     const response = await requestPostFetch(`${memberRolesURL}/${roleId}`, {});
 

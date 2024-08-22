@@ -1,4 +1,5 @@
 // jobPostAPI.js
+import { BASE_URL } from "@api/interface";
 import {
   requestGetFetch,
   // requestDeleteFetch,
@@ -7,7 +8,7 @@ import {
 } from "@api/utils";
 // import { JobPostRequest } from "@api/interface";
 
-const jobPostURL = `jobposts`;
+const jobPostURL = `${BASE_URL}/jobposts`;
 
 const jobPostAPIForCom = {
   async handleResponse(response: Response | null) {
@@ -40,8 +41,7 @@ const jobPostAPIForCom = {
 
   async getAllJobPostByList(year: number, month: number, page: number) {
     const response = await requestGetFetch(
-      jobPostURL +
-        `/companies/company?page=${page}?year=${year}&month=${month + 1}`,
+      jobPostURL + `/companies/company?page=${page}`,
     );
 
     return await this.handleResponse(response);

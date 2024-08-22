@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ManagerDashboard from "./pages/ManagerDashboard";
-import CompanyDetailPage from "./pages/CompanyDetailPage";
 import AddNotice from "./pages/AddNotice";
 import ShowApplicant from "./pages/ShowApplicant";
 
@@ -11,10 +10,10 @@ import Scheduler from "@pages/Scheduler";
 import CompanyHome from "@pages/CompanyHome";
 import ExtraShootManagePage from "@pages/ExtraShootManagePage";
 import CompanyShootManagePage from "@pages/CompanyShootManagePage";
-import CompanyDateSelectedPage from "@pages/CompanyDateSelectedPage";
 import { ApplicantDetail } from "@pages/ApplicantDetail";
 import DetailPage from "@pages/DetailPage";
 import NotFound from "@pages/Error/NotFound";
+import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
 
 function App() {
   return (
@@ -24,11 +23,6 @@ function App() {
           <Route path="/" element={<ExtrasHome />} />
           <Route path="/company-home" element={<CompanyHome />} />
 
-          {/* 임시, 추후 주디님 관리자 화면으로 연결할 route */}
-          <Route
-            path="/company-home/company-job-list/:jobPostId"
-            element={<CompanyDetailPage />}
-          />
           <Route
             path="/extra-casting-board/:jobPostId"
             element={<ExtraCastingBoard />}
@@ -40,8 +34,8 @@ function App() {
           />
 
           <Route
-            path="/company-date-selected-notice-list"
-            element={<CompanyDateSelectedPage />}
+            path="/date-selected-notice-list-company"
+            element={<DateSelectedNoticeListForCom />}
           />
 
           <Route path="/scheduler" element={<Scheduler />} />

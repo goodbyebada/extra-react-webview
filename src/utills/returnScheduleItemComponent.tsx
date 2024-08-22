@@ -5,33 +5,25 @@ import { ScheduleTypeStatusLabel } from "@api/interface";
 const ScheduleItem = styled.div`
   /* 스케줄표 border width 만큼 늘림 */
   position: relative;
+  display: block;
   z-index: 2;
-  /* height: 20px; */
   height: var(--__scheduledItemHeigth);
+  width: 100%;
   padding-left: 5px;
-
-  /* display: flex; */
-  justify-content: center;
-  justify-items: center;
-
   background: #4f4f4f;
   text-overflow: ellipsis;
-  overflow-y: hidden;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
-
   color: #a7a7a7;
-
   font-size: 10px;
   font-style: normal;
   font-weight: 900;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
 
   &.approve {
     background: #49e300;
     color: #fff;
-  }
-  span {
-    width: 100%;
   }
 `;
 
@@ -76,7 +68,7 @@ const returnSchduleItemComponent = (
   const { status, title } = elem;
   let approve;
 
-  if (status === ScheduleTypeStatusLabel.APPLIED) {
+  if (status === ScheduleTypeStatusLabel.APPROVED) {
     approve = true;
   } else {
     approve = false;

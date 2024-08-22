@@ -1,16 +1,13 @@
-import HomeRecruitBox from "@components/HomeRecruitBox";
+import { useState, useEffect, useRef } from "react";
 import { styled } from "styled-components";
 import { JobPost } from "@api/interface";
 import { dateYM } from "@api/interface";
-// import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@redux/store";
-import { useEffect } from "react";
-import { fetchJobPostByList } from "@redux/jobPost/jobPostSlice";
+import HomeRecruitBox from "@components/HomeRecruitBox";
 import { ResponseStatus } from "@api/interface";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 import { sendMessage } from "@api/utils";
+import jobPostAPI from "@api/jobPostAPI";
 
 type ListProps = {
   dateYM: dateYM;
@@ -18,14 +15,11 @@ type ListProps = {
 };
 
 export default function List({ dateYM, showRecommand }: ListProps) {
-  // 리스트 보기 선택시 navigate
-
-  // const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
-
-  const jobPost = useSelector(
-    (state: RootState) => state.jobPosts.jobPostByList,
-  );
+  const [pageNum, setPageNum] = useState(0);
+  const [localJobPost, setLocalJobPost] = useState<JobPost[]>([]);
+  const [status, setStatus] = useState<ResponseStatus>(ResponseStatus.loading);
+  const [hasMore, setHasMore] = useState(true);
+  const isFetching = useRef(false); // 추가된 변수: fetch 중복 방지용
 
   const navigateToExtraCastingBoard = (elem: JobPost) => {
     const path = `/extra-casting-board/${elem.id}`;
@@ -39,18 +33,45 @@ export default function List({ dateYM, showRecommand }: ListProps) {
     // navigate(path);
   };
 
-  useEffect(() => {
-    dispatch(
-      fetchJobPostByList({
-        year: dateYM.year,
-        month: dateYM.month,
-        pageNum: 0,
-      }),
-    );
-  }, [dispatch, dateYM]);
+  const fetchJobPosts = async () => {
+    if (isFetching.current) return; // fetch 중이면 중복 실행 방지
+    isFetching.current = true;
 
-  const Component = () => {
-    switch (jobPost.status) {
+    try {
+      const data = await jobPostAPI.getAllJobPostByList(
+        dateYM.year,
+        dateYM.month,
+        pageNum,
+      );
+
+      if (data.length === 0) {
+        setHasMore(false);
+      } else {
+        const filteredData = data.filter(
+          (newPost: JobPost) =>
+            !localJobPost.some(
+              (existingPost) => existingPost.id === newPost.id,
+            ),
+        );
+        setLocalJobPost((prev) => [...prev, ...filteredData]);
+        setPageNum((prev) => prev + 1);
+      }
+      setStatus(ResponseStatus.fullfilled);
+    } catch (error) {
+      setStatus(ResponseStatus.rejected);
+    } finally {
+      isFetching.current = false; // fetch가 끝난 후 false로 설정
+    }
+  };
+
+  useEffect(() => {
+    if (hasMore && !isFetching.current) {
+      fetchJobPosts();
+    }
+  }, [dateYM, pageNum, hasMore]);
+
+  const renderComponent = () => {
+    switch (status) {
       case ResponseStatus.loading:
         return <Loading loading={true} />;
 
@@ -59,27 +80,24 @@ export default function List({ dateYM, showRecommand }: ListProps) {
 
       case ResponseStatus.fullfilled:
         return (
-          <>
-            <ItemWrapper>
-              {jobPost.data.map((elem, key) => (
-                <HomeRecruitBox
-                  navigate={() => navigateToExtraCastingBoard(elem)}
-                  key={key}
-                  recruitInfo={elem}
-                  recommand={showRecommand}
-                />
-              ))}
-              {/* <div ref={ref}></div> */}
-            </ItemWrapper>
-          </>
+          <ItemWrapper>
+            {localJobPost.map((elem, key) => (
+              <HomeRecruitBox
+                navigate={() => navigateToExtraCastingBoard(elem)}
+                key={key}
+                recruitInfo={elem}
+                recommand={showRecommand}
+              />
+            ))}
+          </ItemWrapper>
         );
 
       default:
-        return;
+        return null;
     }
   };
 
-  return <>{Component()}</>;
+  return <>{renderComponent()}</>;
 }
 
 const ItemWrapper = styled.div`
