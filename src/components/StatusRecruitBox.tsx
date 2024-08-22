@@ -182,7 +182,7 @@ function StatusRecruitBox({
             sendMessage({
               type:
                 recruitStatus === ShootManageSelectStatus.APPROVED
-                  ? "NAVIGATION_MANAGE"
+                  ? "NAVIGATION_MANAGE_DETAIL"
                   : "NAVIGATION_DETAIL",
               payload: payload,
               version: "1.0",
