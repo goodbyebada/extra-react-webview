@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import jobPostAPI from "@api/jobPostAPI";
+
 import { JobPost } from "@api/interface";
 import { ResponseStatus } from "@api/interface";
 import { dateYM, QuryTypesWithPage } from "@api/interface";
 import { ObjectType } from "@api/interface";
+import jobPostAPIForCom from "@api/jobPostAPIForCom";
 
 // 상태의 타입 정의
 
@@ -51,12 +52,12 @@ function transformAndSortDates(input: ObjectType): ObjectType {
 }
 
 export interface JobPostState {
-  jobPostByCalender: {
+  jobPostByCalenderForCom: {
     status: string;
     data: ObjectType;
     error: string;
   };
-  jobPostByList: {
+  jobPostByListForCom: {
     status: string;
     data: JobPost[];
     error: string;
@@ -74,18 +75,20 @@ const initdata: ObjectType = {
 
 // 초기 상태
 const initialState: JobPostState = {
-  jobPostByCalender: { status: "", data: initdata, error: "" },
-  jobPostByList: { status: "", data: [defaultJobPost], error: "" },
+  jobPostByCalenderForCom: { status: "", data: initdata, error: "" },
+  jobPostByListForCom: { status: "", data: [defaultJobPost], error: "" },
   jobPostItem: { status: "", data: defaultJobPost, error: "" },
 };
 
 /**
  * 캘린더에서 JobPost를 가져온다.
  */
-export const fetchJobPostByCalender = createAsyncThunk(
-  "jobPosts/fetchAllbyCalender",
+export const fetchJobPostByCalenderForCom = createAsyncThunk(
+  "companyJobpost/fetchJobPostByCalenderForCom",
   async ({ year, month }: dateYM) => {
-    const data = await jobPostAPI.getAllJobPostByCalender(year, month);
+    const data = await jobPostAPIForCom.getAllJobPostByCalender(year, month);
+    console.log("fetchJobPostByCalenderForCom");
+    console.log(data);
     return data;
   },
 );
@@ -93,48 +96,54 @@ export const fetchJobPostByCalender = createAsyncThunk(
 /**
  * 리스트로보기용 JobPost를 가져온다.
  */
-export const fetchJobPostByList = createAsyncThunk(
-  "jobPosts/fetchAllbyList",
+export const fetchJobPostByListForCom = createAsyncThunk(
+  "companyJobpost/fetchJobPostByListForCom",
   async ({ year, month, pageNum }: QuryTypesWithPage) => {
-    const data = await jobPostAPI.getAllJobPostByList(year, month, pageNum);
-    console.log(`pageNum:${pageNum}`);
-    console.log(`data`);
+    const data = await jobPostAPIForCom.getAllJobPostByList(
+      year,
+      month,
+      pageNum,
+    );
+    console.log("리스트라능");
+    console.log(data);
 
     return data;
   },
 );
 // 특정 공고를 가져오는 GET 요청 (id 필요)
-export const fetchJobPostById = createAsyncThunk<JobPost, number>(
-  "jobPosts/fetchById",
+export const fetchJobPostByIdForCom = createAsyncThunk<JobPost, number>(
+  "companyJobpost/fetchById",
   async (id: number) => {
-    const data = await jobPostAPI.getJobPostById(id);
+    const data = await jobPostAPIForCom.getJobPostById(id);
     return data;
   },
 );
 
-const jobPostSlice = createSlice({
-  name: "jobPosts",
+const companyJobpostSlice = createSlice({
+  name: "companyJobpost",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchJobPostByCalender.pending, (state) => {
-        state.jobPostByCalender.status = ResponseStatus.loading;
-        state.jobPostByCalender.data = initdata;
-        state.jobPostByCalender.error = "";
+      .addCase(fetchJobPostByCalenderForCom.pending, (state) => {
+        state.jobPostByCalenderForCom.status = ResponseStatus.loading;
+        state.jobPostByCalenderForCom.data = initdata;
+        state.jobPostByCalenderForCom.error = "";
       })
-      .addCase(fetchJobPostByCalender.fulfilled, (state, action) => {
-        state.jobPostByCalender.status = ResponseStatus.fullfilled;
+      .addCase(fetchJobPostByCalenderForCom.fulfilled, (state, action) => {
+        state.jobPostByCalenderForCom.status = ResponseStatus.fullfilled;
 
-        state.jobPostByCalender.data = transformAndSortDates(action.payload);
+        state.jobPostByCalenderForCom.data = transformAndSortDates(
+          action.payload,
+        );
 
-        state.jobPostByCalender.error = "";
+        state.jobPostByCalenderForCom.error = "";
       })
-      .addCase(fetchJobPostByCalender.rejected, (state, action) => {
-        state.jobPostByCalender.status = ResponseStatus.rejected;
-        state.jobPostByCalender.data = initdata;
+      .addCase(fetchJobPostByCalenderForCom.rejected, (state, action) => {
+        state.jobPostByCalenderForCom.status = ResponseStatus.rejected;
+        state.jobPostByCalenderForCom.data = initdata;
         // action.error.message는 API에서 전달된 에러 메시지를 포함
-        state.jobPostByCalender.error =
+        state.jobPostByCalenderForCom.error =
           action.error.message || "Failed to fetch all job posts";
       });
 
@@ -142,36 +151,36 @@ const jobPostSlice = createSlice({
      * [{}]값이 하나만 오고 있다.
      */
     builder
-      .addCase(fetchJobPostByList.pending, (state) => {
-        state.jobPostByList.status = ResponseStatus.loading;
-        state.jobPostByList.error = "";
+      .addCase(fetchJobPostByListForCom.pending, (state) => {
+        state.jobPostByListForCom.status = ResponseStatus.loading;
+        state.jobPostByListForCom.error = "";
       })
-      .addCase(fetchJobPostByList.fulfilled, (state, action) => {
-        state.jobPostByList.status = ResponseStatus.fullfilled;
-        state.jobPostByList.data = action.payload;
-        state.jobPostByList.error = "";
+      .addCase(fetchJobPostByListForCom.fulfilled, (state, action) => {
+        state.jobPostByListForCom.status = ResponseStatus.fullfilled;
+        state.jobPostByListForCom.data = action.payload;
+        state.jobPostByListForCom.error = "";
       })
-      .addCase(fetchJobPostByList.rejected, (state, action) => {
-        state.jobPostByList.status = ResponseStatus.rejected;
+      .addCase(fetchJobPostByListForCom.rejected, (state, action) => {
+        state.jobPostByListForCom.status = ResponseStatus.rejected;
 
         // action.error.message는 API에서 전달된 에러 메시지를 포함
-        state.jobPostByList.error =
+        state.jobPostByListForCom.error =
           action.error.message || "Failed to fetch all job posts";
       });
 
     builder
-      .addCase(fetchJobPostById.pending, (state) => {
+      .addCase(fetchJobPostByIdForCom.pending, (state) => {
         state.jobPostItem.status = ResponseStatus.loading;
 
         // 초기화
         state.jobPostItem.data = defaultJobPost;
       })
-      .addCase(fetchJobPostById.fulfilled, (state, action) => {
+      .addCase(fetchJobPostByIdForCom.fulfilled, (state, action) => {
         state.jobPostItem.status = ResponseStatus.fullfilled;
-
         state.jobPostItem.data = action.payload;
       })
-      .addCase(fetchJobPostById.rejected, (state, action) => {
+
+      .addCase(fetchJobPostByIdForCom.rejected, (state, action) => {
         state.jobPostItem.status = ResponseStatus.rejected;
         // 초기화
         state.jobPostItem.data = defaultJobPost;
@@ -183,4 +192,4 @@ const jobPostSlice = createSlice({
   },
 });
 
-export default jobPostSlice.reducer;
+export default companyJobpostSlice.reducer;

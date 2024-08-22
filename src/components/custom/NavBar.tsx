@@ -67,6 +67,7 @@ const NavContainer = styled.nav`
   #content {
     margin: 0px 20px;
     height: 100%;
+    line-height: var(--_nav-height);
   }
 
   button {

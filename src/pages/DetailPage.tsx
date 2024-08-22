@@ -7,6 +7,7 @@ import CompanyRoleModalUpdate from "@components/Modal/CompanyRoleModalUpdate";
 import CompanyRoleModalCreate from "@components/Modal/CompanyRoleModalCreate";
 import { JobPost } from "@api/interface";
 import RoleInfoComponent from "@components/custom/RoleInfo";
+import { requestGetFetch, requestPutFetch, sendMessage } from "@api/utils";
 
 interface RoleInfo {
   index: number;
@@ -56,24 +57,13 @@ function DetailPage() {
   const [modalType, setModalType] = useState<"update" | "create">("update");
 
   const fetchJobPost = useCallback(async () => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      console.error("No access token found");
-      return;
-    }
-
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${id}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "*/*",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
+      const response = await requestGetFetch(`jobposts/${id}`);
+
+      if (response === null) {
+        console.error("Failed to fetch job posts");
+        return;
+      }
 
       if (!response.ok) {
         throw new Error(`Failed to fetch job posts: ${response.statusText}`);
@@ -110,18 +100,12 @@ function DetailPage() {
         status: false,
       };
 
-      const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${id}`,
-        {
-          method: "PUT",
-          headers: {
-            Accept: "*/*",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(updatedJobPost),
-        },
-      );
+      const response = await requestPutFetch(`jobposts/${id}`, updatedJobPost);
+
+      if (response === null) {
+        console.error("Failed to update job post status");
+        return;
+      }
 
       if (!response.ok) {
         throw new Error(
@@ -161,7 +145,11 @@ function DetailPage() {
   };
 
   const goBackManager = () => {
-    navigate("/manager-dashboard");
+    // navigate("/manager-dashboard");
+    sendMessage({
+      type: "HISTORY_BACK",
+      version: "1.0",
+    });
   };
 
   const handleReviseClick = () => {

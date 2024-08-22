@@ -85,22 +85,49 @@ function StatusRecruitBox({
   const [star, setStar] = useState(star_g);
 
   const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const isSwiping = useRef(false);
 
   const formattedDate = formatDateRange(shootManageInfo.calenderList);
   const dday = calculateDday(shootManageInfo.calenderList);
 
-  // gatheringTime에서 시간 부분만 추출
   const gatheringTime = shootManageInfo.gatheringTime.substring(11, 16);
 
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    isSwiping.current = false; // 스와이프 여부 초기화
+  };
+
+  const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    const touchEndX = e.touches[0].clientX;
+    const touchEndY = e.touches[0].clientY;
+
+    const deltaX = touchStartX.current - touchEndX;
+    const deltaY = touchStartY.current - touchEndY;
+
+    // 수직 이동이 감지되면 스와이프를 취소
+    if (Math.abs(deltaY) > Math.abs(deltaX)) {
+      isSwiping.current = false;
+      return;
+    }
+
+    // 가로로 일정 거리 이상 움직이면 스와이프 활성화
+    if (Math.abs(deltaX) > 10) {
+      isSwiping.current = true;
+      e.preventDefault(); // 기본 스크롤 방지
+    }
   };
 
   const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+    if (!isSwiping.current) return;
+
     const touchEndX = e.changedTouches[0].clientX;
-    if (touchStartX.current - touchEndX > 50) {
+    const deltaX = touchStartX.current - touchEndX;
+
+    if (deltaX > 50) {
       setSwiped(true);
-    } else if (touchEndX - touchStartX.current > 50) {
+    } else if (deltaX < -50) {
       setSwiped(false);
     }
   };
@@ -129,7 +156,9 @@ function StatusRecruitBox({
           const payload =
             recruitStatus === ShootManageSelectStatus.APPROVED
               ? {
+                  jobPostId: shootManageInfo.jobPostId,
                   roleId: shootManageInfo.id,
+                  title: shootManageInfo.title,
                 }
               : {
                   url: `/extra-casting-board/${shootManageInfo.jobPostId}`,
@@ -160,6 +189,7 @@ function StatusRecruitBox({
       <RecruitBox
         $swiped={swiped}
         onTouchStart={swipeEnabled ? handleTouchStart : undefined}
+        onTouchMove={swipeEnabled ? handleTouchMove : undefined}
         onTouchEnd={swipeEnabled ? handleTouchEnd : undefined}
         $swipeEnabled={swipeEnabled}
       >
@@ -207,9 +237,7 @@ function StatusRecruitBox({
     </RecruitContainer>
   );
 }
-
 export default StatusRecruitBox;
-
 // 스와이프 애니메이션 정의
 const swipeLeft = keyframes`
   0% {

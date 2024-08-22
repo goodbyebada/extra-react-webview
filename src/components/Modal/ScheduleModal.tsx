@@ -34,7 +34,7 @@ interface ScheduleModalProps {
  */
 function ScheduleModal({ selectedDateInfo, closeModal }: ScheduleModalProps) {
   const appliedListData = useSelector((state: RootState) => {
-    return state.appliedRoles.data;
+    return state.appliedRoles.getMemberApplies.data;
   });
   //  더미데이터 적용되어있음 -> 연도 & 월의 일정 store에서 탐색한다.
   //  initData id가 -1,0이라면 불러온 데이터가없다.

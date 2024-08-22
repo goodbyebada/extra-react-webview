@@ -8,6 +8,7 @@ import homeSelectedDateReducer from "@redux/home/homeSelectedDateSlice";
 import showTypeSliceReducer from "@redux/home/showTypeSlice";
 import jobPostReducer from "@redux/jobPost/jobPostSlice";
 import appliedRoleReducer from "@redux/memberRoles/memberRolesSlice";
+import companyJobPostReducer from "@redux/company/companyJobPostSlice";
 
 // redux-persist를 사용한 데이터 유지를 위한 설정
 
@@ -42,6 +43,13 @@ const jobPostConfig = {
   whitelist: ["jobPostByCalender", "jobPostItem"],
 };
 
+// 확인 필요
+const jobPostForComConfig = {
+  key: "companyJobpost",
+  storage,
+  whitelist: ["jobPostByCalenderForCom", "jobPostItem"],
+};
+
 // 새로 추가된 appliedRole slice에 대한 persist 설정
 const appliedRoleConfig = {
   key: "appliedRoles",
@@ -59,6 +67,7 @@ const rootReducer = combineReducers({
   ),
   showType: persistReducer(showTypeConfig, showTypeSliceReducer),
   jobPosts: persistReducer(jobPostConfig, jobPostReducer), // jobPostSlice 추가
+  companyJobpost: persistReducer(jobPostForComConfig, companyJobPostReducer), // jobPostSlice 추가
   appliedRoles: persistReducer(appliedRoleConfig, appliedRoleReducer), // appliedRoleSlice 추가
 });
 

@@ -2,13 +2,12 @@ import { TopBar } from "@pages/ExtrasHome";
 import { styled } from "styled-components";
 import TypeSelector from "@components/TypeSelector";
 import { useState } from "react";
-import Calender from "@components/Calender";
-// import { dummyJobPostList } from "@api/dummyData";
-// import HomeRecruitBox from "@components/HomeRecruitBox";
+import { useNavigate } from "react-router-dom";
 
-import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { sendMessage } from "@api/utils";
+import { useSelector } from "react-redux";
+import CompanyCalender from "@components/CompanyCalender";
+import CompanyList from "@components/CompanyList";
 
 /**
  *추후 수정 예정
@@ -38,27 +37,29 @@ export default function CompanyHome() {
     });
   };
 
-  // dummydata
-  // const jobList = dummyJobPostList;
-
   // 캘린더 || 리스트
   const showAsCalender = useSelector(
     (state: RootState) => state.showType.showAsCalender,
   );
+
+  const navigate = useNavigate();
 
   /**
    * 일을 클릭했을때 일어날 Event
    */
   const clickedDateEvent = () => {
     // 모달창을 연다
-    sendMessage({
-      type: "MODAL_OPEN",
-      payload: {
-        uri: "/company-date-selected-notice-list",
-      },
-      version: "1.0",
-    });
+    const path = "/date-selected-notice-list-company";
+    navigate(path);
   };
+
+  /**
+   * test용
+   */
+
+  // useEffect(() => {
+  //   GetToken(0);
+  // }, []);
 
   return (
     <div className="company-home-container">
@@ -72,35 +73,14 @@ export default function CompanyHome() {
       <div className="content">
         {showAsCalender ? (
           // 항상 전체 추천 UI
-          <Calender
+          <CompanyCalender
             dateYM={dateYM}
             dateYMHandler={dateYMHandler}
-            // jobPostList={jobList}
             showRecommand={false}
             clickedDateEvent={clickedDateEvent}
           />
         ) : (
-          <ItemWrapper>
-            {/* {jobList.map((elem, key) => {
-              return (
-                <HomeRecruitBox
-                  navigate={() => {
-                    //navigate(path + `${elem.job_post_id}`);
-                    sendMessage({
-                      type: "NAVIGATION_DETAIL",
-                      payload: {
-                        uri: `/company-home/company-job-list/${elem.id}`,
-                      },
-                      version: "1.0",
-                    });
-                  }}
-                  key={key}
-                  recruitInfo={elem}
-                  recommand={false}
-                />
-              );
-            })} */}
-          </ItemWrapper>
+          <CompanyList dateYM={dateYM} showRecommand={false} />
         )}
       </div>
     </div>
@@ -115,32 +95,12 @@ const CompanyHomeTopBar = styled(TopBar)`
   h1 {
     display: flex;
     justify-content: center;
-    font-size: 20px;
+    font-size: 24px;
     font-style: normal;
     font-weight: 600;
-    line-height: 30%;
+    line-height: 83.333%;
     letter-spacing: 0.24px;
     margin: 0px;
     padding-top: 20px;
   }
 `;
-
-const ItemWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 30px;
-`;
-
-// const ModalOverlay = styled.div`
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   bottom: 0;
-//   background-color: rgba(0, 0, 0, 0.5);
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   z-index: 10;
-// `;

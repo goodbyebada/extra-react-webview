@@ -29,7 +29,7 @@ export default function DateSelectedNoticeList() {
     (state: RootState) => state.homeSelectedDate,
   );
 
-  const { dateNum } = selectedDate;
+  const { dateNum, year, month } = selectedDate;
 
   const jobListAboutYM = useSelector(
     (state: RootState) => state.jobPosts.jobPostByCalender.data,
@@ -50,15 +50,18 @@ export default function DateSelectedNoticeList() {
     });
   };
 
-  // useEffect(() => {
-  //   sendMessage({
-  //     type: "POST_DATA",
-  //     payload: {
-  //       title: navContent,
-  //     },
-  //     version: "1.0",
-  //   });
-  // }, [navContent]);
+  const dateString = `${year}/${month}/${dateNum}`;
+  const navContent = `${dateString} 에 모집 중인 공고예요.`;
+
+  useEffect(() => {
+    sendMessage({
+      type: "POST_DATA",
+      payload: {
+        title: navContent,
+      },
+      version: "1.0",
+    });
+  }, [navContent]);
 
   useEffect(() => {
     const fetchData = async () => {

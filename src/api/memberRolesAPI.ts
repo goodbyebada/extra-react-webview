@@ -1,9 +1,9 @@
 // jobPostAPI.js
-import { GetToken } from "@api/GetToken";
-import { BASE_URL } from "@api/interface";
-import { requestGetFetch } from "@api/utils";
+// import { GetToken } from "@api/GetToken";
+// import { BASE_URL } from "@api/interface";
+import { requestGetFetch, requestPostFetch } from "@api/utils";
 
-const memberRolesURL = `${BASE_URL}/application-request/member/roles`;
+const memberRolesURL = `application-request/member/roles`;
 
 const memberRolesAPI = {
   async handleResponse(response: Response | null) {
@@ -39,19 +39,16 @@ const memberRolesAPI = {
   async postMemberRoles(roleId: number) {
     const requestHeaders: HeadersInit = new Headers();
 
-    if (!localStorage.getItem("accessToken")) {
-      GetToken(0);
-    }
+    // if (!localStorage.getItem("accessToken")) {
+    //   GetToken(0);
+    // }
     const token = localStorage.getItem("accessToken");
 
     requestHeaders.set("Authorization", `Bearer ${token}`);
     requestHeaders.set("Accept", "*/*");
     requestHeaders.set("Content-Type", "application/json");
 
-    const response = await fetch(`${memberRolesURL}/${roleId}`, {
-      method: "POST",
-      headers: requestHeaders,
-    });
+    const response = await requestPostFetch(`${memberRolesURL}/${roleId}`, {});
 
     if (!response) {
       throw new Error("No response from server");

@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import { RoleBodyType, TattooList } from "@api/interface";
+import { RoleBodyType, Tattoo } from "@api/interface";
+import { requestGetFetch } from "@api/utils";
+import { requestPutFetch } from "../../api/utils";
 
 interface CompanyRoleModalUpdateProps {
   closeModal: () => void;
@@ -42,30 +44,16 @@ function CompanyRoleModalUpdate({
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      console.error("No access token found");
-      return;
-    }
-
-    fetch(
-      `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${jobPostId}/roles/${roleId}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
+    requestGetFetch(`jobposts/${jobPostId}/roles/${roleId}`)
       .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          console.error("Failed to fetch role data", response.statusText);
-          return null;
+        if (response !== null) {
+          if (response.ok) {
+            return response.json();
+          } else {
+            console.error("Failed to fetch role data", response.statusText);
+          }
         }
+        return null;
       })
       .then((data) => {
         if (data) {
@@ -157,7 +145,7 @@ function CompanyRoleModalUpdate({
     }
   };
 
-  const handleTattooClick = (part: keyof TattooList) => {
+  const handleTattooClick = (part: keyof Tattoo) => {
     setFormState((prevState) => {
       const updatedTattoo = {
         ...prevState.tattoo,
@@ -178,12 +166,6 @@ function CompanyRoleModalUpdate({
 
   const handleSubmit = async () => {
     if (isFormValid) {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        console.error("No access token found");
-        return;
-      }
-
       const minAge = parseInt(formState.minAge, 10);
       const maxAge = parseInt(formState.maxAge, 10);
 
@@ -203,18 +185,17 @@ function CompanyRoleModalUpdate({
       };
 
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${jobPostId}/roles/${roleId}`,
-          {
-            method: "PUT",
-            headers: {
-              Accept: "*/*",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(dataToSend),
-          },
+        const response = await requestPutFetch(
+          `jobposts/${jobPostId}/roles/${roleId}`,
+          dataToSend,
         );
+
+        alert(JSON.stringify(response));
+
+        if (response === null) {
+          console.error("Failed to save role data");
+          return;
+        }
 
         if (response.status === 201) {
           console.log("PUT request successful, resource created.");
@@ -338,8 +319,8 @@ function CompanyRoleModalUpdate({
                 {["face", "chest", "arm", "leg"].map((part, index) => (
                   <TattooBox
                     key={index}
-                    onClick={() => handleTattooClick(part as keyof TattooList)}
-                    selected={formState.tattoo[part as keyof TattooList]}
+                    onClick={() => handleTattooClick(part as keyof Tattoo)}
+                    selected={formState.tattoo[part as keyof Tattoo]}
                   >
                     {part === "face"
                       ? "얼굴"
@@ -355,8 +336,8 @@ function CompanyRoleModalUpdate({
                 {["shoulder", "back", "hand", "feet"].map((part, index) => (
                   <TattooBox
                     key={index}
-                    onClick={() => handleTattooClick(part as keyof TattooList)}
-                    selected={formState.tattoo[part as keyof TattooList]}
+                    onClick={() => handleTattooClick(part as keyof Tattoo)}
+                    selected={formState.tattoo[part as keyof Tattoo]}
                   >
                     {part === "shoulder"
                       ? "어깨"

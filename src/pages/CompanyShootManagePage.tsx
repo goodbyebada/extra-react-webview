@@ -1,8 +1,8 @@
 import styled from "styled-components";
-import AdminManageRecruitBox from "@components/AdminManageRecruitBox";
 import { sendMessage, requestGetFetch } from "@api/utils";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { JobPost } from "@api/interface";
+import HomeRecruitBox from "@components/HomeRecruitBox";
 
 export default function CompanyShootManagePage() {
   const [jobPostList, setJobPostList] = useState<JobPost[]>([]);
@@ -12,7 +12,9 @@ export default function CompanyShootManagePage() {
 
   const loadData = useCallback(async () => {
     try {
-      const res = await requestGetFetch(`jobposts?page=${page}`);
+      const res = await requestGetFetch(
+        `jobposts/companies/company?page=${page}`,
+      );
       if (res !== null) {
         if (res.status === 200) {
           res.json().then((data) => {
@@ -80,9 +82,9 @@ export default function CompanyShootManagePage() {
         });
 
         return (
-          <AdminManageRecruitBox
+          <HomeRecruitBox
             key={index}
-            jobPostInfo={jobPostInfo}
+            recruitInfo={jobPostInfo}
             navigate={() => {
               if (isTargetDate) {
                 sendMessage({

@@ -9,7 +9,7 @@ import {
 
 const jobPostURL = `jobposts`;
 
-const jobPostAPI = {
+const jobPostAPIForCom = {
   async handleResponse(response: Response | null) {
     if (!response) {
       throw new Error("No response from server");
@@ -32,7 +32,7 @@ const jobPostAPI = {
 
   async getAllJobPostByCalender(year: number, month: number) {
     const response = await requestGetFetch(
-      jobPostURL + `/calenders?year=${year}&month=${month + 1}`,
+      jobPostURL + `/company/calenders?year=${year}&month=${month + 1}`,
     );
 
     return await this.handleResponse(response);
@@ -40,7 +40,7 @@ const jobPostAPI = {
 
   async getAllJobPostByList(year: number, month: number, page: number) {
     const response = await requestGetFetch(
-      jobPostURL + `/calender?year=${year}&month=${month + 1}&page=${page}`,
+      jobPostURL + `/companies/company?page=${page}`,
     );
 
     return await this.handleResponse(response);
@@ -52,4 +52,4 @@ const jobPostAPI = {
   },
 };
 
-export default jobPostAPI;
+export default jobPostAPIForCom;

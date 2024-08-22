@@ -120,6 +120,60 @@ const requestFetch = async (
   return null;
 };
 
+// const requestFetch = async (
+//   url: string,
+//   method: string,
+//   data?: object,
+//   option?: object,
+// ) => {
+//   // const token = await new Promise<string>((resolve) => {
+//   //   requestToken(resolve);
+//   // });
+
+//   const token = await fetch(`${API_URL}account/login`, {
+//     method: "POST",
+//     headers: {
+//       Accept: "*/*",
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       email: "user1@naver.com",
+//       password: "password",
+//     }),
+//   }).then((res) => res.json());
+
+//   const requestHeaders: HeadersInit = new Headers();
+//   requestHeaders.set("Authorization", `Bearer ${token}`);
+//   requestHeaders.set("Accept", "*/*");
+//   if (option) {
+//     Object.entries(option).forEach(([key, value]) => {
+//       requestHeaders.set(key, value);
+//     });
+//   }
+
+//   const URL = API_URL + url;
+
+//   try {
+//     if (data !== undefined) {
+//       requestHeaders.set("Content-Type", "application/json");
+//       return await fetch(URL, {
+//         method,
+//         headers: requestHeaders,
+//         body: JSON.stringify(data),
+//       });
+//     } else {
+//       return await fetch(URL, {
+//         method,
+//         headers: requestHeaders,
+//       });
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+
+//   return null;
+// };
+
 export const requestPostFetch = async (url: string, data: object) => {
   return await requestFetch(url, "POST", data);
 };

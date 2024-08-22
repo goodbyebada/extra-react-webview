@@ -21,7 +21,7 @@ export interface JobPostRequest {
   category: string;
 }
 
-type Tattoo = {
+export type Tattoo = {
   face: boolean;
   chest: boolean;
   arm: boolean;
@@ -49,9 +49,9 @@ export interface JobPost {
   calenderList: string[];
   roleIdList: number[];
   roleNameList: string[];
-  costumeList: string[]; // ? 백에서 구현됐는지 확인 필요
+  costumeList: string[][]; // ? 백에서 구현됐는지 확인 필요
   sexList: boolean[];
-  roleAgeList: string[]; // ? roleAgeList 백과 합의 안됨 추후 수정예정
+  roleAgeList: string[][]; // ? roleAgeList 백과 합의 안됨 추후 수정예정
   limitPersonnelList: number[];
   currentPersonnelList: number[];
   seasonList: string[];

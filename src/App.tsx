@@ -59,7 +59,7 @@ function App() {
           <Route path="/manager-dashboard" element={<ManagerDashboard />} />
           <Route path="/applicants" element={<ShowApplicant />} />
           <Route path="/applicants/detail" element={<ApplicantDetail />} />
-          <Route path="/detail/:jobPostId" element={<DetailPage />} />
+          <Route path="/detail/:id" element={<DetailPage />} />
           <Route
             path="/detail/:jobPostId/applicants"
             element={<ShowApplicant />}

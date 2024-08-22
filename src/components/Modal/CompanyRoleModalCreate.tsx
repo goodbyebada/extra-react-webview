@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import { RoleBodyType, Tattoo } from "@api/interface";
+import { requestPostFetch } from "@api/utils";
 
 interface CompanyRoleModalCreateProps {
   closeModal: () => void;
@@ -128,12 +129,6 @@ const CompanyRoleModalCreate: React.FC<CompanyRoleModalCreateProps> = ({
 
   const handleSubmit = async () => {
     if (isFormValid) {
-      const token = localStorage.getItem("accessToken");
-      if (!token) {
-        console.error("No access token found");
-        return;
-      }
-
       const minAge = parseInt(formState.minAge, 10);
       const maxAge = parseInt(formState.maxAge, 10);
 
@@ -153,18 +148,15 @@ const CompanyRoleModalCreate: React.FC<CompanyRoleModalCreateProps> = ({
       };
 
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}api/v1/jobposts/${jobPostId}/roles`,
-          {
-            method: "POST",
-            headers: {
-              Accept: "*/*",
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(dataToSend),
-          },
+        const response = await requestPostFetch(
+          `jobposts/${jobPostId}/roles`,
+          dataToSend,
         );
+
+        if (response === null) {
+          console.error("Failed to save role data");
+          return;
+        }
 
         if (response.status === 201) {
           console.log("POST request successful, resource created.");

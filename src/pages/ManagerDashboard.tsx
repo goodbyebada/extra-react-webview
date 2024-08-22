@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Modal from "@components/Modal";
 import { requestGetFetch, sendMessage } from "@api/utils";
 import { JobPost } from "@api/interface";
-import AdminManageRecruitBox from "@components/AdminManageRecruitBox";
+import HomeRecruitBox from "@components/HomeRecruitBox";
 // import HomeRecruitBox from "@components/HomeRecruitBox";
 // import { dummyMonthJobList } from "@api/dummyData";
 // import { JobPost } from "@api/interface";
@@ -19,7 +19,9 @@ function ManagerDashboard() {
 
   const loadData = useCallback(async () => {
     try {
-      const res = await requestGetFetch(`jobposts?page=${page}`);
+      const res = await requestGetFetch(
+        `jobposts/companies/company?page=${page}`,
+      );
       if (res !== null) {
         if (res.status === 200) {
           res.json().then((data) => {
@@ -138,9 +140,9 @@ function ManagerDashboard() {
           });
 
           return (
-            <AdminManageRecruitBox
+            <HomeRecruitBox
               key={index}
-              jobPostInfo={jobPostInfo}
+              recruitInfo={jobPostInfo}
               navigate={() => {
                 if (isTargetDate) {
                   sendMessage({

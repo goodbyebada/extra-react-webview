@@ -3,19 +3,19 @@ import ToggleBar from "@components/ToggleBar";
 import TypeSelector from "@components/TypeSelector";
 import Calender from "@components/Calender";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 // import { GetToken } from "@api/GetToken";
 
-import { sendMessage } from "@api/utils";
-
 import List from "@pages/List";
+import { sendMessage } from "@api/utils";
 
 /**
  * 회원 정보 수정할 것
  */
+
 /**
  * 보조 출연자 홈화면
  *
@@ -45,6 +45,9 @@ export default function ExtrasHome() {
     });
   };
 
+  // navigate
+  // const navigate = useNavigate();
+
   // 전체 || 추천
   const showRecommand = useSelector(
     (state: RootState) => state.showType.showRecommand,
@@ -55,13 +58,9 @@ export default function ExtrasHome() {
     (state: RootState) => state.showType.showAsCalender,
   );
 
-  const listAll = `지금 당장 ${name}님이 필요해요 ⏰`;
-  const listRecommand = `${name}님한테 딱 맞는 역할이 있어요 🤩`;
-
   // dateSelectedNoticeList 날짜 선택시 화면으로 이동
   const navigateToSelectedNoticeList = () => {
     const path = "/date-selected-notice-list";
-    // navigate(path);
     sendMessage({
       type: "NAVIGATION_DATE",
       payload: {
@@ -69,11 +68,10 @@ export default function ExtrasHome() {
       },
       version: "1.0",
     });
+    // navigate(path);
   };
 
   useEffect(() => {
-    const userAgent = navigator.userAgent || navigator.vendor;
-
     const listener = (event: MessageEvent) => {
       const data = JSON.parse(event.data);
       if (data.type === "POST_DATA") {
@@ -81,24 +79,8 @@ export default function ExtrasHome() {
       }
     };
 
-    const isAndroid = /android/i.test(userAgent);
-    const isIOS = /iPad|iPhone|iPod/.test(userAgent);
-
-    if (isAndroid) {
-      document.addEventListener("message", listener as EventListener);
-    }
-    if (isIOS) {
-      window.addEventListener("message", listener);
-    }
-
-    return () => {
-      if (isAndroid) {
-        document.removeEventListener("message", listener as EventListener);
-      }
-      if (isIOS) {
-        window.removeEventListener("message", listener);
-      }
-    };
+    window.addEventListener("message", listener);
+    document.addEventListener("message", listener as EventListener);
   }, []);
 
   return (
@@ -109,7 +91,11 @@ export default function ExtrasHome() {
           <TypeSelector />
         </nav>
 
-        <h1>{!showRecommand ? listAll : listRecommand}</h1>
+        <h1>
+          {!showRecommand
+            ? `지금 당장 ${name}님이 필요해요 ⏰`
+            : `${name}님한테 딱 맞는 역할이 있어요 🤩`}
+        </h1>
       </TopBar>
 
       <Content className="content">
@@ -138,8 +124,8 @@ export const TopBar = styled.div`
   top: 0;
   z-index: 9;
   background-color: #000000;
-  padding-top: 43px;
-  width: 100vw;
+  padding-top: 25px;
+
   padding-bottom: 23px;
 
   nav {
@@ -156,5 +142,11 @@ export const TopBar = styled.div`
     letter-spacing: 0.2px;
     margin-top: 21px;
     top: 30px;
+  }
+
+  @media all and (max-width: 375px) {
+    h1 {
+      font-size: 18px;
+    }
   }
 `;
