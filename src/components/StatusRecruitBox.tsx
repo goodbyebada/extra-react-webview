@@ -150,30 +150,7 @@ function StatusRecruitBox({
   const swipeEnabled = recruitStatus !== ShootManageSelectStatus.APPROVED;
 
   return (
-    <RecruitContainer
-      onClick={() => {
-        if (recruitStatus !== ShootManageSelectStatus.REJECTED) {
-          const payload =
-            recruitStatus === ShootManageSelectStatus.APPROVED
-              ? {
-                  jobPostId: shootManageInfo.jobPostId,
-                  roleId: shootManageInfo.id,
-                  title: shootManageInfo.title,
-                }
-              : {
-                  url: `/extra-casting-board/${shootManageInfo.jobPostId}`,
-                };
-          sendMessage({
-            type:
-              recruitStatus === ShootManageSelectStatus.APPROVED
-                ? "NAVIGATION_MANAGE"
-                : "NAVIGATION_DETAIL",
-            payload: payload,
-            version: "1.0",
-          });
-        }
-      }}
-    >
+    <RecruitContainer>
       {shouldShowDeleteButton && (
         <DeleteButton
           cancelText={deleteButtonText}
@@ -187,6 +164,28 @@ function StatusRecruitBox({
         />
       )}
       <RecruitBox
+        onClick={() => {
+          if (recruitStatus !== ShootManageSelectStatus.REJECTED) {
+            const payload =
+              recruitStatus === ShootManageSelectStatus.APPROVED
+                ? {
+                    jobPostId: shootManageInfo.jobPostId,
+                    roleId: shootManageInfo.id,
+                    title: shootManageInfo.title,
+                  }
+                : {
+                    url: `/extra-casting-board/${shootManageInfo.jobPostId}`,
+                  };
+            sendMessage({
+              type:
+                recruitStatus === ShootManageSelectStatus.APPROVED
+                  ? "NAVIGATION_MANAGE"
+                  : "NAVIGATION_DETAIL",
+              payload: payload,
+              version: "1.0",
+            });
+          }
+        }}
         $swiped={swiped}
         onTouchStart={swipeEnabled ? handleTouchStart : undefined}
         onTouchMove={swipeEnabled ? handleTouchMove : undefined}
