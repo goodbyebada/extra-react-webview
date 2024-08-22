@@ -46,14 +46,14 @@ function CompanyRecruitMiniBox({ navigate, recruitInfo, recommand }: Props) {
   const {
     category,
     title,
-    calendar,
-    company_name,
-    gathering_time,
-    gathering_location,
+    calenderList,
+    companyName,
+    gatheringTime,
+    gatheringLocation,
     status,
   } = recruitInfo;
 
-  const dday = calculateDday(calendar);
+  const dday = calculateDday(calenderList[0]);
 
   return (
     <RecruitContainer className={`${!recommand ? "" : "recommand"}`}>
@@ -65,10 +65,10 @@ function CompanyRecruitMiniBox({ navigate, recruitInfo, recommand }: Props) {
           <MediaSelectorTxt>{category}</MediaSelectorTxt>
           <TitleTxt>{title}</TitleTxt>
           <DateAndDeadlineContainer>
-            <DateTxt>{calendar}</DateTxt>
+            <DateTxt>{calenderList[0]}</DateTxt>
             <DeadlineBox>{dday}</DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>{company_name}</Team>
+          <Team>{companyName}</Team>
         </InfoContainer>
         <RecruitStatus
           visible={true}
@@ -80,7 +80,7 @@ function CompanyRecruitMiniBox({ navigate, recruitInfo, recommand }: Props) {
           {status ? "모집중" : "모집마감"}
         </RecruitStatus>
         <TimePlace>
-          {gathering_time} 예정 <br /> {gathering_location}
+          {gatheringTime} 예정 <br /> {gatheringLocation}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>
