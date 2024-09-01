@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
-import ToggleBar from "@components/ToggleBar";
-import TypeSelector from "@components/TypeSelector";
+import ToggleBar from "@components/custom/ToggleBar";
+import TypeSelector from "@components/custom/TypeSelector";
 import Calender from "@components/Calender";
 
 import { useState } from "react";

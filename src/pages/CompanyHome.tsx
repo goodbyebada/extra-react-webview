@@ -1,6 +1,6 @@
 import { TopBar } from "@pages/ExtrasHome";
 import { styled } from "styled-components";
-import TypeSelector from "@components/TypeSelector";
+import TypeSelector from "@components/custom/TypeSelector";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

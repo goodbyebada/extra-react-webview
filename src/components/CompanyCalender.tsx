@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import useCalendar from "@utills/useCalendar";
-import DateSelectorItem from "@components/DateSelectorItem";
+import DateSelectorItem from "@components/calender/DateSelectorItem";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setDate } from "@redux/home/homeSelectedDateSlice";

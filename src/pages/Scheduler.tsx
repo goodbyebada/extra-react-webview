@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { useState } from "react";
 import useCalendar from "@utills/useCalendar";
-import DateSelectorItem from "@components/DateSelectorItem";
+import DateSelectorItem from "@components/calender/DateSelectorItem";
 import ScheduleModal from "@components/Modal/ScheduleModal";
 import { useRef } from "react";
 import { useEffect } from "react";
