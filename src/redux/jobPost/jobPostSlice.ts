@@ -2,9 +2,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import jobPostAPI from "@api/jobPostAPI";
 import { JobPost } from "@api/interface";
 import { ResponseStatus } from "@api/interface";
-import { dateYM, QuryTypesWithPage } from "@api/interface";
+import { dateYM, QuryTypesWithPage, JobPostList } from "@api/interface";
 import { ObjectType } from "@api/interface";
-import { dummyCalenderData } from "@api/dummyData";
+import { dummyCalenderData, dummyJobPostList } from "@api/dummyData";
 import { TEST_FLAG } from "@/testFlag";
 
 // 상태의 타입 정의
@@ -110,10 +110,19 @@ export const fetchJobPostByCalender = createAsyncThunk<
 export const fetchJobPostByList = createAsyncThunk(
   "jobPosts/fetchAllbyList",
   async ({ year, month, pageNum }: QuryTypesWithPage) => {
-    const data = await jobPostAPI.getAllJobPostByList(year, month, pageNum);
-    console.log(`pageNum:${pageNum}`);
-    console.log(`data`);
+    let data: Promise<JobPostList>;
 
+    if (TEST_FLAG) {
+      console.log(`${year} ${month + 1}의 ListTest용`);
+      data = new Promise<JobPostList>((resolve) =>
+        setTimeout(() => {
+          resolve(dummyJobPostList);
+        }, 2000),
+      );
+      return data;
+    }
+
+    data = await jobPostAPI.getAllJobPostByList(year, month, pageNum);
     return data;
   },
 );
@@ -157,6 +166,7 @@ const jobPostSlice = createSlice({
     builder
       .addCase(fetchJobPostByList.pending, (state) => {
         state.jobPostByList.status = ResponseStatus.loading;
+        state.jobPostByList.data = [defaultJobPost];
         state.jobPostByList.error = "";
       })
       .addCase(fetchJobPostByList.fulfilled, (state, action) => {
@@ -166,7 +176,7 @@ const jobPostSlice = createSlice({
       })
       .addCase(fetchJobPostByList.rejected, (state, action) => {
         state.jobPostByList.status = ResponseStatus.rejected;
-
+        state.jobPostByList.data = [defaultJobPost];
         // action.error.message는 API에서 전달된 에러 메시지를 포함
         state.jobPostByList.error =
           action.error.message || "Failed to fetch all job posts";

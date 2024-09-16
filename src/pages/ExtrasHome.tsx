@@ -71,17 +71,17 @@ export default function ExtrasHome() {
     // navigate(path);
   };
 
-  useEffect(() => {
-    const listener = (event: MessageEvent) => {
-      const data = JSON.parse(event.data);
-      if (data.type === "POST_DATA") {
-        setName(data.payload.name);
-      }
-    };
+  // useEffect(() => {
+  //   const listener = (event: MessageEvent) => {
+  //     const data = JSON.parse(event.data);
+  //     if (data.type === "POST_DATA") {
+  //       setName(data.payload.name);
+  //     }
+  //   };
 
-    window.addEventListener("message", listener);
-    document.addEventListener("message", listener as EventListener);
-  }, []);
+  //   window.addEventListener("message", listener);
+  //   document.addEventListener("message", listener as EventListener);
+  // }, []);
 
   return (
     <Container className="extras-home">

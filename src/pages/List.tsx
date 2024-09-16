@@ -8,6 +8,12 @@ import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 import { sendMessage } from "@api/utils";
 import jobPostAPI from "@api/jobPostAPI";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@redux/store";
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/store";
+import { fetchJobPostByList } from "@redux/jobPost/jobPostSlice";
+import { ObjectType } from "@api/interface";
 
 type ListProps = {
   dateYM: dateYM;
@@ -16,10 +22,10 @@ type ListProps = {
 
 export default function List({ dateYM, showRecommand }: ListProps) {
   const [pageNum, setPageNum] = useState(0);
-  const [localJobPost, setLocalJobPost] = useState<JobPost[]>([]);
-  const [status, setStatus] = useState<ResponseStatus>(ResponseStatus.loading);
-  const [hasMore, setHasMore] = useState(true);
-  const isFetching = useRef(false); // 추가된 변수: fetch 중복 방지용
+  // const [localJobPost, setLocalJobPost] = useState<JobPost[]>([]);
+  // const [status, setStatus] = useState<ResponseStatus>(ResponseStatus.loading);
+  // const [hasMore, setHasMore] = useState(true);
+  // const isFetching = useRef(false); // 추가된 변수: fetch 중복 방지용
 
   const navigateToExtraCastingBoard = (elem: JobPost) => {
     const path = `/extra-casting-board/${elem.id}`;
@@ -33,45 +39,57 @@ export default function List({ dateYM, showRecommand }: ListProps) {
     // navigate(path);
   };
 
-  const fetchJobPosts = async () => {
-    if (isFetching.current) return; // fetch 중이면 중복 실행 방지
-    isFetching.current = true;
+  // const fetchJobPosts = async () => {
+  //   if (isFetching.current) return; // fetch 중이면 중복 실행 방지
+  //   isFetching.current = true;
 
-    try {
-      const data = await jobPostAPI.getAllJobPostByList(
-        dateYM.year,
-        dateYM.month,
-        pageNum,
-      );
+  //   try {
+  //     const data = await jobPostAPI.getAllJobPostByList(
+  //       dateYM.year,
+  //       dateYM.month,
+  //       pageNum,
+  //     );
 
-      if (data.length === 0) {
-        setHasMore(false);
-      } else {
-        const filteredData = data.filter(
-          (newPost: JobPost) =>
-            !localJobPost.some(
-              (existingPost) => existingPost.id === newPost.id,
-            ),
-        );
-        setLocalJobPost((prev) => [...prev, ...filteredData]);
-        setPageNum((prev) => prev + 1);
-      }
-      setStatus(ResponseStatus.fullfilled);
-    } catch (error) {
-      setStatus(ResponseStatus.rejected);
-    } finally {
-      isFetching.current = false; // fetch가 끝난 후 false로 설정
-    }
-  };
+  //     if (data.length === 0) {
+  //       setHasMore(false);
+  //     } else {
+  //       const filteredData = data.filter(
+  //         (newPost: JobPost) =>
+  //           !localJobPost.some(
+  //             (existingPost) => existingPost.id === newPost.id,
+  //           ),
+  //       );
+  //       setLocalJobPost((prev) => [...prev, ...filteredData]);
+  //       setPageNum((prev) => prev + 1);
+  //     }
+  //     setStatus(ResponseStatus.fullfilled);
+  //   } catch (error) {
+  //     setStatus(ResponseStatus.rejected);
+  //   } finally {
+  //     isFetching.current = false; // fetch가 끝난 후 false로 설정
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (hasMore && !isFetching.current) {
+  //     fetchJobPosts();
+  //   }
+  // }, [dateYM, pageNum, hasMore]);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const jobPost = useSelector(
+    (state: RootState) => state.jobPosts.jobPostByList,
+  );
+  const localJobPost = jobPost.data;
 
   useEffect(() => {
-    if (hasMore && !isFetching.current) {
-      fetchJobPosts();
-    }
-  }, [dateYM, pageNum, hasMore]);
+    const { year, month } = dateYM;
+    const pageNum = 1;
+    dispatch(fetchJobPostByList({ year, month, pageNum }));
+  }, []);
 
   const renderComponent = () => {
-    switch (status) {
+    switch (jobPost.status) {
       case ResponseStatus.loading:
         return <Loading loading={true} />;
 
@@ -81,7 +99,7 @@ export default function List({ dateYM, showRecommand }: ListProps) {
       case ResponseStatus.fullfilled:
         return (
           <ItemWrapper>
-            {localJobPost.map((elem, key) => (
+            {localJobPost.map((elem: JobPost, key: number) => (
               <HomeRecruitBox
                 navigate={() => navigateToExtraCastingBoard(elem)}
                 key={key}
