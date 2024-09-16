@@ -30,9 +30,7 @@ export default function DateSelectedNoticeList() {
   const [notFound, setNotFound] = useState<boolean>(false);
 
   // Nav Bar Content 삭제
-  const selectedDate = useSelector(
-    (state: RootState) => state.homeSelectedDate,
-  );
+  const selectedDate = useSelector((state: RootState) => state.date);
 
   const { dateNum, year, month } = selectedDate;
 
