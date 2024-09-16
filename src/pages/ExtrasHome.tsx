@@ -3,8 +3,9 @@ import ToggleBar from "@components/ToggleBar";
 import TypeSelector from "@components/TypeSelector";
 import Calender from "@components/Calender";
 
-import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+// import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 // import { GetToken } from "@api/GetToken";
@@ -22,7 +23,7 @@ import { sendMessage } from "@api/utils";
  * @returns 보조 출연자 홈화면 UI
  */
 export default function ExtrasHome() {
-  const [name, setName] = useState("");
+  // const [name, setName] = useState("");
 
   // date 관련
   const date = new Date();
@@ -46,7 +47,7 @@ export default function ExtrasHome() {
   };
 
   // navigate
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // 전체 || 추천
   const showRecommand = useSelector(
@@ -61,14 +62,14 @@ export default function ExtrasHome() {
   // dateSelectedNoticeList 날짜 선택시 화면으로 이동
   const navigateToSelectedNoticeList = () => {
     const path = "/date-selected-notice-list";
-    sendMessage({
-      type: "NAVIGATION_DATE",
-      payload: {
-        uri: path,
-      },
-      version: "1.0",
-    });
-    // navigate(path);
+    // sendMessage({
+    //   type: "NAVIGATION_DATE",
+    //   payload: {
+    //     uri: path,
+    //   },
+    //   version: "1.0",
+    // });
+    navigate(path);
   };
 
   // useEffect(() => {

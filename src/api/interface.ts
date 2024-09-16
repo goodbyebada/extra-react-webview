@@ -200,7 +200,7 @@ export interface MemberRoleServer {
   id: number;
   jobPostId: number;
   category: string;
-  calenderList: number[];
+  calenderList: string[];
   title: string;
   gatheringTime: string; //시간
   gatheringLocation: string;

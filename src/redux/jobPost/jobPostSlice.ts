@@ -9,7 +9,7 @@ import { TEST_FLAG } from "@/testFlag";
 
 // 상태의 타입 정의
 
-const defaultJobPost: JobPost = {
+export const defaultJobPost: JobPost = {
   id: -1,
   title: "",
   gatheringLocation: "",

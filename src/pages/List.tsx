@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+// import { useRef } from "react";
 import { styled } from "styled-components";
 import { JobPost } from "@api/interface";
 import { dateYM } from "@api/interface";
@@ -7,13 +8,12 @@ import { ResponseStatus } from "@api/interface";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 import { sendMessage } from "@api/utils";
-import jobPostAPI from "@api/jobPostAPI";
+// import jobPostAPI from "@api/jobPostAPI";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/store";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import { fetchJobPostByList } from "@redux/jobPost/jobPostSlice";
-import { ObjectType } from "@api/interface";
 
 type ListProps = {
   dateYM: dateYM;
@@ -84,9 +84,9 @@ export default function List({ dateYM, showRecommand }: ListProps) {
 
   useEffect(() => {
     const { year, month } = dateYM;
-    const pageNum = 1;
     dispatch(fetchJobPostByList({ year, month, pageNum }));
-  }, []);
+    setPageNum((prev) => prev + 1);
+  }, [dispatch, dateYM]);
 
   const renderComponent = () => {
     switch (jobPost.status) {
