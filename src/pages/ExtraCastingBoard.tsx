@@ -10,7 +10,7 @@ import { AppDispatch } from "@redux/store";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 
-import ExtraCastsComponent from "@components/ExtraCastsCopmponent";
+import CastInfo from "@components/CastInfo";
 import { ResponseStatus } from "@api/interface";
 
 /**
@@ -46,7 +46,7 @@ export default function ExtraCastingBoard() {
       case ResponseStatus.loading:
         return <Loading loading={true} />;
       case ResponseStatus.fullfilled:
-        return <ExtraCastsComponent selectedJobPostItem={jobPostItem.data} />;
+        return <CastInfo selectedJobPostItem={jobPostItem.data} />;
       case ResponseStatus.rejected:
         return <NotFoundPage />;
 

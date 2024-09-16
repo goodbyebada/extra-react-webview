@@ -10,27 +10,6 @@ import List from "@pages/List";
 import { sendMessage } from "@api/utils";
 
 export default function ExtraHomeContent() {
-  // date 관련
-  const date = new Date();
-  const today = {
-    year: date.getFullYear(),
-    month: date.getMonth(),
-  };
-
-  /**
-   * date.getMonth는 항상 원래 월보다 -1이다.
-   * useCaleder에 들어가는 값도 원래  month보다 -1 이어야한다.
-   */
-  const [dateYM, setDateYM] = useState(today);
-
-  const dateYMHandler = (type: string, value: number) => {
-    setDateYM((prev) => {
-      return type === "month"
-        ? { ...prev, [type]: value - 1 }
-        : { ...prev, [type]: value };
-    });
-  };
-
   // navigate
   const navigate = useNavigate();
 
@@ -61,13 +40,11 @@ export default function ExtraHomeContent() {
     <div className="content">
       {showAsCalender ? (
         <Calender
-          dateYM={dateYM}
-          dateYMHandler={dateYMHandler}
           showRecommand={showRecommand}
           clickedDateEvent={navigateToSelectedNoticeList}
         />
       ) : (
-        <List dateYM={dateYM} showRecommand={showRecommand} />
+        <List showRecommand={showRecommand} />
       )}
     </div>
   );

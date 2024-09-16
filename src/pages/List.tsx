@@ -14,14 +14,16 @@ import { AppDispatch } from "@redux/store";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import { fetchJobPostByList } from "@redux/jobPost/jobPostSlice";
+import string2Int from "@utills/string2Int";
 
 type ListProps = {
-  dateYM: dateYM;
+  dateYM?: dateYM;
   showRecommand: boolean;
 };
 
-export default function List({ dateYM, showRecommand }: ListProps) {
+export default function List({ showRecommand }: ListProps) {
   const [pageNum, setPageNum] = useState(0);
+  const dateYM = useSelector((state: RootState) => state.date);
   // const [localJobPost, setLocalJobPost] = useState<JobPost[]>([]);
   // const [status, setStatus] = useState<ResponseStatus>(ResponseStatus.loading);
   // const [hasMore, setHasMore] = useState(true);
@@ -83,7 +85,7 @@ export default function List({ dateYM, showRecommand }: ListProps) {
   const localJobPost = jobPost.data;
 
   useEffect(() => {
-    const { year, month } = dateYM;
+    const { year, month } = string2Int(dateYM);
     dispatch(fetchJobPostByList({ year, month, pageNum }));
     setPageNum((prev) => prev + 1);
   }, [dispatch, dateYM]);

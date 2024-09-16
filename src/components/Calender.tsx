@@ -3,22 +3,20 @@ import useCalendar from "@/customHook/useCalendar";
 
 import { JobPostList } from "@api/interface";
 import { useDispatch, useSelector } from "react-redux";
-import { setDate } from "@redux/home/homeSelectedDateSlice";
+import { setDate } from "@redux/dateSlice";
 import { AppDispatch, RootState } from "@redux/store";
-import { dateYM } from "@api/interface";
+
 import { CalenderTypeFor } from "@api/interface";
 import { useEffect } from "react";
 import { fetchJobPostByCalender } from "@redux/jobPost/jobPostSlice";
 import DayList from "@components/calender/DayList";
 import DateSelectorBar from "@components/calender/DateSelectorBar";
-
 import HomeCalenderSingleWeek from "@components/calender/HomeCalenderSingleWeek";
 import CalenderContainer from "@components/calender/CalenderContainer";
+import string2Int from "@utills/string2Int";
 
 type CalenderProps = {
   type?: CalenderTypeFor;
-  dateYM: dateYM;
-  dateYMHandler: (type: string, value: number) => void;
   jobPostList?: JobPostList;
   showRecommand: boolean;
   clickedDateEvent: () => void;
@@ -30,8 +28,6 @@ type CalenderProps = {
  */
 
 export default function Calender({
-  dateYM,
-  dateYMHandler,
   showRecommand,
   clickedDateEvent,
 }: CalenderProps) {
@@ -39,12 +35,25 @@ export default function Calender({
   const gotJob = useSelector(
     (state: RootState) => state.jobPosts.jobPostByCalender,
   );
+
+  const dateYM = useSelector((state: RootState) => state.date);
+  const { year, month } = string2Int(dateYM);
   const gotJobDataList = gotJob.data;
+
   useEffect(() => {
-    dispatch(fetchJobPostByCalender(dateYM));
+    console.log(dateYM);
+  }, [dateYM]);
+
+  useEffect(() => {
+    dispatch(
+      fetchJobPostByCalender({
+        year,
+        month,
+      }),
+    );
   }, [dispatch, dateYM]);
 
-  const weeklists = useCalendar(dateYM.year, dateYM.month);
+  const weeklists = useCalendar(year, month);
 
   const dateOnClick = (dateNum: number, key: number) => {
     const stringDate = dateNum.toString();
@@ -54,15 +63,10 @@ export default function Calender({
       return;
     }
     if (jobLength > 0) {
-      /**
-       * !DayList 없앴는데 굳이?
-       */
-      const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
       const data = {
         year: dateYM.year.toString(),
         month: (dateYM.month + 1).toString(),
         dateNum: dateNum.toString(),
-        dayOfWeek: DAY_LIST[key % 7],
       };
       dispatch(setDate(data));
       clickedDateEvent();
@@ -77,7 +81,7 @@ export default function Calender({
       <CalenderContainer>
         {/* 년도 월일 선택 바 */}
         <TopWrapper>
-          <DateSelectorBar dateYM={dateYM} dateYMHandler={dateYMHandler} />
+          <DateSelectorBar />
         </TopWrapper>
 
         {/* 캘린더 컨테이너의 캘린더(달력) */}

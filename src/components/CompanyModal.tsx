@@ -23,9 +23,7 @@ export default function CompanyModal({ jobList }: CompanyModalType) {
 
   const navigate = useNavigate();
   // 선택된 날짜
-  const selectedDate = useSelector(
-    (state: RootState) => state.homeSelectedDate,
-  );
+  const selectedDate = useSelector((state: RootState) => state.date);
   const { month, dateNum, dayOfWeek } = selectedDate;
   const dayOfWeekString = dayOfWeek + "요일";
 

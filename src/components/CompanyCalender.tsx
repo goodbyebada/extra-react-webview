@@ -3,7 +3,7 @@ import useCalendar from "@/customHook/useCalendar";
 import DateSelectorItem from "@components/calender/DateSelectorItem";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setDate } from "@redux/home/homeSelectedDateSlice";
+import { setDate } from "@redux/dateSlice";
 import { AppDispatch, RootState } from "@redux/store";
 import { dateYM } from "@api/interface";
 import { CalenderTypeFor } from "@api/interface";
@@ -96,13 +96,11 @@ export default function CompanyCalender({
                   type="year"
                   value={dateYM.year}
                   modalList={yearItemList}
-                  dateHandler={dateYMHandler}
                 />
                 <DateSelectorItem
                   type="month"
                   value={dateYM.month + 1}
                   modalList={monthItemList}
-                  dateHandler={dateYMHandler}
                 />
               </DateSelector>
 

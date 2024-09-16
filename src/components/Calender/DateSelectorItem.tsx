@@ -1,17 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import dropDownBtn from "@assets/more-than-button.png";
 import { styled } from "styled-components";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@redux/store";
+import { setDate } from "@redux/dateSlice";
 
 export default function DateSelectorItem({
   type,
   value,
   modalList,
-  dateHandler,
 }: {
   type: string;
   value: number;
   modalList: number[];
-  dateHandler: (type: string, value: number) => void;
 }) {
   /**
    * ! 반응형에 따라 달라지는 Heigth 처리 어떻게 할 것인지 고민
@@ -21,8 +22,15 @@ export default function DateSelectorItem({
   const [btnClicked, setBtnClicked] = useState(false);
   const ulRef = useRef<HTMLUListElement>(null);
   const setShowList = () => setBtnClicked((prev) => !prev);
+  const dispatch = useDispatch<AppDispatch>();
+
   const onClickedDropDownListItem = (date: number) => {
-    dateHandler(type, date);
+    if (type === "month") {
+      dispatch(setDate({ month: (date - 1).toString() }));
+      setBtnClicked(false);
+      return;
+    }
+    dispatch(setDate({ year: date.toString() }));
     setBtnClicked(false);
   };
 
