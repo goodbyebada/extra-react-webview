@@ -26,11 +26,6 @@ export default function DateSelectorBar({
     return state.date.selectedBySchedule;
   });
 
-  useEffect(() => {
-    console.log("dateYM 변경");
-    console.log(dateYM);
-  }, [dateYM.year, dateYM.month]);
-
   const funcForDispatch = (elem: { month: string } | { year: string }) => {
     if (dateSelctedType === DateSelctedType.home) return setHomeDate(elem);
     return setScheduleDate(elem);

@@ -125,11 +125,10 @@ const DateItem = styled.span``;
 const DateSelector = styled.span`
   position: relative;
   padding: 5px;
-
-  /* font-size: 24px;
+  font-size: 32px;
   font-weight: 900;
   line-height: 83.333%;
-  letter-spacing: 0.24px; */
+  letter-spacing: 0.24px;
 
   /* ID로 접근 할 수 있다.
   하지만 좋은 코드는 아닌 것 같다 -> 매번 selector 만들때마다 id를 추가할 수는 없으니까 */
