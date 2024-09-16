@@ -1,4 +1,4 @@
-import { TopBar } from "@pages/ExtrasHome";
+import { TopBar } from "@components/ExtraHomeWrapper";
 import { styled } from "styled-components";
 import TypeSelector from "@components/custom/TypeSelector";
 import { useState } from "react";
@@ -52,14 +52,6 @@ export default function CompanyHome() {
     const path = "/date-selected-notice-list-company";
     navigate(path);
   };
-
-  /**
-   * test용
-   */
-
-  // useEffect(() => {
-  //   GetToken(0);
-  // }, []);
 
   return (
     <div className="company-home-container">

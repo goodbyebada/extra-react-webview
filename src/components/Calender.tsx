@@ -80,7 +80,7 @@ export default function Calender({
           <DateSelectorBar dateYM={dateYM} dateYMHandler={dateYMHandler} />
         </TopWrapper>
 
-        {/* 캘린더 */}
+        {/* 캘린더 컨테이너의 캘린더(달력) */}
         <Container>
           <DayList HeightPercent={DAYLIST_HEIGHT_PERCENT} />
           <DatesWrapper $HeightPercent={DAYLIST_HEIGHT_PERCENT}>
@@ -105,6 +105,13 @@ export default function Calender({
 
 const TopWrapper = styled.div`
   margin-bottom: 10px;
+
+  /* DateSelectorBar fontstyle */
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 20px; /* 83.333% */
+  letter-spacing: 0.24px;
 `;
 
 const DatesWrapper = styled.div<{ $HeightPercent: number }>`
