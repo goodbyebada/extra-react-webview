@@ -5,7 +5,7 @@
 import { ObjectType } from "@api/interface";
 import { styled } from "styled-components";
 
-export default function SingleWeek({
+export default function HomeCalenderSingleWeek({
   height,
   item,
   gotJobDataList,

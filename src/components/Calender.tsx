@@ -1,7 +1,6 @@
 import { styled } from "styled-components";
-import useCalendar from "@utills/useCalendar";
+import useCalendar from "@/customHook/useCalendar";
 
-import DateSelectorItem from "@components/calender/DateSelectorItem";
 import { JobPostList } from "@api/interface";
 import { useDispatch, useSelector } from "react-redux";
 import { setDate } from "@redux/home/homeSelectedDateSlice";
@@ -10,11 +9,10 @@ import { dateYM } from "@api/interface";
 import { CalenderTypeFor } from "@api/interface";
 import { useEffect } from "react";
 import { fetchJobPostByCalender } from "@redux/jobPost/jobPostSlice";
-import { ResponseStatus } from "@api/interface";
-import Loading from "@components/Loading";
-import NotFoundPage from "@pages/Error/NotFound";
+import DayList from "@components/calender/DayList";
+import DateSelectorBar from "@components/calender/DateSelectorBar";
 
-import SingleWeek from "@components/calender/SingleWeek";
+import HomeCalenderSingleWeek from "@components/calender/HomeCalenderSingleWeek";
 import CalenderContainer from "@components/calender/CalenderContainer";
 
 type CalenderProps = {
@@ -37,8 +35,6 @@ export default function Calender({
   showRecommand,
   clickedDateEvent,
 }: CalenderProps) {
-  const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
-
   const dispatch = useDispatch<AppDispatch>();
   const gotJob = useSelector(
     (state: RootState) => state.jobPosts.jobPostByCalender,
@@ -50,10 +46,6 @@ export default function Calender({
 
   const weeklists = useCalendar(dateYM.year, dateYM.month);
 
-  // 2024 ~ 2053년(30년)
-  const yearItemList = Array.from({ length: 30 }, (_, i) => 2024 + i);
-  const monthItemList = Array.from({ length: 12 }, (_, i) => 1 + i);
-
   const dateOnClick = (dateNum: number, key: number) => {
     const stringDate = dateNum.toString();
     const jobLength = gotJobDataList[stringDate].length;
@@ -62,6 +54,10 @@ export default function Calender({
       return;
     }
     if (jobLength > 0) {
+      /**
+       * !DayList 없앴는데 굳이?
+       */
+      const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
       const data = {
         year: dateYM.year.toString(),
         month: (dateYM.month + 1).toString(),
@@ -73,84 +69,50 @@ export default function Calender({
     }
   };
 
-  /**
-   * Response Status에 따른 분기 처리
-   * @returns
-   */
-  const Component = () => {
-    switch (gotJob.status) {
-      case ResponseStatus.loading:
-        return <Loading loading={true} />;
+  // 요일 리스트 높이 비율
+  const DAYLIST_HEIGHT_PERCENT = 8;
 
-      case ResponseStatus.rejected:
-        return <NotFoundPage />;
+  return (
+    <>
+      <CalenderContainer>
+        {/* 년도 월일 선택 바 */}
+        <TopWrapper>
+          <DateSelectorBar dateYM={dateYM} dateYMHandler={dateYMHandler} />
+        </TopWrapper>
 
-      case ResponseStatus.fullfilled:
-        return (
-          <>
-            <CalenderContainer>
-              {/* 년도 월일 선택 바 */}
-              <DateSelector>
-                <DateSelectorItem
-                  type="year"
-                  value={dateYM.year}
-                  modalList={yearItemList}
-                  dateHandler={dateYMHandler}
+        {/* 캘린더 */}
+        <Container>
+          <DayList HeightPercent={DAYLIST_HEIGHT_PERCENT} />
+          <DatesWrapper $HeightPercent={DAYLIST_HEIGHT_PERCENT}>
+            {weeklists.map((item, key) => {
+              return (
+                <HomeCalenderSingleWeek
+                  key={key}
+                  height={weeklists.length}
+                  item={item}
+                  gotJobDataList={gotJobDataList}
+                  dateOnClick={dateOnClick}
+                  showRecommand={showRecommand}
                 />
-                <DateSelectorItem
-                  type="month"
-                  value={dateYM.month + 1}
-                  modalList={monthItemList}
-                  dateHandler={dateYMHandler}
-                />
-              </DateSelector>
-
-              {/* 캘린더 */}
-              <ContentContainer className="calender-container">
-                <ContentWrapper>
-                  <DayList $daylistHeight={8}>
-                    {DAY_LIST.map((elem, key) => {
-                      return (
-                        <span className="item" key={key}>
-                          {elem}
-                        </span>
-                      );
-                    })}
-                  </DayList>
-
-                  <Dates>
-                    {weeklists.map((item, key) => {
-                      return (
-                        <SingleWeek
-                          key={key}
-                          height={weeklists.length}
-                          item={item}
-                          gotJobDataList={gotJobDataList}
-                          dateOnClick={dateOnClick}
-                          showRecommand={showRecommand}
-                        />
-                      );
-                    })}
-                  </Dates>
-                </ContentWrapper>
-              </ContentContainer>
-            </CalenderContainer>
-          </>
-        );
-
-      default:
-        return;
-    }
-  };
-
-  return <>{Component()}</>;
+              );
+            })}
+          </DatesWrapper>
+        </Container>
+      </CalenderContainer>
+    </>
+  );
 }
 
-const DateSelector = styled.div`
+const TopWrapper = styled.div`
   margin-bottom: 10px;
 `;
 
-const ContentContainer = styled.div`
+const DatesWrapper = styled.div<{ $HeightPercent: number }>`
+  height: ${({ $HeightPercent }) => `calc(100% - ${$HeightPercent}%)`};
+`;
+
+const Container = styled.div`
+  background-color: black;
   width: 372px;
   height: 430px;
 
@@ -163,28 +125,4 @@ const ContentContainer = styled.div`
     width: 300px;
     //스타일 설정
   }
-`;
-
-const ContentWrapper = styled.div`
-  background-color: black;
-  height: 100%;
-  border-radius: 20px;
-`;
-
-const DayList = styled.div<{ $daylistHeight: number }>`
-  display: flex;
-  height: ${(props) => `${props.$daylistHeight}%`};
-
-  .item {
-    width: calc(100% / 7);
-    box-sizing: border-box;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
-
-const Dates = styled.div`
-  height: 92%;
 `;
