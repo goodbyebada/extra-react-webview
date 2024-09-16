@@ -4,6 +4,8 @@ import { JobPost } from "@api/interface";
 import { ResponseStatus } from "@api/interface";
 import { dateYM, QuryTypesWithPage } from "@api/interface";
 import { ObjectType } from "@api/interface";
+import { dummyCalenderData } from "@api/dummyData";
+import { TEST_FLAG } from "@/testFlag";
 
 // 상태의 타입 정의
 
@@ -34,7 +36,7 @@ function transformAndSortDates(input: ObjectType): ObjectType {
   const transformedObject: ObjectType = {};
 
   for (const date in input) {
-    const day = date.split("-")[2]; // "YYYY-MM-DD"에서 "DD" 추출
+    const day = parseInt(date.split("-")[2]); // "YYYY-MM-DD"에서 "DD" 추출
     transformedObject[day] = input[date];
   }
 
@@ -80,15 +82,27 @@ const initialState: JobPostState = {
 };
 
 /**
- * 캘린더에서 JobPost를 가져온다.
+ * 캘린더에서 보여줄 JobPost(공고 리스트)를 data를 가져온다.
  */
-export const fetchJobPostByCalender = createAsyncThunk(
-  "jobPosts/fetchAllbyCalender",
-  async ({ year, month }: dateYM) => {
-    const data = await jobPostAPI.getAllJobPostByCalender(year, month);
+export const fetchJobPostByCalender = createAsyncThunk<
+  ObjectType,
+  { year: number; month: number }
+>("jobPosts/fetchAllbyCalender", async ({ year, month }: dateYM) => {
+  let data: Promise<ObjectType>;
+
+  if (TEST_FLAG) {
+    console.log(`${year} ${month + 1}의 TEST용입니다`);
+    data = new Promise<ObjectType>((resolve) =>
+      setTimeout(() => {
+        resolve(dummyCalenderData);
+      }, 2000),
+    );
     return data;
-  },
-);
+  }
+
+  data = await jobPostAPI.getAllJobPostByCalender(year, month);
+  return data;
+});
 
 /**
  * 리스트로보기용 JobPost를 가져온다.
@@ -127,7 +141,6 @@ const jobPostSlice = createSlice({
         state.jobPostByCalender.status = ResponseStatus.fullfilled;
 
         state.jobPostByCalender.data = transformAndSortDates(action.payload);
-
         state.jobPostByCalender.error = "";
       })
       .addCase(fetchJobPostByCalender.rejected, (state, action) => {

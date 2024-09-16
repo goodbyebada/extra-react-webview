@@ -40,7 +40,7 @@ export interface JobPost {
   title: string;
   gatheringLocation: string;
   gatheringTime: string;
-  imageUrl: string;
+  imageUrl?: string; // ? 서버에서 없을텐데 왜 이 속성이 있는지 모르겠다
   status: boolean;
   hourPay: number;
   category: string;

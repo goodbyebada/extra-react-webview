@@ -3,11 +3,13 @@ import {
   MemberRoleFront,
   ResponseStatus,
   ScheduleTypeStatusLabel,
+  dateYM,
+  MemberRoleServer,
 } from "@api/interface";
-import { MemberRoleServer } from "@api/interface";
 import memberRolesAPI from "@api/memberRolesAPI";
 import convertToDateNum from "@utills/convertToDateNum";
-import { dateYM } from "@api/interface";
+import { TEST_FLAG } from "@/testFlag";
+import { memberRoleServerDummyList } from "@api/dummyData";
 
 const initDate: MemberRoleFront = {
   id: -1,
@@ -26,7 +28,6 @@ const initDate: MemberRoleFront = {
 
 const Convert = (arr: MemberRoleServer[]): MemberRoleFront[] => {
   const myScheduledList = arr.map((elem: MemberRoleServer) => {
-    console.log(elem.calenderList[0]);
     const newElem: MemberRoleFront = {
       id: elem.id,
       jobPostId: elem.jobPostId,
@@ -65,8 +66,18 @@ const initialState = {
 export const getMemberAppliedRoles = createAsyncThunk(
   "member/getMyAppliedRoles",
   async ({ year, month }: dateYM) => {
-    const data = await memberRolesAPI.getAllmemberRoles(year, month);
+    let data: Promise<MemberRoleServer[]>;
 
+    if (TEST_FLAG) {
+      data = new Promise<MemberRoleServer[]>((resolve) =>
+        setTimeout(() => {
+          resolve(memberRoleServerDummyList);
+        }, 2000),
+      );
+      return data;
+    }
+
+    data = await memberRolesAPI.getAllmemberRoles(year, month);
     return data;
   },
 );
@@ -75,7 +86,6 @@ export const appliedRole = createAsyncThunk(
   "member/postMyAppliedRoles",
   async (roleId: number) => {
     const data = await memberRolesAPI.postMemberRoles(roleId);
-
     return data;
   },
 );
@@ -88,16 +98,17 @@ export const appliedRoleSlice = createSlice({
     builder
       .addCase(getMemberAppliedRoles.pending, (state) => {
         state.getMemberApplies.status = ResponseStatus.loading;
+        state.getMemberApplies.data = [initDate];
         state.getMemberApplies.error = "";
       })
       .addCase(getMemberAppliedRoles.fulfilled, (state, action) => {
         state.getMemberApplies.status = ResponseStatus.fullfilled;
-        console.log(action.payload);
         state.getMemberApplies.data = Convert(action.payload);
         state.getMemberApplies.error = "";
       })
       .addCase(getMemberAppliedRoles.rejected, (state, action) => {
         state.getMemberApplies.status = ResponseStatus.rejected;
+        state.getMemberApplies.data = [initDate];
         state.getMemberApplies.error =
           action.error.message || "Failed to fetch all job posts";
       });
