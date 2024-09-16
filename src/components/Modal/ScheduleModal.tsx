@@ -19,9 +19,9 @@ import { memberRoleFrontDummyData } from "@api/dummyData";
 interface ScheduleModalProps {
   dayOfJobList?: JobPost;
   selectedDateInfo: {
-    year: number;
-    month: number;
-    dateNum: number;
+    year: string;
+    month: string;
+    dateNum: string;
     dayOfWeek: string;
   };
   closeModal: () => void;
@@ -44,7 +44,7 @@ function ScheduleModal({ selectedDateInfo, closeModal }: ScheduleModalProps) {
   const { year, month, dateNum, dayOfWeek } = selectedDateInfo;
   const dateString = `${year}/${month + 1}/${dateNum}  (${dayOfWeek})`;
 
-  const dateNumber = dateNum;
+  const dateNumber = parseInt(dateNum);
 
   const todayJobList = appliedList.filter(
     (elem) =>

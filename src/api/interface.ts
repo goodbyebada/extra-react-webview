@@ -269,3 +269,8 @@ export enum CalenderTypeFor {
   "user" = 0,
   "company" = 1,
 }
+
+export const DateSelctedType = {
+  home: "HOME",
+  scheduler: "SCHEDULER",
+};

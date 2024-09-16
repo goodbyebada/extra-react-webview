@@ -27,7 +27,7 @@ const recruitConfig = {
 const dateConfig = {
   key: "date",
   storage,
-  whitelist: ["year", "month", "dateNum", "dayOfWeek"],
+  whitelist: ["selectedByHome"],
 };
 
 const showTypeConfig = {

@@ -3,13 +3,22 @@ import dropDownBtn from "@assets/more-than-button.png";
 import { styled } from "styled-components";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/store";
-import { setDate } from "@redux/dateSlice";
+import { setHomeDate } from "@redux/dateSlice";
+import MonthList from "@utills/MonthList";
+
+type setFun = (
+  elem: { month: string } | { year: string },
+) =>
+  | { payload: any; type: "selectedDate/setHomeDate" }
+  | { payload: any; type: "selectedDate/setScheduleDate" };
 
 export default function DateSelectorItem({
+  setFun,
   type,
   value,
   modalList,
 }: {
+  setFun: setFun;
   type: string;
   value: number;
   modalList: number[];
@@ -26,11 +35,12 @@ export default function DateSelectorItem({
 
   const onClickedDropDownListItem = (date: number) => {
     if (type === "month") {
-      dispatch(setDate({ month: (date - 1).toString() }));
+      dispatch(setFun({ month: (date - 1).toString() }));
       setBtnClicked(false);
       return;
     }
-    dispatch(setDate({ year: date.toString() }));
+
+    dispatch(setFun({ year: date.toString() }));
     setBtnClicked(false);
   };
 

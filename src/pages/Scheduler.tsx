@@ -18,6 +18,10 @@ import {
 import Ellipsis from "@components/custom/Ellipsis";
 import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
 import DayList from "@components/calender/DayList";
+import string2Int from "@utills/string2Int";
+import { setScheduleDate } from "@redux/dateSlice";
+
+import { DateSelctedType } from "@api/interface";
 
 /**
  *
@@ -35,7 +39,6 @@ import DayList from "@components/calender/DayList";
  */
 
 export default function Scheduler() {
-  const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
   const dispatch = useDispatch<AppDispatch>();
 
   //모달창 state
@@ -46,44 +49,17 @@ export default function Scheduler() {
   // 모달창에 전달할 정보
   const [clicketCnt, setClickedCnt] = useState<number>(1);
 
-  const date = new Date();
-  const today = {
-    year: date.getFullYear(),
-    month: date.getMonth(),
-  };
+  const dateYM = useSelector(
+    (state: RootState) => state.date.selectedBySchedule,
+  );
+  const { year, month } = string2Int(dateYM);
 
-  /**
-   * date.getMonth는 항상 원래 월보다 -1이다.
-   * useCaleder에 들어가는 값도 원래  month보다 -1 이어야한다.
-   */
-  const [dateYM, setDateYM] = useState(today);
-  const weeklists = useCalendar(dateYM.year, dateYM.month);
-  const INIT_DATA = {
-    year: today.year,
-    month: today.month,
-    dateNum: 0,
-    dayOfWeek: "",
-  };
-  const [selectedDateInfo, setSelectedDateInfo] = useState(INIT_DATA);
-
-  const dateHandler = (type: string, value: number) => {
-    setDateYM((prev) => {
-      return type === "month"
-        ? { ...prev, [type]: value - 1 }
-        : { ...prev, [type]: value };
-    });
-  };
-
+  const weeklists = useCalendar(year, month);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  const selectedDateEvent = (elem: number, idx: number) => {
-    const selectedDateInfo = {
-      year: dateYM.year,
-      month: dateYM.month,
-      dateNum: elem,
-      dayOfWeek: DAY_LIST[idx % 7],
-    };
-    setSelectedDateInfo(selectedDateInfo);
+  const selectedDateEvent = (elem: number) => {
+    const dateNum = elem.toString();
+    dispatch(setScheduleDate({ ...dateYM, dateNum }));
     openModal();
   };
 
@@ -93,8 +69,8 @@ export default function Scheduler() {
   const appliedList = appliedListData.data;
 
   useEffect(() => {
-    dispatch(getMemberAppliedRoles(dateYM));
-  }, [dispatch, dateYM]);
+    dispatch(getMemberAppliedRoles({ year, month }));
+  }, [dispatch, year, month]);
 
   // ! 최적화 필요
   const CheckGotJob = (dateNum: number) => {
@@ -130,7 +106,7 @@ export default function Scheduler() {
   return (
     <Container>
       {/* 년도 월일 선택 바 */}
-      <DateSelectorBar dateYM={dateYM} dateYMHandler={dateHandler} />
+      <DateSelectorBar dateSelctedType={DateSelctedType.scheduler} />
       {/* 캘린더 */}
 
       {appliedList[0].id > 0 ? (
@@ -166,10 +142,7 @@ export default function Scheduler() {
               }
             }}
           >
-            <ScheduleModal
-              selectedDateInfo={selectedDateInfo}
-              closeModal={closeModal}
-            />
+            <ScheduleModal selectedDateInfo={dateYM} closeModal={closeModal} />
           </ModalOverlay>
         </>
       ) : (

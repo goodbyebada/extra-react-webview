@@ -3,7 +3,7 @@ import useCalendar from "@/customHook/useCalendar";
 
 import { JobPostList } from "@api/interface";
 import { useDispatch, useSelector } from "react-redux";
-import { setDate } from "@redux/dateSlice";
+import { setHomeDate } from "@redux/dateSlice";
 import { AppDispatch, RootState } from "@redux/store";
 
 import { CalenderTypeFor } from "@api/interface";
@@ -14,6 +14,7 @@ import DateSelectorBar from "@components/calender/DateSelectorBar";
 import HomeCalenderSingleWeek from "@components/calender/HomeCalenderSingleWeek";
 import CalenderContainer from "@components/calender/CalenderContainer";
 import string2Int from "@utills/string2Int";
+import { DateSelctedType } from "@api/interface";
 
 type CalenderProps = {
   type?: CalenderTypeFor;
@@ -23,6 +24,7 @@ type CalenderProps = {
 };
 
 /**
+ *
  * @param param0 CalenderProps
  * @returns 사용자/ 업체 홈 화면 캘린더 UI
  */
@@ -36,13 +38,14 @@ export default function Calender({
     (state: RootState) => state.jobPosts.jobPostByCalender,
   );
 
-  const dateYM = useSelector((state: RootState) => state.date);
+  const dateYM = useSelector((state: RootState) => state.date.selectedByHome);
   const { year, month } = string2Int(dateYM);
   const gotJobDataList = gotJob.data;
 
   useEffect(() => {
     console.log(dateYM);
-  }, [dateYM]);
+    console.log(dateYM);
+  }, []);
 
   useEffect(() => {
     dispatch(
@@ -51,11 +54,11 @@ export default function Calender({
         month,
       }),
     );
-  }, [dispatch, dateYM]);
+  }, [dispatch, year, month]);
 
   const weeklists = useCalendar(year, month);
 
-  const dateOnClick = (dateNum: number, key: number) => {
+  const dateOnClick = (dateNum: number) => {
     const stringDate = dateNum.toString();
     const jobLength = gotJobDataList[stringDate].length;
 
@@ -68,7 +71,7 @@ export default function Calender({
         month: (dateYM.month + 1).toString(),
         dateNum: dateNum.toString(),
       };
-      dispatch(setDate(data));
+      dispatch(setHomeDate(data));
       clickedDateEvent();
     }
   };
@@ -81,7 +84,7 @@ export default function Calender({
       <CalenderContainer>
         {/* 년도 월일 선택 바 */}
         <TopWrapper>
-          <DateSelectorBar />
+          <DateSelectorBar dateSelctedType={DateSelctedType.home} />
         </TopWrapper>
 
         {/* 캘린더 컨테이너의 캘린더(달력) */}
