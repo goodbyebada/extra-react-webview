@@ -42,7 +42,7 @@ function ScheduleModal({ selectedDateInfo, closeModal }: ScheduleModalProps) {
     appliedListData[0].id <= 0 ? memberRoleFrontDummyData : appliedListData;
 
   const { year, month, dateNum, dayOfWeek } = selectedDateInfo;
-  const dateString = `${year}/${month + 1}/${dateNum}  (${dayOfWeek})`;
+  const dateString = `${year}/${parseInt(month) + 1}/${dateNum}  (${dayOfWeek})`;
 
   const dateNumber = parseInt(dateNum);
 

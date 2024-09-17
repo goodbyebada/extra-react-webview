@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { useState } from "react";
 import useCalendar from "@/customHook/useCalendar";
-import DateSelectorBar from "@components/calender/DateSelectorBar";
+
 import ScheduleModal from "@components/Modal/ScheduleModal";
 import { useRef, useEffect } from "react";
 
@@ -10,68 +10,48 @@ import { RootState, AppDispatch } from "@redux/store";
 import returnSchduleItemComponent from "@utills/returnScheduleItemComponent";
 import SchedulerSingleWeek from "@components/calender/SchedulerSingleWeek";
 
-import {
-  MemberRoleFront,
-  ScheduleType,
-  ScheduleTypeStatusLabel,
-} from "@api/interface";
+import Template from "@components/Template";
+
+import { ScheduleType } from "@api/interface";
 import Ellipsis from "@components/custom/Ellipsis";
 import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
 import DayList from "@components/calender/DayList";
 import string2Int from "@utills/string2Int";
 import { setScheduleDate } from "@redux/dateSlice";
-
 import { DateSelctedType } from "@api/interface";
 
-/**
- *
- * 보조출연자 달력
- *
- * 추후 수정 예정
- * 1. 스케줄러(일정)이 주가 다르게 연속으로 이어져있을때 UI fix
- * 2. 스케줄러 일정 map으로 컴포넌트 반환 로직 fix
- * status  에따라 에러 로딩 로직 추가
- *
- *
- *
- * 보조 출연자는 setData 접근하지 않는다 -> home이랑 날짜 분리 위해서
- * props로 전달한다
- */
-
 export default function Scheduler() {
+  const DAYLIST_HEIGHT_PERCENT = 8;
   const dispatch = useDispatch<AppDispatch>();
 
   //모달창 state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
-  // 모달창에 전달할 정보
-  const [clicketCnt, setClickedCnt] = useState<number>(1);
-
-  const dateYM = useSelector(
-    (state: RootState) => state.date.selectedBySchedule,
-  );
-  const { year, month } = string2Int(dateYM);
-
-  const weeklists = useCalendar(year, month);
   const modalRef = useRef<HTMLDivElement>(null);
-
   const selectedDateEvent = (elem: number) => {
     const dateNum = elem.toString();
     dispatch(setScheduleDate({ ...dateYM, dateNum }));
     openModal();
   };
 
+  // 날짜 정보
+  const dateYM = useSelector(
+    (state: RootState) => state.date.selectedBySchedule,
+  );
+  const { year, month } = string2Int(dateYM);
+  const weeklists = useCalendar(year, month);
+
+  // 데이터
   const appliedListData = useSelector((state: RootState) => {
     return state.appliedRoles.getMemberApplies;
   });
   const appliedList = appliedListData.data;
-
   useEffect(() => {
     dispatch(getMemberAppliedRoles({ year, month }));
   }, [dispatch, year, month]);
 
+  // OnlyScheduler
   // ! 최적화 필요
   const CheckGotJob = (dateNum: number) => {
     const ComponentList = [];
@@ -104,33 +84,28 @@ export default function Scheduler() {
   };
 
   return (
-    <Container>
-      {/* 년도 월일 선택 바 */}
-      <DateSelectorBar dateSelctedType={DateSelctedType.scheduler} />
-      {/* 캘린더 */}
-
-      {appliedList[0].id > 0 ? (
-        <CalenderContainer $daylistHeight={8}>
-          <Wrapper>
-            <DayList HeightPercent={8} />
-            <DatesWrapper>
-              {weeklists.map((item, key) => {
-                return (
-                  <SchedulerSingleWeek
-                    week={weeklists.length}
-                    key={key}
-                    item={item}
-                    selectedDateEvent={selectedDateEvent}
-                    CheckGotJob={CheckGotJob}
-                  />
-                );
-              })}
-            </DatesWrapper>
-          </Wrapper>
-        </CalenderContainer>
-      ) : (
-        "loading"
-      )}
+    <Template dateSelctedType={DateSelctedType.scheduler}>
+      <Container $daylistHeight={DAYLIST_HEIGHT_PERCENT}>
+        <Wrapper>
+          <DayList
+            HeightPercent={DAYLIST_HEIGHT_PERCENT}
+            dateSelctedType={DateSelctedType.scheduler}
+          />
+          <DatesWrapper>
+            {weeklists.map((item, key) => {
+              return (
+                <SchedulerSingleWeek
+                  week={weeklists.length}
+                  key={key}
+                  item={item}
+                  selectedDateEvent={selectedDateEvent}
+                  CheckGotJob={CheckGotJob}
+                />
+              );
+            })}
+          </DatesWrapper>
+        </Wrapper>
+      </Container>
 
       {isModalOpen ? (
         <>
@@ -148,42 +123,13 @@ export default function Scheduler() {
       ) : (
         <></>
       )}
-    </Container>
+    </Template>
   );
 }
 
 const DatesWrapper = styled.div``;
 
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 900;
-  color: #fff;
-  line-height: 142.857%;
-
-  /* 드래그 방지  */
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-
-  .date-selector-bar {
-    /* 임의로  */
-    font-size: 32px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-  }
-`;
-
-const CalenderContainer = styled.div<{ $daylistHeight: number }>`
+const Container = styled.div<{ $daylistHeight: number }>`
   width: 372px;
   height: 412px;
   border: 3px solid transparent;

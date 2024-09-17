@@ -6,7 +6,7 @@ import ShowApplicant from "./pages/ShowApplicant";
 import ExtrasHome from "@pages/ExtrasHome";
 import ExtraCastingBoard from "@pages/ExtraCastingBoard";
 import DateSelectedNoticeList from "@pages/DateSelectedNoticeList";
-import Scheduler from "@pages/Scheduler";
+// import Scheduler from "@pages/Scheduler";
 import CompanyHome from "@pages/CompanyHome";
 import ExtraShootManagePage from "@pages/ExtraShootManagePage";
 import CompanyShootManagePage from "@pages/CompanyShootManagePage";
@@ -14,6 +14,7 @@ import { ApplicantDetail } from "@pages/ApplicantDetail";
 import DetailPage from "@pages/DetailPage";
 import NotFound from "@pages/Error/NotFound";
 import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
+import Scheduler from "@pages/Scheduler";
 
 import ThemePreviewPage from "@pages/ThemePreview";
 
