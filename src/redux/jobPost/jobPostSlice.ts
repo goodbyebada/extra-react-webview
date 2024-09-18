@@ -2,8 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import jobPostAPI from "@api/jobPostAPI";
 import { JobPost } from "@api/interface";
 import { ResponseStatus } from "@api/interface";
-import { dateYM, QuryTypesWithPage, JobPostList } from "@api/interface";
-import { ObjectType } from "@api/interface";
+import {
+  dateYM,
+  QuryTypesWithPage,
+  JobPostList,
+  ObjectType,
+} from "@api/interface";
 import { dummyCalenderData, dummyJobPostList } from "@api/dummyData";
 import { TEST_FLAG } from "@/testFlag";
 
