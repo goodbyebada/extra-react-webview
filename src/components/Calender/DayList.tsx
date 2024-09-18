@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import React from "react";
+import React, { useMemo } from "react";
 import { DateSelctedType } from "@api/interface";
 /**
  * 요일을 나타내는 컴포넌트 UI
@@ -8,14 +8,14 @@ import { DateSelctedType } from "@api/interface";
  * @returns
  */
 
-const DayList = React.memo(
-  ({
-    HeightPercent,
-    dateSelctedType,
-  }: {
-    HeightPercent: number;
-    dateSelctedType: string;
-  }) => {
+export default function DayList({
+  HeightPercent,
+  dateSelctedType,
+}: {
+  HeightPercent: number;
+  dateSelctedType: string;
+}) {
+  return useMemo(() => {
     const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
     return (
       <>
@@ -33,8 +33,8 @@ const DayList = React.memo(
         </Wrapper>
       </>
     );
-  },
-);
+  }, [dateSelctedType, HeightPercent]);
+}
 
 const Item = styled.span`
   width: calc(100% / 7);
@@ -68,6 +68,3 @@ const Wrapper = styled.div<{ $daylistHeight: number }>`
   height: ${(props) => `${props.$daylistHeight}%`};
   width: 100%;
 `;
-
-// React.memo를 사용하여 내보내기
-export default React.memo(DayList);
