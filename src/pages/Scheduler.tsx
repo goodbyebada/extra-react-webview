@@ -20,7 +20,7 @@ import string2Int from "@utills/string2Int";
 import { setScheduleDate } from "@redux/dateSlice";
 import { DateSelctedType } from "@api/interface";
 
-export default function Scheduler() {
+export default function SchedulerPage() {
   const DAYLIST_HEIGHT_PERCENT = 8;
   const dispatch = useDispatch<AppDispatch>();
 

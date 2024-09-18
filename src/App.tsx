@@ -14,7 +14,7 @@ import { ApplicantDetail } from "@pages/ApplicantDetail";
 import DetailPage from "@pages/DetailPage";
 import NotFound from "@pages/Error/NotFound";
 import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
-import Scheduler from "@pages/Scheduler";
+import SchedulerPage from "@pages/Scheduler";
 
 import ThemePreviewPage from "@pages/ThemePreview";
 
@@ -41,7 +41,7 @@ function App() {
             element={<DateSelectedNoticeListForCom />}
           />
 
-          <Route path="/scheduler" element={<Scheduler />} />
+          <Route path="/scheduler" element={<SchedulerPage />} />
 
           <Route
             path="/extra-shoot-manage"
