@@ -1,4 +1,4 @@
-import DateSelectorItem from "@components/calender/DateSelectorItem";
+import DateSelectorItem from "@components/Calender/DateSelectorItem";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import string2Int from "@utills/string2Int";

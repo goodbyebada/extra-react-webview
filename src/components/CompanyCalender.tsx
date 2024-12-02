@@ -15,8 +15,8 @@ import { fetchJobPostByCalenderForCom } from "@redux/company/companyJobPostSlice
 
 import { DateSelctedType } from "@api/interface";
 import Template from "@components/Template";
-import HomeCalenderSingleWeek from "@components/calender/HomeCalenderSingleWeek";
-import DayList from "@components/calender/DayList";
+import HomeCalenderSingleWeek from "@components/Calender/HomeCalenderSingleWeek";
+import DayList from "@components/Calender/DayList";
 import string2Int from "@utills/string2Int";
 
 type CalenderProps = {
