@@ -15,6 +15,8 @@ import DetailPage from "@pages/DetailPage";
 import NotFound from "@pages/Error/NotFound";
 import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
 
+import ThemePreviewPage from "@pages/ThemePreview";
+
 function App() {
   return (
     <>
@@ -61,6 +63,8 @@ function App() {
           <Route path="/add-notice" element={<AddNotice />} />
 
           <Route path="/*" element={<NotFound />} />
+
+          <Route path="/theme-preview" element={<ThemePreviewPage />} />
         </Routes>
       </BrowserRouter>
     </>
