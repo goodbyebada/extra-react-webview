@@ -139,10 +139,16 @@ const StyledCalendarItemWrapper = styled(
   }}
 `;
 
+/*
+  Tag Wrapper
+ */
 const TagWrapper: React.FC<WrapperProps> = ({ children }) => {
   return <StyledTagWrapper>{children}</StyledTagWrapper>;
 };
 
+/**
+ * Status Tag Wrapper
+ */
 const StatusWrapper: React.FC<StatusWrapperProps> = ({
   children,
   status = "applied",
@@ -150,6 +156,9 @@ const StatusWrapper: React.FC<StatusWrapperProps> = ({
   return <StyledStatusWrapper status={status}>{children}</StyledStatusWrapper>;
 };
 
+/**
+ * Recruit List Item Wrapper
+ */
 const ItemWrapper: React.FC<ItemWrapperProps> = ({
   children,
   highlight = false,
@@ -163,6 +172,9 @@ const ItemWrapper: React.FC<ItemWrapperProps> = ({
   );
 };
 
+/**
+ * Recruit Calendar Item Wrapper
+ */
 const CalendarItemWrapper: React.FC<CalendarItemWrapperProps> = ({
   children,
   highlight = false,

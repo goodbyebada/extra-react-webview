@@ -1,12 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  ItemWrapper,
-  TagWrapper,
-  StatusWrapper,
-} from "@components/atoms/Wrapper";
+import { ItemWrapper, TagWrapper } from "@components/atoms/Wrapper";
 import Text, { ThemeText } from "@components/atoms/Text";
 import { StarToggleButton } from "@components/atoms/Button";
+import StatusTag from "./Status";
 
 interface ItemProps {
   title: string;
@@ -54,6 +51,24 @@ const ItemGatheringWrapper = styled.div`
   }
 `;
 
+/**
+ * Recruitment List Item
+ * highlight: 추천 공고 시 지정
+ * isActiveStar: 즐겨찾기 활성화 여부
+ * isRecruit: 즐겨찾기 버튼 표시 여부
+ * @param title string (title)
+ * @param category string (category)
+ * @param date string (date: 01/01 - 01/02)
+ * @param dDay string (D-Day)
+ * @param company string (company name)
+ * @param time string (time: 01:00)
+ * @param location string (location)
+ * @param status "applied" | "rejected" | "approved" (status)
+ * @param statusText string (status text)
+ * @param highlight boolean (specify when posting a recommendation)
+ * @param isActiveStar boolean (favorites status)
+ * @param isRecruit boolean (whether to enable the favorites button)
+ */
 const Item: React.FC<ItemProps> = ({
   title,
   category,
@@ -99,15 +114,7 @@ const Item: React.FC<ItemProps> = ({
             <StarToggleButton onClick={onClickStar} isActive={isActiveStar} />
           )}
         </ItemGatheringWrapper>
-        <StatusWrapper status={status}>
-          <Text
-            size={12}
-            weight={900}
-            color={status == "applied" ? "#000" : "#fff"}
-          >
-            {statusText}
-          </Text>
-        </StatusWrapper>
+        <StatusTag status={status} statusText={statusText} />
       </ItemRightContent>
     </ItemWrapper>
   );

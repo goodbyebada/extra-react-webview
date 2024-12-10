@@ -31,6 +31,15 @@ const CounterWrapper = styled.div`
   right: -5px;
 `;
 
+/**
+ * Recruitment Calendar Item
+ * count: 공고 갯수
+ * highlight: 추천 공고 여부
+ * @param count number (the number of recruitment)
+ * @param highlight boolean (specify when posting a recommendation)
+ * @param onClick () => void (onClick method)
+ * @returns
+ */
 const CalendarItem: React.FC<CalendarItemProps> = ({
   children,
   count = 0,

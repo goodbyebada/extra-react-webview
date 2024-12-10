@@ -31,6 +31,13 @@ const StyledMainButton = styled(StyledButton)<ButtonProps>`
   background: ${({ isActive }) => (isActive ? "#f5c001" : "#575757")};
 `;
 
+/**
+ * Favorite Button (별 모양 즐겨찾기 버튼)
+ * isActive: 활성화 여부
+ * 하위 컴포넌트 추가 불가능
+ * @param onClick () => void (onClick method)
+ * @param isActive boolean (active status)
+ */
 const StarToggleButton: React.FC<ButtonProps> = ({ onClick, isActive }) => {
   return (
     <StyledButton onClick={onClick}>
@@ -39,6 +46,18 @@ const StarToggleButton: React.FC<ButtonProps> = ({ onClick, isActive }) => {
   );
 };
 
+/**
+ * Main Submit Button
+ * isActive: 색 지정을 위한 props (비활성화 불가능)
+ * isActive: true => 테마 (#f5c001) 색
+ * isActive: false => 회색
+ * disabled: button 비활성화 여부
+ * 하위 컴포넌트에는 텍스트만 가능
+ * @param children string (button inner text)
+ * @param  onClick () => void (onClick method)
+ * @param isActive boolean (button design type)
+ * @param disabled boolean (disabled status)
+ */
 const MainButton: React.FC<ButtonProps> = ({
   children,
   onClick = () => {},

@@ -65,6 +65,17 @@ const StyledThemeText = styled(StyledText)<ThemeTextProps>`
   }}
 `;
 
+/**
+ * Text
+ * highlight로 테마 (#f5c001) 색 지정가능
+ * inline=true => display: inline-block;
+ * @param size number (font size)
+ * @param color string (font color)
+ * @param align "left" | "center" | "right" (text align)
+ * @param weight 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 (font weight)
+ * @param highlight boolean (highlight)
+ * @param inline boolean (display state)
+ */
 const Text: React.FC<TextProps> = ({
   children,
   size = 20,
