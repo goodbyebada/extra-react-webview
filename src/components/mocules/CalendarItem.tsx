@@ -8,6 +8,7 @@ interface CalendarItemProps {
   count?: number;
   highlight?: boolean;
   onClick?: () => void;
+  fontSize?: number;
 }
 
 const StyledCalendarItem = styled.div`
@@ -38,6 +39,7 @@ const CounterWrapper = styled.div`
  * @param count number (the number of recruitment)
  * @param highlight boolean (specify when posting a recommendation)
  * @param onClick () => void (onClick method)
+ * @param fontSize number (font size)
  * @returns
  */
 const CalendarItem = ({
@@ -45,12 +47,13 @@ const CalendarItem = ({
   count = 0,
   highlight = false,
   onClick = () => {},
+  fontSize = 16,
 }: CalendarItemProps) => {
   return (
     <StyledCalendarItem onClick={onClick}>
       {count > 0 && (
         <CounterWrapper>
-          <Text size={16} weight={900}>
+          <Text size={fontSize} weight={900}>
             {count}
           </Text>
         </CounterWrapper>
