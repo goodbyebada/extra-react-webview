@@ -76,7 +76,7 @@ const StyledThemeText = styled(StyledText)<ThemeTextProps>`
  * @param highlight boolean (highlight)
  * @param inline boolean (display state)
  */
-const Text: React.FC<TextProps> = ({
+const Text = ({
   children,
   size = 20,
   color,
@@ -84,7 +84,7 @@ const Text: React.FC<TextProps> = ({
   weight,
   highlight = false,
   inline = false,
-}) => {
+}: TextProps) => {
   return (
     <StyledText
       size={size}
@@ -99,7 +99,7 @@ const Text: React.FC<TextProps> = ({
   );
 };
 
-const ThemeText: React.FC<ThemeTextProps> = ({ children, align, variant }) => {
+const ThemeText = ({ children, align, variant }: ThemeTextProps) => {
   return (
     <StyledThemeText variant={variant} align={align}>
       {children}

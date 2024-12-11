@@ -38,7 +38,7 @@ const StyledMainButton = styled(StyledButton)<ButtonProps>`
  * @param onClick () => void (onClick method)
  * @param isActive boolean (active status)
  */
-const StarToggleButton: React.FC<ButtonProps> = ({ onClick, isActive }) => {
+const StarToggleButton = ({ onClick, isActive }: ButtonProps) => {
   return (
     <StyledButton onClick={onClick}>
       <img src={isActive ? star_y : star_g} alt="star" />
@@ -58,12 +58,12 @@ const StarToggleButton: React.FC<ButtonProps> = ({ onClick, isActive }) => {
  * @param isActive boolean (button design type)
  * @param disabled boolean (disabled status)
  */
-const MainButton: React.FC<ButtonProps> = ({
+const MainButton = ({
   children,
   onClick = () => {},
   isActive = true,
   disabled = false,
-}) => {
+}: ButtonProps) => {
   return (
     <StyledMainButton isActive={isActive} onClick={onClick} disabled={disabled}>
       <Text size={17} color={isActive ? "#000" : "#adadad"} weight={700}>

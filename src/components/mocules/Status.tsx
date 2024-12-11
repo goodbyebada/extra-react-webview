@@ -1,4 +1,3 @@
-import React from "react";
 import Text from "@components/atoms/Text";
 import { StatusWrapper } from "@components/atoms/Wrapper";
 
@@ -13,7 +12,7 @@ interface StatusTagProps {
  * @param status "applied" | "rejected" | "approved" (status)
  * @param statusText string (status text)
  */
-const StatusTag: React.FC<StatusTagProps> = ({ status, statusText }) => {
+const StatusTag = ({ status, statusText }: StatusTagProps) => {
   return (
     <StatusWrapper status={status}>
       <Text

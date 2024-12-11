@@ -40,12 +40,12 @@ const CounterWrapper = styled.div`
  * @param onClick () => void (onClick method)
  * @returns
  */
-const CalendarItem: React.FC<CalendarItemProps> = ({
+const CalendarItem = ({
   children,
   count = 0,
   highlight = false,
   onClick = () => {},
-}) => {
+}: CalendarItemProps) => {
   return (
     <StyledCalendarItem onClick={onClick}>
       {count > 0 && (

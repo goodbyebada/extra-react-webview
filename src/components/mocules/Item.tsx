@@ -69,7 +69,7 @@ const ItemGatheringWrapper = styled.div`
  * @param isActiveStar boolean (favorites status)
  * @param isRecruit boolean (whether to enable the favorites button)
  */
-const Item: React.FC<ItemProps> = ({
+const Item = ({
   title,
   category,
   date,
@@ -84,7 +84,7 @@ const Item: React.FC<ItemProps> = ({
   isRecruit = false,
   onClick,
   onClickStar = () => {},
-}) => {
+}: ItemProps) => {
   return (
     <ItemWrapper highlight={highlight}>
       <ItemContent onClick={onClick}>
