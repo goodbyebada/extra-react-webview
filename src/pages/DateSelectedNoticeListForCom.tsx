@@ -1,7 +1,6 @@
 import { styled } from "styled-components";
 
 import HomeRecruitBox from "@components/HomeRecruitBox";
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import { useEffect, useState } from "react";
@@ -9,6 +8,7 @@ import jobPostAPI from "@api/jobPostAPI";
 import { JobPost } from "@api/interface";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
+import { sendMessage } from "@api/utils";
 
 /**
  * 날짜 선택시 화면
@@ -33,8 +33,6 @@ export default function DateSelectedNoticeListForCom() {
 
   const selectedDataIdList = jobListAboutYM[dateNum];
 
-  const navigate = useNavigate();
-
   /**
    * navigate하고 싶은 url 추가
    * @param jobPostId
@@ -42,6 +40,13 @@ export default function DateSelectedNoticeListForCom() {
   const navigateToExtraCastingBoard = (jobPostId: number) => {
     // const basePath = "/detail";
     // navigate(`${basePath}/${jobPostId}`);
+    sendMessage({
+      type: "NAVIGATION_DETAIL",
+      payload: {
+        uri: `/detail/${jobPostId}`,
+      },
+      version: "1.0",
+    });
   };
 
   useEffect(() => {

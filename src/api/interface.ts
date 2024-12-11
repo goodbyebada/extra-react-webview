@@ -21,6 +21,17 @@ export interface JobPostRequest {
   category: string;
 }
 
+export type Tattoo = {
+  face: boolean;
+  chest: boolean;
+  arm: boolean;
+  leg: boolean;
+  shoulder: boolean;
+  back: boolean;
+  hand: boolean;
+  feet: boolean;
+};
+
 /**
  * JobPost 단건 조회
  */
@@ -44,7 +55,7 @@ export interface JobPost {
   limitPersonnelList: number[];
   currentPersonnelList: number[];
   seasonList: string[];
-  checkTattooList: boolean[];
+  tattooList: Tattoo[];
 }
 
 /**
@@ -72,6 +83,7 @@ export type RoleListToShow = RoleItemToShow[];
  * - 역할 수정
  */
 export type RoleBodyType = {
+  id: number;
   roleName: string;
   costume: string;
   sex: boolean;
@@ -80,26 +92,37 @@ export type RoleBodyType = {
   limitPersonnel: number;
   currentPersonnel: number;
   season: string;
-  checkTattoo: TattooList;
-};
-
-export type TattooList = {
-  face: boolean;
-  chest: boolean;
-  arm: boolean;
-  leg: boolean;
-  shoulder: boolean;
-  back: boolean;
-  hand: boolean;
-  feet: boolean;
+  tattoo: Tattoo;
 };
 
 /**
  * 촬영관리 API 호출시,
  * request
  */
+export type RoleRegister = {
+  job_post_id: number;
+  sex: boolean; // true: female, false: male
+  min_age: number;
+  max_age: number;
+  season: keyof typeof SeasonEnum;
+  costume: string;
+  etc: string;
+  limit_personnal: number;
+  tattoo: {
+    face: boolean;
+    chest: boolean;
+    arm: boolean;
+    leg: boolean;
+    shoulder: boolean;
+    back: boolean;
+    hand: boolean;
+    feet: boolean;
+  };
+};
+
 export type ShootManage = {
   id: number;
+  jobPostId: number;
   category: string;
   title: string;
   gatheringTime: string;
@@ -128,6 +151,43 @@ export const ApplyStatusLabel: { [key: number]: string } = {
   1: "승인 대기",
   2: "미승인",
   3: "승인 완료",
+};
+
+export type Role = {
+  id: number;
+  roleName: string;
+  costume: string;
+  sex: boolean;
+  minAge: number;
+  maxAge: number;
+  limitPersonnel: number;
+  currentPersonnel: number;
+  season: string;
+  tattoo: Tattoo;
+};
+
+export type RoleList = Role[];
+
+export type CategoryEnumType = {
+  DRAMA: "드라마";
+  MOVIE: "영화";
+  ADVERTISEMENT: "광고";
+  MUSIC_VIDEO: "뮤비촬영";
+  ETC?: string;
+};
+
+export const CategoryEnum: CategoryEnumType = {
+  DRAMA: "드라마",
+  MOVIE: "영화",
+  ADVERTISEMENT: "광고",
+  MUSIC_VIDEO: "뮤비촬영",
+};
+
+export const SeasonEnum = {
+  SPRING: "봄",
+  SUMMER: "여름",
+  AUTUMN: "가을",
+  WINTER: "겨울",
 };
 
 export enum ResponseStatus {

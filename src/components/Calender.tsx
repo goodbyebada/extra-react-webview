@@ -181,7 +181,7 @@ export default function Calender({
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
+  max-height: 100vh;
 
   display: flex;
   flex-direction: column;
@@ -202,12 +202,12 @@ const Container = styled.div`
 `;
 
 const DateSelector = styled.div`
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 `;
 
 const CalenderContainer = styled.div<{ $daylistHeight: number }>`
   width: 372px;
-  height: 412px;
+  height: 430px;
 
   font-size: 16px;
   font-weight: 900;
@@ -216,7 +216,7 @@ const CalenderContainer = styled.div<{ $daylistHeight: number }>`
 
   .calender-wrapper {
     background-color: black;
-    height: 100%;
+    height: 75%;
     border-radius: 20px;
   }
 

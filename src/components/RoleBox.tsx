@@ -26,7 +26,7 @@ const RoleBox = ({
   isSelected,
   index,
 }: RoleBoxProps) => {
-  const { roleId, roleName, roleAge, sex } = roleInfo;
+  const { roleName, roleAge, sex } = roleInfo;
   const { borderColor, backgroundColor, color } = styled;
 
   const roleString = (roleAge: string | null) => {

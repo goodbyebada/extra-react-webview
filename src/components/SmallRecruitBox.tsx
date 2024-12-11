@@ -4,6 +4,7 @@ import RecruitStatus from "@components/custom/smallRecuitStatus";
 // import { RootState } from "../redux/store";
 import { MemberRoleFront } from "@api/interface";
 import { ScheduleTypeStatusLabel } from "@api/interface";
+import { sendMessage } from "@api/utils";
 
 const SmallRecruitBox = ({ elem }: { elem: MemberRoleFront }) => {
   // const recruitStatus = useSelector(
@@ -64,7 +65,29 @@ const SmallRecruitBox = ({ elem }: { elem: MemberRoleFront }) => {
   };
 
   return (
-    <RecruitContainer>
+    <RecruitContainer
+      onClick={() => {
+        if (status === ScheduleTypeStatusLabel.APPROVED) {
+          sendMessage({
+            type: "NAVIGATION_MANAGE",
+            payload: {
+              jobPostId: elem.jobPostId,
+              roleId: elem.id,
+              title: elem.title,
+            },
+            version: "1.0",
+          });
+        } else {
+          sendMessage({
+            type: "NAVIGATION_DETAIL",
+            payload: {
+              uri: `/extra-casting-board/${elem.jobPostId}`,
+            },
+            version: "1.0",
+          });
+        }
+      }}
+    >
       <RecruitBox>
         <InfoContainer>
           <MediaSelectorTxt>{category}</MediaSelectorTxt>

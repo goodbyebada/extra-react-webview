@@ -75,7 +75,7 @@ export default function ExtraCastsComponent({
         <div className="date-status-set">
           <StarIcon id="star" src={star} onClick={handleStarClick} />
 
-          <div className="date-Of-shooting">
+          <div>
             <span> {dateOfShotting}</span>
 
             {/* 추후 공통 컴포넌트의 모집중 컴포넌트로 통일 예정 */}
@@ -183,8 +183,9 @@ const ShootingSchedule = styled.div`
   line-height: 100%;
 
   .time-location-set {
+    padding: 20px;
+    width: 100%;
     align-self: center;
-    font-size: 20px;
   }
 
   .date-status-set {
@@ -201,7 +202,6 @@ const ShootingSchedule = styled.div`
     #star {
       width: 40px;
       height: 40px;
-      margin-top: 20px;
     }
 
     #status {

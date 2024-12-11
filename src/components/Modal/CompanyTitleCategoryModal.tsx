@@ -1,29 +1,30 @@
 import styled from "styled-components";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { CategoryEnum } from "@api/interface";
 
 interface CompanyTitleCategoryModalProps {
-  closeModal: (title: string, category: string) => void;
+  onSubmit: (
+    title: string,
+    category: [keyof typeof CategoryEnum | null, string],
+  ) => void;
+  closeModal: () => void;
 }
 
 export type TitleCategory = {
   title: string;
-  category: string;
+  category: [keyof typeof CategoryEnum | null, string];
 };
 
 function CompanyTitleCategoryModal({
+  onSubmit,
   closeModal,
 }: CompanyTitleCategoryModalProps) {
   const [formState, setFormState] = useState<TitleCategory>({
     title: "",
-    category: "",
+    category: [null, ""],
   });
   const [categoryInput, setCategoryInput] = useState("");
-  const [isFormValid, setIsFormValid] = useState(false);
-  const [boxes, setBoxes] = useState<string[]>([]);
-
-  useEffect(() => {
-    setIsFormValid(formState.title !== "" && formState.category !== "");
-  }, [formState]);
+  const [categoryList, setCategoryList] = useState(CategoryEnum);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,97 +39,113 @@ function CompanyTitleCategoryModal({
   };
 
   const handlePlusClick = () => {
-    if (categoryInput.trim() !== "" && !boxes.includes(categoryInput.trim())) {
-      setBoxes((prevBoxes) => [...prevBoxes, categoryInput.trim()]);
-      setCategoryInput("");
-    }
+    if (categoryInput === "") return;
+    const newCategoryList = { ...categoryList };
+    newCategoryList["ETC"] = categoryInput;
+    setCategoryList(newCategoryList);
+    setCategoryInput("");
   };
 
-  const handleCategoryClick = (category: string) => {
-    setFormState((prevState) => {
-      const newCategories = prevState.category
-        .split(",")
-        .map((cat) => cat.trim());
-      if (newCategories.includes(category)) {
-        // 이미 선택된 카테고리인 경우 제거
-        const updatedCategories = newCategories.filter(
-          (cat) => cat !== category,
-        );
-        return {
-          ...prevState,
-          category: updatedCategories.join(", "),
-        };
-      } else {
-        // 선택되지 않은 카테고리인 경우 추가
-        return {
-          ...prevState,
-          category: [...newCategories, category].join(", "),
-        };
-      }
-    });
+  const handleCategoryClick = (
+    key: keyof typeof CategoryEnum,
+    value: string,
+  ) => {
+    setFormState((prevState) => ({
+      title: prevState.title,
+      category: key === prevState.category[0] ? [null, ""] : [key, value],
+    }));
   };
 
   const handleSubmit = () => {
-    if (isFormValid) {
-      closeModal(formState.title, formState.category);
+    if (formState.title !== "" && formState.category[0] !== null) {
+      onSubmit(formState.title, formState.category);
+      closeModal();
     }
   };
 
   return (
-    <ModalContainer>
-      <RoleBoxWrapper>
-        <Row>
-          <Txt>제목 :</Txt>
-          <Input
-            name="title"
-            value={formState.title}
-            onChange={handleChange}
-            spellCheck="false"
-          />
-        </Row>
-        <Row>
-          <Txt>카테고리 :</Txt>
-          <Input
-            name="categoryInput"
-            value={categoryInput}
-            onChange={handleChange}
-            spellCheck="false"
-          />
-          <PlusBtn onClick={handlePlusClick}>+</PlusBtn>
-        </Row>
-        <BoxesContainer>
-          {boxes.map((box, index) => (
-            <Box
-              key={index}
-              onClick={() => handleCategoryClick(box)}
-              $isSelected={formState.category
-                .split(",")
-                .map((cat) => cat.trim())
-                .includes(box)}
-            >
-              <span>{box}</span>
-            </Box>
-          ))}
-        </BoxesContainer>
-        <Btn $isValid={isFormValid} onClick={handleSubmit}>
-          확인
-        </Btn>
-      </RoleBoxWrapper>
-    </ModalContainer>
+    <ModalOverlay>
+      <ModalBackground onClick={closeModal} />
+      <ModalContainer>
+        <RoleBoxWrapper>
+          <Row>
+            <Txt>제목 :</Txt>
+            <Input
+              name="title"
+              value={formState.title}
+              onChange={handleChange}
+              spellCheck="false"
+            />
+          </Row>
+          <Row>
+            <Txt>카테고리 :</Txt>
+            <Input
+              name="categoryInput"
+              value={categoryInput}
+              onChange={handleChange}
+              spellCheck="false"
+            />
+            <PlusBtn onClick={handlePlusClick}>+</PlusBtn>
+          </Row>
+          <BoxesContainer>
+            {Object.entries(categoryList).map(([key, value], index) => (
+              <Box
+                key={index}
+                onClick={() =>
+                  handleCategoryClick(key as keyof typeof CategoryEnum, value)
+                }
+                $isSelected={
+                  formState.category[0] !== null &&
+                  key === formState.category[0]
+                }
+              >
+                <span>{value}</span>
+              </Box>
+            ))}
+          </BoxesContainer>
+          <Btn
+            $isValid={formState.title !== "" && formState.category !== null}
+            onClick={handleSubmit}
+          >
+            확인
+          </Btn>
+        </RoleBoxWrapper>
+      </ModalContainer>
+    </ModalOverlay>
   );
 }
 
 export default CompanyTitleCategoryModal;
 
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+`;
+
 const ModalContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   width: 329px;
   height: 320px;
   border-radius: 30px;
   background: #302e34;
+  position: relative;
+  z-index: 30;
 `;
 
 const RoleBoxWrapper = styled.div`
@@ -187,13 +204,13 @@ const BoxesContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-left: 120px;
-  width: calc(100% - 120px);
+  width: 50%;
+  margin-left: 20px;
 `;
 
 const Box = styled.div<{ $isSelected: boolean }>`
-  width: 66px;
-  height: 23px;
+  width: 45%;
+  height: 20px;
   border-radius: 5px;
   background: ${(props) =>
     props.$isSelected ? "rgba(116, 116, 116, 0.4)" : "#747474"};

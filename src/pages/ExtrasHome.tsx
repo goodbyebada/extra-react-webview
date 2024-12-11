@@ -3,22 +3,18 @@ import ToggleBar from "@components/ToggleBar";
 import TypeSelector from "@components/TypeSelector";
 import Calender from "@components/Calender";
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { GetToken } from "@api/GetToken";
-import { useEffect } from "react";
+// import { GetToken } from "@api/GetToken";
 
 import List from "@pages/List";
+import { sendMessage } from "@api/utils";
 
 /**
  * 회원 정보 수정할 것
  */
-/**임시
- * API 개발 후 처리할 예정
- */
-const name = "미뇽";
 
 /**
  * 보조 출연자 홈화면
@@ -26,6 +22,8 @@ const name = "미뇽";
  * @returns 보조 출연자 홈화면 UI
  */
 export default function ExtrasHome() {
+  const [name, setName] = useState("");
+
   // date 관련
   const date = new Date();
   const today = {
@@ -48,7 +46,7 @@ export default function ExtrasHome() {
   };
 
   // navigate
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // 전체 || 추천
   const showRecommand = useSelector(
@@ -60,18 +58,29 @@ export default function ExtrasHome() {
     (state: RootState) => state.showType.showAsCalender,
   );
 
-  const listAll = `지금 당장 ${name}님이 필요해요 ⏰`;
-  const listRecommand = `${name}님한테 딱 맞는 역할이 있어요 🤩`;
-
   // dateSelectedNoticeList 날짜 선택시 화면으로 이동
   const navigateToSelectedNoticeList = () => {
     const path = "/date-selected-notice-list";
-    navigate(path);
+    sendMessage({
+      type: "NAVIGATION_DATE",
+      payload: {
+        uri: path,
+      },
+      version: "1.0",
+    });
+    // navigate(path);
   };
 
   useEffect(() => {
-    // web일때
-    GetToken(0);
+    const listener = (event: MessageEvent) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "POST_DATA") {
+        setName(data.payload.name);
+      }
+    };
+
+    window.addEventListener("message", listener);
+    document.addEventListener("message", listener as EventListener);
   }, []);
 
   return (
@@ -82,7 +91,11 @@ export default function ExtrasHome() {
           <TypeSelector />
         </nav>
 
-        <h1>{!showRecommand ? listAll : listRecommand}</h1>
+        <h1>
+          {!showRecommand
+            ? `지금 당장 ${name}님이 필요해요 ⏰`
+            : `${name}님한테 딱 맞는 역할이 있어요 🤩`}
+        </h1>
       </TopBar>
 
       <Content className="content">

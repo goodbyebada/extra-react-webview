@@ -1,5 +1,4 @@
 // jobPostAPI.js
-import { BASE_URL } from "@api/interface";
 import {
   requestGetFetch,
   // requestDeleteFetch,
@@ -8,7 +7,7 @@ import {
 } from "@api/utils";
 // import { JobPostRequest } from "@api/interface";
 
-const jobPostURL = `${BASE_URL}/jobposts`;
+const jobPostURL = `jobposts`;
 
 const jobPostAPI = {
   async handleResponse(response: Response | null) {

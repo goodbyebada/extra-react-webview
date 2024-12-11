@@ -8,7 +8,7 @@
 
 import StatusRecruitBox from "@components/StatusRecruitBox";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DropDownSelector from "@components/DropDownSelector";
 import CancelCheckModal from "@components/Modal/CancelCheckModal";
 import CompleteModal from "@components/Modal/CompleteModal";
@@ -17,6 +17,7 @@ import {
   ShootManageSelectStatus,
   ShootManage,
 } from "@api/interface";
+import { requestDeleteFetch, requestGetFetch } from "@api/utils";
 
 export default function ExtraShootManagePage() {
   const [applyStatusIdx, setApplyStatusIdx] = useState(0);
@@ -25,53 +26,50 @@ export default function ExtraShootManagePage() {
   const [isCancelCheckModalOpen, setIsCancelCheckModalOpen] = useState(false);
   const [isCompleteModalOpen, setIsCompleteModalOpen] = useState(false);
 
+  const loadData = useCallback(
+    async (statusUrl: string) => {
+      try {
+        const res = await requestGetFetch(
+          `application-request/member/roles${statusUrl}`,
+        );
+
+        if (res !== null) {
+          if (!res.ok) {
+            throw new Error(`API call failed with status ${res.status}`);
+          }
+          res.json().then((data) => {
+            setRecruitBoxes(data);
+            const mappedData = data.map((item: ShootManage) => ({
+              ...item,
+              applyStatus:
+                ShootManageSelectStatus[
+                  item.applyStatus as unknown as keyof typeof ShootManageSelectStatus
+                ],
+            }));
+
+            setRecruitBoxes(mappedData);
+            const status =
+              ShootManageSelectStatus[applyStatusIdx] || "Unknown status";
+            console.log(`Data fetched successfully for ${status}:`, data);
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    },
+    [applyStatusIdx],
+  );
+
   // applyStatusIdx가 변경될 때마다 API 호출
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      console.error("No access token found");
-      return;
-    }
-
     const status = ShootManageSelectStatus[applyStatusIdx];
     const statusUrl =
       applyStatusIdx === 0
         ? "" // 전체 목록은 /roles만 호출
         : `/${status.toLowerCase()}`;
 
-    fetch(
-      `${import.meta.env.VITE_SERVER_URL}api/v1/application-request/member/roles${statusUrl}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`API call failed with status ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data: ShootManage[]) => {
-        const mappedData = data.map((item) => ({
-          ...item,
-          applyStatus:
-            ShootManageSelectStatus[
-              item.applyStatus as unknown as keyof typeof ShootManageSelectStatus
-            ],
-        }));
-
-        setRecruitBoxes(mappedData);
-        const status =
-          ShootManageSelectStatus[applyStatusIdx] || "Unknown status";
-        console.log(`Data fetched successfully for ${status}:`, data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, [applyStatusIdx]);
+    loadData(statusUrl);
+  }, [loadData, applyStatusIdx]);
 
   // 1~3까지의 배열
   const selcetorList = Array.from({ length: 4 }, (_, i) => i);
@@ -79,26 +77,17 @@ export default function ExtraShootManagePage() {
     setApplyStatusIdx(selectedIdx);
   };
 
-  const handleDeleteOrCancel = (id: number, isCancel: boolean) => {
-    const token = localStorage.getItem("accessToken");
-    if (!token) {
-      console.error("No access token found");
-      return;
-    }
+  const handleDeleteOrCancel = async (id: number, isCancel: boolean) => {
+    try {
+      const res = await requestDeleteFetch(
+        `application-request/member/application-requests/${id}`,
+      );
 
-    fetch(
-      `${import.meta.env.VITE_SERVER_URL}api/v1/application-request/member/application-requests/${id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    )
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`API call failed with status ${response.status}`);
+      if (res !== null) {
+        if (!res.ok) {
+          throw new Error(`API call failed with status ${res.status}`);
         }
+
         if (isCancel) {
           setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
           closeCancelModal();
@@ -106,10 +95,10 @@ export default function ExtraShootManagePage() {
         } else {
           setRecruitBoxes(recruitBoxes.filter((box) => box.id !== id));
         }
-      })
-      .catch((error) => {
-        console.error("Error handling delete request:", error);
-      });
+      }
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    }
   };
 
   const openCancelModal = (item: ShootManage) => {
@@ -137,7 +126,11 @@ export default function ExtraShootManagePage() {
   };
 
   return (
-    <div>
+    <div
+      style={{
+        marginTop: "10px",
+      }}
+    >
       <Top>
         <DropDownSelector
           currentIdx={applyStatusIdx}

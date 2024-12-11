@@ -39,7 +39,7 @@ function AdminManageRecruitBox({ navigate, jobPostInfo }: Props) {
     } else if (differenceInDays === 0) {
       return `D-Day`;
     } else {
-      return `D+${Math.abs(differenceInDays)}`;
+      return `종료`;
     }
   };
 
@@ -52,11 +52,13 @@ function AdminManageRecruitBox({ navigate, jobPostInfo }: Props) {
           <DateAndDeadlineContainer>
             {/* calendar가 '2001-01-01'일 경우로 구현함 */}
             {/* calendarList일 경우 => getMMDD(jobPostInfo.calendarList[0]) + " - " + getMMDD(jobPostInfo.calendarList[jobPostInfo.calendarList.length - 1])  */}
-            <DateTxt>{getMMDD(jobPostInfo.calendar)}</DateTxt>
+            <DateTxt>{getMMDD(jobPostInfo.calenderList[0])}</DateTxt>
             {/* calendarList일 경우 => getDaysUntil(jobPostInfo.calendarList[0])  */}
-            <DeadlineBox>{getDaysUntil(jobPostInfo.calendar)}</DeadlineBox>
+            <DeadlineBox>
+              {getDaysUntil(jobPostInfo.calenderList[0])}
+            </DeadlineBox>
           </DateAndDeadlineContainer>
-          <Team>{jobPostInfo.company_name}</Team>
+          <Team>{jobPostInfo.companyName}</Team>
         </InfoContainer>
         <button
           style={{
@@ -74,8 +76,8 @@ function AdminManageRecruitBox({ navigate, jobPostInfo }: Props) {
           />
         </button>
         <TimePlace>
-          {jobPostInfo.gathering_time} 예정 <br />{" "}
-          {jobPostInfo.gathering_location}
+          {jobPostInfo.gatheringTime} 예정 <br />{" "}
+          {jobPostInfo.gatheringLocation}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>

@@ -1,10 +1,14 @@
+import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-
+// import NavBar from "@components/custom/NavBar";
 import HomeRecruitBox from "@components/HomeRecruitBox";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+// import { dummyJobPostList } from "@api/dummyData";
+import { sendMessage } from "@api/utils";
+
+// import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { useEffect, useState } from "react";
 import jobPostAPI from "@api/jobPostAPI";
 import { JobPost } from "@api/interface";
 import Loading from "@components/Loading";
@@ -25,7 +29,7 @@ export default function DateSelectedNoticeList() {
     (state: RootState) => state.homeSelectedDate,
   );
 
-  const { dateNum } = selectedDate;
+  const { dateNum, year, month } = selectedDate;
 
   const jobListAboutYM = useSelector(
     (state: RootState) => state.jobPosts.jobPostByCalender.data,
@@ -33,17 +37,31 @@ export default function DateSelectedNoticeList() {
 
   const selectedDataIdList = jobListAboutYM[dateNum];
 
-  // const dateString = `${year}/${month}/${dateNum}`;
-  // const navContent = `${dateString} 에 모집 중인 공고예요.`;
-  // month에 따른 데이터들중 해당 날짜에 맞는 joblist만 고르는 로직 추가 필요
-  // dummydata
-
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const navigateToExtraCastingBoard = (jobPostId: number) => {
-    const basePath = "/extra-casting-board";
-    navigate(`${basePath}/${jobPostId}`);
+    // navigate(`${basePath}/${jobPostId}`);
+    sendMessage({
+      type: "NAVIGATION_DETAIL",
+      payload: {
+        uri: `/extra-casting-board/${jobPostId}`,
+      },
+      version: "1.0",
+    });
   };
+
+  const dateString = `${year}/${month}/${dateNum}`;
+  const navContent = `${dateString} 에 모집 중인 공고예요.`;
+
+  useEffect(() => {
+    sendMessage({
+      type: "POST_DATA",
+      payload: {
+        title: navContent,
+      },
+      version: "1.0",
+    });
+  }, [navContent]);
 
   useEffect(() => {
     const fetchData = async () => {

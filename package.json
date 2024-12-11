@@ -15,6 +15,7 @@
     "@reduxjs/toolkit": "^2.2.6",
     "@types/crypto-js": "^4.2.2",
     "crypto-js": "^4.2.0",
+    "esbuild": "^0.23.0",
     "eslint-plugin-react": "^7.34.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -25,18 +26,19 @@
     "styled-components": "^6.1.11"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^7.15.0",
-    "@typescript-eslint/parser": "^7.15.0",
-    "@vitejs/plugin-react-swc": "^3.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.2.0",
+    "@typescript-eslint/parser": "^8.2.0",
+    "@vitejs/plugin-react-swc": "^3.7.2",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
     "husky": "^9.0.11",
-    "lint-staged": "^15.2.7",
+    "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "typescript": "^5.2.2",
     "vite": "^5.3.4",
@@ -47,5 +49,8 @@
       "eslint --fix",
       "prettier --write"
     ]
+  },
+  "resolutions": {
+    "@typescript-eslint/parser": "^5.62.0"
   }
 }

@@ -1,7 +1,9 @@
 import { styled } from "styled-components";
 
 import navBtn from "@assets/more-than-button.png";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
+
+import { sendMessage } from "@api/utils";
 
 type NavBarProps = {
   content: string;
@@ -14,12 +16,21 @@ type NavBarProps = {
  * @returns navBar UI
  */
 export default function NavBar({ content }: NavBarProps) {
-  const navigate = useNavigate();
+  //  const navigate = useNavigate();
 
   return (
     <NavContainer>
       <div className="wrapper">
-        <button onClick={() => navigate(-1)}>
+        <button
+          onClick={() => {
+            // navigate(-1)
+
+            sendMessage({
+              type: "HISTORY_BACK",
+              version: "1.0",
+            });
+          }}
+        >
           <img src={navBtn}></img>
         </button>
 
@@ -56,6 +67,7 @@ const NavContainer = styled.nav`
   #content {
     margin: 0px 20px;
     height: 100%;
+    line-height: var(--_nav-height);
   }
 
   button {

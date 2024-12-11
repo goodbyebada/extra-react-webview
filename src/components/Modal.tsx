@@ -35,7 +35,6 @@ const ModalContent = styled.div`
   position: relative;
   z-index: 1001;
   width: 300px;
-  
 `;
 
 const Modal = ({ isVisible, onClose, children }: ModalProps) => {

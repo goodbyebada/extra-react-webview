@@ -28,7 +28,7 @@ const defaultJobPost: JobPost = {
   limitPersonnelList: [],
   currentPersonnelList: [],
   seasonList: [],
-  checkTattooList: [],
+  tattooList: [],
 };
 
 function transformAndSortDates(input: ObjectType): ObjectType {

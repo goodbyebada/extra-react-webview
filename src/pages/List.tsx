@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { styled } from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { JobPost, ResponseStatus, dateYM } from "@api/interface";
+import { JobPost } from "@api/interface";
+import { dateYM } from "@api/interface";
+import HomeRecruitBox from "@components/HomeRecruitBox";
+import { ResponseStatus } from "@api/interface";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
-import HomeRecruitBox from "@components/HomeRecruitBox";
-import jobPostAPI from "@api/jobPostAPI"; // API 호출을 위한 모듈
+import { sendMessage } from "@api/utils";
+import jobPostAPI from "@api/jobPostAPI";
 
 type ListProps = {
   dateYM: dateYM;
@@ -13,7 +15,6 @@ type ListProps = {
 };
 
 export default function List({ dateYM, showRecommand }: ListProps) {
-  const navigate = useNavigate();
   const [pageNum, setPageNum] = useState(0);
   const [localJobPost, setLocalJobPost] = useState<JobPost[]>([]);
   const [status, setStatus] = useState<ResponseStatus>(ResponseStatus.loading);
@@ -22,7 +23,14 @@ export default function List({ dateYM, showRecommand }: ListProps) {
 
   const navigateToExtraCastingBoard = (elem: JobPost) => {
     const path = `/extra-casting-board/${elem.id}`;
-    navigate(path);
+    sendMessage({
+      type: "NAVIGATION_DETAIL",
+      payload: {
+        uri: path,
+      },
+      version: "1.0",
+    });
+    // navigate(path);
   };
 
   const fetchJobPosts = async () => {
