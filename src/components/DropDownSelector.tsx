@@ -10,6 +10,8 @@ import { ApplyStatusLabel } from "@api/interface";
  * @param param0
  * @returns
  */
+
+//  TODO atoms에 맞춰 수정 필요함
 export default function DropDownSelector({
   currentIdx,
   modalIdxList,

@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { DateSelctedType } from "@api/interface";
 /**
  * 요일을 나타내는 컴포넌트 UI

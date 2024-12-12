@@ -21,6 +21,7 @@ import CustomCheckModal from "@components/Modal/CustomCheckModal";
  *
  * @param param0
  * @returns 지원 공고 상세 정보 화면
+ * - 페이지의 영역 같음
  */
 export default function CastInfo({
   selectedJobPostItem,

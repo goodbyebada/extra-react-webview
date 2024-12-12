@@ -1,14 +1,9 @@
-// import Calender from "@components/Calender";
-import Calender from "@components/Calender";
-
-import { useState } from "react";
+import Calender from "@components/organisms/Calender";
 
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-
 import List from "@pages/List";
-import { sendMessage } from "@api/utils";
 
 export default function ExtraHomeContent() {
   // navigate

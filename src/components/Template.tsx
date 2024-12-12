@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import DateSelectorBar from "@components/Calender/DateSelectorBar";
+import DateSelectorBar from "@components/calender/DateSelectorBar";
 import { ReactNode } from "react";
 
 {

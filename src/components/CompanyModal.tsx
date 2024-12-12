@@ -14,9 +14,13 @@ type CompanyModalType = {
  * 1. 음력 날짜 치환 로직
  * 2. HomeRecruitBox click시 이동할 navigate path 확정시 수정 예정
  *
+ *
+ *
  * @param param0
  * @returns 홈 업체 화면에서 날짜 선택시의 모달창
  */
+
+// TODO CompanyModal atoms 이용해 분리해야함
 export default function CompanyModal({ jobList }: CompanyModalType) {
   // 임시 경로
   const path = "company-job-list/";
@@ -24,7 +28,7 @@ export default function CompanyModal({ jobList }: CompanyModalType) {
   const navigate = useNavigate();
   // 선택된 날짜
   const selectedDate = useSelector((state: RootState) => state.date);
-  const { month, dateNum, dayOfWeek } = selectedDate;
+  const { month, dateNum, dayOfWeek } = selectedDate.selectedByHome;
   const dayOfWeekString = dayOfWeek + "요일";
 
   return (

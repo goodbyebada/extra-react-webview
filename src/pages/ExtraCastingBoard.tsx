@@ -10,7 +10,7 @@ import { AppDispatch } from "@redux/store";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 
-import CastInfo from "@components/CastInfo";
+import CastInfo from "@pages/CastInfo";
 import { ResponseStatus } from "@api/interface";
 
 /**

@@ -7,12 +7,10 @@ import { setHomeDate } from "@redux/dateSlice";
 import { AppDispatch, RootState } from "@redux/store";
 
 import { CalenderTypeFor } from "@api/interface";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { fetchJobPostByCalender } from "@redux/jobPost/jobPostSlice";
-import DayList from "@components/Calender/DayList";
-import DateSelectorBar from "@components/Calender/DateSelectorBar";
-import HomeCalenderSingleWeek from "@components/Calender/HomeCalenderSingleWeek";
-import CalenderContainer from "@components/Calender/CalenderContainer";
+import DayList from "@components/calender/DayList";
+import HomeCalenderSingleWeek from "@components/calender/HomeCalenderSingleWeek";
 import string2Int from "@utills/string2Int";
 import { DateSelctedType } from "@api/interface";
 import Template from "@components/Template";

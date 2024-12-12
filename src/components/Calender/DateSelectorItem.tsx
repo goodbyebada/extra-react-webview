@@ -3,8 +3,6 @@ import dropDownBtn from "@assets/more-than-button.png";
 import { styled } from "styled-components";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/store";
-import { setHomeDate } from "@redux/dateSlice";
-import MonthList from "@utills/MonthList";
 
 type setFun = (
   elem: { month: string } | { year: string },

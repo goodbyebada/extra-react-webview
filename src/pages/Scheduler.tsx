@@ -8,14 +8,14 @@ import { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@redux/store";
 import returnSchduleItemComponent from "@utills/returnScheduleItemComponent";
-import SchedulerSingleWeek from "@components/Calender/SchedulerSingleWeek";
+import SchedulerSingleWeek from "@components/calender/SchedulerSingleWeek";
 
 import Template from "@components/Template";
 
 import { ScheduleType } from "@api/interface";
 import Ellipsis from "@components/custom/Ellipsis";
 import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
-import DayList from "@components/Calender/DayList";
+import DayList from "@components/calender/DayList";
 import string2Int from "@utills/string2Int";
 import { setScheduleDate } from "@redux/dateSlice";
 import { DateSelctedType } from "@api/interface";

@@ -1,4 +1,4 @@
-import { TopBar } from "@components/ExtraHomeWrapper";
+import { TopBar } from "@pages/ExtrasHome";
 import { styled } from "styled-components";
 import TypeSelector from "@components/custom/TypeSelector";
 import { useState } from "react";
@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 import { RootState } from "@redux/store";
 import { useSelector } from "react-redux";
-import CompanyCalender from "@components/CompanyCalender";
-import CompanyList from "@components/CompanyList";
+import CompanyCalender from "@components/organisms/CompanyCalender";
+import CompanyList from "@components/organisms/CompanyList";
 
 /**
  *추후 수정 예정
@@ -53,6 +53,14 @@ export default function CompanyHome() {
     navigate(path);
   };
 
+  /**
+   * test용
+   */
+
+  // useEffect(() => {
+  //   GetToken(0);
+  // }, []);
+
   return (
     <div className="company-home-container">
       <CompanyHomeTopBar>
@@ -66,8 +74,8 @@ export default function CompanyHome() {
         {showAsCalender ? (
           // 항상 전체 추천 UI
           <CompanyCalender
-            dateYM={dateYM}
-            dateYMHandler={dateYMHandler}
+            // dateYM={dateYM}
+            // dateYMHandler={dateYMHandler}
             showRecommand={false}
             clickedDateEvent={clickedDateEvent}
           />
