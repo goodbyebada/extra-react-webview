@@ -3,28 +3,37 @@ import dropDownBtn from "@assets/more-than-button.png";
 import { styled } from "styled-components";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/store";
+import Text from "@components/atoms/Text";
+import { FONT_COLORS } from "@/styled/colors";
+import { FONT_SIZE } from "@/styled/font";
+import { DATE_SELECTOR_SIZE } from "@/styled/size";
 
-type setFun = (
+type setDateAction = (
   elem: { month: string } | { year: string },
 ) =>
   | { payload: any; type: "selectedDate/setHomeDate" }
   | { payload: any; type: "selectedDate/setScheduleDate" };
 
-export default function DateSelectorItem({
-  setFun,
+/**
+ *
+ * @param param0
+ * @returns
+ * Button 변경했을때 dispatch 함
+ */
+
+export default function DateSelectorButton({
+  setDateActionByType,
   type,
   value,
   modalList,
 }: {
-  setFun: setFun;
+  setDateActionByType: setDateAction;
   type: string;
   value: number;
   modalList: number[];
 }) {
-  /**
-   * ! 반응형에 따라 달라지는 Heigth 처리 어떻게 할 것인지 고민
-   */
-  const LI_ITEM_HEIGHT = 24;
+  // TODO 반응형에 따라 달라지는 Heigth 처리 어떻게 할 것인지 고민
+  const LI_ITEM_HEIGHT = DATE_SELECTOR_SIZE.liItemHeight;
 
   const [btnClicked, setBtnClicked] = useState(false);
   const ulRef = useRef<HTMLUListElement>(null);
@@ -33,12 +42,15 @@ export default function DateSelectorItem({
 
   const onClickedDropDownListItem = (date: number) => {
     if (type === "month") {
-      dispatch(setFun({ month: (date - 1).toString() }));
+      const dateUINumber = date;
+
+      //TODO month는 UI로 보이는 num보다 -1 작게 들어가야한다. 추후 수정할 것
+      dispatch(setDateActionByType({ month: (dateUINumber - 1).toString() }));
       setBtnClicked(false);
       return;
     }
 
-    dispatch(setFun({ year: date.toString() }));
+    dispatch(setDateActionByType({ year: date.toString() }));
     setBtnClicked(false);
   };
 
@@ -46,9 +58,7 @@ export default function DateSelectorItem({
     if (btnClicked && ulRef.current) {
       const selectedIndex = modalList.findIndex((date) => date === value);
 
-      /**
-       * ! 로직 수정 필요
-       */
+      // TODO 로직 수정 필요
       // ul.current.children.length가 0보다 커야한다.
       // index가 2 이상이어지 유효한 로직
       // 선택한 item이 list 중앙에 있기 위해 제작한 로직
@@ -79,7 +89,14 @@ export default function DateSelectorItem({
                 onClick={() => onClickedDropDownListItem(date)}
                 className={date === value ? "selected" : ""}
               >
-                {date}
+                <Text
+                  size={FONT_SIZE.small}
+                  color={FONT_COLORS.white}
+                  weight={700}
+                  align="center"
+                >
+                  {date}
+                </Text>
               </Item>
             );
           })}
@@ -106,11 +123,10 @@ const Item = styled.li<{ $height: number }>`
   align-items: center;
   height: ${({ $height }) => `${$height}px`};
 
-  /* default FontSize */
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px; /* 150% */
+  &:hover {
+    border: 1px solid white;
+    margin: 0px 10px;
+  }
 
   &.selected {
     border: 1px solid white;

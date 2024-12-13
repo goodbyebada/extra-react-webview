@@ -8,17 +8,18 @@ import { useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@redux/store";
 import returnSchduleItemComponent from "@utills/returnScheduleItemComponent";
-import SchedulerSingleWeek from "@components/calender/SchedulerSingleWeek";
+import SchedulerSingleWeek from "@components/mocules/calender/SchedulerSingleWeek";
 
-import Template from "@components/Template";
+import CalenderWrapper from "@components/CalenderWrapper";
 
 import { ScheduleType } from "@api/interface";
 import Ellipsis from "@components/custom/Ellipsis";
 import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
-import DayList from "@components/calender/DayList";
-import string2Int from "@utills/string2Int";
+
+import convertYearMonthStringToInt from "@utills/parsedDateInfoToInt";
 import { setScheduleDate } from "@redux/dateSlice";
-import { DateSelctedType } from "@api/interface";
+import { DateSelctedType } from "@api/dateInteface";
+import { SchedulerWeekdayLabels } from "@components/mocules/WeekdayLabels";
 
 export default function SchedulerPage() {
   const DAYLIST_HEIGHT_PERCENT = 8;
@@ -39,7 +40,7 @@ export default function SchedulerPage() {
   const dateYM = useSelector(
     (state: RootState) => state.date.selectedBySchedule,
   );
-  const { year, month } = string2Int(dateYM);
+  const { year, month } = convertYearMonthStringToInt(dateYM);
   const weeklists = useCalendar(year, month);
 
   // 데이터
@@ -84,13 +85,10 @@ export default function SchedulerPage() {
   };
 
   return (
-    <Template dateSelctedType={DateSelctedType.scheduler}>
+    <CalenderWrapper dateSelctedType={DateSelctedType.scheduler}>
       <Container $daylistHeight={DAYLIST_HEIGHT_PERCENT}>
         <Wrapper>
-          <DayList
-            HeightPercent={DAYLIST_HEIGHT_PERCENT}
-            dateSelctedType={DateSelctedType.scheduler}
-          />
+          <SchedulerWeekdayLabels HeightPercent={DAYLIST_HEIGHT_PERCENT} />
           <DatesWrapper>
             {weeklists.map((item, key) => {
               return (
@@ -123,7 +121,7 @@ export default function SchedulerPage() {
       ) : (
         <></>
       )}
-    </Template>
+    </CalenderWrapper>
   );
 }
 

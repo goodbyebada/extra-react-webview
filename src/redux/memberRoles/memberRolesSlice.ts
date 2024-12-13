@@ -3,7 +3,7 @@ import {
   MemberRoleFront,
   ResponseStatus,
   ScheduleTypeStatusLabel,
-  dateYM,
+  DateYearMonth,
   MemberRoleServer,
 } from "@api/interface";
 import memberRolesAPI from "@api/memberRolesAPI";
@@ -65,7 +65,7 @@ const initialState = {
 // [회원]: 역할 전체 조회
 export const getMemberAppliedRoles = createAsyncThunk(
   "member/getMyAppliedRoles",
-  async ({ year, month }: dateYM) => {
+  async ({ year, month }: DateYearMonth) => {
     let data: Promise<MemberRoleServer[]>;
 
     if (TEST_FLAG) {

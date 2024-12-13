@@ -8,8 +8,9 @@ import {
 export {
   memberRoleServerDummyList,
   memberRoleFrontDummyData,
-  dummyCalenderData,
+  dummyCalenderDataForExtra,
   dummyJobPostList,
+  dummyCalenderDataForCompany,
 };
 
 const memberRoleServerDummyList: MemberRoleServer[] = [
@@ -138,11 +139,13 @@ const memberRoleFrontDummyData: MemberRoleFront[] = [
  * 캘린더 화면일 때 호출되는 API response
  */
 
-const dummyCalenderData: ObjectType = {
+const dummyCalenderDataForExtra: ObjectType = {
   "2024-09-02": [1, 2],
   "2024-09-05": [2],
   "2024-09-18": [3, 4],
 };
+
+const dummyCalenderDataForCompany: ObjectType = dummyCalenderDataForExtra;
 
 /**
  * JobPost 공고 전체 조회

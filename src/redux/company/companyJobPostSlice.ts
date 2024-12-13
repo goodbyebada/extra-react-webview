@@ -2,12 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { JobPost } from "@api/interface";
 import { ResponseStatus } from "@api/interface";
-import { dateYM, QuryTypesWithPage } from "@api/interface";
-import { ObjectType, JobPostList } from "@api/interface";
+import { QuryTypesWithPage, ObjectType } from "@api/dateInteface";
+import { JobPostList } from "@api/interface";
 import jobPostAPIForCom from "@api/jobPostAPIForCom";
 
-import { dummyCalenderData, dummyJobPostList } from "@api/dummyData";
+import { dummyCalenderDataForCompany, dummyJobPostList } from "@api/dummyData";
 import { TEST_FLAG } from "@/testFlag";
+import { YearMonthAsNumber } from "@api/dateInteface";
 
 // 상태의 타입 정의
 
@@ -88,14 +89,15 @@ const initialState: JobPostState = {
  */
 export const fetchJobPostByCalenderForCom = createAsyncThunk(
   "companyJobpost/fetchJobPostByCalenderForCom",
-  async ({ year, month }: dateYM) => {
+  async ({ year, month }: YearMonthAsNumber) => {
     let data: Promise<ObjectType>;
 
     if (TEST_FLAG) {
       console.log(`${year} ${month + 1}의 TEST용입니다`);
       data = new Promise<ObjectType>((resolve) =>
         setTimeout(() => {
-          resolve(dummyCalenderData);
+          console.log("공고(Company) 측 jobPost 입니다.");
+          resolve(dummyCalenderDataForCompany);
         }, 2000),
       );
       return data;

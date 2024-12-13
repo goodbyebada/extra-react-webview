@@ -3,12 +3,13 @@ import jobPostAPI from "@api/jobPostAPI";
 import { JobPost } from "@api/interface";
 import { ResponseStatus } from "@api/interface";
 import {
-  dateYM,
+  DateYearMonth,
   QuryTypesWithPage,
-  JobPostList,
   ObjectType,
-} from "@api/interface";
-import { dummyCalenderData, dummyJobPostList } from "@api/dummyData";
+} from "@api/dateInteface";
+
+import { JobPostList } from "@api/interface";
+import { dummyCalenderDataForExtra, dummyJobPostList } from "@api/dummyData";
 import { TEST_FLAG } from "@/testFlag";
 
 // 상태의 타입 정의
@@ -90,15 +91,15 @@ const initialState: JobPostState = {
  */
 export const fetchJobPostByCalender = createAsyncThunk<
   ObjectType,
-  { year: number; month: number }
->("jobPosts/fetchAllbyCalender", async ({ year, month }: dateYM) => {
+  DateYearMonth
+>("jobPosts/fetchAllbyCalender", async ({ year, month }: DateYearMonth) => {
   let data: Promise<ObjectType>;
 
   if (TEST_FLAG) {
     console.log(`${year} ${month + 1}의 TEST용입니다`);
     data = new Promise<ObjectType>((resolve) =>
       setTimeout(() => {
-        resolve(dummyCalenderData);
+        resolve(dummyCalenderDataForExtra);
       }, 2000),
     );
     return data;
@@ -120,6 +121,7 @@ export const fetchJobPostByList = createAsyncThunk(
       console.log(`${year} ${month + 1}의 ListTest용`);
       data = new Promise<JobPostList>((resolve) =>
         setTimeout(() => {
+          console.log("사용자(Extra) 측 jobPost 입니다.");
           resolve(dummyJobPostList);
         }, 2000),
       );

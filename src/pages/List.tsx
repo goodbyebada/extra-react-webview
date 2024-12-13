@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 // import { useRef } from "react";
 import { styled } from "styled-components";
 import { JobPost } from "@api/interface";
-import { dateYM } from "@api/interface";
+import { DateYearMonth } from "@api/interface";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 import { ResponseStatus } from "@api/interface";
 import Loading from "@components/Loading";
@@ -14,10 +14,10 @@ import { AppDispatch } from "@redux/store";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import { fetchJobPostByList } from "@redux/jobPost/jobPostSlice";
-import string2Int from "@utills/string2Int";
+import convertYearMonthStringToInt from "@utills/parsedDateInfoToInt";
 
 type ListProps = {
-  dateYM?: dateYM;
+  dateYM?: DateYearMonth;
   showRecommand: boolean;
 };
 
@@ -85,7 +85,7 @@ export default function List({ showRecommand }: ListProps) {
   const localJobPost = jobPost.data;
 
   useEffect(() => {
-    const { year, month } = string2Int(dateYM);
+    const { year, month } = convertYearMonthStringToInt(dateYM);
     dispatch(fetchJobPostByList({ year, month, pageNum }));
     setPageNum((prev) => prev + 1);
   }, [dispatch, dateYM]);

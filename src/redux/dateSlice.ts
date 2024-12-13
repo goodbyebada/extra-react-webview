@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { DateDetailedInfoByString } from "@api/dateInteface";
+import { WEEK_DAY_LABELS } from "@components/mocules/WeekdayLabels";
 
 const date = new Date();
-const DAY_LIST = ["일", "월", "화", "수", "목", "금", "토"];
 
-const today = {
+const today: DateDetailedInfoByString = {
   year: date.getFullYear().toString(),
   month: date.getMonth().toString(),
   dateNum: date.getDate().toString(), // getDay() 대신 getDate() 사용
-  dayOfWeek: DAY_LIST[date.getDay()],
+  weekDayName: WEEK_DAY_LABELS[date.getDay()],
 };
 
 /**
@@ -34,18 +35,18 @@ const dateSlice = createSlice({
       dateNum = !dateNum ? state.selectedByHome.dateNum : dateNum;
 
       const dayIdx = new Date(year, month, dateNum).getDay();
-      const dayOfWeek = DAY_LIST[dayIdx];
-
-      console.log(action.payload);
+      const weekDayName = WEEK_DAY_LABELS[dayIdx];
 
       state.selectedBySchedule = {
         year,
         month,
         dateNum,
-        dayOfWeek,
+        weekDayName,
       };
     },
+
     setHomeDate(state, action) {
+      console.log(action.payload);
       let { year, month, dateNum } = action.payload;
 
       year = !year ? state.selectedByHome.year : year;
@@ -53,13 +54,13 @@ const dateSlice = createSlice({
       dateNum = !dateNum ? state.selectedByHome.dateNum : dateNum;
 
       const dayIdx = new Date(year, month, dateNum).getDay();
-      const dayOfWeek = DAY_LIST[dayIdx];
+      const weekDayName = WEEK_DAY_LABELS[dayIdx];
 
       state.selectedByHome = {
         year,
         month,
         dateNum,
-        dayOfWeek,
+        weekDayName,
       };
     },
   },
