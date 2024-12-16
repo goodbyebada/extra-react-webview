@@ -252,25 +252,3 @@ export const SeasonLabel: { [key: string]: string } = {
   AUTUMN: "가을",
   WINTER: "겨울",
 };
-
-export interface dateYM {
-  year: number;
-  month: number;
-}
-
-export interface QuryTypesWithPage extends dateYM {
-  pageNum: number;
-}
-
-export type ObjectType = {
-  [key: string]: number[];
-};
-export enum CalenderTypeFor {
-  "user" = 0,
-  "company" = 1,
-}
-
-export const DateSelctedType = {
-  home: "HOME",
-  scheduler: "SCHEDULER",
-};

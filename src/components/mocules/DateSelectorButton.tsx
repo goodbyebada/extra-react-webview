@@ -8,8 +8,8 @@ import { FONT_COLORS } from "@/styled/colors";
 import { FONT_SIZE } from "@/styled/font";
 import { DATE_SELECTOR_SIZE } from "@/styled/size";
 
-type setDateAction = (
-  elem: { month: string } | { year: string },
+type DateReducer = (
+  elem: { month: number } | { year: number },
 ) =>
   | { payload: any; type: "selectedDate/setHomeDate" }
   | { payload: any; type: "selectedDate/setScheduleDate" };
@@ -27,7 +27,7 @@ export default function DateSelectorButton({
   value,
   modalList,
 }: {
-  setDateActionByType: setDateAction;
+  setDateActionByType: DateReducer;
   type: string;
   value: number;
   modalList: number[];
@@ -40,17 +40,18 @@ export default function DateSelectorButton({
   const setShowList = () => setBtnClicked((prev) => !prev);
   const dispatch = useDispatch<AppDispatch>();
 
+  // year/month type에 따라 달라지는 dispatch
   const onClickedDropDownListItem = (date: number) => {
     if (type === "month") {
       const dateUINumber = date;
 
       //TODO month는 UI로 보이는 num보다 -1 작게 들어가야한다. 추후 수정할 것
-      dispatch(setDateActionByType({ month: (dateUINumber - 1).toString() }));
+      dispatch(setDateActionByType({ month: dateUINumber - 1 }));
       setBtnClicked(false);
       return;
     }
 
-    dispatch(setDateActionByType({ year: date.toString() }));
+    dispatch(setDateActionByType({ year: date }));
     setBtnClicked(false);
   };
 

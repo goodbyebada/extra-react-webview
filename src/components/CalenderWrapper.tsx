@@ -14,7 +14,7 @@ export default function CalenderWrapper({
 }) {
   return (
     <CenteredLayoutComponent>
-      <DateSelectorBar dateSelctedType={dateSelctedType} />
+      <DateSelectorBar dateSelctedType={dateSelctedType} yearsAhead={30} />
       {children}
     </CenteredLayoutComponent>
   );

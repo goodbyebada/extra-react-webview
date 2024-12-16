@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import ToggleBar from "@components/custom/ToggleBar";
 import TypeSelector from "@components/custom/TypeSelector";
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import { USER_NAME } from "@/testFlag";

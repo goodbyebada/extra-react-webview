@@ -1,9 +1,6 @@
-import {
-  MemberRoleServer,
-  MemberRoleFront,
-  JobPostList,
-  ObjectType,
-} from "@api/interface";
+import { MemberRoleServer, MemberRoleFront, JobPostList } from "@api/interface";
+
+import { ObjectType } from "@api/dateInteface";
 
 export {
   memberRoleServerDummyList,

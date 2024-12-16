@@ -3,9 +3,9 @@ import {
   MemberRoleFront,
   ResponseStatus,
   ScheduleTypeStatusLabel,
-  DateYearMonth,
   MemberRoleServer,
 } from "@api/interface";
+import { DateYearMonth } from "@api/dateInteface";
 import memberRolesAPI from "@api/memberRolesAPI";
 import convertToDateNum from "@utills/convertToDateNum";
 import { TEST_FLAG } from "@/testFlag";

@@ -31,7 +31,7 @@ export default function CompanyModal({ jobList }: CompanyModalType) {
   const {
     month,
     dateNum,
-    weekDayName: dayOfWeek,
+    weekDayLabel: dayOfWeek,
   } = selectedDate.selectedByHome;
   const dayOfWeekString = dayOfWeek + "요일";
 

@@ -1,20 +1,17 @@
 import { styled } from "styled-components";
 import ToggleBar from "@components/custom/ToggleBar";
 import TypeSelector from "@components/custom/TypeSelector";
-import Calender from "@components/organisms/Calender";
-
-import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "@redux/store";
+import HomeCalendar from "@components/organisms/HomeCalendar";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@redux/store";
 // import { GetToken } from "@api/GetToken";
 
-import List from "@pages/List";
-import { sendMessage } from "@api/utils";
+import { useNavigate } from "react-router-dom";
+import { DateDetailedInfo } from "@api/dateInteface";
+import { fetchJobPostByCalender } from "@redux/jobPost/jobPostSlice";
 
-/**
- * 회원 정보 수정할 것
- */
+const DUMMY_INIT_NAME = "김출연";
 
 /**
  * 보조 출연자 홈화면
@@ -22,31 +19,9 @@ import { sendMessage } from "@api/utils";
  * @returns 보조 출연자 홈화면 UI
  */
 export default function ExtrasHome() {
-  const [name, setName] = useState("");
-
-  // date 관련
-  const date = new Date();
-  const today = {
-    year: date.getFullYear(),
-    month: date.getMonth(),
-  };
-
-  /**
-   * date.getMonth는 항상 원래 월보다 -1이다.
-   * useCaleder에 들어가는 값도 원래  month보다 -1 이어야한다.
-   */
-  const [dateYM, setDateYM] = useState(today);
-
-  const dateYMHandler = (type: string, value: number) => {
-    setDateYM((prev) => {
-      return type === "month"
-        ? { ...prev, [type]: value - 1 }
-        : { ...prev, [type]: value };
-    });
-  };
-
-  // navigate
-  // const navigate = useNavigate();
+  const name = DUMMY_INIT_NAME;
+  const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   // 전체 || 추천
   const showRecommand = useSelector(
@@ -61,27 +36,44 @@ export default function ExtrasHome() {
   // dateSelectedNoticeList 날짜 선택시 화면으로 이동
   const navigateToSelectedNoticeList = () => {
     const path = "/date-selected-notice-list";
-    sendMessage({
-      type: "NAVIGATION_DATE",
-      payload: {
-        uri: path,
-      },
-      version: "1.0",
-    });
-    // navigate(path);
+    navigate(path);
   };
 
-  useEffect(() => {
-    const listener = (event: MessageEvent) => {
-      const data = JSON.parse(event.data);
-      if (data.type === "POST_DATA") {
-        setName(data.payload.name);
-      }
-    };
+  // 데이터
+  const gotJob = useSelector(
+    (state: RootState) => state.jobPosts.jobPostByCalender,
+  );
+  const gotJobDataList = gotJob.data;
 
-    window.addEventListener("message", listener);
-    document.addEventListener("message", listener as EventListener);
-  }, []);
+  // 날짜 정보
+  //CHECK date.getMonth는 항상 원래 월보다 -1이다.
+  //CHECK useCaleder에 들어가는 값도 원래  month보다 -1 이어야한다.s
+  const dateDetailedInfo: DateDetailedInfo = useSelector(
+    (state: RootState) => state.date.selectedByHome,
+  );
+  const { year, month } = dateDetailedInfo;
+
+  useEffect(() => {
+    dispatch(fetchJobPostByCalender({ year, month }));
+  }, [dispatch, year, month]);
+
+  // Only Calender
+  const clickedDateEvent = (dateNum: number) => {
+    const stringDate = dateNum.toString();
+    const jobLength = gotJobDataList[stringDate]?.length;
+
+    if (!jobLength) {
+      return;
+    }
+
+    if (jobLength > 0) {
+      // const dateNum = stringDate;
+
+      // CHECK dateNum 눌렀을때 어떻게 처리했는지 확인 후 수정 예정
+      // dispatch(setHomeDate(dateNum));
+      navigateToSelectedNoticeList();
+    }
+  };
 
   return (
     <Container className="extras-home">
@@ -100,14 +92,16 @@ export default function ExtrasHome() {
 
       <Content className="content">
         {showAsCalender ? (
-          <Calender
-            // dateYM={dateYM}
-            // dateYMHandler={dateYMHandler}
+          <HomeCalendar
+            dateYearMonth={{ year, month }}
             showRecommand={showRecommand}
-            clickedDateEvent={navigateToSelectedNoticeList}
+            clickedDateEvent={(dateNum) => clickedDateEvent(dateNum)}
+            gotJobDataList={gotJobDataList}
           />
         ) : (
-          <List dateYM={dateYM} showRecommand={showRecommand} />
+          ""
+          // TODO list 리팩해야함
+          // <List dateYM={dateYM} showRecommand={showRecommand} />
         )}
       </Content>
     </Container>
