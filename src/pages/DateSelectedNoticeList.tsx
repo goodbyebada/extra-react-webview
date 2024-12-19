@@ -32,7 +32,7 @@ export default function DateSelectedNoticeList() {
   // Nav Bar Content 삭제
   const selectedDate = useSelector((state: RootState) => state.date);
 
-  const { dateNum, year, month } = selectedDate;
+  const { dateNum, year, month } = selectedDate.selectedByHome;
 
   const jobListAboutYM = useSelector(
     (state: RootState) => state.jobPosts.jobPostByCalender.data,

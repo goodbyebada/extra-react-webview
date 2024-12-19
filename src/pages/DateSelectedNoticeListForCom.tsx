@@ -21,7 +21,9 @@ export default function DateSelectedNoticeListForCom() {
   const [loading, setIsLoading] = useState<boolean>(true);
   const [notFound, setNotFound] = useState<boolean>(false);
   // Nav Bar Content 삭제
-  const selectedDate = useSelector((state: RootState) => state.date);
+  const selectedDate = useSelector(
+    (state: RootState) => state.date.selectedByHome,
+  );
 
   const { dateNum } = selectedDate;
 
