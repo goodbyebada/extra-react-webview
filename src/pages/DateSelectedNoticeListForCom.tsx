@@ -22,7 +22,7 @@ export default function DateSelectedNoticeListForCom() {
   const [notFound, setNotFound] = useState<boolean>(false);
   // Nav Bar Content 삭제
   const selectedDate = useSelector(
-    (state: RootState) => state.homeSelectedDate,
+    (state: RootState) => state.date.selectedByHome,
   );
 
   const { dateNum } = selectedDate;
