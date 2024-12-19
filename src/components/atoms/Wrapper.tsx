@@ -1,5 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+// children props 공통적으로 사용할 수 있게 선언함
+export interface WithChildrenProps {
+  children: React.ReactNode;
+}
 
 interface WrapperProps {
   children: React.ReactNode;

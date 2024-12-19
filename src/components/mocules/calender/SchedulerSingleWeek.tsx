@@ -2,28 +2,32 @@ import React from "react";
 import { styled } from "styled-components";
 
 type SchedulerProps = {
-  week: number;
+  height: number;
   key?: number;
   item: number[];
   selectedDateEvent: (elem: number, key: number) => void;
   CheckGotJob: (elem: number) => React.ReactNode;
 };
 export default function SchedulerSingleWeek({
-  week,
+  height,
   item,
   selectedDateEvent,
   CheckGotJob,
 }: SchedulerProps) {
   return (
-    <Week $weekcnt={week} className="week">
-      {item.map((elem, key) => {
-        if (!elem) {
+    <Week $weekcnt={height}>
+      {item.map((dateNumber, key) => {
+        if (!dateNumber) {
           return <DateItem key={key}></DateItem>;
         }
+
         return (
-          <DateItem key={key} onClick={() => selectedDateEvent(elem, key)}>
-            <DateNumber>{!elem ? "" : elem}</DateNumber>
-            {CheckGotJob(elem)}
+          <DateItem
+            key={key}
+            onClick={() => selectedDateEvent(dateNumber, key)}
+          >
+            <DateNumber>{dateNumber}</DateNumber>
+            {CheckGotJob(dateNumber)}
           </DateItem>
         );
       })}

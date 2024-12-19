@@ -1,6 +1,5 @@
 import { styled } from "styled-components";
-import ToggleBar from "@components/custom/ToggleBar";
-import TypeSelector from "@components/custom/TypeSelector";
+
 import HomeCalendar from "@components/organisms/HomeCalendar";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +9,12 @@ import { AppDispatch, RootState } from "@redux/store";
 import { useNavigate } from "react-router-dom";
 import { DateDetailedInfo } from "@api/dateInteface";
 import { fetchJobPostByCalender } from "@redux/jobPost/jobPostSlice";
+import List from "@pages/List";
+import { HOME_MESSAGES } from "@/constants/messages";
+import { LayoutComponent } from "@components/template/Layout";
+import { ThemeText } from "@components/atoms/Text";
+import { Header } from "@components/template/Layout";
+import { HomeNavBar } from "@components/mocules/HomeNavBar";
 
 const DUMMY_INIT_NAME = "김출연";
 
@@ -54,8 +59,9 @@ export default function ExtrasHome() {
   const { year, month } = dateDetailedInfo;
 
   useEffect(() => {
-    dispatch(fetchJobPostByCalender({ year, month }));
-  }, [dispatch, year, month]);
+    const dateYearMonth = { year, month };
+    showAsCalender ? dispatch(fetchJobPostByCalender(dateYearMonth)) : "";
+  }, [dispatch, year, month, showAsCalender]);
 
   // Only Calender
   const clickedDateEvent = (dateNum: number) => {
@@ -75,72 +81,43 @@ export default function ExtrasHome() {
     }
   };
 
+  const homeMessageComponent = () => {
+    return (
+      <HomeMessage>
+        {showRecommand
+          ? HOME_MESSAGES.recommend(name)
+          : HOME_MESSAGES.all(name)}
+      </HomeMessage>
+    );
+  };
+
   return (
-    <Container className="extras-home">
-      <TopBar>
-        <nav>
-          <ToggleBar />
-          <TypeSelector />
-        </nav>
+    <LayoutComponent>
+      <Header>
+        <HomeNavBar />
+        <ThemeText
+          children={homeMessageComponent()}
+          variant="title"
+        ></ThemeText>
+      </Header>
 
-        <h1>
-          {!showRecommand
-            ? `지금 당장 ${name}님이 필요해요 ⏰`
-            : `${name}님한테 딱 맞는 역할이 있어요 🤩`}
-        </h1>
-      </TopBar>
-
-      <Content className="content">
-        {showAsCalender ? (
-          <HomeCalendar
-            dateYearMonth={{ year, month }}
-            showRecommand={showRecommand}
-            clickedDateEvent={(dateNum) => clickedDateEvent(dateNum)}
-            gotJobDataList={gotJobDataList}
-          />
-        ) : (
-          ""
-          // TODO list 리팩해야함
-          // <List dateYM={dateYM} showRecommand={showRecommand} />
-        )}
-      </Content>
-    </Container>
+      {showAsCalender ? (
+        <HomeCalendar
+          dateYearMonth={{ year, month }}
+          showRecommand={showRecommand}
+          clickedDateEvent={(dateNum) => clickedDateEvent(dateNum)}
+          gotJobDataList={gotJobDataList}
+        />
+      ) : (
+        <List dateYearMonth={{ year, month }} showRecommand={showRecommand} />
+      )}
+    </LayoutComponent>
   );
 }
 
-const Container = styled.div``;
-
-const Content = styled.div``;
-
-export const TopBar = styled.div`
-  padding: 0 22px;
-  position: sticky;
-  top: 0;
-  z-index: 9;
-  background-color: #000000;
-  padding-top: 25px;
-
-  padding-bottom: 23px;
-
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  h1 {
-    color: #fff;
-    font-size: 20px;
-    font-weight: 900;
-    line-height: 100%;
-    letter-spacing: 0.2px;
-    margin-top: 21px;
-    top: 30px;
-  }
-
-  @media all and (max-width: 375px) {
-    h1 {
-      font-size: 18px;
-    }
-  }
+const HomeMessage = styled.p`
+  color: #fff;
+  font-size: 20px;
+  font-weight: 900;
+  margin-top: 20px;
 `;

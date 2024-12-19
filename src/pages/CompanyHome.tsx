@@ -1,6 +1,6 @@
-import { TopBar } from "@pages/ExtrasHome";
+// import { TopBar } from "@pages/ExtrasHome";
 import { styled } from "styled-components";
-import TypeSelector from "@components/custom/TypeSelector";
+import TypeSelector from "@components/mocules/TypeSelector";
 import { useNavigate } from "react-router-dom";
 
 import { RootState } from "@redux/store";
@@ -64,7 +64,7 @@ export default function CompanyHome() {
   );
 }
 
-const CompanyHomeTopBar = styled(TopBar)`
+const CompanyHomeTopBar = styled.div`
   nav {
     display: flex;
     justify-content: end;
