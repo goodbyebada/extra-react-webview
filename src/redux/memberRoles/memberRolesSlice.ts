@@ -7,7 +7,7 @@ import {
 } from "@api/interface";
 import { DateYearMonth } from "@api/dateInteface";
 import memberRolesAPI from "@api/memberRolesAPI";
-import convertToDateNum from "@utills/convertToDateNum";
+import converToDateObject from "@utills/convertToDateNum";
 import { TEST_FLAG } from "@/testFlag";
 import { memberRoleServerDummyList } from "@api/dummyData";
 
@@ -26,7 +26,9 @@ const initDate: MemberRoleFront = {
   },
 };
 
-const Convert = (arr: MemberRoleServer[]): MemberRoleFront[] => {
+const convertServerInterfaceToFrontInterface = (
+  arr: MemberRoleServer[],
+): MemberRoleFront[] => {
   const myScheduledList = arr.map((elem: MemberRoleServer) => {
     const newElem: MemberRoleFront = {
       id: elem.id,
@@ -35,8 +37,8 @@ const Convert = (arr: MemberRoleServer[]): MemberRoleFront[] => {
       title: elem.title,
       gatheringTime: elem.gatheringTime,
       calender: {
-        startDateNum: convertToDateNum(elem.calenderList[0].toString()),
-        endDateNum: convertToDateNum(
+        startDateNum: converToDateObject(elem.calenderList[0].toString()),
+        endDateNum: converToDateObject(
           elem.calenderList[elem.calenderList.length - 1].toString(),
         ),
       },
@@ -50,7 +52,8 @@ const Convert = (arr: MemberRoleServer[]): MemberRoleFront[] => {
   // dateNum 기준으로 오름차순 정렬
   myScheduledList.sort(
     (a: MemberRoleFront, b: MemberRoleFront) =>
-      a.calender.startDateNum - b.calender.startDateNum,
+      a.calender.startDateNum - b.calender.startDateNum ||
+      a.calender.endDateNum - b.calender.endDateNum,
   );
 
   return myScheduledList;
@@ -103,7 +106,9 @@ export const appliedRoleSlice = createSlice({
       })
       .addCase(getMemberAppliedRoles.fulfilled, (state, action) => {
         state.getMemberApplies.status = ResponseStatus.fullfilled;
-        state.getMemberApplies.data = Convert(action.payload);
+        state.getMemberApplies.data = convertServerInterfaceToFrontInterface(
+          action.payload,
+        );
         state.getMemberApplies.error = "";
       })
       .addCase(getMemberAppliedRoles.rejected, (state, action) => {
