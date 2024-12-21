@@ -1,13 +1,12 @@
-import { TopBar } from "@pages/ExtrasHome";
+// import { TopBar } from "@pages/ExtrasHome";
 import { styled } from "styled-components";
-import TypeSelector from "@components/TypeSelector";
-import { useState } from "react";
+import TypeSelector from "@components/mocules/TypeSelector";
 import { useNavigate } from "react-router-dom";
 
 import { RootState } from "@redux/store";
 import { useSelector } from "react-redux";
-import CompanyCalender from "@components/CompanyCalender";
-import CompanyList from "@components/CompanyList";
+import CompanyCalender from "@components/template/CompanyCalender";
+// import CompanyList from "@components/organisms/CompanyList";
 
 /**
  *추후 수정 예정
@@ -16,27 +15,6 @@ import CompanyList from "@components/CompanyList";
  * @returns 회사 업체측 홈화면 UI
  */
 export default function CompanyHome() {
-  // date 관련
-  const date = new Date();
-  const today = {
-    year: date.getFullYear(),
-    month: date.getMonth(),
-  };
-
-  /**
-   * date.getMonth는 항상 원래 월보다 -1이다.
-   * useCaleder에 들어가는 값도 원래  month보다 -1 이어야한다.
-   */
-  const [dateYM, setDateYM] = useState(today);
-
-  const dateYMHandler = (type: string, value: number) => {
-    setDateYM((prev) => {
-      return type === "month"
-        ? { ...prev, [type]: value - 1 }
-        : { ...prev, [type]: value };
-    });
-  };
-
   // 캘린더 || 리스트
   const showAsCalender = useSelector(
     (state: RootState) => state.showType.showAsCalender,
@@ -47,7 +25,7 @@ export default function CompanyHome() {
   /**
    * 일을 클릭했을때 일어날 Event
    */
-  const clickedDateEvent = () => {
+  const openModalWindow = () => {
     // 모달창을 연다
     const path = "/date-selected-notice-list-company";
     navigate(path);
@@ -72,22 +50,21 @@ export default function CompanyHome() {
 
       <div className="content">
         {showAsCalender ? (
-          // 항상 전체 추천 UI
           <CompanyCalender
-            dateYM={dateYM}
-            dateYMHandler={dateYMHandler}
             showRecommand={false}
-            clickedDateEvent={clickedDateEvent}
+            clickedDateEvent={openModalWindow}
           />
         ) : (
-          <CompanyList dateYM={dateYM} showRecommand={false} />
+          ""
+          // TODO test 위해 CompanyList 주석 처리
+          // <CompanyList dateYM={dateYM} showRecommand={false} />
         )}
       </div>
     </div>
   );
 }
 
-const CompanyHomeTopBar = styled(TopBar)`
+const CompanyHomeTopBar = styled.div`
   nav {
     display: flex;
     justify-content: end;

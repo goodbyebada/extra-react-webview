@@ -84,6 +84,8 @@ const requestFetch = async (
   data?: object,
   option?: object,
 ) => {
+
+  console.log("호출")
   const token = await new Promise<string>((resolve) => {
     requestToken(resolve);
   });

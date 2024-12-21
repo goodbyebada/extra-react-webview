@@ -3,6 +3,15 @@ import dropDownBtn from "@assets/more-than-button.png";
 import { styled } from "styled-components";
 import { ApplyStatusLabel } from "@api/interface";
 
+/**
+ * 지원현황 페이지에서 사용되는 DropDownButton
+ * - 승인중, 승인완료, 승인거절 선택하는 드롭다운 버튼
+ *
+ * @param param0
+ * @returns
+ */
+
+//  TODO atoms에 맞춰 수정 필요함
 export default function DropDownSelector({
   currentIdx,
   modalIdxList,

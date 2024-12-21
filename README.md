@@ -79,8 +79,6 @@ main branch와 merge 전에 PR 진행
 2. 설명
 
 - 주요 변경사항에 대해서만 간략하게 나열합니다.
-  <<<<<<< HEAD
-  =======
 
 ## Code convention
 
@@ -90,6 +88,8 @@ main branch와 merge 전에 PR 진행
   - api
   - assets
   - components
+    - atoms
+    - mocules
     - custom
     - modal
   - pages
@@ -105,5 +105,3 @@ main branch와 merge 전에 PR 진행
  * 보조출연자 달력
  */
 ```
-
-> > > > > > > d4b43e5e1bad0fbc529e1c9004daa172a732b614

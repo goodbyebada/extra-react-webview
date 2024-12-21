@@ -37,14 +37,6 @@ const memberRolesAPI = {
 
   // 역할에 지원 요청
   async postMemberRoles(roleId: number) {
-    // const requestHeaders: HeadersInit = new Headers();
-
-    // const token = localStorage.getItem("accessToken");
-
-    // requestHeaders.set("Authorization", `Bearer ${token}`);
-    // requestHeaders.set("Accept", "*/*");
-    // requestHeaders.set("Content-Type", "application/json");
-
     const response = await requestPostFetch(`${memberRolesURL}/${roleId}`, {});
 
     if (!response) {
@@ -53,10 +45,8 @@ const memberRolesAPI = {
 
     if (!response.ok) {
       const errorData = await response.json();
-      console.log(errorData);
       throw new Error(errorData.message || "Unknown error occurred");
     }
-
     return { response: "good" };
   },
 };

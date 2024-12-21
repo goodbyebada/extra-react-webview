@@ -2,12 +2,19 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import jobPostAPI from "@api/jobPostAPI";
 import { JobPost } from "@api/interface";
 import { ResponseStatus } from "@api/interface";
-import { dateYM, QuryTypesWithPage } from "@api/interface";
-import { ObjectType } from "@api/interface";
+import {
+  DateYearMonth,
+  QuryTypesWithPage,
+  ObjectType,
+} from "@api/dateInteface";
+
+import { JobPostList } from "@api/interface";
+import { dummyCalenderDataForExtra, dummyJobPostList } from "@api/dummyData";
+import { TEST_FLAG } from "@/testFlag";
 
 // 상태의 타입 정의
 
-const defaultJobPost: JobPost = {
+export const defaultJobPost: JobPost = {
   id: -1,
   title: "",
   gatheringLocation: "",
@@ -34,7 +41,7 @@ function transformAndSortDates(input: ObjectType): ObjectType {
   const transformedObject: ObjectType = {};
 
   for (const date in input) {
-    const day = date.split("-")[2]; // "YYYY-MM-DD"에서 "DD" 추출
+    const day = parseInt(date.split("-")[2]); // "YYYY-MM-DD"에서 "DD" 추출
     transformedObject[day] = input[date];
   }
 
@@ -80,15 +87,27 @@ const initialState: JobPostState = {
 };
 
 /**
- * 캘린더에서 JobPost를 가져온다.
+ * 캘린더에서 보여줄 JobPost(공고 리스트)를 data를 가져온다.
  */
-export const fetchJobPostByCalender = createAsyncThunk(
-  "jobPosts/fetchAllbyCalender",
-  async ({ year, month }: dateYM) => {
-    const data = await jobPostAPI.getAllJobPostByCalender(year, month);
+export const fetchJobPostByCalender = createAsyncThunk<
+  ObjectType,
+  DateYearMonth
+>("jobPosts/fetchAllbyCalender", async ({ year, month }: DateYearMonth) => {
+  let data: Promise<ObjectType>;
+
+  if (TEST_FLAG) {
+    console.log(`${year} ${month + 1}의 TEST용입니다`);
+    data = new Promise<ObjectType>((resolve) =>
+      setTimeout(() => {
+        resolve(dummyCalenderDataForExtra);
+      }, 2000),
+    );
     return data;
-  },
-);
+  }
+
+  data = await jobPostAPI.getAllJobPostByCalender(year, month);
+  return data;
+});
 
 /**
  * 리스트로보기용 JobPost를 가져온다.
@@ -96,10 +115,20 @@ export const fetchJobPostByCalender = createAsyncThunk(
 export const fetchJobPostByList = createAsyncThunk(
   "jobPosts/fetchAllbyList",
   async ({ year, month, pageNum }: QuryTypesWithPage) => {
-    const data = await jobPostAPI.getAllJobPostByList(year, month, pageNum);
-    console.log(`pageNum:${pageNum}`);
-    console.log(`data`);
+    let data: Promise<JobPostList>;
 
+    if (TEST_FLAG) {
+      console.log(`${year} ${month + 1}의 ListTest용`);
+      data = new Promise<JobPostList>((resolve) =>
+        setTimeout(() => {
+          console.log("사용자(Extra) 측 jobPost 입니다.");
+          resolve(dummyJobPostList);
+        }, 2000),
+      );
+      return data;
+    }
+
+    data = await jobPostAPI.getAllJobPostByList(year, month, pageNum);
     return data;
   },
 );
@@ -127,7 +156,6 @@ const jobPostSlice = createSlice({
         state.jobPostByCalender.status = ResponseStatus.fullfilled;
 
         state.jobPostByCalender.data = transformAndSortDates(action.payload);
-
         state.jobPostByCalender.error = "";
       })
       .addCase(fetchJobPostByCalender.rejected, (state, action) => {
@@ -144,6 +172,7 @@ const jobPostSlice = createSlice({
     builder
       .addCase(fetchJobPostByList.pending, (state) => {
         state.jobPostByList.status = ResponseStatus.loading;
+        state.jobPostByList.data = [defaultJobPost];
         state.jobPostByList.error = "";
       })
       .addCase(fetchJobPostByList.fulfilled, (state, action) => {
@@ -153,7 +182,7 @@ const jobPostSlice = createSlice({
       })
       .addCase(fetchJobPostByList.rejected, (state, action) => {
         state.jobPostByList.status = ResponseStatus.rejected;
-
+        state.jobPostByList.data = [defaultJobPost];
         // action.error.message는 API에서 전달된 에러 메시지를 포함
         state.jobPostByList.error =
           action.error.message || "Failed to fetch all job posts";

@@ -4,7 +4,7 @@ import storage from "redux-persist/lib/storage"; // 기본적으로 localStorage
 
 import modalReducer from "@redux/modalSlice";
 import recruitReducer from "@redux/recruitSlice";
-import homeSelectedDateReducer from "@redux/home/homeSelectedDateSlice";
+import dateSlice from "@redux/dateSlice";
 import showTypeSliceReducer from "@redux/home/showTypeSlice";
 import jobPostReducer from "@redux/jobPost/jobPostSlice";
 import appliedRoleReducer from "@redux/memberRoles/memberRolesSlice";
@@ -24,10 +24,10 @@ const recruitConfig = {
   whitelist: ["recruit", "star", "recruitStatus"],
 };
 
-const homeSelectedDateConfig = {
-  key: "homeSelectedDate",
+const dateConfig = {
+  key: "date",
   storage,
-  whitelist: ["homeSelectedDate", "year", "month", "dateNum", "dayOfWeek"],
+  whitelist: ["selectedByHome"],
 };
 
 const showTypeConfig = {
@@ -61,10 +61,7 @@ const appliedRoleConfig = {
 const rootReducer = combineReducers({
   modal: persistReducer(modalConfig, modalReducer),
   recruit: persistReducer(recruitConfig, recruitReducer),
-  homeSelectedDate: persistReducer(
-    homeSelectedDateConfig,
-    homeSelectedDateReducer,
-  ),
+  date: persistReducer(dateConfig, dateSlice),
   showType: persistReducer(showTypeConfig, showTypeSliceReducer),
   jobPosts: persistReducer(jobPostConfig, jobPostReducer), // jobPostSlice 추가
   companyJobpost: persistReducer(jobPostForComConfig, companyJobPostReducer), // jobPostSlice 추가

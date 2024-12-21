@@ -3,11 +3,13 @@ import {
   MemberRoleFront,
   ResponseStatus,
   ScheduleTypeStatusLabel,
+  MemberRoleServer,
 } from "@api/interface";
-import { MemberRoleServer } from "@api/interface";
+import { DateYearMonth } from "@api/dateInteface";
 import memberRolesAPI from "@api/memberRolesAPI";
-import convertToDateNum from "@utills/convertToDateNum";
-import { dateYM } from "@api/interface";
+import converToDateObject from "@utills/convertToDateNum";
+import { TEST_FLAG } from "@/testFlag";
+import { memberRoleServerDummyList } from "@api/dummyData";
 
 const initDate: MemberRoleFront = {
   id: -1,
@@ -24,9 +26,10 @@ const initDate: MemberRoleFront = {
   },
 };
 
-const Convert = (arr: MemberRoleServer[]): MemberRoleFront[] => {
+const convertServerInterfaceToFrontInterface = (
+  arr: MemberRoleServer[],
+): MemberRoleFront[] => {
   const myScheduledList = arr.map((elem: MemberRoleServer) => {
-    console.log(elem.calenderList[0]);
     const newElem: MemberRoleFront = {
       id: elem.id,
       jobPostId: elem.jobPostId,
@@ -34,8 +37,8 @@ const Convert = (arr: MemberRoleServer[]): MemberRoleFront[] => {
       title: elem.title,
       gatheringTime: elem.gatheringTime,
       calender: {
-        startDateNum: convertToDateNum(elem.calenderList[0].toString()),
-        endDateNum: convertToDateNum(
+        startDateNum: converToDateObject(elem.calenderList[0].toString()),
+        endDateNum: converToDateObject(
           elem.calenderList[elem.calenderList.length - 1].toString(),
         ),
       },
@@ -49,7 +52,8 @@ const Convert = (arr: MemberRoleServer[]): MemberRoleFront[] => {
   // dateNum 기준으로 오름차순 정렬
   myScheduledList.sort(
     (a: MemberRoleFront, b: MemberRoleFront) =>
-      a.calender.startDateNum - b.calender.startDateNum,
+      a.calender.startDateNum - b.calender.startDateNum ||
+      a.calender.endDateNum - b.calender.endDateNum,
   );
 
   return myScheduledList;
@@ -64,9 +68,19 @@ const initialState = {
 // [회원]: 역할 전체 조회
 export const getMemberAppliedRoles = createAsyncThunk(
   "member/getMyAppliedRoles",
-  async ({ year, month }: dateYM) => {
-    const data = await memberRolesAPI.getAllmemberRoles(year, month);
+  async ({ year, month }: DateYearMonth) => {
+    let data: Promise<MemberRoleServer[]>;
 
+    if (TEST_FLAG) {
+      data = new Promise<MemberRoleServer[]>((resolve) =>
+        setTimeout(() => {
+          resolve(memberRoleServerDummyList);
+        }, 2000),
+      );
+      return data;
+    }
+
+    data = await memberRolesAPI.getAllmemberRoles(year, month);
     return data;
   },
 );
@@ -75,7 +89,6 @@ export const appliedRole = createAsyncThunk(
   "member/postMyAppliedRoles",
   async (roleId: number) => {
     const data = await memberRolesAPI.postMemberRoles(roleId);
-
     return data;
   },
 );
@@ -88,16 +101,19 @@ export const appliedRoleSlice = createSlice({
     builder
       .addCase(getMemberAppliedRoles.pending, (state) => {
         state.getMemberApplies.status = ResponseStatus.loading;
+        state.getMemberApplies.data = [initDate];
         state.getMemberApplies.error = "";
       })
       .addCase(getMemberAppliedRoles.fulfilled, (state, action) => {
         state.getMemberApplies.status = ResponseStatus.fullfilled;
-        console.log(action.payload);
-        state.getMemberApplies.data = Convert(action.payload);
+        state.getMemberApplies.data = convertServerInterfaceToFrontInterface(
+          action.payload,
+        );
         state.getMemberApplies.error = "";
       })
       .addCase(getMemberAppliedRoles.rejected, (state, action) => {
         state.getMemberApplies.status = ResponseStatus.rejected;
+        state.getMemberApplies.data = [initDate];
         state.getMemberApplies.error =
           action.error.message || "Failed to fetch all job posts";
       });
