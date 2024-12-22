@@ -4,8 +4,9 @@ import Text, { ThemeText } from "@components/atoms/Text";
 import Item from "@components/mocules/Item";
 import CalendarItem from "@components/mocules/CalendarItem";
 import { MainButton } from "@components/atoms/Button";
-import { Input } from "@components/atoms/Form";
+// import { InputField } from "@components/atoms/Form";
 import DropDownInput from "@components/mocules/DropDownInput";
+import { useForm } from "react-hook-form";
 
 const PreviewContainer = styled.section`
   background: #000;
@@ -14,8 +15,7 @@ const PreviewContainer = styled.section`
 
 const ThemePreviewPage = () => {
   const [activeStar, setActiveStar] = useState(false);
-  const [value, setValue] = useState("");
-  const [dropDownValue, setDropDownValue] = useState("");
+  const { control, setValue } = useForm();
 
   return (
     <PreviewContainer>
@@ -108,19 +108,12 @@ const ThemePreviewPage = () => {
         다음
       </MainButton>
 
-      <Input
-        name="name"
-        placeholder="이름을 입력하세요"
-        value={value}
-        onChange={(value) => setValue(value)}
-      />
-
       <DropDownInput
+        control={control}
+        setValue={setValue}
         name="나이"
         placeholder="나이를 입력하세요"
-        value={dropDownValue}
         items={[...Array(10)].map((_, i) => `${i}`)}
-        onChange={(value) => setDropDownValue(value)}
       />
     </PreviewContainer>
   );
