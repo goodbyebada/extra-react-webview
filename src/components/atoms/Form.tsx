@@ -1,23 +1,38 @@
-// import React from "react";
+import Color from "@/constants/color";
+import { forwardRef } from "react";
+import {
+  Controller,
+  Control,
+  FieldValues,
+  FieldPath,
+  RegisterOptions,
+} from "react-hook-form";
 import styled from "styled-components";
 
 interface InputProps {
+  type?: string;
+  placeholder?: string;
+}
+
+interface InputFieldProps<T extends FieldValues = FieldValues>
+  extends InputProps {
   name: string;
-  placeholder: string;
-  value: string;
-  onChange: (value: string) => void;
-  required?: boolean;
-  readOnly?: boolean;
+  control: Control<T>;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
+  rules?: Omit<
+    RegisterOptions<T>,
+    "disabled" | "valueAsNumber" | "valueAsDate" | "setValueAs"
+  >;
 }
 
 const StyledInput = styled.input`
   width: 100%;
-  height: 60px;
-  padding-left: 14px;
+  height: 53px;
+  padding-left: 20px;
 
-  background: none;
+  background: ${Color.input};
   outline: none;
-  border: 2px solid #696969;
+  border: none;
   border-radius: 15px;
   box-sizing: border-box;
 
@@ -36,34 +51,62 @@ const StyledInput = styled.input`
 /**
  * Input
  * @param name string (input name)
- * @param placeholder string (placeholder)
- * @param value string (input value)
- * @param onChange string (onChange method)
- * @param required boolean (whether to allow empty values)
- * @param readOnly boolean (whether to allow changing values)
+ * @param type string (input field type)
  */
-const Input = ({
-  name,
-  placeholder,
-  value = "",
-  onChange,
-  required = true,
-  readOnly = false,
-}: InputProps) => {
-  return (
-    <StyledInput
-      type="text"
-      name={name}
-      placeholder={placeholder}
-      value={value}
-      required={required}
-      readOnly={readOnly}
-      onChange={(event) => {
-        event.preventDefault();
-        onChange(event.target.value);
-      }}
-    />
-  );
-};
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ type = "text", placeholder = "", ...props }, ref) => {
+    return (
+      <StyledInput
+        {...props}
+        type={type}
+        placeholder={placeholder}
+        autoComplete="off"
+        ref={ref}
+      />
+    );
+  },
+);
 
-export { Input };
+Input.displayName = "Input";
+
+/**
+ * Input
+ * @param name string (input name)
+ * @param control Control (react-hook-form control object)
+ * @param rules RegisterOptions (react-hook-form rules object)
+ * @param type string (input field type)
+ */
+const InputField = forwardRef(
+  <T extends FieldValues = FieldValues>(
+    {
+      name,
+      control,
+      type,
+      placeholder,
+      inputProps,
+      ...props
+    }: InputFieldProps<T>,
+    ref: React.Ref<HTMLInputElement>,
+  ) => {
+    return (
+      <Controller
+        control={control}
+        name={name as FieldPath<T>}
+        {...props}
+        render={({ field }) => (
+          <Input
+            {...field}
+            {...inputProps}
+            placeholder={placeholder}
+            type={type}
+            ref={ref} // Forward the ref
+          />
+        )}
+      />
+    );
+  },
+);
+
+InputField.displayName = "InputField";
+
+export { InputField };

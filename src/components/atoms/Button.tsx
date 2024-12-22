@@ -3,12 +3,19 @@ import Text from "@components/atoms/Text";
 import styled from "styled-components";
 import star_g from "@assets/Star_g.png";
 import star_y from "@assets/Star_y.png";
+import Color from "@/constants/color";
+import { TfiAngleLeft } from "react-icons/tfi";
+import { useNavigate } from "react-router-dom";
 
 interface ButtonProps {
   children?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   isActive?: boolean;
   disabled?: boolean;
+}
+
+interface HistoryBackButtonProps {
+  onClick?: () => void;
 }
 
 const StyledButton = styled.button`
@@ -28,7 +35,7 @@ const StyledMainButton = styled(StyledButton)<ButtonProps>`
   border-radius: 18px;
   ${({ disabled }) => !disabled && "cursor: pointer;"}
 
-  background: ${({ isActive }) => (isActive ? "#f5c001" : "#575757")};
+  background: ${({ isActive }) => (isActive ? Color.theme : Color.disabled)};
 `;
 
 /**
@@ -73,4 +80,19 @@ const MainButton = ({
   );
 };
 
-export { StarToggleButton, MainButton };
+const HistoryBackButton = ({ onClick }: HistoryBackButtonProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (onClick) onClick();
+    navigate(-1);
+  };
+
+  return (
+    <button type="button" onClick={handleClick}>
+      <TfiAngleLeft size={30} color={Color.theme} />
+    </button>
+  );
+};
+
+export { StarToggleButton, MainButton, HistoryBackButton };
