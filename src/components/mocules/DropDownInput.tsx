@@ -1,28 +1,28 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import styled from "styled-components";
-import { Input } from "@components/atoms/Form";
+import { InputField } from "@components/atoms/Form";
 import Text from "@components/atoms/Text";
+import { Control } from "react-hook-form";
+import { TfiAngleDown, TfiAngleUp } from "react-icons/tfi";
+import Color from "@/constants/color";
 
 interface DropDownInputProps {
   name: string;
-  placeholder: string;
-  value: string;
+  placeholder?: string;
   items: string[];
-  required?: boolean;
-  onChange: (value: string) => void;
+  control: Control;
+  setValue: (name: string, value: unknown) => void;
 }
 
 const DropDownInputWrapper = styled.div`
   position: relative;
   width: 100%;
-  height: 60px;
 `;
 
 const DropDownIcon = styled.div`
   position: absolute;
-  height: 100%;
-  top: -5px;
   right: 20px;
+  height: 100%;
 
   display: flex;
   align-items: center;
@@ -103,12 +103,10 @@ const DropDownItem = styled.li`
 const DropDownInput = ({
   name,
   placeholder,
-  value,
-  required = true,
   items,
-  onChange,
+  control,
+  setValue,
 }: DropDownInputProps) => {
-  const [_value, setValue] = useState<string>(value);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
@@ -120,7 +118,13 @@ const DropDownInput = ({
     if (scrollY != undefined) {
       const index = Math.round(scrollY / 50);
       setCurrentIndex(index);
-      setValue(items[index]);
+      setValue(name, items[index]);
+    }
+  };
+
+  const setScrollPosition = () => {
+    if (scrollContainerRef.current != undefined) {
+      scrollContainerRef.current.scrollTop = currentIndex * 50;
     }
   };
 
@@ -133,9 +137,7 @@ const DropDownInput = ({
 
     // 스크롤이 멈추면 특정 행동 실행
     timeoutRef.current = setTimeout(() => {
-      if (scrollContainerRef.current != undefined) {
-        scrollContainerRef.current.scrollTop = currentIndex * 50;
-      }
+      setScrollPosition();
     }, 200);
   }, [currentIndex, handlePosition]);
 
@@ -158,19 +160,23 @@ const DropDownInput = ({
 
   return (
     <>
-      <DropDownInputWrapper onClick={() => setIsOpen(true)}>
+      <DropDownInputWrapper
+        onClick={() => {
+          setIsOpen(true);
+          setValue(name, items[currentIndex]);
+          setScrollPosition();
+        }}
+      >
         <DropDownIcon>
           <Text size={14} weight={900}>
-            {isOpen ? "∧" : "∨"}
+            {isOpen ? <TfiAngleUp /> : <TfiAngleDown />}
           </Text>
         </DropDownIcon>
-        <Input
+        <InputField
           name={name}
           placeholder={placeholder}
-          value={_value}
-          readOnly={true}
-          onChange={onChange}
-          required={required}
+          control={control}
+          inputProps={{ readOnly: true }}
         />
       </DropDownInputWrapper>
       <DropDownListContainer
@@ -184,7 +190,6 @@ const DropDownInput = ({
               {items.map((v, i) => (
                 <DropDownItem
                   key={i}
-                  onClick={() => setValue(v)}
                   style={{
                     transform: currentIndex == i ? "scale(1)" : "scale(0.9)",
                   }}
@@ -192,7 +197,7 @@ const DropDownInput = ({
                   <Text
                     size={16}
                     weight={900}
-                    color={currentIndex == i ? "#fff" : "#444"}
+                    color={currentIndex == i ? Color.text : Color.subText}
                   >
                     {v}
                   </Text>
