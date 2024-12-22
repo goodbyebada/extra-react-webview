@@ -16,6 +16,16 @@ import NotFound from "@pages/Error/NotFound";
 import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
 
 import ThemePreviewPage from "@pages/ThemePreview";
+import LoginPage from "@pages/Sign/LoginPage";
+// import MainPage from "@pages/Sign/MainPage";
+import MainFormPage from "@pages/Sign/MainFormPage";
+import AuthenticationPage from "@pages/Sign/AuthenticationPage";
+import SelectUserTypePage from "@pages/Sign/SelectUserTypePage";
+import MemberInfoFormPage from "@pages/Sign/MemberInfoFormPage";
+import AccountFormPage from "@pages/Sign/AccountFormPage";
+import TattooFormPage from "@pages/Sign/TattooFormPage";
+import TattooSelectFormPage from "@pages/Sign/TattooSelectFormPage";
+import CompanyInfoFormPage from "@pages/Sign/CompanyInfoFormPage";
 
 function App() {
   return (
@@ -64,6 +74,22 @@ function App() {
 
           <Route path="/*" element={<NotFound />} />
 
+          {/* sign process */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/main-form" element={<MainFormPage />} />
+          <Route path="/auth" element={<AuthenticationPage />} />
+          <Route path="/user-type" element={<SelectUserTypePage />} />
+          <Route path="/member-info-form" element={<MemberInfoFormPage />} />
+          <Route path="/tattoo-form" element={<TattooFormPage />} />
+          <Route
+            path="/tattoo-select-form"
+            element={<TattooSelectFormPage />}
+          />
+          <Route path="/company-info-form" element={<CompanyInfoFormPage />} />
+          <Route path="/account-form" element={<AccountFormPage />} />
+          {/* <Route path="/company-info" element={<CompanyInfoFormPage />} /> */}
+
+          {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />
         </Routes>
       </BrowserRouter>
