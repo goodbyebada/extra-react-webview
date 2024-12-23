@@ -28,6 +28,7 @@ import TattooFormPage from "@pages/Sign/TattooFormPage";
 import TattooSelectFormPage from "@pages/Sign/TattooSelectFormPage";
 import CompanyInfoFormPage from "@pages/Sign/CompanyInfoFormPage";
 import CompanyShootManageDetailPage from "@pages/Manage/CompanyShootManageDetailPage";
+import ActorListPage from "@pages/Manage/ActorListPage";
 
 function App() {
   return (
@@ -95,6 +96,7 @@ function App() {
             path="/company-shoot-manage-detail"
             element={<CompanyShootManageDetailPage />}
           />
+          <Route path="/actor-list" element={<ActorListPage />} />
 
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />
