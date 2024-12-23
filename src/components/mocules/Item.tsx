@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { ItemWrapper, TagWrapper } from "@components/atoms/Wrapper";
 import Text, { ThemeText } from "@components/atoms/Text";

@@ -17,7 +17,13 @@ import RoleItemComponentList from "@utills/RoleItemComponentList";
 
 import CustomCheckModal from "@components/Modal/CustomCheckModal";
 
-export default function ExtraCastsComponent({
+/**
+ *
+ * @param param0
+ * @returns 지원 공고 상세 정보 화면
+ * - 페이지의 영역 같음
+ */
+export default function CastInfo({
   selectedJobPostItem,
 }: {
   selectedJobPostItem: JobPost;

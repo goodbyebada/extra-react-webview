@@ -2,9 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { JobPost } from "@api/interface";
 import { ResponseStatus } from "@api/interface";
-import { dateYM, QuryTypesWithPage } from "@api/interface";
-import { ObjectType } from "@api/interface";
+import { QuryTypesWithPage, ObjectType } from "@api/dateInteface";
+import { JobPostList } from "@api/interface";
 import jobPostAPIForCom from "@api/jobPostAPIForCom";
+
+import { dummyCalenderDataForCompany, dummyJobPostList } from "@api/dummyData";
+import { TEST_FLAG } from "@/testFlag";
+import { YearMonthAsNumber } from "@api/dateInteface";
 
 // 상태의 타입 정의
 
@@ -85,10 +89,22 @@ const initialState: JobPostState = {
  */
 export const fetchJobPostByCalenderForCom = createAsyncThunk(
   "companyJobpost/fetchJobPostByCalenderForCom",
-  async ({ year, month }: dateYM) => {
-    const data = await jobPostAPIForCom.getAllJobPostByCalender(year, month);
-    console.log("fetchJobPostByCalenderForCom");
-    console.log(data);
+  async ({ year, month }: YearMonthAsNumber) => {
+    let data: Promise<ObjectType>;
+
+    if (TEST_FLAG) {
+      console.log(`${year} ${month + 1}의 TEST용입니다`);
+      data = new Promise<ObjectType>((resolve) =>
+        setTimeout(() => {
+          console.log("공고(Company) 측 jobPost 입니다.");
+          resolve(dummyCalenderDataForCompany);
+        }, 2000),
+      );
+      return data;
+    }
+
+    data = await jobPostAPIForCom.getAllJobPostByCalender(year, month);
+
     return data;
   },
 );
@@ -99,13 +115,18 @@ export const fetchJobPostByCalenderForCom = createAsyncThunk(
 export const fetchJobPostByListForCom = createAsyncThunk(
   "companyJobpost/fetchJobPostByListForCom",
   async ({ year, month, pageNum }: QuryTypesWithPage) => {
-    const data = await jobPostAPIForCom.getAllJobPostByList(
-      year,
-      month,
-      pageNum,
-    );
-    console.log("리스트라능");
-    console.log(data);
+    let data: Promise<JobPostList>;
+    if (TEST_FLAG) {
+      console.log(`${year} ${month + 1}의 ListTest용`);
+      data = new Promise<JobPostList>((resolve) =>
+        setTimeout(() => {
+          resolve(dummyJobPostList);
+        }, 2000),
+      );
+      return data;
+    }
+
+    data = await jobPostAPIForCom.getAllJobPostByList(year, month, pageNum);
 
     return data;
   },

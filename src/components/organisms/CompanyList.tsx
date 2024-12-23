@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { styled } from "styled-components";
-import { JobPost, ResponseStatus, dateYM } from "@api/interface";
+import { JobPost, ResponseStatus } from "@api/interface";
+import { YearMonthAsNumber } from "@api/dateInteface";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 import HomeRecruitBox from "@components/HomeRecruitBox";
@@ -8,10 +9,11 @@ import jobPostAPIForCom from "@api/jobPostAPIForCom";
 import { sendMessage } from "@api/utils";
 
 type ListProps = {
-  dateYM: dateYM;
+  dateYM: YearMonthAsNumber;
   showRecommand: boolean;
 };
 
+// TODO 내부에서 날짜 관리를 해야한다.
 export default function CompanyList({ dateYM, showRecommand }: ListProps) {
   // const navigate = useNavigate();
   const [pageNum, setPageNum] = useState(0);
