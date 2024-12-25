@@ -30,6 +30,7 @@ import CompanyInfoFormPage from "@pages/Sign/CompanyInfoFormPage";
 import CompanyShootManageDetailPage from "@pages/Manage/CompanyShootManageDetailPage";
 import ActorListPage from "@pages/Manage/ActorListPage";
 import ClothesConfirmStatusListPage from "@pages/Manage/ClothesConfirmStatusListPage";
+import CameraPage from "@pages/Manage/CameraPage";
 
 function App() {
   return (
@@ -102,6 +103,7 @@ function App() {
             path="/clothes-confirm-status-list"
             element={<ClothesConfirmStatusListPage />}
           />
+          <Route path="/camera" element={<CameraPage />} />
 
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />
