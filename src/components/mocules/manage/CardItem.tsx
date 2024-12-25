@@ -80,6 +80,10 @@ const ClothesStatus = styled.div<CardStatus>`
   width: 62px;
   height: 20px;
   border-radius: 10px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ActorCardItem = ({ name, status, url }: CardItemProps) => {
