@@ -31,6 +31,8 @@ import CompanyShootManageDetailPage from "@pages/Manage/CompanyShootManageDetail
 import ActorListPage from "@pages/Manage/ActorListPage";
 import ClothesConfirmStatusListPage from "@pages/Manage/ClothesConfirmStatusListPage";
 import CameraPage from "@pages/Manage/CameraPage";
+import MemberShootManageDetailPage from "@pages/Manage/MemberShootManageDetailPage";
+import AttendancePage from "@pages/Manage/AttendancePage";
 
 function App() {
   return (
@@ -104,6 +106,12 @@ function App() {
             element={<ClothesConfirmStatusListPage />}
           />
           <Route path="/camera" element={<CameraPage />} />
+          <Route path="/camera" element={<CameraPage />} />
+          <Route
+            path="/member-shoot-manage-detail"
+            element={<MemberShootManageDetailPage />}
+          />
+          <Route path="/attendance" element={<AttendancePage />} />
 
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />
