@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { Container, Window } from "@components/atoms/Container";
@@ -7,10 +8,12 @@ import Color from "@/constants/color";
 import { RxCross2 } from "react-icons/rx";
 import { IoIosFlash, IoIosFlashOff } from "react-icons/io";
 import { MdCameraswitch } from "react-icons/md";
+import { FaCamera } from "react-icons/fa6";
 
 import VConsole from "vconsole";
+import { MainButton } from "@components/atoms/Button";
+import Margin from "@components/atoms/Margin";
 const vConsole = new VConsole({ theme: "dark" });
-import { FaCamera } from "react-icons/fa6";
 
 const CaptureIconButton = styled.div`
   display: flex;
@@ -22,14 +25,22 @@ const CaptureIconButton = styled.div`
   border-radius: 50%;
 
   background: ${Color.theme};
+
+  position: absolute;
+  bottom: 20px;
 `;
 
 const CameraPage = () => {
+  const navigate = useNavigate();
+
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [photo, setPhoto] = useState<string | null>(null);
 
   const [isFlashOn, setIsFlashOn] = useState(false);
+  const [facingMode, setFacingMode] = useState<"user" | "environment">(
+    "environment",
+  );
   const [stream, setStream] = useState<MediaStream | null>(null);
 
   const startCamera = async () => {
@@ -53,7 +64,7 @@ const CameraPage = () => {
     const constraints = {
       video: {
         deviceId: videoDevices[0]?.deviceId || undefined,
-        facingMode: "environment", // 필요 시 "environment"로 변경
+        facingMode: facingMode, // 필요 시 "environment"로 변경
         width: { ideal: 1920 }, // 가급적 1080p 해상도
         height: { ideal: 1080 },
         frameRate: { ideal: 30 },
@@ -142,41 +153,55 @@ const CameraPage = () => {
   }, []);
 
   return (
-    <Window paddingHorizontal={20}>
+    <Window paddingHorizontal={10}>
       {photo != null ? (
-        <img src={photo} alt="capture image" style={{ maxWidth: "100%" }} />
+        <Container>
+          <Container flex={90}>
+            <img src={photo} alt="capture image" style={{ maxWidth: "100%" }} />
+          </Container>
+          <Container flex={10}>
+            <Container flexDirection="row" paddingHorizontal={30}>
+              <MainButton isActive={false}>취소</MainButton>
+              <Margin size={30} direction="horizontal" />
+              <MainButton isActive={true}>저장</MainButton>
+            </Container>
+          </Container>
+        </Container>
       ) : (
         <>
-          <Container flex={10}>
+          <Container flex={10} paddingHorizontal={10}>
             <Container
               flexDirection="row"
               justifyContent="space-between"
               paddingHorizontal={10}
             >
-              <button type="button">
-                <RxCross2 color="#fff" size={20} />
+              <button type="button" onClick={() => navigate(-1)}>
+                <RxCross2 color="#fff" size={25} />
               </button>
               <button type="button" onClick={toggleFlash}>
                 {isFlashOn ? (
-                  <IoIosFlash size={20} color="#fff" />
+                  <IoIosFlash size={25} color="#fff" />
                 ) : (
-                  <IoIosFlashOff size={20} color="#fff" />
+                  <IoIosFlashOff size={25} color="#fff" />
                 )}
               </button>
-              <button type="button">
+              <button
+                type="button"
+                onClick={() =>
+                  setFacingMode(facingMode == "user" ? "environment" : "user")
+                }
+              >
                 <MdCameraswitch size={20} color="#fff" />
               </button>
             </Container>
           </Container>
-          <Container flex={70}>
+          <Container flex={90}>
             <video
               ref={videoRef}
               autoPlay
               playsInline
               style={{ maxWidth: "100%", maxHeight: "100%" }}
             />
-          </Container>
-          <Container flex={10}>
             <CaptureIconButton onClick={capturePhoto}>
               <FaCamera size={15} />
             </CaptureIconButton>
