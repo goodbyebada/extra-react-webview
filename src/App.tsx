@@ -49,6 +49,7 @@ import CompanySettingPage from "@pages/CompanySettingPage";
 import PostOverviewPage from "@pages/PostOverviewPage";
 import RecruitmentStatus from "@pages/RecruitmentStatus";
 import SignaturePage from "@pages/SignaturePage";
+import JobPostManagement from "@pages/JobPostManagement";
 
 function App() {
   return (
@@ -121,7 +122,7 @@ function App() {
           <Route path="/company/manage/clock-in" element={<ClockInPage />} />
           <Route path="/company/manage/clock-out" element={<ClockOutPage />} />
           {/* company notice */}
-          <Route path="/company/notice" element={<ManagerDashboard />} />
+          <Route path="/company/notice" element={<JobPostManagement />} />
           {/* 업체 측 공고 리스트 페이지 화면 */}
           <Route
             path="/company/notice/post-overview"
