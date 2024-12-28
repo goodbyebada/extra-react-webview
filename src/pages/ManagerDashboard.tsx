@@ -9,6 +9,11 @@ import HomeRecruitBox from "@components/HomeRecruitBox";
 // import { dummyMonthJobList } from "@api/dummyData";
 // import { JobPost } from "@api/interface";
 
+/**
+ * Legacy
+ * 이전에 작성된  업체 관리 화면
+ * @returns
+ */
 function ManagerDashboard() {
   const navigate = useNavigate();
 

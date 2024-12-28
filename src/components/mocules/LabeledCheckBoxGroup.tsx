@@ -85,7 +85,8 @@ export const LabeledCheckBoxGroup = ({
 
     initLabelMap();
     initCheckedBooleanArray();
-  }, [lableItemList, defaultCheckedLabelIdx]);
+  }, []);
+
 
   return (
     <LabeledWrapper>
