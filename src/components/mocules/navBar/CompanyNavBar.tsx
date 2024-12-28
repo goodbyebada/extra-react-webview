@@ -1,8 +1,5 @@
-import BackIconImg from "@assets/backIcon.png";
 import { SpaceBetweenNavBar } from "@components/template/Layout";
 import { styled } from "styled-components";
-
-import { useNavigate } from "react-router-dom";
 import { BackButton } from "@components/atoms/Button";
 
 const Wrapper = styled.div`
@@ -11,7 +8,6 @@ const Wrapper = styled.div`
 `;
 
 export function CompanyNavBar() {
-  const navigate = useNavigate();
   return (
     <Wrapper>
       <BackButton />

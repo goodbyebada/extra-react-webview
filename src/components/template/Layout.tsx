@@ -62,4 +62,21 @@ const Header = ({ children, backGroundColor }: LayOutProps) => {
   );
 };
 
-export { LayoutComponent, CenteredLayoutComponent, HandlerWrapper, Header };
+const StyledSpaceBetweenNavBar = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1;
+`;
+
+const SpaceBetweenNavBar = ({ children }: WithChildrenProps) => {
+  return <StyledSpaceBetweenNavBar>{children}</StyledSpaceBetweenNavBar>;
+};
+
+export {
+  LayoutComponent,
+  CenteredLayoutComponent,
+  HandlerWrapper,
+  Header,
+  SpaceBetweenNavBar,
+};
