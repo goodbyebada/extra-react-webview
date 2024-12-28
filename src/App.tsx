@@ -152,8 +152,6 @@ function App() {
             element={<ManagerDashboard />}
           />
 
-          <Route path="/manager-dashboard" element={<ManagerDashboard />} />
-
           {/* 업체 측 공고 화면*/}
           <Route path="/job-post-management" element={<JobPostManagement />} />
 
