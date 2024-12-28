@@ -39,6 +39,7 @@ import MemberProfilePage from "@pages/MemberProfilePage";
 import MemberSettingPage from "@pages/MemberSettingPage";
 import CompanyProfilePage from "@pages/CompanyProfilePage";
 import CompanySettingPage from "@pages/CompanySettingPage";
+import JobPostManagement from "@pages/JobPostManagement";
 
 function App() {
   return (
@@ -117,6 +118,23 @@ function App() {
           <Route
             path="/company/profile/setting"
             element={<CompanySettingPage />}
+          />
+
+          <Route
+            path="/company/manager-dashboard"
+            element={<ManagerDashboard />}
+          />
+
+          {/* 업체 측 공고 화면*/}
+          <Route
+            path="/company/job-post-management"
+            element={<JobPostManagement />}
+          />
+
+          {/* 업체 측 공고 화면*/}
+          <Route
+            path="/company/job-post-management"
+            element={<JobPostManagement />}
           />
 
           <Route path="/applicants" element={<ShowApplicant />} />

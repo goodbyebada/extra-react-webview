@@ -3,6 +3,8 @@ import Text from "@components/atoms/Text";
 import styled from "styled-components";
 import star_g from "@assets/Star_g.png";
 import star_y from "@assets/Star_y.png";
+import BackIconImg from "@assets/backIcon.png";
+import { useNavigate } from "react-router-dom";
 import { TfiAngleLeft } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
 import { BACKGROUND_COLORS, COMMON_COLORS } from "@/styled/colors";
@@ -26,6 +28,7 @@ const StyledButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;
 
 const StyledMainButton = styled(StyledButton)<ButtonProps>`
@@ -87,6 +90,15 @@ const MainButton = ({
   );
 };
 
+const BackButton = () => {
+  const navigate = useNavigate();
+  return (
+    <StyledButton onClick={() => navigate(-1)}>
+      <img src={BackIconImg} alt="뒤로가기" />
+    </StyledButton>
+  );
+};
+
 const HistoryBackButton = ({ onClick }: HistoryBackButtonProps) => {
   const navigate = useNavigate();
 
@@ -102,4 +114,4 @@ const HistoryBackButton = ({ onClick }: HistoryBackButtonProps) => {
   );
 };
 
-export { StarToggleButton, MainButton, HistoryBackButton };
+export { StarToggleButton, MainButton, HistoryBackButton, BackButton };
