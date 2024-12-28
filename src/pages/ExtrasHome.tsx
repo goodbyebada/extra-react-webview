@@ -14,7 +14,7 @@ import { HOME_MESSAGES } from "@/constants/messages";
 import { LayoutComponent } from "@components/template/Layout";
 import { ThemeText } from "@components/atoms/Text";
 import { Header } from "@components/template/Layout";
-import { HomeNavBar } from "@components/mocules/HomeNavBar";
+import { HomeNavBar } from "@components/mocules/navBar/HomeNavBar";
 
 const DUMMY_INIT_NAME = "김출연";
 
