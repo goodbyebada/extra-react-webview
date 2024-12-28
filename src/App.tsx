@@ -49,6 +49,7 @@ import CompanySettingPage from "@pages/CompanySettingPage";
 import PostOverviewPage from "@pages/PostOverviewPage";
 import RecruitmentStatus from "@pages/RecruitmentStatus";
 import SignaturePage from "@pages/SignaturePage";
+import JobPostManagement from "@pages/JobPostManagement";
 
 function App() {
   return (
@@ -150,6 +151,11 @@ function App() {
             path="/company/manager-dashboard"
             element={<ManagerDashboard />}
           />
+
+          <Route path="/manager-dashboard" element={<ManagerDashboard />} />
+
+          {/* 업체 측 공고 화면*/}
+          <Route path="/job-post-management" element={<JobPostManagement />} />
 
           <Route path="/applicants" element={<ShowApplicant />} />
           <Route path="/applicants/detail" element={<ApplicantDetail />} />

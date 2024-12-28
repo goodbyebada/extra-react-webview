@@ -1,37 +1,24 @@
-import { SpaceBetweenNavBar } from "@components/atoms/Layout";
+import BackIconImg from "@assets/backIcon.png";
+import { SpaceBetweenNavBar } from "@components/template/Layout";
 import { styled } from "styled-components";
-import { BackButton } from "@components/atoms/Button";
-import { BACKGROUND_COLORS } from "@/styled/colors";
 
-//TODO z-index 통일해야함 -> 논의 예정
-// TODO theme에 따라 background color 바뀌어야한다.
-// TODO Wrapper 높이 크기 고정 || 전달해야함-> 가리기 때문에
-const Wrapper = styled.div<{ fixed?: boolean }>`
+import { useNavigate } from "react-router-dom";
+import { BackButton } from "@components/atoms/Button";
+
+const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  padding: 10px;
-  background-color: ${BACKGROUND_COLORS.default};
-
-  ${({ fixed }) =>
-    fixed &&
-    `
-      position: fixed;
-      top: 0;
-      z-index: 10; 
-  `}
 `;
 
-export function CompanyNavBar({
-  children,
-  fixed = false,
-}: {
-  children: React.ReactNode;
-  fixed?: boolean;
-}) {
+export function CompanyNavBar() {
+  const navigate = useNavigate();
   return (
-    <Wrapper fixed={fixed}>
+    <Wrapper>
       <BackButton />
-      <SpaceBetweenNavBar>{children}</SpaceBetweenNavBar>
+      <SpaceBetweenNavBar>
+        <div> 모집 공고</div>
+        <div> 드라마 </div>
+      </SpaceBetweenNavBar>
     </Wrapper>
   );
 }
