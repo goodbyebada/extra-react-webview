@@ -3,11 +3,13 @@ import { ItemWrapper, TagWrapper } from "@components/atoms/Wrapper";
 import Text, { ThemeText } from "@components/atoms/Text";
 import { StarToggleButton } from "@components/atoms/Button";
 import StatusTag from "./Status";
+import getDdayString from "@utills/getDdayString";
+import getDateString from "@utills/getDateString";
 
 interface ItemProps {
   title: string;
   category: string;
-  date: string;
+  date: string[];
   dDay: string;
   company: string;
   time: string;
@@ -57,8 +59,8 @@ const ItemGatheringWrapper = styled.div`
  * isRecruit: 즐겨찾기 버튼 표시 여부
  * @param title string (title)
  * @param category string (category)
- * @param date string (date: 01/01 - 01/02)
- * @param dDay string (D-Day)
+ * @param date string[] (date: 배열로 변경)
+ * @param dDay string (dDate: deadline Date)
  * @param company string (company name)
  * @param time string (time: 01:00)
  * @param location string (location)
@@ -84,16 +86,19 @@ const Item = ({
   onClick,
   onClickStar = () => {},
 }: ItemProps) => {
+  const dDate = getDdayString(dDay);
+  const formattedDate = getDateString(date);
+
   return (
     <ItemWrapper highlight={highlight}>
       <ItemContent onClick={onClick}>
         <ThemeText variant="item-info">{category}</ThemeText>
         <ThemeText variant="item-title">{title}</ThemeText>
         <ItemDateWrapper>
-          <ThemeText variant="item-subtitle">{date}</ThemeText>
+          <ThemeText variant="item-subtitle">{formattedDate}</ThemeText>
           <TagWrapper>
             <Text size={11} weight={900} color="#888">
-              {dDay}
+              {dDate}
             </Text>
           </TagWrapper>
         </ItemDateWrapper>
