@@ -25,8 +25,8 @@ function RoleDetailBox({ onClick }: RoleDetailBoxProps) {
 export default RoleDetailBox;
 
 const BoxWrapper = styled.div`
-  width: 70%;
-  background-color: #535255;
+  width: 80%;
+  background-color: #575659;
   opacity: 0.7;
   border-radius: 10px;
   display: flex;

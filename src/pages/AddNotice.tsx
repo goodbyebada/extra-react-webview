@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import backIcon from "@assets/backIcon.png";
 import styled from "styled-components";
+import PostFormCard from "@components/mocules/company/PostFormCard";
+import RoleDetailBox from "@components/mocules/company/RoleDetailBox";
 import CompanyRoleModal from "@/components/Modal/CompanyRoleModal";
 import CompanyTitleCategoryModal from "@components/Modal/CompanyTitleCategoryModal";
 import CompanyDateTimePlaceModal from "@components/Modal/CompanyDateTimePlaceModal";
+import { MainButton } from "@components/atoms/Button";
+import Text from "@components/atoms/Text";
 import {
   SeasonEnum,
   type CategoryEnum,
@@ -11,103 +14,22 @@ import {
 } from "@api/interface";
 import { requestPostFetch } from "@api/utils";
 import { useNavigate } from "react-router-dom";
+import { IoCaretBackOutline } from "react-icons/io5";
 
-const Column = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+/**
+ * AddNotice : 업체 - 공고 등록록 화면
+ * 추후 수정 :
+ * 1. 역할 등록 시 모집 공고 화면 컴포넌트 추가
+ * 2. 구조가 비효율적
+ */
 
-const Container = styled.div`
-  background: #302e34;
-  width: 90%;
-  height: 150px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const Container2 = styled.div`
-  background-color: rgba(83, 82, 85, 0.7);
-  color: rgba(255, 255, 255, 0.7);
-  width: 90%;
-  height: 80px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 14px;
-`;
-
-const Container3 = styled.div`
-  border-radius: 10px;
-  background: rgba(83, 82, 85, 0.7);
-  width: 264px;
-  height: 49px;
-  flex-shrink: 0;
-  font-size: 12px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const PlusButton = styled.button`
-  font-size: 30px;
-  border-radius: 5px;
-  padding: 0 8px 0;
-  background-color: #fff;
-  margin-bottom: 10px;
-`;
-
-const CheckButton = styled.button`
-  background: #f5c001;
-  color: white;
-  border-radius: 8px;
-  font-size: 15px;
-  font-weight: bold;
-  padding: 5px 14px 5px;
-  margin-bottom: 30px;
-`;
-
-const CustomInput2 = styled.input`
-  border: none;
-  border-bottom: 1px solid white;
-  outline: none;
-  background: #302e34;
-  height: 25px;
-  margin-left: 10px;
-  padding-left: 10px;
-  color: white;
-  margin-right: 10px;
-  width: 40%;
-`;
-
-const RoleInfo = styled.div`
-  background-color: #302e34;
-  width: 90%;
-  height: 100px;
-  margin-bottom: 20px;
-  font-size: 10px;
-  font-weight: 700;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 15px 20px;
-  position: relative;
-`;
 function AddNotice() {
   const navigate = useNavigate();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [openModal, setOpenModal] = useState<boolean[]>(
-    Array.from({ length: 3 }, () => false),
-  );
-
+  const [isTitleModalVisible, setTitleModalVisible] = useState(false);
+  const [isDateModalVisible, setDateModalVisible] = useState(false);
+  const [isRoleModalVisible, setRoleModalVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState<
     [keyof typeof CategoryEnum | null, string]
@@ -120,17 +42,29 @@ function AddNotice() {
   const [roleName, setRoleName] = useState<string[]>([]);
   const [roleList, setRoleList] = useState<RoleRegister[][]>([]);
   const [roleValue, setRoleValue] = useState<string>("");
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [currentIndex] = useState<number>(0);
+
+  const handleOpenTitleModal = () => {
+    setTitleModalVisible(true);
+  };
+  const handleOpenDateModal = () => {
+    setDateModalVisible(true);
+  };
+  const handleOpenRoleModal = () => {
+    setRoleModalVisible(true);
+  };
+  const handleCloseTitleModal = () => {
+    setTitleModalVisible(false);
+  };
+  const handleCloseDateModal = () => {
+    setDateModalVisible(false);
+  };
+  const handleCloseRoleModal = () => {
+    setRoleModalVisible(false);
+  };
 
   const goBackManager = () => {
     navigate("/manager-dashboard");
-  };
-
-  // 모달 열기
-  const handlePlusButtonClick = (type: number) => {
-    const newOpenModal = [...openModal];
-    newOpenModal[type - 1] = true;
-    setOpenModal(newOpenModal);
   };
 
   const submitTitleCategoryModal = (
@@ -159,10 +93,6 @@ function AddNotice() {
     setRoleList(newRoleList);
   };
 
-  const closeModal = () => {
-    setOpenModal(Array.from({ length: 3 }, () => false));
-  };
-
   // 역할을 작성했을 때
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && e.currentTarget.value !== "") {
@@ -171,10 +101,6 @@ function AddNotice() {
       setRoleList([...roleList, []]);
     }
   };
-
-  // const openTitleCategoryModal = () => {
-  //   setIsModalOpen1(true);
-  // };
 
   const convertTime = (date: string, time: string) => {
     const newDate = new Date(`${date}T${time}:00.000`);
@@ -274,20 +200,17 @@ function AddNotice() {
 
   const RoleRegisterContainer = (index: number) => {
     return (
-      <Container
+      <RoleContainer
         style={{
           height: "200px",
           alignItems: "flex-start",
           justifyContent: "flex-start",
           flexDirection: "column",
-          marginTop: "20px",
+          marginTop: "15px",
         }}
       >
         <div style={{ marginTop: "15px", marginLeft: "15px" }}>
-          {index + 1}){" "}
-          {/* // error  'e' is defined but never used
-                                      <CustomInput2 type="text" onKeyDown={(e) => {handleKeyDown}}/> 
-                                      */}
+          {index + 1})
           {roleName[index] || (
             <CustomInput2
               type="text"
@@ -304,155 +227,68 @@ function AddNotice() {
             justifyContent: "center",
             marginTop: "15px",
             width: "100%",
-            height: "100%",
           }}
         >
-          {/* 눌렀을 때 7개의 조율 사항 모달이 뜨도록 구현해야함!!!! */}
-
-          <Container2
-            onClick={() => {
-              setCurrentIndex(index);
-              handlePlusButtonClick(3);
-            }}
-          >
-            <p>+ 역할 상세 프로필</p>
-          </Container2>
+          <RoleDetailBox onClick={handleOpenRoleModal} />
         </div>
-      </Container>
+      </RoleContainer>
     );
   };
 
   return (
     <>
-      <Column
-        style={{
-          marginTop: "3rem",
-          width: "100%",
-        }}
-      >
+      <Header>
+        <IoCaretBackOutline size={40} onClick={goBackManager} />
+        <Text size={25} color="#fff" weight={900}>
+          공고 등록
+        </Text>
+      </Header>
+
+      <Column>
         {title.length > 0 && category[0] !== null ? (
-          <Column
-            style={{
-              width: "90%",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <button
-                onClick={goBackManager}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <img
-                  src={backIcon}
-                  alt="back"
-                  style={{
-                    height: "1.5rem",
-                    marginRight: "1rem",
-                  }}
-                />
-                <span
-                  style={{
-                    color: "#fff",
-                  }}
-                >
-                  모집공고
-                </span>
-              </button>
-              <div>{category[1]}</div>
-            </div>
-            <div
-              style={{
-                marginTop: "2rem",
-                fontSize: "2rem",
-                fontWeight: "600",
-                color: "#F5C001",
-                marginBottom: ".5rem",
-              }}
-            >
+          <div>
+            <Text size={32} color="#F5C001" weight={600}>
               {title}
-            </div>
-          </Column>
+            </Text>
+            <Text size={16} color="#fff" weight={600}>
+              {category[1]}
+            </Text>
+          </div>
         ) : (
           <>
-            <div
-              style={{
-                display: "flex",
-                width: "100%",
-                alignItems: "start",
-                padding: "10px",
-              }}
-            >
-              <img
-                src={backIcon}
-                alt="back"
-                onClick={goBackManager}
-                style={{ margin: "12px 10px 10px" }}
-              />
-              <p
-                style={{
-                  margin: "12px 5px",
-                  fontSize: "25px",
-                  fontWeight: "bold",
-                }}
-              >
-                공고 등록
-              </p>
-            </div>
-            <Container>
-              <Column>
-                <PlusButton onClick={() => handlePlusButtonClick(1)}>
-                  +
-                </PlusButton>
-                <p style={{ color: "#5A5A5A" }}>제목, 카테고리</p>
-              </Column>
-            </Container>
+            <PostFormCard
+              title="제목, 카테고리"
+              onClick={handleOpenTitleModal}
+            />
           </>
         )}
         {date.length > 0 && time.length && place.length > 0 ? (
-          <Column
+          <div
             style={{
-              background: "#000",
-              width: "90%",
               borderTop: "1px solid #fff",
               borderBottom: "1px solid #fff",
               padding: ".5rem 0 .5rem",
-              marginBottom: "1rem",
+              margin: "1rem 0",
+              width: "100%",
             }}
           >
-            <p style={{ width: "100%", fontSize: "1rem", fontWeight: "700" }}>
-              {time} 예정
-            </p>
-            <p style={{ width: "100%", fontSize: "1rem", fontWeight: "700" }}>
+            <Row>
+              <Text size={16} weight={700} align="left">
+                {time} 예정
+              </Text>
+              <Text size={16} weight={700} align="right">
+                {date.replace(/(\d{4})-(\d{2})-(\d{2})/, "$2/$3")}
+              </Text>
+            </Row>
+            <Text size={16} weight={700} align="left">
               {place}
-            </p>
-            <p
-              style={{
-                width: "100%",
-                fontSize: "1rem",
-                fontWeight: "700",
-                textAlign: "right",
-              }}
-            >
-              {date.replace(/(\d{4})-(\d{2})-(\d{2})/, "$2/$3")}
-            </p>
-          </Column>
+            </Text>
+          </div>
         ) : (
-          <Container>
-            <Column>
-              <PlusButton onClick={() => handlePlusButtonClick(2)}>
-                +
-              </PlusButton>
-              <p style={{ color: "#5A5A5A" }}>날짜, 시간, 장소</p>
-            </Column>
-          </Container>
+          <PostFormCard
+            title="날짜, 시간, 장소"
+            onClick={handleOpenDateModal}
+          />
         )}
         {roleName.length > 0 &&
           roleName.map((name, index) => (
@@ -495,44 +331,91 @@ function AddNotice() {
                   </p>
                 </RoleInfo>
               ))}
-              <Container3
-                onClick={() => {
-                  setCurrentIndex(index);
-                  handlePlusButtonClick(3);
-                }}
-              >
-                <p>+</p>
-                <p>역할 상세 프로필</p>
-              </Container3>
+              <RoleDetailBox onClick={handleOpenRoleModal} />
             </>
           ))}
         {RoleRegisterContainer(roleName.length)}
 
-        <CheckButton onClick={handleConfirmToAdd}>확인</CheckButton>
+        <MainButton onClick={handleConfirmToAdd}>확인</MainButton>
       </Column>
 
-      {/* 제목 카테고리 모달의 내용 */}
-      {openModal[0] && (
-        <CompanyTitleCategoryModal
-          onSubmit={submitTitleCategoryModal}
-          closeModal={closeModal}
-        />
-      )}
-
-      {/* 날짜 시간 장소 모달의 내용 */}
-      {openModal[1] && (
-        <CompanyDateTimePlaceModal
-          onSubmit={submitDateTimePlaceModal}
-          closeModal={closeModal}
-        />
-      )}
-
-      {/* 역할 상세 모달 */}
-      {openModal[2] && (
-        <CompanyRoleModal onSubmit={submitRoleModal} closeModal={closeModal} />
-      )}
+      <CompanyTitleCategoryModal
+        isVisible={isTitleModalVisible}
+        onSubmit={submitTitleCategoryModal}
+        closeModal={handleCloseTitleModal}
+      />
+      <CompanyDateTimePlaceModal
+        isVisible={isDateModalVisible}
+        onSubmit={submitDateTimePlaceModal}
+        closeModal={handleCloseDateModal}
+      />
+      <CompanyRoleModal
+        isVisible={isRoleModalVisible}
+        onSubmit={submitRoleModal}
+        closeModal={handleCloseRoleModal}
+      />
     </>
   );
 }
 
 export default AddNotice;
+
+const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  width: 100%;
+`;
+
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 10px;
+`;
+
+const RoleContainer = styled.div`
+  background-color: #302e34;
+  width: 100%;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const CustomInput2 = styled.input`
+  border: none;
+  border-bottom: 1px solid white;
+  outline: none;
+  background: #302e34;
+  height: 25px;
+  margin-left: 10px;
+  padding-left: 10px;
+  color: white;
+  margin-right: 10px;
+  width: 40%;
+`;
+
+const RoleInfo = styled.div`
+  background-color: #302e34;
+  width: 100%;
+  height: 100px;
+  margin-bottom: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 15px 20px;
+  position: relative;
+`;

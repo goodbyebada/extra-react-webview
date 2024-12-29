@@ -27,7 +27,7 @@ function PostFormCard({ title, onClick }: PostFormCardProps) {
 export default PostFormCard;
 
 const CardWrapper = styled.div`
-  width: 90%;
+  width: 100%;
   height: 20%;
   background-color: #535255;
   opacity: 0.7;
@@ -39,4 +39,5 @@ const CardWrapper = styled.div`
   position: relative;
   padding: 20px;
   gap: 12px;
+  margin: 15px 0;
 `;

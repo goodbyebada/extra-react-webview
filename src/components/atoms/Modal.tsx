@@ -62,8 +62,8 @@ const ModalWrapper = styled.div`
   border: 3px solid transparent;
   width: 80%;
   max-width: 400px;
-  min-height: 500px;
-  padding: 20px;
+  min-height: 200px;
+  padding: 28px;
   display: flex;
   flex-direction: column;
   border-radius: 30px;
