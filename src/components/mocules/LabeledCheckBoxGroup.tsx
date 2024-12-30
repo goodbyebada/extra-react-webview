@@ -13,7 +13,7 @@ interface LabeldCheckedProps {
 interface LabeldCheckboxGroupProps {
   lableItemList: string[];
   defaultCheckedLabelIdx?: number;
-  handleCheckedItemLable: (checkedLabel: string | undefined) => void;
+  handleCheckedItemIdx: (checkedLabel: number) => void;
 }
 
 /**
@@ -49,7 +49,7 @@ export const LabeledCheckbox = ({
 export const LabeledCheckBoxGroup = ({
   lableItemList,
   defaultCheckedLabelIdx,
-  handleCheckedItemLable,
+  handleCheckedItemIdx,
 }: LabeldCheckboxGroupProps) => {
   const [labelMap, setCheckLabel] = useState<Map<number, string>>(new Map());
   const [checkedArray, setCheckedArrayList] = useState<boolean[]>([]);
@@ -58,9 +58,7 @@ export const LabeledCheckBoxGroup = ({
     setCheckedArrayList((prev: boolean[]) =>
       prev.map((_, idx) => idx === checkedIdx),
     );
-
-    const label = labelMap.get(checkedIdx);
-    if (label) handleCheckedItemLable(label);
+    handleCheckedItemIdx(checkedIdx);
   };
 
   useEffect(() => {
@@ -86,7 +84,6 @@ export const LabeledCheckBoxGroup = ({
     initLabelMap();
     initCheckedBooleanArray();
   }, []);
-
 
   return (
     <LabeledWrapper>
