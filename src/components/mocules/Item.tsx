@@ -4,7 +4,7 @@ import Text, { ThemeText } from "@components/atoms/Text";
 import { StarToggleButton } from "@components/atoms/Button";
 import StatusTag from "./Status";
 
-interface ItemProps {
+export interface ItemProps {
   title: string;
   category: string;
   date: string;
