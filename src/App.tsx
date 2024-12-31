@@ -17,7 +17,8 @@ import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
 import SchedulerPage from "@pages/Scheduler";
 
 import ThemePreviewPage from "@pages/ThemePreview";
-import JobPostManagement from "@pages/JobPostManagement";
+import PostOverviewPage from "@pages/PostOverviewPage";
+import RecruitmentStatus from "@pages/RecruitmentStatus";
 
 function App() {
   return (
@@ -54,8 +55,12 @@ function App() {
             element={<CompanyShootManagePage />}
           />
 
-          {/* 업체 측 공고 화면*/}
-          <Route path="/job-post-management" element={<JobPostManagement />} />
+          {/* 업체 측 공고 리스트 페이지 화면*/}
+          <Route
+            path="/company/notice/post-overview"
+            element={<PostOverviewPage />}
+          />
+
 
           <Route path="/applicants" element={<ShowApplicant />} />
           <Route path="/applicants/detail" element={<ApplicantDetail />} />

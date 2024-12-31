@@ -1,18 +1,22 @@
-import { Header } from "@components/template/Layout";
+import { Header } from "@components/atoms/Layout";
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { SpaceBetweenNavBar } from "@components/template/Layout";
+import { SpaceBetweenNavBar } from "@components/atoms/Layout";
 import addButtonImg from "@assets/addButton.jpg";
 import { useNavigate } from "react-router-dom";
 import { LabeledCheckBoxGroup } from "@components/mocules/LabeledCheckBoxGroup";
-import InfiniteScrollingTemplate from "@components/template/InfiniteScrolling";
-import { ItemProps } from "@components/mocules/Item"; // ItemProps import
+import InfiniteScrollingTemplate from "@components/mocules/InfiniteScrolling";
+import { ItemProps } from "@components/mocules/Item";
+import Text, { ThemeText } from "@components/atoms/Text";
+import { LineWrapper } from "@components/atoms/Wrapper";
 
 /**
- * 업체 측 공고 관리 화면
+ * 업체 측 공고 화면
+ * (본인이 소속된 회사의 공고 리스트를 보여주는 화면)
  */
 
-export default function JobPostManagement() {
+// [ ] 12.30 api 호출시에 loading 화면 띄우기
+export default function PostOverviewPage() {
   const navigate = useNavigate();
 
   const OPTION_STR = {
@@ -23,7 +27,7 @@ export default function JobPostManagement() {
   const BASE_URL = `https://jsonplaceholder.typicode.com`;
   const TMP_ALL_BASE_URL = `${BASE_URL}/posts?`;
   const TMP_MY_BASE_URL = `${BASE_URL}/comments?`;
-  const query = `_limit=5&_page`;
+  const query = `_limit=10&_page`;
 
   // TODO 최대 N 글자  명시 필요함 Itemp component 망가짐 추후 논의 예정
   const convertItemPropsAllType = (elem: {
@@ -95,6 +99,7 @@ export default function JobPostManagement() {
     }
   }, [checkedLabelIdx]);
 
+  // TODO 추후 공고 추가 페이제 path와 연결해야함
   const path = "/";
 
   return (
@@ -148,5 +153,5 @@ const StickyWrapper = styled.div`
 `;
 
 const ContentWrapper = styled.div`
-  margin-top: 100px;
+  margin-top: 10rem;
 `;
