@@ -5,6 +5,7 @@ import Item from "@components/mocules/Item";
 import CalendarItem from "@components/mocules/calender/CalendarItem";
 import { MainButton } from "@components/atoms/Button";
 import SwipeableItem from "@components/mocules/SwipeableItem";
+import RoleInfo from "@components/custom/RoleInfo";
 
 const PreviewContainer = styled.section`
   background: #000;
@@ -15,6 +16,15 @@ const ThemePreviewPage = () => {
   const [activeStar, setActiveStar] = useState(false);
   const handleDelete = () => {
     alert("아이템이 삭제되었습니다!");
+  };
+  const roleExample = {
+    sex: true,
+    roleAge: ["20", "30"],
+    season: "봄",
+    costume: ["드레스", "정장"],
+    currentPersonnel: 3,
+    limitPersonnel: 5,
+    roleId: 101,
   };
 
   return (
@@ -43,6 +53,15 @@ const ThemePreviewPage = () => {
         </Text>{" "}
         defaultText
       </Text>
+
+      <RoleInfo
+        role={roleExample}
+        roleName="주연 배우"
+        index={0}
+        onClick={(roleName, index) => {
+          console.log(`Role Name: ${roleName}, Index: ${index}`);
+        }}
+      />
 
       <SwipeableItem
         title="UMC 드라마 촬영"

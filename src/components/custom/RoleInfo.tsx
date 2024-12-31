@@ -1,5 +1,5 @@
-import React from "react";
 import styled from "styled-components";
+import Text from "@components/atoms/Text";
 
 interface RoleInfoProps {
   role: {
@@ -15,39 +15,45 @@ interface RoleInfoProps {
   index: number;
   onClick: (roleName: string, index: number) => void;
 }
-const RoleInfoComponent: React.FC<RoleInfoProps> = ({
-  role,
-  roleName,
-  index,
-  onClick,
-}) => {
+
+/**
+ * RoleInfo : 업체 역할 정보 박스
+ */
+
+const RoleInfo = ({ role, roleName, index, onClick }: RoleInfoProps) => {
   return (
     <RoleInfoContainer onClick={() => onClick(roleName, index)}>
       <RoleDetail>
-        <p>1. 성별 : {role.sex ? "여" : "남"}</p>
-        <p>2. 나이 : {role.roleAge}</p>
-        <p>3. 계절 : {role.season}</p>
-        <p>4. 의상 : {role.costume}</p>
+        <Text size={14} weight={700}>
+          1. 성별 : {role.sex ? "여" : "남"}
+        </Text>
+        <Text size={14} weight={700}>
+          2. 나이 : {role.roleAge}
+        </Text>
+        <Text size={14} weight={700}>
+          3. 계절 : {role.season}
+        </Text>
+        <Text size={14} weight={700}>
+          4. 의상 : {role.costume}
+        </Text>
       </RoleDetail>
       <RolePersonnel>
-        ({role.currentPersonnel}/{role.limitPersonnel})
+        <Text size={16} weight={700} color="#fff">
+          ({role.currentPersonnel}/{role.limitPersonnel})
+        </Text>
       </RolePersonnel>
     </RoleInfoContainer>
   );
 };
 
-export default RoleInfoComponent;
+export default RoleInfo;
 
 const RoleInfoContainer = styled.div`
   background-color: #535255;
   box-shadow: 5px 5px 4px 0px #000;
-  width: 340px;
-  height: 105px;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  padding-left: 20px;
-  font-size: 12px;
-  font-weight: 700;
+  width: 90%;
+  padding: 16px;
+  margin: 20px 0;
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -60,13 +66,11 @@ const RoleInfoContainer = styled.div`
 const RoleDetail = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 2px;
 `;
 
 const RolePersonnel = styled.div`
   position: absolute;
-  top: 7px;
-  right: 15px;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 700;
+  top: 14px;
+  right: 20px;
 `;
