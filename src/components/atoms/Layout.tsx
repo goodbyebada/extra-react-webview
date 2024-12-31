@@ -67,6 +67,8 @@ const StyledSpaceBetweenNavBar = styled.nav`
   justify-content: space-between;
   align-items: center;
   flex-grow: 1;
+  padding: 10px;
+  width: 100%;
 `;
 
 const SpaceBetweenNavBar = ({ children }: WithChildrenProps) => {
