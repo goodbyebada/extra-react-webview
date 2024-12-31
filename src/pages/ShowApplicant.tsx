@@ -3,6 +3,7 @@ import styled from "styled-components";
 import RoleCheckItem from "@components/mocules/company/RoleCheckItem";
 import Text from "@components/atoms/Text";
 import { MainButton } from "@components/atoms/Button";
+import { dummyUserRoleData } from "@api/dummyData";
 
 /**
  * ShowApplicant : 업체 - 역할 별 지원현황
@@ -10,12 +11,6 @@ import { MainButton } from "@components/atoms/Button";
  * - 역할 이름 전 화면에서 넘겨 받아야 함
  * - 역할 상세 내역 전 화면에서 컴포넌트 만들어지면 추가
  */
-
-const dummyData = [
-  { id: 1, name: "박지민" },
-  { id: 2, name: "이건" },
-  { id: 3, name: "박창선" },
-];
 
 const role = "학생";
 
@@ -36,10 +31,10 @@ const ShowApplicant = () => {
 
   const handleTabClick = (tab: string) => {
     if (tab === "전체선택") {
-      if (selectedItems.length === dummyData.length) {
+      if (selectedItems.length === dummyUserRoleData.length) {
         setSelectedItems([]);
       } else {
-        setSelectedItems(dummyData.map((item) => item.name)); // 전체 선택
+        setSelectedItems(dummyUserRoleData.map((item) => item.name)); // 전체 선택
       }
     } else {
       setActiveTab(tab);
@@ -65,7 +60,7 @@ const ShowApplicant = () => {
         </LeftTabs>
         <RightTab>
           <TabItem
-            isActive={selectedItems.length === dummyData.length}
+            isActive={selectedItems.length === dummyUserRoleData.length}
             onClick={() => handleTabClick("전체선택")}
           >
             전체선택
@@ -73,14 +68,19 @@ const ShowApplicant = () => {
         </RightTab>
       </TabWrapper>
       <RoleList>
-        {dummyData.map((item) => (
-          <RoleCheckItem
-            key={item.id}
-            name={item.name}
-            isChecked={selectedItems.includes(item.name)} // 선택된 항목인지 여부 전달
-            onCheckClick={(isChecked) => handleCheckClick(item.name, isChecked)}
-          />
-        ))}
+        {dummyUserRoleData.map((item) => {
+          return (
+            <RoleCheckItem
+              key={item.id}
+              userId={item.userId}
+              name={item.name}
+              isChecked={selectedItems.includes(item.name)} // 선택된 항목인지 여부 전달
+              onCheckClick={(isChecked) =>
+                handleCheckClick(item.name, isChecked)
+              }
+            />
+          );
+        })}
       </RoleList>
       <Footer>
         <MainButton onClick={() => console.log("승인: ", selectedItems)}>

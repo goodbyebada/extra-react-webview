@@ -14,12 +14,14 @@ import DetailProfileModal from "@components/Modal/DetailProfileModal";
  */
 
 interface RoleCheckItemProps {
+  userId: string;
   name: string;
   isChecked: boolean;
   onCheckClick?: (isChecked: boolean) => void;
 }
 
 const RoleCheckItem = ({
+  userId,
   name,
   isChecked,
   onCheckClick,
@@ -57,9 +59,11 @@ const RoleCheckItem = ({
       </ListItemWrapper>
 
       <DetailProfileModal
+        userId={userId}
         isVisible={isModalVisible}
         onClose={handleCloseModal}
         name={name}
+        isApprovalModal={false}
       />
     </>
   );
