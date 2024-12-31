@@ -132,6 +132,16 @@ function App() {
             element={<PostOverviewPage />}
           />
 
+          {/* 추후 수정 예정, UI 보이기 위해 임시로 id 값 고정 시킴*/}
+          <Route
+            path="/company/notice/post-status/2"
+            element={<RecruitmentStatus />}
+          />
+          {/* <Route
+            path="/company/notice/post-status/:id"
+            element={<PostOverviewPage />}
+          /> */}
+
           <Route path="/applicants" element={<ShowApplicant />} />
           <Route path="/applicants/detail" element={<ApplicantDetail />} />
           <Route path="/detail/:id" element={<DetailPage />} />
