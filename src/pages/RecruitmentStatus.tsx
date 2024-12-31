@@ -5,7 +5,7 @@
 import { CompanyNavBar } from "@components/mocules/navBar/CompanyNavBar";
 import Text, { ThemeText } from "@components/atoms/Text";
 import { COLORS } from "@/styled/colors";
-import { LineWrapper } from "@components/atoms/Wrapper";
+import { ContentWrapper, LineWrapper } from "@components/atoms/Wrapper";
 import { styled } from "styled-components";
 
 export default function RecruitmentStatus() {
@@ -31,7 +31,7 @@ export default function RecruitmentStatus() {
           드라마
         </Text>
       </CompanyNavBar>
-      <ContentWrapper>
+      <ContentWrapper marginTop="5rem">
         {/* 제목 */}
         <LineWrapper>
           <Text size={40} highlight={true} weight={700}>
@@ -55,10 +55,6 @@ export default function RecruitmentStatus() {
     </>
   );
 }
-
-const ContentWrapper = styled.div`
-  margin-top: 5rem;
-`;
 
 const InfoWrapper = styled.div`
   width: 100%;

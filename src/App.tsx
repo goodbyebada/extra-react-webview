@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ManagerDashboard from "./pages/ManagerDashboard";
 import AddNotice from "./pages/AddNotice";
 import ShowApplicant from "./pages/ShowApplicant";
 
@@ -17,8 +16,9 @@ import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
 import SchedulerPage from "@pages/Scheduler";
 
 import ThemePreviewPage from "@pages/ThemePreview";
-import PostOverviewPage from "@pages/PostOverviewPage";
+import PostOverViewPage from "@pages/PostOverviewPage";
 import RecruitmentStatus from "@pages/RecruitmentStatus";
+import ManageOverViewPage from "@pages/ManageOverviewPage";
 
 function App() {
   return (
@@ -56,10 +56,7 @@ function App() {
           />
 
           {/* 업체 측 공고 리스트 페이지 화면*/}
-          <Route
-            path="/company/notice/post-overview"
-            element={<PostOverviewPage />}
-          />
+          <Route path="/company/notice/" element={<PostOverViewPage />} />
 
           {/* 추후 수정 예정, UI 보이기 위해 임시로 id 값 고정 시킴*/}
           <Route
@@ -70,6 +67,8 @@ function App() {
             path="/company/notice/post-status/:id"
             element={<PostOverviewPage />}
           /> */}
+
+          <Route path="/company/manage" element={<ManageOverViewPage />} />
 
           <Route path="/applicants" element={<ShowApplicant />} />
           <Route path="/applicants/detail" element={<ApplicantDetail />} />
