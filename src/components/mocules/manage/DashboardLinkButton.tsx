@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
-import Color from "@/constants/color";
-import { Container } from "@components/atoms/Container";
+import Container from "@components/atoms/Container";
 import Text from "@components/atoms/Text";
 
 import { FaAngleRight } from "react-icons/fa6";
+import { BACKGROUND_COLORS, FONT_COLORS } from "@/styled/colors";
 
 interface LinkButtonProps {
   url: string;
@@ -20,7 +20,7 @@ const StyledLinkButton = styled.button`
 
   border-radius: 20px;
 
-  background: ${Color.input};
+  background: ${BACKGROUND_COLORS.card};
 `;
 
 const DashboardLinkButton = ({ url, title }: LinkButtonProps) => {
@@ -33,13 +33,13 @@ const DashboardLinkButton = ({ url, title }: LinkButtonProps) => {
         navigate(url);
       }}
     >
-      <Container alignItems="flex-start" flex={50} background="none">
+      <Container alignItems="flex-start" flex={50}>
         <Text size={24} weight={900}>
           {title}
         </Text>
       </Container>
-      <Container alignItems="flex-end" flex={50} background="none">
-        <FaAngleRight color={Color.text} size={24} />
+      <Container alignItems="flex-end" flex={50}>
+        <FaAngleRight color={FONT_COLORS.white} size={24} />
       </Container>
     </StyledLinkButton>
   );

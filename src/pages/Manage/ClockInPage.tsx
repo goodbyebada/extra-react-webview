@@ -1,7 +1,7 @@
 import MainWindow from "@components/mocules/MainWindow";
 import QRScanner from "@components/organisms/QRScanner";
 
-const AttendancePage = () => {
+const ClockInPage = () => {
   return (
     <MainWindow bottomNavigationShown={false}>
       <QRScanner
@@ -13,4 +13,4 @@ const AttendancePage = () => {
   );
 };
 
-export default AttendancePage;
+export default ClockInPage;

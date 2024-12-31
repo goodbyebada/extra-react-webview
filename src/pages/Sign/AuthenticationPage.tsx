@@ -2,14 +2,15 @@ import { useState, useRef } from "react";
 import { Control, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-import Color from "@/constants/color";
-import { Window, Container } from "@/components/atoms/Container";
+import Container from "@/components/atoms/Container";
+import Window from "@components/mocules/Window";
 import Text from "@components/atoms/Text";
 
 import { SiAuthelia } from "react-icons/si";
 import Margin from "@components/atoms/Margin";
 import { InputField } from "@components/atoms/Form";
 import { MainButton } from "@components/atoms/Button";
+import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@/styled/colors";
 
 const NumberInputGroup = ({
   control,
@@ -108,17 +109,23 @@ const AuthenticationPage = () => {
   };
 
   return (
-    <Window>
+    <Window background={BACKGROUND_COLORS.sign}>
       <Container>
         <Margin size={40} />
         <SiAuthelia
           size={60}
-          color={status == "completion" ? Color.theme : Color.disabled}
+          color={
+            status == "completion"
+              ? COMMON_COLORS.main
+              : BACKGROUND_COLORS.disabled
+          }
         />
         <Margin size={20} />
         <Text
           size={20}
-          color={status == "completion" ? Color.theme : Color.text}
+          color={
+            status == "completion" ? COMMON_COLORS.main : FONT_COLORS.white
+          }
         >
           {!isSended
             ? "전송 대기"

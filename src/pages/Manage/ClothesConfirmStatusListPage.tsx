@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 
-import { Container, Window } from "@components/atoms/Container";
+import Container from "@components/atoms/Container";
 import { ClothesConfirmCardItem } from "@components/mocules/manage/CardItem";
 import ScrollingList from "@components/mocules/ScrollingList";
 import Margin from "@components/atoms/Margin";
 import SearchInputField from "@components/mocules/manage/SearchInputField";
 import Text from "@components/atoms/Text";
+import MainWindow from "@components/mocules/MainWindow";
 
 interface ClothesConfirmStatusItem {
   name: string;
@@ -87,7 +88,7 @@ const ClothesConfirmStatusListPage = () => {
   let lastRole = "";
 
   return (
-    <Window paddingHorizontal={33}>
+    <MainWindow>
       <ScrollingList>
         {clothesConfirmStatusList.map((v, i) => {
           let roleHeader = null;
@@ -132,7 +133,7 @@ const ClothesConfirmStatusListPage = () => {
           );
         })}
       </ScrollingList>
-    </Window>
+    </MainWindow>
   );
 };
 

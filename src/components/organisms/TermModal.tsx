@@ -1,4 +1,3 @@
-import Color from "@/constants/color";
 import styled from "styled-components";
 
 import { FaCheck } from "react-icons/fa6";
@@ -6,6 +5,7 @@ import Text from "@components/atoms/Text";
 import { useEffect, useState } from "react";
 import { MainButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
+import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@/styled/colors";
 
 const ModalOverlay = styled.div`
   width: 100%;
@@ -46,7 +46,7 @@ const TermItemWrapper = styled.div`
 const TermDivider = styled.div`
   width: 100%;
   height: 1px;
-  background: ${Color.disabled};
+  background: ${BACKGROUND_COLORS.disabled};
 
   margin: 20px 0;
 `;
@@ -63,8 +63,8 @@ const CheckButtonWrapper = styled.div<CheckButtonProps>`
   border-radius: 5px;
   ${({ checked }) =>
     checked
-      ? `background: ${Color.theme};`
-      : `border: 1px solid ${Color.disabled};`}
+      ? `background: ${COMMON_COLORS.main};`
+      : `border: 1px solid ${BACKGROUND_COLORS.disabled};`}
 
   box-sizing: border-box;
 
@@ -76,7 +76,10 @@ const CheckButtonWrapper = styled.div<CheckButtonProps>`
 const CheckButton = ({ checked }: CheckButtonProps) => {
   return (
     <CheckButtonWrapper checked={checked}>
-      <FaCheck color={checked ? Color.background : Color.disabled} size={15} />
+      <FaCheck
+        color={checked ? BACKGROUND_COLORS.default : BACKGROUND_COLORS.disabled}
+        size={15}
+      />
     </CheckButtonWrapper>
   );
 };
@@ -94,7 +97,7 @@ const TermItem = ({ checked, text, onClick }: TermItemProps) => {
         <Text
           size={14}
           weight={500}
-          color={checked ? Color.text : Color.disabled}
+          color={checked ? FONT_COLORS.white : BACKGROUND_COLORS.disabled}
         >
           {text}
         </Text>

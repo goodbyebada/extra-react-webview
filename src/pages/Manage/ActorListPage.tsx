@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 
-import { Container, Window } from "@components/atoms/Container";
+import Container from "@components/atoms/Container";
 import { ActorCardItem } from "@components/mocules/manage/CardItem";
 import ScrollingList from "@components/mocules/ScrollingList";
 import Margin from "@components/atoms/Margin";
 import Filter from "@components/mocules/manage/Filter";
 import SearchInputField from "@components/mocules/manage/SearchInputField";
+import MainWindow from "@components/mocules/MainWindow";
 
 interface ActorItem {
   name: string;
@@ -116,7 +117,7 @@ const ActorListPage = () => {
   }, [filterIndex, searchKey]);
 
   return (
-    <Window paddingHorizontal={33}>
+    <MainWindow>
       <Container flex={10}>
         <Container flexDirection="row" justifyContent="space-between">
           <Filter
@@ -139,7 +140,7 @@ const ActorListPage = () => {
           </li>
         ))}
       </ScrollingList>
-    </Window>
+    </MainWindow>
   );
 };
 

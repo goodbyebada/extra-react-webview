@@ -3,9 +3,9 @@ import Text from "@components/atoms/Text";
 import styled from "styled-components";
 import star_g from "@assets/Star_g.png";
 import star_y from "@assets/Star_y.png";
-import Color from "@/constants/color";
 import { TfiAngleLeft } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
+import { BACKGROUND_COLORS, COMMON_COLORS } from "@/styled/colors";
 
 interface ButtonProps {
   children?: React.ReactNode;
@@ -35,7 +35,8 @@ const StyledMainButton = styled(StyledButton)<ButtonProps>`
   border-radius: 18px;
   ${({ disabled }) => !disabled && "cursor: pointer;"}
 
-  background: ${({ isActive }) => (isActive ? Color.theme : Color.disabled)};
+  background: ${({ isActive }) =>
+    isActive ? COMMON_COLORS.main : BACKGROUND_COLORS.disabled};
 `;
 
 /**
@@ -90,7 +91,7 @@ const HistoryBackButton = ({ onClick }: HistoryBackButtonProps) => {
 
   return (
     <button type="button" onClick={handleClick}>
-      <TfiAngleLeft size={30} color={Color.theme} />
+      <TfiAngleLeft size={30} color={COMMON_COLORS.main} />
     </button>
   );
 };

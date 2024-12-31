@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import styled from "styled-components";
-import { Window, Container } from "@components/atoms/Container";
+import Container from "@components/atoms/Container";
 import { InputField } from "@components/atoms/Form";
 import { MainButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
@@ -11,7 +11,8 @@ import Text from "@components/atoms/Text";
 import logoImage from "@/assets/logo.png";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
-import Color from "@/constants/color";
+import { FONT_COLORS } from "@/styled/colors";
+import Window from "@components/mocules/Window";
 
 const SocialLoginButton = styled.button`
   width: 50px;
@@ -91,13 +92,13 @@ const LoginPage = () => {
         <Container flexDirection="row">
           <Margin direction="horizontal" size={20} />
           <button onClick={() => navigate("/main-form")}>
-            <Text size={12} color={Color.subText}>
+            <Text size={12} color={FONT_COLORS.gray}>
               회원가입{"  "}
             </Text>
           </button>
           <Margin direction="horizontal" size={40} />
           <button onClick={() => console.log("비밀번호 찾기")}>
-            <Text size={12} color={Color.subText}>
+            <Text size={12} color={FONT_COLORS.gray}>
               비밀번호 찾기
             </Text>
           </button>

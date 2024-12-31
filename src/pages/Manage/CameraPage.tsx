@@ -2,8 +2,8 @@ import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
-import { Container, Window } from "@components/atoms/Container";
-import Color from "@/constants/color";
+import Container from "@components/atoms/Container";
+import MainWindow from "@components/mocules/MainWindow";
 
 import { RxCross2 } from "react-icons/rx";
 import { IoIosFlash, IoIosFlashOff } from "react-icons/io";
@@ -13,6 +13,7 @@ import { FaCamera } from "react-icons/fa6";
 import VConsole from "vconsole";
 import { MainButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
+import { COMMON_COLORS } from "@/styled/colors";
 const vConsole = new VConsole({ theme: "dark" });
 
 const CaptureIconButton = styled.div`
@@ -24,7 +25,7 @@ const CaptureIconButton = styled.div`
   height: 50px;
   border-radius: 50%;
 
-  background: ${Color.theme};
+  background: ${COMMON_COLORS.main};
 
   position: absolute;
   bottom: 20px;
@@ -153,7 +154,7 @@ const CameraPage = () => {
   }, []);
 
   return (
-    <Window paddingHorizontal={10}>
+    <MainWindow bottomNavigationShown={false} headerShown={false}>
       {photo != null ? (
         <Container>
           <Container flex={90}>
@@ -214,7 +215,7 @@ const CameraPage = () => {
         width={500}
         height={500}
       ></canvas>
-    </Window>
+    </MainWindow>
   );
 };
 

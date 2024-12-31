@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
-import Color from "@/constants/color";
 import Text from "@components/atoms/Text";
 import SignWindow from "@components/mocules/SignWindow";
 import TermModal from "@components/organisms/TermModal";
+import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@/styled/colors";
 
 interface SelectButtonProps {
   isActive: boolean;
@@ -18,13 +18,14 @@ const SelectButton = styled.div<SelectButtonProps>`
 
   border-radius: 20px;
 
-  background: ${Color.input};
+  background: ${BACKGROUND_COLORS.input};
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  ${({ isActive }) => (isActive ? `border: 2px solid ${Color.theme}` : "")}
+  ${({ isActive }) =>
+    isActive ? `border: 2px solid ${COMMON_COLORS.main}` : ""}
 `;
 
 const ListWrapper = styled.div`
@@ -71,7 +72,7 @@ const CompanyInfoFormPage = () => {
               <Text
                 size={20}
                 weight={700}
-                color={currentIndex == i ? Color.text : Color.subText}
+                color={currentIndex == i ? FONT_COLORS.white : FONT_COLORS.gray}
               >
                 {v}
               </Text>

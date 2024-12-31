@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { CiSearch } from "react-icons/ci";
-import Color from "@/constants/color";
+import { BACKGROUND_COLORS, FONT_COLORS } from "@/styled/colors";
 
 interface SearchInputFieldProps {
   value: string;
@@ -15,12 +15,12 @@ const InputWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 9px;
-  background: ${Color.input};
+  background: ${BACKGROUND_COLORS.card};
 `;
 
 const Input = styled.input`
   outline: none;
-  color: ${Color.text};
+  color: ${FONT_COLORS.white};
   font-size: 13px;
   width: 100%;
   border: none;

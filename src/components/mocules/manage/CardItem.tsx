@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import Color from "@/constants/color";
 import Text from "@components/atoms/Text";
 import { useNavigate } from "react-router-dom";
 import Margin from "@components/atoms/Margin";
 import { FaAngleRight } from "react-icons/fa6";
+import { BACKGROUND_COLORS, FONT_COLORS } from "@/styled/colors";
 
 interface StyledCardItemProps {
   name: string;
@@ -27,7 +27,7 @@ const CardItemWrapper = styled.div`
 
   border-radius: 10px;
 
-  background: ${Color.input};
+  background: ${BACKGROUND_COLORS.card};
 
   display: flex;
   justify-content: space-between;
@@ -60,7 +60,7 @@ const StyledCardItem = ({
       <div>
         {statusComponent}
         <Margin size={14} direction="horizontal" />
-        <FaAngleRight size={24} color={Color.text} />
+        <FaAngleRight size={24} color={FONT_COLORS.white} />
       </div>
     </CardItemWrapper>
   );
@@ -75,7 +75,8 @@ const ActorStatus = styled.div<CardStatus>`
 `;
 
 const ClothesStatus = styled.div<CardStatus>`
-  background: ${({ status }) => (status ? "#35EB17" : Color.disabled)};
+  background: ${({ status }) =>
+    status ? "#35EB17" : BACKGROUND_COLORS.disabled};
 
   width: 62px;
   height: 20px;

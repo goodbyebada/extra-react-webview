@@ -1,17 +1,17 @@
 import { useState } from "react";
 
 import styled from "styled-components";
-import Color from "@/constants/color";
 import Text from "@components/atoms/Text";
 import { GoTriangleDown } from "react-icons/go";
 import { GoTriangleUp } from "react-icons/go";
 import Margin from "@components/atoms/Margin";
+import { BACKGROUND_COLORS, FONT_COLORS } from "@/styled/colors";
 
 const FilterWrapper = styled.div`
   position: relative;
   width: 84px;
   height: 35px;
-  background: ${Color.input};
+  background: ${BACKGROUND_COLORS.card};
   border-radius: 5px;
 
   z-index: 10;
@@ -49,7 +49,7 @@ const FilterItem = styled.div<FilterItemProps>`
   width: 100%;
   height: 100%;
 
-  background: ${({ isActive }) => (isActive ? Color.input : "#222")};
+  background: ${({ isActive }) => (isActive ? BACKGROUND_COLORS.card : "#222")};
 
   display: flex;
   justify-content: center;
@@ -69,9 +69,9 @@ const Filter = ({ items, setValue }: FilterProps) => {
   return (
     <FilterWrapper onClick={() => setIsOpen(!isOpen)}>
       {isOpen ? (
-        <GoTriangleUp size={15} color={Color.text} />
+        <GoTriangleUp size={15} color={FONT_COLORS.white} />
       ) : (
-        <GoTriangleDown size={15} color={Color.text} />
+        <GoTriangleDown size={15} color={FONT_COLORS.white} />
       )}
       <Margin size={10} direction="horizontal" />
       <Text size={14} weight={900}>
