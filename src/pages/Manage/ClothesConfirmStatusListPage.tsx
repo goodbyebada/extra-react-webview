@@ -10,128 +10,95 @@ import MainWindow from "@components/mocules/MainWindow";
 
 interface ClothesConfirmStatusItem {
   name: string;
-  roles: string;
   status: boolean;
 }
 
-const dummyClothesConfirmStatusList = [
-  {
-    name: "이름1",
-    roles: "역할1",
-    status: true,
-  },
-  {
-    name: "이름2",
-    roles: "역할1",
-    status: false,
-  },
-  {
-    name: "이름3",
-    roles: "역할1",
-    status: true,
-  },
-  {
-    name: "이름4",
-    roles: "역할2",
-    status: true,
-  },
-  {
-    name: "이름5",
-    roles: "역할2",
-    status: false,
-  },
-  {
-    name: "이름6",
-    roles: "역할2",
-    status: true,
-  },
-  {
-    name: "이름7",
-    roles: "역할3",
-    status: true,
-  },
-  {
-    name: "이름8",
-    roles: "역할3",
-    status: true,
-  },
-  {
-    name: "이름9",
-    roles: "역할3",
-    status: true,
-  },
-];
+interface ClothesConfirmStatusList {
+  [key: string]: ClothesConfirmStatusItem[];
+}
+
+const dummyClothesConfirmStatusList: ClothesConfirmStatusList = {
+  역할1: [
+    { name: "이름1", status: true },
+    { name: "이름2", status: false },
+    { name: "이름3", status: true },
+  ],
+  역할2: [
+    { name: "이름4", status: true },
+    { name: "이름5", status: false },
+    { name: "이름6", status: true },
+  ],
+  역할3: [
+    { name: "이름7", status: true },
+    { name: "이름8", status: true },
+    { name: "이름9", status: true },
+  ],
+};
 
 const ClothesConfirmStatusListPage = () => {
-  const [clothesConfirmStatusList, setClothesConfirmStatusList] = useState<
-    ClothesConfirmStatusItem[]
-  >([]);
-  const [searchKeyList, setSearchKeyList] = useState<string[]>([]);
+  const [clothesConfirmStatusList, setClothesConfirmStatusList] =
+    useState<ClothesConfirmStatusList>({});
+  const [searchKeyList, setSearchKeyList] = useState<{ [key: string]: string }>(
+    {},
+  );
 
   useEffect(() => {
-    const sortedList = [...dummyClothesConfirmStatusList].sort((a, b) =>
-      a.roles.localeCompare(b.roles),
-    );
-
-    setClothesConfirmStatusList(sortedList);
+    setClothesConfirmStatusList(dummyClothesConfirmStatusList);
   }, []);
 
-  const setSearchKey = (index: number) => {
-    return (value: string) => {
-      const newSearchKeyList = [...searchKeyList];
-      newSearchKeyList[index] = value;
-      setSearchKeyList(newSearchKeyList);
-    };
+  const setFilterList = (role: string, searchKey: string) => {
+    const newClothesConfirmStatusList = { ...dummyClothesConfirmStatusList };
+    newClothesConfirmStatusList[role] = newClothesConfirmStatusList[
+      role
+    ].filter((actor: ClothesConfirmStatusItem) =>
+      actor.name.includes(searchKey),
+    );
+    setClothesConfirmStatusList(newClothesConfirmStatusList);
   };
 
-  let currentRoleIndex = -1;
-  let lastRole = "";
+  const setSearchKey = (role: string) => {
+    return (value: string) => {
+      const newSearchKeyList = { ...searchKeyList };
+      newSearchKeyList[role] = value;
+      setSearchKeyList(newSearchKeyList);
+      setFilterList(role, value);
+    };
+  };
 
   return (
     <MainWindow>
       <ScrollingList>
-        {clothesConfirmStatusList.map((v, i) => {
-          let roleHeader = null;
-
-          if (v.roles !== lastRole) {
-            currentRoleIndex += 1;
-            lastRole = v.roles;
-
-            roleHeader = (
-              <li key={`header-${i}`}>
-                <Margin size={30} />
-                <Container
-                  flexDirection="row"
-                  justifyContent="space-between"
-                  paddingHorizontal={10}
-                >
-                  <Text size={20} weight={900}>
-                    {currentRoleIndex + 1}. {v.roles}
-                  </Text>
-                  <SearchInputField
-                    value={searchKeyList[currentRoleIndex]}
-                    setValue={setSearchKey(currentRoleIndex)}
-                  />
-                </Container>
-                <Margin size={20} />
-              </li>
-            );
-          }
-
-          return (
-            <>
-              {roleHeader}
-              <li key={`item-${i}`}>
-                <ClothesConfirmCardItem
-                  name={`${v.name}`}
-                  status={v.status}
-                  url="/"
+        {Object.entries(clothesConfirmStatusList).map(
+          ([role, items], roleIndex) => (
+            <li key={`group-${roleIndex}`}>
+              <Margin size={30} />
+              <Container
+                flexDirection="row"
+                justifyContent="space-between"
+                paddingHorizontal={10}
+              >
+                <Text size={20} weight={900}>
+                  {roleIndex + 1}. {role}
+                </Text>
+                <SearchInputField
+                  value={searchKeyList[role] || ""}
+                  setValue={setSearchKey(role)}
                 />
-                <Margin size={7} />
-              </li>
-            </>
-          );
-        })}
+              </Container>
+              <Margin size={20} />
+              {items.map((item, itemIndex) => (
+                <li key={`item-${roleIndex}-${itemIndex}`}>
+                  <ClothesConfirmCardItem
+                    name={item.name}
+                    status={item.status}
+                    url="/"
+                  />
+                  <Margin size={7} />
+                </li>
+              ))}
+            </li>
+          ),
+        )}
       </ScrollingList>
     </MainWindow>
   );
