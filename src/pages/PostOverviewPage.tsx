@@ -5,17 +5,16 @@ import { SpaceBetweenNavBar } from "@components/atoms/Layout";
 import addButtonImg from "@assets/addButton.jpg";
 import { useNavigate } from "react-router-dom";
 import { LabeledCheckBoxGroup } from "@components/mocules/LabeledCheckBoxGroup";
-import InfiniteScrollingTemplate from "@components/mocules/InfiniteScrolling";
-import { ItemProps } from "@components/mocules/Item";
-import Text, { ThemeText } from "@components/atoms/Text";
-import { LineWrapper } from "@components/atoms/Wrapper";
+import InfiniteScroll from "@utills/InfiniteScroll";
+import Item, { ItemProps } from "@components/mocules/Item";
+import { testConvertFun } from "@utills/convert";
 
 /**
  * 업체 측 공고 화면
  * (본인이 소속된 회사의 공고 리스트를 보여주는 화면)
  */
 
-// [ ] 12.30 api 호출시에 loading 화면 띄우기
+// TODO + 버튼 눌렀을때 역할 추가 페이지 역할로 이동
 export default function PostOverviewPage() {
   const navigate = useNavigate();
 
@@ -24,63 +23,17 @@ export default function PostOverviewPage() {
     my: "나만 보기",
   };
 
+  // TMP URL 과 path
   const BASE_URL = `https://jsonplaceholder.typicode.com`;
   const TMP_ALL_BASE_URL = `${BASE_URL}/posts?`;
   const TMP_MY_BASE_URL = `${BASE_URL}/comments?`;
   const query = `_limit=10&_page`;
 
-  // TODO 최대 N 글자  명시 필요함 Itemp component 망가짐 추후 논의 예정
-  const convertItemPropsAllType = (elem: {
-    id: string;
-    body: string;
-    title: string;
-  }): ItemProps | null => {
-    if (!elem) return null;
-    let { id, body, title } = elem;
-
-    // title = title ? title.split(" ").slice(0, 5).join(" ") : "none";
-    const tmpDateStr = new Date().toString().split(" ").slice(0, 4).join(" ");
-    const itemProps: ItemProps = {
-      title,
-      category: id.toString(),
-      date: tmpDateStr,
-      dDay: "D-3",
-      company: "companyName",
-      time: tmpDateStr,
-      location: "서울시 강남역",
-      onClick: () => {},
-    };
-
-    return itemProps;
-  };
-
-  const convertItemPropsMyType = (elem: {
-    id: string;
-    name: string;
-    email: string;
-    body: string;
-  }): ItemProps | null => {
-    // 반환 타입을 ItemProps로 명시
-    if (!elem) return null;
-    const { id, name, email, body } = elem;
-    const tmpDateStr = new Date().toString().split(" ").slice(0, 4).join(" ");
-    const itemProps: ItemProps = {
-      title: name,
-      category: id.toString(),
-      date: tmpDateStr,
-      dDay: "D-3",
-      company: email,
-      time: tmpDateStr,
-      location: "어딘가",
-      onClick: () => {},
-    };
-
-    return itemProps;
-  };
-
   const LABEL_ITEM_LIST = Object.values(OPTION_STR);
   const [checkedLabelIdx, setCheckedLabelIdx] = useState<number>(0); // 현재 체크된 인덱스
   const [url, setURL] = useState(TMP_ALL_BASE_URL); // baseURL 설정
+  const { convertItemPropsAllType, convertItemPropsMyType } = testConvertFun;
+
   const [convertFunc, setConvertFunc] = useState<
     (elem: any) => ItemProps | null
   >(convertItemPropsAllType);
@@ -89,18 +42,61 @@ export default function PostOverviewPage() {
     setCheckedLabelIdx(checkedLabelIdx);
   };
 
+  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [offset, setOffset] = useState(0);
+  const [dataList, setDataList] = useState<any[]>([]);
+
   useEffect(() => {
+    const setInitState = () => {
+      setDataList([]);
+      setHasMore(true);
+      setOffset(0);
+    };
+
+    setInitState();
+
     if (LABEL_ITEM_LIST[checkedLabelIdx] === OPTION_STR.all) {
       setURL(TMP_ALL_BASE_URL);
       setConvertFunc(() => convertItemPropsAllType);
-    } else if (LABEL_ITEM_LIST[checkedLabelIdx] === OPTION_STR.my) {
+      return;
+    }
+
+    if (LABEL_ITEM_LIST[checkedLabelIdx] === OPTION_STR.my) {
       setURL(TMP_MY_BASE_URL);
       setConvertFunc(() => convertItemPropsMyType);
+      return;
     }
   }, [checkedLabelIdx]);
 
+  const fetchData = async () => {
+    try {
+      const response = await fetch(url + `${query}=${offset}`);
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error("ERROR");
+      }
+
+      const data = await response.json();
+      console.log(data);
+
+      if (!data.length) {
+        console.log("NO DATA");
+        setHasMore(false);
+        return;
+      }
+      setDataList((prev) => [...prev, ...data]);
+      setOffset((prev) => prev + 1);
+    } catch (error) {
+      console.error("데이터 로드 실패:", error);
+      setHasError(true);
+    }
+  };
+
   // TODO 추후 공고 추가 페이제 path와 연결해야함
   const path = "/";
+  const tmpPath = "/company/notice/post-status/2";
 
   return (
     <>
@@ -126,11 +122,37 @@ export default function PostOverviewPage() {
       </StickyWrapper>
 
       <ContentWrapper>
-        <InfiniteScrollingTemplate
-          baseURL={url} // 동적으로 URL 전달
-          query={query}
-          convertResponse2ItemProps={convertFunc} // 동적으로 변환 함수 전달
-        />
+        <InfiniteScroll
+          fetchData={fetchData}
+          hasMore={hasMore}
+          loader={<h2>loading....!</h2>}
+          endMessage={<h2>모든 공고를 업데이트 하였습니다.</h2>}
+          hasError={hasError}
+          errorMessage={<h2>에러가 발생했습니다.</h2>}
+        >
+          {dataList.length > 0 &&
+            dataList.map((elem, key) => {
+              let props = convertFunc(elem);
+              if (!props) return "";
+
+              const { title, category, date, dDay, company, time, location } =
+                props;
+
+              return (
+                <Item
+                  key={key}
+                  title={title}
+                  category={category}
+                  date={date}
+                  dDay={dDay}
+                  company={company}
+                  time={time}
+                  onClick={() => navigate(tmpPath)}
+                  location={location}
+                ></Item>
+              );
+            })}
+        </InfiniteScroll>
       </ContentWrapper>
     </>
   );
