@@ -7,7 +7,7 @@ import {
 } from "@api/interface";
 import { DateYearMonth } from "@api/dateInteface";
 import memberRolesAPI from "@api/memberRolesAPI";
-import converToDateObject from "@utills/convertToDateNum";
+import { converToDateObject } from "@utills/convert";
 import { TEST_FLAG } from "@/testFlag";
 import { memberRoleServerDummyList } from "@api/dummyData";
 
