@@ -114,6 +114,23 @@ function App() {
           <Route path="/company/manage/clock-out" element={<ClockOutPage />} />
           {/* company notice */}
           <Route path="/company/notice" element={<ManagerDashboard />} />
+          {/* 업체 측 공고 리스트 페이지 화면 */}
+          <Route
+            path="/company/notice/post-overview"
+            element={<PostOverviewPage />}
+          />
+
+          {/* 추후 수정 예정, UI 보이기 위해 임시로 id 값 고정 시킴*/}
+          <Route
+            path="/company/notice/post-status/2"
+            element={<RecruitmentStatus />}
+          />
+
+          {/* <Route
+            path="/company/notice/post-status/:id"
+            element={<PostOverviewPage />}
+          /> */}
+
           {/* member profile */}
           <Route path="/company/profile" element={<CompanyProfilePage />} />
           <Route
@@ -125,22 +142,6 @@ function App() {
             path="/company/manager-dashboard"
             element={<ManagerDashboard />}
           />
-
-          {/* 업체 측 공고 리스트 페이지 화면*/}
-          <Route
-            path="/company/company/notice/post-overview"
-            element={<PostOverviewPage />}
-          />
-
-          {/* 추후 수정 예정, UI 보이기 위해 임시로 id 값 고정 시킴*/}
-          <Route
-            path="/company/notice/post-status/2"
-            element={<RecruitmentStatus />}
-          />
-          {/* <Route
-            path="/company/notice/post-status/:id"
-            element={<PostOverviewPage />}
-          /> */}
 
           <Route path="/applicants" element={<ShowApplicant />} />
           <Route path="/applicants/detail" element={<ApplicantDetail />} />

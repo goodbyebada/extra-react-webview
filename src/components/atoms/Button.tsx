@@ -6,7 +6,6 @@ import star_y from "@assets/Star_y.png";
 import BackIconImg from "@assets/backIcon.png";
 import { useNavigate } from "react-router-dom";
 import { TfiAngleLeft } from "react-icons/tfi";
-import { useNavigate } from "react-router-dom";
 import { BACKGROUND_COLORS, COMMON_COLORS } from "@/styled/colors";
 
 interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
