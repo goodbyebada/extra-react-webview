@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import Text, { ThemeText } from "@components/atoms/Text";
 import Item from "@components/mocules/Item";
-import CalendarItem from "@components/mocules/CalendarItem";
+import CalendarItem from "@components/mocules/calender/CalendarItem";
 import { MainButton } from "@components/atoms/Button";
 // import { InputField } from "@components/atoms/Form";
 import DropDownInput from "@components/mocules/DropDownInput";

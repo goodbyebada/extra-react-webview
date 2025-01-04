@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // init set 전체, 캘린더로 보기
 const initialState = {
   showRecommand: false,
-  showAsCalender: false,
+  showAsCalender: true,
 };
 
 const showTypeSlice = createSlice({

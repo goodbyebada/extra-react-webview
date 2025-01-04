@@ -40,7 +40,7 @@ export interface JobPost {
   title: string;
   gatheringLocation: string;
   gatheringTime: string;
-  imageUrl: string;
+  imageUrl?: string; // ? 서버에서 없을텐데 왜 이 속성이 있는지 모르겠다
   status: boolean;
   hourPay: number;
   category: string;
@@ -200,7 +200,7 @@ export interface MemberRoleServer {
   id: number;
   jobPostId: number;
   category: string;
-  calenderList: number[];
+  calenderList: string[];
   title: string;
   gatheringTime: string; //시간
   gatheringLocation: string;
@@ -252,20 +252,3 @@ export const SeasonLabel: { [key: string]: string } = {
   AUTUMN: "가을",
   WINTER: "겨울",
 };
-
-export interface dateYM {
-  year: number;
-  month: number;
-}
-
-export interface QuryTypesWithPage extends dateYM {
-  pageNum: number;
-}
-
-export type ObjectType = {
-  [key: string]: number[];
-};
-export enum CalenderTypeFor {
-  "user" = 0,
-  "company" = 1,
-}

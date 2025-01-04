@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 import { styled } from "styled-components";
-// import NavBar from "@components/custom/NavBar";
 import HomeRecruitBox from "@components/HomeRecruitBox";
-// import { useNavigate } from "react-router-dom";
-// import { dummyJobPostList } from "@api/dummyData";
+import { useNavigate } from "react-router-dom";
 import { sendMessage } from "@api/utils";
 
-// import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import jobPostAPI from "@api/jobPostAPI";
@@ -14,22 +11,28 @@ import { JobPost } from "@api/interface";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 
+import { TEST_FLAG } from "@/testFlag";
+import { dummyJobPostList } from "@api/dummyData";
+import { defaultJobPost } from "@redux/jobPost/jobPostSlice";
+
 /**
  * 날짜 선택시 화면
  * @returns
  */
 export default function DateSelectedNoticeList() {
+  const basePath = "/extra-casting-board";
+  const navigate = useNavigate();
+
   const INIT_LOCAL_INFOLIST = [] as JobPost[];
   const [localJobInfoLists, setLocalJobInfoLists] =
     useState<JobPost[]>(INIT_LOCAL_INFOLIST);
   const [loading, setIsLoading] = useState<boolean>(true);
   const [notFound, setNotFound] = useState<boolean>(false);
-  // Nav Bar Content 삭제
-  const selectedDate = useSelector(
-    (state: RootState) => state.homeSelectedDate,
-  );
 
-  const { dateNum, year, month } = selectedDate;
+  // Nav Bar Content 삭제
+  const selectedDate = useSelector((state: RootState) => state.date);
+
+  const { dateNum, year, month } = selectedDate.selectedByHome;
 
   const jobListAboutYM = useSelector(
     (state: RootState) => state.jobPosts.jobPostByCalender.data,
@@ -37,17 +40,8 @@ export default function DateSelectedNoticeList() {
 
   const selectedDataIdList = jobListAboutYM[dateNum];
 
-  // const navigate = useNavigate();
-
   const navigateToExtraCastingBoard = (jobPostId: number) => {
-    // navigate(`${basePath}/${jobPostId}`);
-    sendMessage({
-      type: "NAVIGATION_DETAIL",
-      payload: {
-        uri: `/extra-casting-board/${jobPostId}`,
-      },
-      version: "1.0",
-    });
+    navigate(`${basePath}/${jobPostId}`);
   };
 
   const dateString = `${year}/${month}/${dateNum}`;
@@ -67,7 +61,23 @@ export default function DateSelectedNoticeList() {
     const fetchData = async () => {
       let finalList: (JobPost | null)[] = []; // 에러일 경우 null을 넣도록 변경
 
-      const fetch = async (id: number) => {
+      const fetchAllJobPostID = async (id: number) => {
+        let data: Promise<JobPost>;
+
+        if (TEST_FLAG) {
+          data = new Promise<JobPost>((resolve) =>
+            setTimeout(() => {
+              const jobPost = dummyJobPostList.find((elem) => elem.id === id);
+              if (!jobPost) {
+                return resolve(defaultJobPost);
+              }
+              return resolve(jobPost);
+            }, 2000),
+          );
+          return data;
+        }
+
+        // test 아닐때
         try {
           const data = await jobPostAPI.getJobPostById(id);
           return data;
@@ -79,7 +89,7 @@ export default function DateSelectedNoticeList() {
 
       if (selectedDataIdList && selectedDataIdList.length > 0) {
         finalList = await Promise.all(
-          selectedDataIdList.map((id) => fetch(id)),
+          selectedDataIdList.map((id) => fetchAllJobPostID(id)),
         );
       }
 
