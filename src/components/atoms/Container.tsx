@@ -1,16 +1,11 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, HTMLAttributes } from "react";
 import styled from "styled-components";
-import getPlatform from "@utills/getPlatform";
-import Color from "@/constants/color";
 
-interface WindowProps {
+interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   background?: string;
   paddingVertical?: number;
   paddingHorizontal?: number;
-}
-
-interface ContainerProps extends WindowProps {
   flex?: number;
   flexDirection?: "row" | "column";
   justifyContent?:
@@ -28,22 +23,6 @@ interface ContainerProps extends WindowProps {
   flexWrap?: boolean;
 }
 
-const WebWindow = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background: #aaa;
-  box-sizing: border-box;
-`;
-
-const StyledWindow = styled.div`
-  margin: 0 auto;
-  max-width: 460px;
-  height: 100vh;
-  background: ${Color.background};
-
-  overflow: hidden;
-`;
-
 const StyledContainer = styled.div<ContainerProps>`
   ${({ flexDirection, flex }) => {
     if (flexDirection == "row") {
@@ -60,7 +39,7 @@ const StyledContainer = styled.div<ContainerProps>`
   }}
   box-sizing: border-box;
 
-  background: ${({ background }) => background || Color.background};
+  background: ${({ background }) => background || "none"};
 
   padding: ${({ paddingVertical, paddingHorizontal }) => {
     return `${paddingVertical}px ${paddingHorizontal}px`;
@@ -75,22 +54,6 @@ const StyledContainer = styled.div<ContainerProps>`
   ${({ flexWrap }) => flexWrap && `flex-wrap: wrap`}
 `;
 
-const PlatformWindow = ({ children }: ContainerProps) => {
-  switch (getPlatform()) {
-    case "Android":
-    case "iOS":
-      return <StyledWindow>{children}</StyledWindow>;
-    case "Windows":
-    case "MacOS":
-    default:
-      return (
-        <WebWindow>
-          <StyledWindow>{children}</StyledWindow>
-        </WebWindow>
-      );
-  }
-};
-
 const Container = forwardRef<HTMLDivElement, ContainerProps>(
   (
     {
@@ -103,6 +66,7 @@ const Container = forwardRef<HTMLDivElement, ContainerProps>(
       alignItems = "center",
       flexDirection = "column",
       flexWrap = false,
+      ...props
     }: ContainerProps,
     ref,
   ) => {
@@ -117,6 +81,7 @@ const Container = forwardRef<HTMLDivElement, ContainerProps>(
         alignItems={alignItems}
         flexDirection={flexDirection}
         flexWrap={flexWrap}
+        {...props}
       >
         {children}
       </StyledContainer>
@@ -125,30 +90,5 @@ const Container = forwardRef<HTMLDivElement, ContainerProps>(
 );
 Container.displayName = "Container";
 
-const Window = forwardRef<HTMLDivElement, WindowProps>(
-  (
-    {
-      children,
-      background,
-      paddingHorizontal = 0,
-      paddingVertical = 0,
-    }: ContainerProps,
-    ref,
-  ) => {
-    return (
-      <PlatformWindow>
-        <Container
-          background={background}
-          ref={ref}
-          paddingHorizontal={paddingHorizontal}
-          paddingVertical={paddingVertical}
-        >
-          {children}
-        </Container>
-      </PlatformWindow>
-    );
-  },
-);
-Window.displayName = "Window";
-
-export { Window, Container };
+export default Container;
+export type { ContainerProps };

@@ -1,4 +1,3 @@
-import Color from "@/constants/color";
 import { forwardRef } from "react";
 import {
   Controller,
@@ -7,7 +6,9 @@ import {
   FieldPath,
   RegisterOptions,
 } from "react-hook-form";
+
 import styled from "styled-components";
+import { BACKGROUND_COLORS } from "@/styled/colors";
 
 interface InputProps {
   type?: string;
@@ -30,7 +31,7 @@ const StyledInput = styled.input`
   height: 53px;
   padding-left: 20px;
 
-  background: ${Color.input};
+  background: ${BACKGROUND_COLORS.input};
   outline: none;
   border: none;
   border-radius: 15px;

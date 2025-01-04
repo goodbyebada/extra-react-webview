@@ -4,7 +4,7 @@ import { InputField } from "@components/atoms/Form";
 import Text from "@components/atoms/Text";
 import { Control } from "react-hook-form";
 import { TfiAngleDown, TfiAngleUp } from "react-icons/tfi";
-import Color from "@/constants/color";
+import { FONT_COLORS } from "@/styled/colors";
 
 interface DropDownInputProps {
   name: string;
@@ -112,7 +112,7 @@ const DropDownInput = ({
 
   // scrolling
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  const timeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handlePosition = (scrollY: number | undefined) => {
     if (scrollY != undefined) {
@@ -197,7 +197,9 @@ const DropDownInput = ({
                   <Text
                     size={16}
                     weight={900}
-                    color={currentIndex == i ? Color.text : Color.subText}
+                    color={
+                      currentIndex == i ? FONT_COLORS.white : FONT_COLORS.gray
+                    }
                   >
                     {v}
                   </Text>

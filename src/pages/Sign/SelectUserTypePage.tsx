@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Color from "@/constants/color";
 import Margin from "@components/atoms/Margin";
 import TypeSelectButton from "@components/mocules/TypeSelectButton";
 
@@ -9,6 +8,7 @@ import SignWindow from "@components/mocules/SignWindow";
 
 import { RiMovie2Line } from "react-icons/ri";
 import { GiDirectorChair } from "react-icons/gi";
+import { FONT_COLORS } from "@/styled/colors";
 
 const SelectUserTypePage = () => {
   const navigate = useNavigate();
@@ -46,7 +46,7 @@ const SelectUserTypePage = () => {
         text="보조출연자"
         icon={
           <RiMovie2Line
-            color={type === 1 ? Color.text : Color.subText}
+            color={type === 1 ? FONT_COLORS.white : FONT_COLORS.gray}
             size={50}
           />
         }
@@ -60,7 +60,7 @@ const SelectUserTypePage = () => {
         text="업체관리자"
         icon={
           <GiDirectorChair
-            color={type === 2 ? Color.text : Color.subText}
+            color={type === 2 ? FONT_COLORS.white : FONT_COLORS.gray}
             size={50}
           />
         }

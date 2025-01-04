@@ -27,56 +27,22 @@ import AccountFormPage from "@pages/Sign/AccountFormPage";
 import TattooFormPage from "@pages/Sign/TattooFormPage";
 import TattooSelectFormPage from "@pages/Sign/TattooSelectFormPage";
 import CompanyInfoFormPage from "@pages/Sign/CompanyInfoFormPage";
+import CompanyShootManageDetailPage from "@pages/Manage/CompanyShootManageDetailPage";
+import ActorListPage from "@pages/Manage/ActorListPage";
+import ClothesConfirmStatusListPage from "@pages/Manage/ClothesConfirmStatusListPage";
+import CameraPage from "@pages/Manage/CameraPage";
+import MemberShootManageDetailPage from "@pages/Manage/MemberShootManageDetailPage";
+import AttendancePage from "@pages/Manage/AttendancePage";
+import ClockInPage from "@pages/Manage/ClockInPage";
+import ClockOutPage from "@pages/Manage/ClockOutPage";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ExtrasHome />} />
-          <Route path="/company-home" element={<CompanyHome />} />
-
-          <Route
-            path="/extra-casting-board/:jobPostId"
-            element={<ExtraCastingBoard />}
-          />
-
-          <Route
-            path="/date-selected-notice-list"
-            element={<DateSelectedNoticeList />}
-          />
-
-          <Route
-            path="/date-selected-notice-list-company"
-            element={<DateSelectedNoticeListForCom />}
-          />
-
-          <Route path="/scheduler" element={<SchedulerPage />} />
-
-          <Route
-            path="/extra-shoot-manage"
-            element={<ExtraShootManagePage />}
-          />
-
-          <Route
-            path="/company-shoot-manage"
-            element={<CompanyShootManagePage />}
-          />
-
-          <Route path="/manager-dashboard" element={<ManagerDashboard />} />
-          <Route path="/applicants" element={<ShowApplicant />} />
-          <Route path="/applicants/detail" element={<ApplicantDetail />} />
-          <Route path="/detail/:id" element={<DetailPage />} />
-          <Route
-            path="/detail/:jobPostId/applicants"
-            element={<ShowApplicant />}
-          />
-          <Route path="/add-notice" element={<AddNotice />} />
-
-          <Route path="/*" element={<NotFound />} />
-
           {/* sign process */}
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/main-form" element={<MainFormPage />} />
           <Route path="/auth" element={<AuthenticationPage />} />
           <Route path="/user-type" element={<SelectUserTypePage />} />
@@ -88,7 +54,65 @@ function App() {
           />
           <Route path="/company-info-form" element={<CompanyInfoFormPage />} />
           <Route path="/account-form" element={<AccountFormPage />} />
-          {/* <Route path="/company-info" element={<CompanyInfoFormPage />} /> */}
+
+          {/* member */}
+          {/* member home */}
+          <Route path="/member/home" element={<ExtrasHome />} />
+          <Route
+            path="/member/home/extra-casting-board/:jobPostId"
+            element={<ExtraCastingBoard />}
+          />
+          <Route
+            path="/member/home/date-selected-notice-list"
+            element={<DateSelectedNoticeList />}
+          />
+          {/* scheduler */}
+          <Route path="/member/scheduler" element={<SchedulerPage />} />
+          {/* member manage */}
+          <Route path="/member/manage" element={<ExtraShootManagePage />} />
+          <Route
+            path="/member/manage/detail"
+            element={<MemberShootManageDetailPage />}
+          />
+
+          {/* company */}
+          {/* home */}
+          <Route path="/company/home" element={<CompanyHome />} />
+          <Route
+            path="/company/home/date-selected-notice-list"
+            element={<DateSelectedNoticeListForCom />}
+          />
+          {/* company manage */}
+          <Route path="/company/manage" element={<CompanyShootManagePage />} />
+          <Route
+            path="/company/manage/detail"
+            element={<CompanyShootManageDetailPage />}
+          />
+          <Route path="/company/manage/actor" element={<ActorListPage />} />
+          <Route
+            path="/company/manage/clothes-confirm"
+            element={<ClothesConfirmStatusListPage />}
+          />
+          <Route path="/company/manage/camera" element={<CameraPage />} />
+          <Route
+            path="/company/manage/attendance"
+            element={<AttendancePage />}
+          />
+          <Route path="/company/manage/clock-in" element={<ClockInPage />} />
+          <Route path="/company/manage/clock-out" element={<ClockOutPage />} />
+          {/* company notice */}
+          <Route path="/company/notice" element={<ManagerDashboard />} />
+
+          <Route path="/applicants" element={<ShowApplicant />} />
+          <Route path="/applicants/detail" element={<ApplicantDetail />} />
+          <Route path="/detail/:id" element={<DetailPage />} />
+          <Route
+            path="/detail/:jobPostId/applicants"
+            element={<ShowApplicant />}
+          />
+          <Route path="/add-notice" element={<AddNotice />} />
+
+          <Route path="/*" element={<NotFound />} />
 
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />

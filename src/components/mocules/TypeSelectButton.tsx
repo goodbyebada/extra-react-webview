@@ -1,4 +1,4 @@
-import Color from "@/constants/color";
+import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@/styled/colors";
 import Margin from "@components/atoms/Margin";
 import Text from "@components/atoms/Text";
 import styled from "styled-components";
@@ -20,13 +20,14 @@ const StyledTypeSelectButton = styled.button<StyledTypeSelectButtonProps>`
 
   border-radius: 20px;
 
-  background: ${Color.input};
+  background: ${BACKGROUND_COLORS.input};
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  ${({ isActive }) => (isActive ? `border: 2px solid ${Color.theme}` : "")}
+  ${({ isActive }) =>
+    isActive ? `border: 2px solid ${COMMON_COLORS.main}` : ""}
 `;
 
 const TypeSelectButton = ({
@@ -46,7 +47,7 @@ const TypeSelectButton = ({
       <Text
         size={20}
         weight={700}
-        color={isActive ? Color.text : Color.subText}
+        color={isActive ? FONT_COLORS.white : FONT_COLORS.gray}
       >
         {text}
       </Text>
