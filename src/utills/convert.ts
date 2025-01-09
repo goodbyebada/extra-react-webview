@@ -17,7 +17,7 @@ const convertItemPropsAllType = (elem: {
   title: string;
 }): ItemProps | null => {
   if (!elem) return null;
-  let { id, body, title } = elem;
+  const { id, title } = elem;
 
   // title = title ? title.split(" ").slice(0, 5).join(" ") : "none";
   const tmpDateStr = new Date().toString().split(" ").slice(0, 4).join(" ");
@@ -43,7 +43,7 @@ const convertItemPropsMyType = (elem: {
 }): ItemProps | null => {
   // 반환 타입을 ItemProps로 명시
   if (!elem) return null;
-  const { id, name, email, body } = elem;
+  const { id, name, email } = elem;
 
   console.log(elem);
   const tmpDateStr = new Date().toString().split(" ").slice(0, 4).join(" ");
