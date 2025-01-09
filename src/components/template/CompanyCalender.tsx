@@ -52,7 +52,7 @@ export default function CompanyCalender({
 
     if (!jobLength) return;
     if (jobLength > 0) {
-      const dateNum = stringDate;
+      // const dateNum = stringDate;
       // dispatch(setHomeDate(dateNum));
       clickedDateEvent();
     }

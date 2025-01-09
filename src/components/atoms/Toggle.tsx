@@ -1,7 +1,6 @@
 import { styled } from "styled-components";
 export { Toggle };
 import { COMMON_COLORS, COLORS } from "@/styled/colors";
-import { TEXT_CONSTANTS } from "@/constants/TEXT_CONSTANTS";
 
 const Item = styled.span<{ $on: boolean }>`
   color: ${(props) => (props.$on ? COLORS.black : COLORS.darkGray)};
