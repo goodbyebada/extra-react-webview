@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import { useState } from "react";
 import useCalendar from "@/customHook/useCalendar";
 
-import ScheduleModal from "@components/Modal/ScheduleModal";
+// import ScheduleModal from "@components/Modal/ScheduleModal";
 import { useRef, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,6 @@ import { ScheduleType } from "@api/interface";
 import Ellipsis from "@components/custom/Ellipsis";
 import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
 
-import convertYearMonthStringToInt from "@utills/parsedDateInfoToInt";
 import { setScheduleDate } from "@redux/dateSlice";
 import { DateSelctedType } from "@api/dateInteface";
 import { SchedulerWeekdayLabels } from "@components/mocules/WeekdayLabels";
@@ -40,7 +39,7 @@ export default function SchedulerPage() {
   const dateYM = useSelector(
     (state: RootState) => state.date.selectedBySchedule,
   );
-  const { year, month } = convertYearMonthStringToInt(dateYM);
+  const { year, month } = dateYM;
   const weeklists = useCalendar(year, month);
 
   // 데이터
@@ -93,7 +92,7 @@ export default function SchedulerPage() {
             {weeklists.map((item, key) => {
               return (
                 <SchedulerSingleWeek
-                  week={weeklists.length}
+                  height={weeklists.length}
                   key={key}
                   item={item}
                   selectedDateEvent={selectedDateEvent}
@@ -115,7 +114,8 @@ export default function SchedulerPage() {
               }
             }}
           >
-            <ScheduleModal selectedDateInfo={dateYM} closeModal={closeModal} />
+            {/* 수정 예정 */}
+            {/* <ScheduleModal selectedDateInfo={dateYM} closeModal={closeModal} /> */}
           </ModalOverlay>
         </>
       ) : (

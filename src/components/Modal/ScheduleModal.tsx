@@ -21,8 +21,8 @@ interface ScheduleModalProps {
   selectedDateInfo: {
     year: string;
     month: string;
-    dateNum: string;
-    dayOfWeek: string;
+    dateNum?: string;
+    dayOfWeek?: string;
   };
   closeModal: () => void;
 }
@@ -44,7 +44,7 @@ function ScheduleModal({ selectedDateInfo, closeModal }: ScheduleModalProps) {
   const { year, month, dateNum, dayOfWeek } = selectedDateInfo;
   const dateString = `${year}/${parseInt(month) + 1}/${dateNum}  (${dayOfWeek})`;
 
-  const dateNumber = parseInt(dateNum);
+  const dateNumber = dateNum ? parseInt(dateNum) : 0;
 
   const todayJobList = appliedList.filter(
     (elem) =>
