@@ -278,6 +278,7 @@ interface MainWindowProps extends ContainerProps {
   headerShown?: boolean;
   title?: string;
   bottomNavigationShown?: boolean;
+  activeDefaultPadding?: boolean;
 }
 
 const MainWindow = ({
@@ -285,8 +286,13 @@ const MainWindow = ({
   headerShown = true,
   title = "",
   bottomNavigationShown = true,
+  activeDefaultPadding = true,
   ...props
 }: MainWindowProps) => {
+  const paddingProps = activeDefaultPadding
+    ? { paddingHorizontal: 34, paddingVertical: 20 }
+    : {};
+
   return (
     <Window>
       {headerShown && (
@@ -306,8 +312,7 @@ const MainWindow = ({
         </Container>
       )}
       <Container
-        paddingHorizontal={34}
-        paddingVertical={20}
+        {...paddingProps}
         style={{
           height:
             headerShown && bottomNavigationShown

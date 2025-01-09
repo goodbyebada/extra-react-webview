@@ -13,6 +13,7 @@ import { RiKakaoTalkFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { FONT_COLORS } from "@/styled/colors";
 import Window from "@components/mocules/Window";
+import KakaoLogin from "react-kakao-login";
 
 const SocialLoginButton = styled.button`
   width: 50px;
@@ -21,11 +22,6 @@ const SocialLoginButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-
-  & > img {
-    max-width: 24px;
-    max-height: 24px;
-  }
 `;
 
 const LogoImageWrapper = styled.div`
@@ -40,6 +36,16 @@ const LogoImageWrapper = styled.div`
   }
 `;
 
+interface KakaoSuccessResponse {
+  response: {
+    access_token: string;
+  };
+}
+
+interface KakaoFailureResponse {
+  error: string; // Adjust based on the actual error structure.
+}
+
 const LoginPage = () => {
   const {
     control,
@@ -48,6 +54,18 @@ const LoginPage = () => {
   } = useForm();
 
   const navigate = useNavigate();
+
+  const kakaoClientId = import.meta.env.VITE_KAKAO_API_KEY;
+  const kakaoOnSuccess = async (data: KakaoSuccessResponse) => {
+    console.log(data);
+    const idToken = data.response.access_token;
+    console.log(idToken);
+    navigate("/member/home");
+  };
+  const kakaoOnFailure = (error: KakaoFailureResponse) => {
+    console.log(error);
+    console.log(error);
+  };
 
   return (
     <Window>
@@ -106,12 +124,28 @@ const LoginPage = () => {
       </Container>
       <Container flex={10}>
         <Container flexDirection="row">
-          <SocialLoginButton
+          {/* <SocialLoginButton
             style={{ background: "#FEE501" }}
             onClick={() => console.log("kakao")}
           >
             <RiKakaoTalkFill color="#000" size={30} />
-          </SocialLoginButton>
+          </SocialLoginButton> */}
+          <KakaoLogin
+            style={{
+              background: "#FEE501",
+              width: "50px",
+              height: "50px",
+              borderRadius: "50%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            token={kakaoClientId}
+            onSuccess={kakaoOnSuccess}
+            onFail={kakaoOnFailure}
+          >
+            <RiKakaoTalkFill color="#000" size={30} />
+          </KakaoLogin>
           <Margin direction="horizontal" size={15} />
           <SocialLoginButton
             style={{ background: "#fff" }}

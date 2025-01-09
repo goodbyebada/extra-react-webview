@@ -35,6 +35,10 @@ import MemberShootManageDetailPage from "@pages/Manage/MemberShootManageDetailPa
 import AttendancePage from "@pages/Manage/AttendancePage";
 import ClockInPage from "@pages/Manage/ClockInPage";
 import ClockOutPage from "@pages/Manage/ClockOutPage";
+import MemberProfilePage from "@pages/MemberProfilePage";
+import MemberSettingPage from "@pages/MemberSettingPage";
+import CompanyProfilePage from "@pages/CompanyProfilePage";
+import CompanySettingPage from "@pages/CompanySettingPage";
 
 function App() {
   return (
@@ -74,6 +78,12 @@ function App() {
             path="/member/manage/detail"
             element={<MemberShootManageDetailPage />}
           />
+          {/* member profile */}
+          <Route path="/member/profile" element={<MemberProfilePage />} />
+          <Route
+            path="/member/profile/setting"
+            element={<MemberSettingPage />}
+          />
 
           {/* company */}
           {/* home */}
@@ -102,6 +112,12 @@ function App() {
           <Route path="/company/manage/clock-out" element={<ClockOutPage />} />
           {/* company notice */}
           <Route path="/company/notice" element={<ManagerDashboard />} />
+          {/* member profile */}
+          <Route path="/company/profile" element={<CompanyProfilePage />} />
+          <Route
+            path="/company/profile/setting"
+            element={<CompanySettingPage />}
+          />
 
           <Route path="/applicants" element={<ShowApplicant />} />
           <Route path="/applicants/detail" element={<ApplicantDetail />} />

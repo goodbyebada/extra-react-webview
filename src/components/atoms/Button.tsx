@@ -1,4 +1,4 @@
-import React from "react";
+import { HTMLAttributes } from "react";
 import Text from "@components/atoms/Text";
 import styled from "styled-components";
 import star_g from "@assets/Star_g.png";
@@ -7,7 +7,7 @@ import { TfiAngleLeft } from "react-icons/tfi";
 import { useNavigate } from "react-router-dom";
 import { BACKGROUND_COLORS, COMMON_COLORS } from "@/styled/colors";
 
-interface ButtonProps {
+interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
   onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   isActive?: boolean;
@@ -71,9 +71,15 @@ const MainButton = ({
   onClick = () => {},
   isActive = true,
   disabled = false,
+  ...props
 }: ButtonProps) => {
   return (
-    <StyledMainButton isActive={isActive} onClick={onClick} disabled={disabled}>
+    <StyledMainButton
+      isActive={isActive}
+      onClick={onClick}
+      disabled={disabled}
+      {...props}
+    >
       <Text size={17} color={isActive ? "#000" : "#adadad"} weight={700}>
         {children}
       </Text>
