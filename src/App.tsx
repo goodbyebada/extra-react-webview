@@ -18,9 +18,14 @@ import SchedulerPage from "@pages/Scheduler";
 import ThemePreviewPage from "@pages/ThemePreview";
 import PostOverViewPage from "@pages/PostOverviewPage";
 import RecruitmentStatus from "@pages/RecruitmentStatus";
-import ManageOverViewPage from "@pages/ManageOverviewPage";
+import ManageOverViewPage from "@pages/ManageOverViewPage";
+import handleAllowNotification from "@utills/pushNotification/notificationPermission";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    handleAllowNotification();
+  }, []);
   return (
     <>
       <BrowserRouter>
