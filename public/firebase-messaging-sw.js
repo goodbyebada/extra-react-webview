@@ -38,14 +38,9 @@ self.addEventListener("activate", function (e) {
   console.log("fcm sw activate..");
 });
 
-/*
- * Overrides push notification data, to avoid having 'notification' key and firebase blocking
- * the message handler from being called
- */
-self.addEventListener("push", (e) => {
-  // Skip if event is our own custom event
-  if (e.custom) return;
+console.log("IM TESTING");
 
+function convertNewEvent(e) {
   // Kep old event data to override
   const oldData = e.data;
 
@@ -69,9 +64,22 @@ self.addEventListener("push", (e) => {
 
   // Stop event propagation
   e.stopImmediatePropagation();
-
   // Dispatch the new wrapped event
   dispatchEvent(newEvent);
+
+  return newEvent;
+}
+
+// NOTE pushEvent
+/*
+ * Overrides push notification data, to avoid having 'notification' key and firebase blocking
+ * the message handler from being called
+ */
+self.addEventListener("push", (e) => {
+  // Skip if event is our own custom event
+  if (e.custom) return;
+
+  const newEvent = convertNewEvent(e);
 
   const pushData = newEvent.data.json().data;
   const title = pushData.title;
@@ -81,62 +89,49 @@ self.addEventListener("push", (e) => {
     badge: pushData.image,
   };
 
-  console.log(pushData);
-  console.log(title);
-  console.log(options);
-
   newEvent.waitUntil(self.registration.showNotification(title, options));
 });
 
-// sw.js
-// self.addEventListener("push", function (event) {
-//   console.log(event.data.text());
-//   console.log("실행!");
-//   // const json = event.data.json();
-//   // const data = json.notification;
-//   // const title = data.title;
-//   // const options = {
-//   //   body: data.body,
-//   //   icon: data.image,
-//   //   badge: data.image,
-//   // };
-//   // event.waitUntil(self.registration.showNotification(title, options));
-//   // These are handled by the FCM SDK automatically.
-//   // webAppShowNotificaiton("push Message");
-// });
-
 //  웹 앱 포그라운드, 백그라운드 알림
+
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-// TODO PWA 환경 설정 후 수정예정
-function webAppShowNotificaiton(tmpBody) {
-  // 임시
-  const notificationTitle = tmpBody + "title";
-  const notificationOptions = {
-    body: tmpBody,
-    icon: "/pwa-64x64.png",
+messaging.onMessage((payload) => {
+  console.log(`FORE_GROUND`, payload);
+
+  const data = payload.notification;
+
+  const title = `FORE_GROUND` + data.title;
+  const options = {
+    body: data.body,
+    icon: data.image,
+    badge: data.image,
   };
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
-}
-
-messaging.onMessage((payload) => {
-  console.log("포어그라운드 ", payload);
-
-  const tmpBody = "포어그라운드 ";
-  webAppShowNotificaiton(tmpBody);
+  self.registration.showNotification(title, options);
 });
 
 messaging.onBackgroundMessage((payload) => {
-  console.log("백그라운드", payload);
+  console.log(`BACK_GROUND`, payload);
 
-  const tmpBody = "백그라운드";
-  webAppShowNotificaiton(tmpBody);
+  const data = payload.notification;
+
+  const title = `BACK_GROUND` + data.title;
+  const options = {
+    body: data.body,
+    icon: data.image,
+    badge: data.image,
+  };
+
+  self.registration.showNotification(title, options);
 });
 
 self.addEventListener("notificationclick", (event) => {
   // 알림창 닫음
   event.notification.close();
+
+  console.log(event);
+
   event.waitUntil(self.clients.openWindow(PATH_AFTER_CLICK_NOTIFICATION));
 });

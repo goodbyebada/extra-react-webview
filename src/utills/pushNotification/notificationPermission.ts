@@ -26,7 +26,9 @@ async function registerServiceWorker() {
   try {
     // 서비스워커를 지원하는가
     if ("serviceWorker" in navigator) {
-      await navigator.serviceWorker.register("/firebase-messaging-sw.js");
+      await navigator.serviceWorker.register("/firebase-messaging-sw.js", {
+        scope: "/firebase-cloud-messaging-push-scope",
+      });
       return;
     }
 
@@ -45,12 +47,11 @@ export default async function handleAllowNotification() {
   try {
     const permission = await Notification.requestPermission();
 
-    console.log(import.meta.env);
-
     if (permission === "granted") {
       const token = await getToken(messaging, {
         vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
       });
+
       if (token) {
         // (토큰을 서버로 전송하는 로직)
         console.log(token);
@@ -66,4 +67,3 @@ export default async function handleAllowNotification() {
     console.error("푸시 토큰 가져오는 중에 에러 발생", error);
   }
 }
-// handleAllowNotification();
