@@ -14,9 +14,16 @@ import { dummyUserRoleData } from "@api/dummyData";
 
 const role = "학생";
 
+const TABS = {
+  ORDER_BY_TIME: "시간순",
+  ORDER_BY_TEMP: "온도순",
+  ORDER_BY_EXPERIENCE: "경력순",
+  SELECT_ALL: "전체선택",
+};
+
 const ShowApplicant = () => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState<string>("시간순");
+  const [activeTab, setActiveTab] = useState<string>(TABS.ORDER_BY_TIME);
 
   // 체크박스 클릭 시 상태 업데이트
   const handleCheckClick = (name: string, isChecked: boolean) => {
@@ -30,7 +37,7 @@ const ShowApplicant = () => {
   };
 
   const handleTabClick = (tab: string) => {
-    if (tab === "전체선택") {
+    if (tab === TABS.SELECT_ALL) {
       if (selectedItems.length === dummyUserRoleData.length) {
         setSelectedItems([]);
       } else {
@@ -48,7 +55,11 @@ const ShowApplicant = () => {
       </Text>
       <TabWrapper>
         <LeftTabs>
-          {["시간순", "온도순", "경력순"].map((tab) => (
+          {[
+            TABS.ORDER_BY_TIME,
+            TABS.ORDER_BY_TEMP,
+            TABS.ORDER_BY_EXPERIENCE,
+          ].map((tab) => (
             <TabItem
               key={tab}
               isActive={activeTab === tab}
@@ -61,9 +72,9 @@ const ShowApplicant = () => {
         <RightTab>
           <TabItem
             isActive={selectedItems.length === dummyUserRoleData.length}
-            onClick={() => handleTabClick("전체선택")}
+            onClick={() => handleTabClick(TABS.SELECT_ALL)}
           >
-            전체선택
+            {TABS.SELECT_ALL}
           </TabItem>
         </RightTab>
       </TabWrapper>
