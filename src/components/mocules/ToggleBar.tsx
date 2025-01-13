@@ -3,7 +3,7 @@ import { RootState } from "@redux/store";
 import { useDispatch } from "react-redux";
 import { setTypetoggle } from "@redux/home/showTypeSlice";
 import { Toggle } from "@components/atoms/Toggle";
-import { TEXT_CONSTANTS } from "@/constants/TEXT_CONSTANTS";
+import { TEXT_CONSTANTS } from "@/constants/const";
 
 /**
  * 기본 상태 전체

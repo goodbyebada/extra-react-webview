@@ -1,14 +1,21 @@
-import React from "react";
+import { HTMLAttributes } from "react";
 import Text from "@components/atoms/Text";
 import styled from "styled-components";
 import star_g from "@assets/Star_g.png";
 import star_y from "@assets/Star_y.png";
+import { TfiAngleLeft } from "react-icons/tfi";
+import { useNavigate } from "react-router-dom";
+import { BACKGROUND_COLORS, COMMON_COLORS } from "@/styled/colors";
 
-interface ButtonProps {
+interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   isActive?: boolean;
   disabled?: boolean;
+}
+
+interface HistoryBackButtonProps {
+  onClick?: () => void;
 }
 
 const StyledButton = styled.button`
@@ -28,7 +35,8 @@ const StyledMainButton = styled(StyledButton)<ButtonProps>`
   border-radius: 18px;
   ${({ disabled }) => !disabled && "cursor: pointer;"}
 
-  background: ${({ isActive }) => (isActive ? "#f5c001" : "#575757")};
+  background: ${({ isActive }) =>
+    isActive ? COMMON_COLORS.main : BACKGROUND_COLORS.disabled};
 `;
 
 /**
@@ -63,9 +71,15 @@ const MainButton = ({
   onClick = () => {},
   isActive = true,
   disabled = false,
+  ...props
 }: ButtonProps) => {
   return (
-    <StyledMainButton isActive={isActive} onClick={onClick} disabled={disabled}>
+    <StyledMainButton
+      isActive={isActive}
+      onClick={onClick}
+      disabled={disabled}
+      {...props}
+    >
       <Text size={17} color={isActive ? "#000" : "#adadad"} weight={700}>
         {children}
       </Text>
@@ -73,4 +87,19 @@ const MainButton = ({
   );
 };
 
-export { StarToggleButton, MainButton };
+const HistoryBackButton = ({ onClick }: HistoryBackButtonProps) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (onClick) onClick();
+    navigate(-1);
+  };
+
+  return (
+    <button type="button" onClick={handleClick}>
+      <TfiAngleLeft size={30} color={COMMON_COLORS.main} />
+    </button>
+  );
+};
+
+export { StarToggleButton, MainButton, HistoryBackButton };
