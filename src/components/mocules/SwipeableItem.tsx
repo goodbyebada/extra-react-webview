@@ -3,6 +3,14 @@ import styled from "styled-components";
 import { useSwipeable } from "react-swipeable";
 import Item from "./Item";
 
+const Status = {
+  APPLIED: "applied",
+  REJECTED: "rejected",
+  APPROVED: "approved",
+} as const;
+
+type StatusType = (typeof Status)[keyof typeof Status];
+
 interface SwipeableItemProps {
   title: string;
   category: string;
@@ -11,24 +19,11 @@ interface SwipeableItemProps {
   company: string;
   time: string;
   location: string;
-  status?: "applied" | "rejected" | "approved";
+  status?: StatusType;
   statusText?: string;
   onClick: () => void;
   onDelete: () => void;
 }
-
-/**
- * Swipeable List Item
- * @param title string (title)
- * @param category string (category)
- * @param date string[] (date: 배열로 변경)
- * @param dDay string (dDate: deadline Date)
- * @param company string (company name)
- * @param time string (time: 01:00)
- * @param location string (location)
- * @param status "applied" | "rejected" | "approved" (status)
- * @param statusText string (status text)
- */
 
 const SwipeableItem = ({
   title,
@@ -38,7 +33,7 @@ const SwipeableItem = ({
   company,
   time,
   location,
-  status = "applied",
+  status = Status.APPLIED,
   statusText = "승인대기",
   onClick,
   onDelete,
@@ -47,18 +42,19 @@ const SwipeableItem = ({
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
-      if (status !== "approved") setTranslateX(-100);
+      if (status !== Status.APPROVED) setTranslateX(-100);
     },
     onSwipedRight: () => {
-      if (status !== "approved") setTranslateX(0);
+      if (status !== Status.APPROVED) setTranslateX(0);
     },
     delta: 50,
   });
 
-  const deleteButtonText = status === "applied" ? "지원\n취소하기" : "삭제하기";
+  const deleteButtonText =
+    status === Status.APPLIED ? "지원\n취소하기" : "삭제하기";
 
   return (
-    <SwipeableContainer {...(status !== "approved" && swipeHandlers)}>
+    <SwipeableContainer {...(status !== Status.APPROVED && swipeHandlers)}>
       <DeleteButton onClick={onDelete}>{deleteButtonText}</DeleteButton>
       <SwipeableContent translateX={translateX}>
         <Item
