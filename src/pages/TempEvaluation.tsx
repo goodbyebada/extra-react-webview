@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import Text from "@components/atoms/Text";
 import { MainButton } from "@components/atoms/Button";
@@ -14,14 +14,25 @@ const TempEvaluation = () => {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
   const { id } = useParams<{ id: string }>();
-
+  const isDragging = useRef(false); // 드래그 중 여부 추적
   const user = dummyUserRoleData.find((user) => user.userId === id);
 
-  const handleStarClick = (index: number) => {
-    setRating(index + 1);
+  const handleDragStart = (event: React.MouseEvent | React.TouchEvent) => {
+    isDragging.current = true;
+    updateRating(event);
   };
 
-  const handleDrag = (event: React.MouseEvent | React.TouchEvent) => {
+  const handleDragMove = (event: React.MouseEvent | React.TouchEvent) => {
+    if (isDragging.current) {
+      updateRating(event);
+    }
+  };
+
+  const handleDragEnd = () => {
+    isDragging.current = false;
+  };
+
+  const updateRating = (event: React.MouseEvent | React.TouchEvent) => {
     const clientX =
       "touches" in event ? event.touches[0].clientX : event.clientX;
     const starsElement = document.getElementById("stars-container");
@@ -72,9 +83,14 @@ const TempEvaluation = () => {
         </Text>
         <StarsContainer
           id="stars-container"
-          onMouseMove={handleDrag}
-          onTouchMove={handleDrag}
-          onClick={() => handleStarClick(rating - 1)}
+          // 마우스 드래그
+          onMouseDown={handleDragStart}
+          onMouseMove={handleDragMove}
+          onMouseUp={handleDragEnd}
+          // 터치 드래그
+          onTouchStart={handleDragStart}
+          onTouchMove={handleDragMove}
+          onTouchEnd={handleDragEnd}
         >
           {[...Array(5)].map((_, index) => (
             <StarIcon key={index} isActive={index < rating} />
