@@ -4,7 +4,7 @@ import { RootState } from "@redux/store";
 import { setTypeShow } from "@redux/home/showTypeSlice";
 import Text from "@components/atoms/Text";
 import { DownArrow } from "@components/atoms/Icon";
-import { HandlerWrapper } from "@components/template/Layout";
+import { HandlerWrapper } from "@components/atoms/Layout";
 
 /**
  * UI 초기상태 :리스트로 보기

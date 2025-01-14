@@ -4,7 +4,7 @@ import Text, { ThemeText } from "@components/atoms/Text";
 import { StarToggleButton } from "@components/atoms/Button";
 import StatusTag from "./Status";
 
-interface ItemProps {
+export interface ItemProps {
   title: string;
   category: string;
   date: string;
@@ -26,6 +26,10 @@ const ItemContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ItemRightContent = styled(ItemContent)`

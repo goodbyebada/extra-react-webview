@@ -11,10 +11,10 @@ import { DateDetailedInfo } from "@api/dateInteface";
 import { fetchJobPostByCalender } from "@redux/jobPost/jobPostSlice";
 import List from "@pages/List";
 import { HOME_MESSAGES } from "@/constants/messages";
-import { LayoutComponent } from "@components/template/Layout";
+import { LayoutComponent } from "@components/atoms/Layout";
 import { ThemeText } from "@components/atoms/Text";
-import { Header } from "@components/template/Layout";
-import { HomeNavBar } from "@components/mocules/HomeNavBar";
+import { Header } from "@components/atoms/Layout";
+import { HomeNavBar } from "@components/mocules/navBar/HomeNavBar";
 
 const DUMMY_INIT_NAME = "김출연";
 

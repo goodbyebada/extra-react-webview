@@ -39,6 +39,8 @@ import MemberProfilePage from "@pages/MemberProfilePage";
 import MemberSettingPage from "@pages/MemberSettingPage";
 import CompanyProfilePage from "@pages/CompanyProfilePage";
 import CompanySettingPage from "@pages/CompanySettingPage";
+import PostOverviewPage from "@pages/PostOverviewPage";
+import RecruitmentStatus from "@pages/RecruitmentStatus";
 
 function App() {
   return (
@@ -112,11 +114,33 @@ function App() {
           <Route path="/company/manage/clock-out" element={<ClockOutPage />} />
           {/* company notice */}
           <Route path="/company/notice" element={<ManagerDashboard />} />
+          {/* 업체 측 공고 리스트 페이지 화면 */}
+          <Route
+            path="/company/notice/post-overview"
+            element={<PostOverviewPage />}
+          />
+
+          {/* 추후 수정 예정, UI 보이기 위해 임시로 id 값 고정 시킴*/}
+          <Route
+            path="/company/notice/post-status/2"
+            element={<RecruitmentStatus />}
+          />
+
+          {/* <Route
+            path="/company/notice/post-status/:id"
+            element={<PostOverviewPage />}
+          /> */}
+
           {/* member profile */}
           <Route path="/company/profile" element={<CompanyProfilePage />} />
           <Route
             path="/company/profile/setting"
             element={<CompanySettingPage />}
+          />
+
+          <Route
+            path="/company/manager-dashboard"
+            element={<ManagerDashboard />}
           />
 
           <Route path="/applicants" element={<ShowApplicant />} />
