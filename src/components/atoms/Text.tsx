@@ -9,6 +9,7 @@ interface TextProps {
   weight?: 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
   highlight?: boolean;
   inline?: boolean;
+  style?: object;
 }
 
 interface ThemeTextProps extends TextProps {
@@ -84,6 +85,7 @@ const Text = ({
   weight,
   highlight = false,
   inline = false,
+  style = {},
 }: TextProps) => {
   return (
     <StyledText
@@ -93,6 +95,7 @@ const Text = ({
       weight={weight}
       highlight={highlight}
       inline={inline}
+      style={style}
     >
       {children}
     </StyledText>

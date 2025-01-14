@@ -193,4 +193,23 @@ const CalendarItemWrapper = ({
   );
 };
 
-export { TagWrapper, StatusWrapper, ItemWrapper, CalendarItemWrapper };
+const StyledBottomLine = styled.div`
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  border-bottom: 1px solid #ffffff;
+  background-color: #000000;
+  color: #ffffff;
+`;
+
+const LineWrapper = ({ children }: { children: React.ReactNode }) => {
+  return <StyledBottomLine>{children}</StyledBottomLine>;
+};
+
+export {
+  TagWrapper,
+  StatusWrapper,
+  ItemWrapper,
+  CalendarItemWrapper,
+  LineWrapper,
+};

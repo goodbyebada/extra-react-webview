@@ -6,7 +6,7 @@ import StatusTag from "./Status";
 import getDdayString from "@utills/getDdayString";
 import getDateString from "@utills/getDateString";
 
-interface ItemProps {
+export interface ItemProps {
   title: string;
   category: string;
   date: string[];
@@ -28,6 +28,10 @@ const ItemContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ItemRightContent = styled(ItemContent)`

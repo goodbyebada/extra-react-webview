@@ -6,6 +6,9 @@ import CalendarItem from "@components/mocules/calender/CalendarItem";
 import { MainButton } from "@components/atoms/Button";
 import SwipeableItem from "@components/mocules/SwipeableItem";
 import RoleInfo from "@components/custom/RoleInfo";
+// import { InputField } from "@components/atoms/Form";
+import DropDownInput from "@components/mocules/DropDownInput";
+import { useForm } from "react-hook-form";
 
 const PreviewContainer = styled.section`
   background: #000;
@@ -26,6 +29,7 @@ const ThemePreviewPage = () => {
     limitPersonnel: 5,
     roleId: 101,
   };
+  const { control, setValue } = useForm();
 
   return (
     <PreviewContainer>
@@ -166,6 +170,14 @@ const ThemePreviewPage = () => {
       <MainButton isActive={false} disabled={true}>
         다음
       </MainButton>
+
+      <DropDownInput
+        control={control}
+        setValue={setValue}
+        name="나이"
+        placeholder="나이를 입력하세요"
+        items={[...Array(10)].map((_, i) => `${i}`)}
+      />
     </PreviewContainer>
   );
 };
