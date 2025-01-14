@@ -42,7 +42,7 @@ const StyledTagWrapper = styled(StyledWrapper)`
 const StyledStatusWrapper = styled(StyledTagWrapper)<StatusWrapperProps>`
   border-width: 1px;
   border-style: solid;
-  width: 56px;
+  padding: 3px 8px;
 
   ${({ status, bg }) => {
     if (bg) {

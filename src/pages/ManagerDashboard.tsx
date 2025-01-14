@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Modal from "@components/Modal";
+import Modal from "@components/atoms/Modal";
 import { requestGetFetch, sendMessage } from "@api/utils";
 import { JobPost } from "@api/interface";
 import HomeRecruitBox from "@components/HomeRecruitBox";

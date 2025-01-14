@@ -1,4 +1,4 @@
-import Modal from "../components/Modal";
+import Modal from "../components/atoms/Modal";
 import backIcon from "@assets/backIcon.png";
 import { sendMessage } from "@api/utils";
 import { useEffect, useState } from "react";

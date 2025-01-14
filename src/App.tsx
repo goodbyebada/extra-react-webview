@@ -15,6 +15,7 @@ import DetailPage from "@pages/DetailPage";
 import NotFound from "@pages/Error/NotFound";
 import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
 import SchedulerPage from "@pages/Scheduler";
+import TempEvaluation from "@pages/TempEvaluation";
 
 import ThemePreviewPage from "@pages/ThemePreview";
 import LoginPage from "@pages/Sign/LoginPage";
@@ -151,6 +152,7 @@ function App() {
             element={<ShowApplicant />}
           />
           <Route path="/add-notice" element={<AddNotice />} />
+          <Route path="/temp/:id" element={<TempEvaluation />} />
 
           <Route path="/*" element={<NotFound />} />
 

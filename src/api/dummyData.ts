@@ -8,6 +8,7 @@ export {
   dummyCalenderDataForExtra,
   dummyJobPostList,
   dummyCalenderDataForCompany,
+  dummyUserRoleData,
 };
 
 const memberRoleServerDummyList: MemberRoleServer[] = [
@@ -372,5 +373,52 @@ const dummyJobPostList: JobPostList = [
         feet: false,
       },
     ],
+  },
+];
+
+/**
+ * 지원자 정보 (임시)
+ * - 역할 별 지원현황 / 상세페이지 모달 / 온도 평가
+ */
+const dummyUserRoleData = [
+  {
+    id: 1,
+    userId: "1",
+    name: "user1",
+    category: "UMC 드라마",
+    role: "학생 역할",
+    imageUrl: "https://via.placeholder.com/100",
+  },
+  {
+    id: 2,
+    userId: "2",
+    name: "user2",
+    category: "UMC 영화",
+    role: "학생 역할",
+    imageUrl: "https://via.placeholder.com/100",
+  },
+  {
+    id: 3,
+    userId: "3",
+    name: "user3",
+    category: "UMC 연극",
+    role: "주인공 역할",
+    imageUrl: "https://via.placeholder.com/100",
+  },
+  {
+    id: 4,
+    userId: "4",
+    name: "user4",
+    category: "UMC 드라마",
+    role: "조연 역할",
+    imageUrl: "https://via.placeholder.com/100",
+  },
+  {
+    id: 5,
+    userId: "5",
+    name: "user5",
+    category: "UMC 영화",
+    role: "조연 역할",
+    imageUrl: "https://via.placeholder.com/100",
   },
 ];
