@@ -24,7 +24,7 @@ const convertItemPropsAllType = (elem: {
   const itemProps: ItemProps = {
     title,
     category: id.toString(),
-    date: tmpDateStr,
+    date: [tmpDateStr],
     dDay: "D-3",
     company: "companyName",
     time: tmpDateStr,
@@ -50,7 +50,7 @@ const convertItemPropsMyType = (elem: {
   const itemProps: ItemProps = {
     title: name,
     category: id.toString(),
-    date: tmpDateStr,
+    date: [tmpDateStr],
     dDay: "D-3",
     company: email,
     time: tmpDateStr,
