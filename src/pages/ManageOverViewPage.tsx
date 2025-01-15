@@ -30,7 +30,7 @@ export default function ManageOverViewPage() {
             <Item
               title={elem.title}
               category={elem.category}
-              date={elem.gatheringTime.split("T")[0]}
+              date={[elem.gatheringTime]}
               dDay={"D-3"}
               company={elem.companyName}
               time={elem.gatheringTime}

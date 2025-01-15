@@ -42,9 +42,13 @@ import CompanyProfilePage from "@pages/CompanyProfilePage";
 import CompanySettingPage from "@pages/CompanySettingPage";
 import PostOverviewPage from "@pages/PostOverviewPage";
 import RecruitmentStatus from "@pages/RecruitmentStatus";
-import JobPostManagement from "@pages/JobPostManagement";
+import handleAllowNotification from "@utills/pushNotification/notificationPermission";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    handleAllowNotification();
+  }, []);
   return (
     <>
       <BrowserRouter>

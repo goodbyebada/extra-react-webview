@@ -26,9 +26,15 @@ async function registerServiceWorker() {
   try {
     // 서비스워커를 지원하는가
     if ("serviceWorker" in navigator) {
-      await navigator.serviceWorker.register("/firebase-messaging-sw.js", {
-        scope: "/firebase-cloud-messaging-push-scope",
-      });
+      console.log("지원한다1");
+      const res = await navigator.serviceWorker.register(
+        "/firebase-messaging-sw.js",
+        {
+          scope: "/firebase-cloud-messaging-push-scope",
+        },
+      );
+
+      console.log(res);
       return;
     }
 
