@@ -6,7 +6,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  console.log(mode);
+  // console.log(mode);
   return {
     plugins: [
       react(),
@@ -47,10 +47,9 @@ export default defineConfig(({ mode }) => {
         },
       }),
     ],
-
-    // 배포 시 인증서 필요하지 않음
+    // 인증서가 있을 시 https 설정
     server:
-      mode === "production"
+      !fs.existsSync("./localhost-key.pem") || !fs.existsSync("./localhost.pem")
         ? undefined
         : {
             https: {
