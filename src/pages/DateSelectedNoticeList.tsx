@@ -7,12 +7,12 @@ import { sendMessage } from "@api/utils";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import jobPostAPI from "@api/jobPostAPI";
-import { JobPost } from "@api/interface";
+import { JobPost } from "@/types/shared";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 
 import { TEST_FLAG } from "@/testFlag";
-import { dummyJobPostList } from "@api/dummyData";
+import { dummyJobPostList } from "@/mocks/dummyData";
 import { defaultJobPost } from "@redux/jobPost/jobPostSlice";
 
 /**

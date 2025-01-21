@@ -1,6 +1,6 @@
-import { MemberRoleServer, MemberRoleFront, JobPostList } from "@api/interface";
+import { MemberRoleServer, MemberRoleFront, JobPostList } from "@/types/shared";
 
-import { ObjectType } from "@api/dateInteface";
+import { ObjectType } from "@/types/dateInteface";
 
 export {
   memberRoleServerDummyList,
@@ -509,5 +509,33 @@ const dummyUserClothes = [
         description: "의상 1",
       },
     ],
+  },
+];
+
+//
+export const DummyUserList = [
+  {
+    name: "JohnDoe",
+    type: "Admin",
+    special_permission: "Access to all system settings",
+    created_at: "2023-11-15T08:30:00Z",
+  },
+  {
+    name: "JaneSmith",
+    type: "Extra",
+    special_permission: null,
+    created_at: "2024-01-10T12:45:00Z",
+  },
+  {
+    name: "AliceJohnson",
+    type: "Admin",
+    special_permission: "Ability to modify user roles",
+    created_at: "2022-07-20T16:20:00Z",
+  },
+  {
+    name: "BobBrown",
+    type: "Extra",
+    special_permission: null,
+    created_at: "2024-01-05T09:00:00Z",
   },
 ];

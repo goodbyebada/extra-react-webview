@@ -5,7 +5,11 @@ import { CalendarWeekdayLabels } from "@components/mocules/WeekdayLabels";
 import HomeCalendarWeek from "@components/organisms/HomeCalendarWeek";
 import CalenderWrapper from "@components/CalenderWrapper";
 import { CALENDER_SIZE } from "@/styled/size";
-import { DateYearMonth, DateSelctedType, ObjectType } from "@api/dateInteface";
+import {
+  DateYearMonth,
+  DateSelctedType,
+  ObjectType,
+} from "@/types/dateInteface";
 
 type CalenderProps = {
   dateYearMonth: DateYearMonth;

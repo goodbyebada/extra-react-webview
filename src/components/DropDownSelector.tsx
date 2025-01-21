@@ -1,7 +1,7 @@
 import { useState } from "react";
 import dropDownBtn from "@assets/more-than-button.png";
 import { styled } from "styled-components";
-import { ApplyStatusLabel } from "@api/interface";
+import { ApplyStatusLabel } from "@/types/shared";
 
 /**
  * 지원현황 페이지에서 사용되는 DropDownButton

@@ -3,7 +3,7 @@ import multiply from "@assets/Multiply.png";
 import approval from "@assets/Approval.png";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { ResponseStatus } from "@api/interface";
+import { ResponseStatus } from "@/types/shared";
 import { useState } from "react";
 import Loading from "@components/Loading";
 import { useEffect } from "react";

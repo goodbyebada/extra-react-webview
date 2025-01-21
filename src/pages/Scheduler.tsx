@@ -12,12 +12,12 @@ import SchedulerSingleWeek from "@components/mocules/calender/SchedulerSingleWee
 
 import CalenderWrapper from "@components/CalenderWrapper";
 
-import { ScheduleType } from "@api/interface";
+import { ScheduleType } from "@/types/shared";
 import Ellipsis from "@components/custom/Ellipsis";
 import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
 
 import { setScheduleDate } from "@redux/dateSlice";
-import { DateSelctedType } from "@api/dateInteface";
+import { DateSelctedType } from "@/types/dateInteface";
 import { SchedulerWeekdayLabels } from "@components/mocules/WeekdayLabels";
 
 export default function SchedulerPage() {

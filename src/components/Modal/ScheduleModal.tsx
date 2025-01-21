@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import SmallRecruitBox from "@components/SmallRecruitBox";
-import { JobPost } from "@api/interface";
+import { JobPost } from "@/types/shared";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { memberRoleFrontDummyData } from "@api/dummyData";
+import { memberRoleFrontDummyData } from "@/mocks/dummyData";
 
 /**
  * 추후 props 추가 통해,

@@ -5,7 +5,7 @@ import backIcon from "@assets/backIcon.png";
 import reviseIcon from "@assets/reviseIcon.png";
 import CompanyRoleModalUpdate from "@components/Modal/CompanyRoleModalUpdate";
 import CompanyRoleModalCreate from "@components/Modal/CompanyRoleModalCreate";
-import { JobPost } from "@api/interface";
+import { JobPost } from "@/types/shared";
 import RoleInfoComponent from "@components/custom/RoleInfo";
 import { requestGetFetch, requestPutFetch, sendMessage } from "@api/utils";
 

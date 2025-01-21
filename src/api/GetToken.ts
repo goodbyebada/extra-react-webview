@@ -1,4 +1,4 @@
-import { BASE_URL } from "@api/interface";
+import { BASE_URL } from "@/types/shared";
 
 /**
  *

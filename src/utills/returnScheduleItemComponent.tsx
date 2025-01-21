@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
-import { MemberRoleFront } from "@api/interface";
-import { ScheduleTypeStatusLabel } from "@api/interface";
+import { MemberRoleFront } from "@/types/shared";
+import { ScheduleTypeStatusLabel } from "@/types/shared";
 
 const ScheduleItem = styled.div`
   /* 스케줄표 border width 만큼 늘림 */

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import RecruitStatus from "@components/custom/recruitStatus";
-import { JobPost } from "@api/interface";
+import { JobPost } from "@/types/shared";
 
 type Props = {
   navigate: () => void;

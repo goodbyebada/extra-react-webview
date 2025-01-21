@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 // import { useRef } from "react";
 import { styled } from "styled-components";
-import { JobPost } from "@api/interface";
-import { DateYearMonth } from "@api/dateInteface";
+import { JobPost } from "@/types/shared";
+import { DateYearMonth } from "@/types/dateInteface";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 // import { ResponseStatus } from "@api/interface";
 // import Loading from "@components/Loading";

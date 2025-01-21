@@ -7,7 +7,7 @@ import { AppDispatch, RootState } from "@redux/store";
 // import { GetToken } from "@api/GetToken";
 
 import { useNavigate } from "react-router-dom";
-import { DateDetailedInfo } from "@api/dateInteface";
+import { DateDetailedInfo } from "@/types/dateInteface";
 import { fetchJobPostByCalender } from "@redux/jobPost/jobPostSlice";
 import List from "@pages/List";
 import { HOME_MESSAGES } from "@/constants/messages";

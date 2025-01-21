@@ -6,7 +6,7 @@
 import { CompanyNavBar } from "@components/mocules/navBar/CompanyNavBar";
 import Text from "@components/atoms/Text";
 import { ContentWrapper, LineWrapper } from "@components/atoms/Wrapper";
-import { memberRoleFrontDummyData } from "@api/dummyData";
+import { memberRoleFrontDummyData } from "@/mocks/dummyData";
 import Item from "@components/mocules/Item";
 import styled from "styled-components";
 

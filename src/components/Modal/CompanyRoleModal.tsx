@@ -1,6 +1,13 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import { RoleBodyType, Tattoo, TattooNames, Costume } from "@api/interface";
+import {
+  RoleBodyType,
+  Tattoo,
+  TattooNames,
+  Costume,
+  RoleRegister,
+  SeasonEnum,
+} from "@/types/shared";
 import Modal from "@components/atoms/Modal";
 import { MainButton, BoxButton, SubButton } from "@components/atoms/Button";
 import Text from "@components/atoms/Text";

@@ -4,12 +4,12 @@ import {
   ResponseStatus,
   ScheduleTypeStatusLabel,
   MemberRoleServer,
-} from "@api/interface";
-import { DateYearMonth } from "@api/dateInteface";
+} from "@/types/shared";
+import { DateYearMonth } from "@/types/dateInteface";
 import memberRolesAPI from "@api/memberRolesAPI";
 import { converToDateObject } from "@utills/convert";
 import { TEST_FLAG } from "@/testFlag";
-import { memberRoleServerDummyList } from "@api/dummyData";
+import { memberRoleServerDummyList } from "@/mocks/dummyData";
 
 const initDate: MemberRoleFront = {
   id: -1,

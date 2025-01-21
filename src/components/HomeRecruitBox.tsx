@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import RecruitStatus from "@components/custom/recruitStatus";
-import { JobPost } from "@api/interface";
+import { JobPost } from "@/types/shared";
 import star_g from "@assets/Star_g.png";
 import star_y from "@assets/Star_y.png";
 

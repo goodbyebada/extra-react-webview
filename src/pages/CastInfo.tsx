@@ -3,7 +3,7 @@ import { toggleStar } from "@redux/recruitSlice";
 import { useEffect, useState } from "react";
 import NavBar from "@components/custom/NavBar";
 
-import { JobPost } from "@api/interface";
+import { JobPost } from "@/types/shared";
 import RoleModal from "@components/Modal/RoleModal";
 import { useRef } from "react";
 import { ReturnDateOfShooting } from "@utills/returnDateOfShooting";
