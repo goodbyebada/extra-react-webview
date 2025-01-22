@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ManagerDashboard from "./pages/ManagerDashboard";
+
 import AddNotice from "./pages/AddNotice";
 import ShowApplicant from "./pages/ShowApplicant";
 
@@ -49,10 +49,12 @@ import CompanySettingPage from "@pages/CompanySettingPage";
 import PostOverviewPage from "@pages/PostOverviewPage";
 import RecruitmentStatus from "@pages/RecruitmentStatus";
 import SignaturePage from "@pages/SignaturePage";
-import JobPostManagement from "@pages/JobPostManagement";
 import { useEffect } from "react";
 import handleAllowNotification from "@utills/pushNotification/notificationPermission";
-import Chat from "@pages/Chat/Chat";
+import ChatList from "@pages/Chat/ChatList";
+import Channel from "@pages/Chat/Chanel";
+import ManageOverViewPage from "@pages/ManageOverViewPage";
+import ChatRoomPage from "@pages/Chat/ChatRoomPage";
 
 function App() {
   useEffect(() => {
@@ -128,7 +130,7 @@ function App() {
           <Route path="/company/manage/clock-in" element={<ClockInPage />} />
           <Route path="/company/manage/clock-out" element={<ClockOutPage />} />
           {/* company notice */}
-          <Route path="/company/notice" element={<JobPostManagement />} />
+          <Route path="/company/notice" element={<ManageOverViewPage />} />
           {/* 업체 측 공고 리스트 페이지 화면 */}
           <Route
             path="/company/notice/post-overview"
@@ -151,11 +153,6 @@ function App() {
           <Route
             path="/company/profile/setting"
             element={<CompanySettingPage />}
-          />
-
-          <Route
-            path="/company/manager-dashboard"
-            element={<ManagerDashboard />}
           />
 
           <Route path="/applicants" element={<ShowApplicant />} />
@@ -197,7 +194,9 @@ function App() {
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />
 
-          <Route path="/chatRoom" element={<Chat />} />
+          <Route path="/chatRoom" element={<ChatList />} />
+          <Route path="/chatRoom/channel/tmp" element={<ChatRoomPage />} />
+          <Route path="/chatRoom/channel/:id" element={<ChatRoomPage />} />
         </Routes>
       </BrowserRouter>
     </>

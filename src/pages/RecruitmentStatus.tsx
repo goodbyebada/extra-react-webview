@@ -2,7 +2,7 @@
  * 공고 업체 측에서 볼 수 있는 지원 현황 화면
  */
 
-import { CompanyNavBar } from "@components/mocules/navBar/CompanyNavBar";
+import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 import Text, { ThemeText } from "@components/atoms/Text";
 import { COLORS } from "@/styled/colors";
 import { ContentWrapper, LineWrapper } from "@components/atoms/Wrapper";
@@ -23,14 +23,14 @@ export default function RecruitmentStatus() {
 
   return (
     <>
-      <CompanyNavBar fixed={true}>
+      <NavBar sticky={true}>
         <Text weight={900} color={COLORS.darkGray}>
           모집 공고
         </Text>
         <Text weight={900} color={COLORS.darkGray}>
           드라마
         </Text>
-      </CompanyNavBar>
+      </NavBar>
       <ContentWrapper marginTop="5rem">
         {/* 제목 */}
         <LineWrapper>

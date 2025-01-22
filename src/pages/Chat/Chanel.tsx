@@ -1,12 +1,7 @@
-import {
-  ChatRoomsMessageField,
-  ChatRoomsSendMessageField,
-  UserFiled,
-} from "@/types/firebase_db";
+import { ChatRoomsMessageField, UserFiled } from "@/types/firebase_db";
 import { useFirestoreQuery } from "@utills/chat/useFireStoreQuery";
 import { db } from "@utills/firebase";
 import {
-  FieldValue,
   addDoc,
   collection,
   orderBy,
@@ -15,7 +10,10 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
 import { UserDetailsInChat } from "@/types/firebase_db";
-import { IoSend } from "react-icons/io5";
+
+import MessageItem from "@components/mocules/chat/MessageItem";
+import MessageInput from "@components/mocules/chat/MessageInput";
+import styled from "styled-components";
 
 export default function Channel({
   chatUserDetails,
@@ -34,8 +32,7 @@ export default function Channel({
   // 채팅 메세지 생성시 useState로 새로운 메세지 저장
   const [newMessage, setNewMessage] = useState("");
 
-  // input 필드 포커싱과 하단 스크롤을 위한 useRef
-  const inputRef = useRef<HTMLInputElement>(null);
+  //  하단 스크롤을 위한 useRef
   const bottomListRef = useRef<HTMLDivElement | null>(null);
 
   // TODO 쓰로톨링 적용 예정
@@ -43,11 +40,7 @@ export default function Channel({
     setNewMessage(e.currentTarget.value);
   };
 
-  async function sendMessage(data: {
-    user_id: string;
-    message: string;
-    created_at: string;
-  }) {
+  async function sendMessage(data: ChatRoomsMessageField) {
     await addDoc(colloectionRef, data);
   }
 
@@ -58,25 +51,28 @@ export default function Channel({
     const messageContent = newMessage;
     setNewMessage("");
 
-    const data: ChatRoomsSendMessageField = {
+    const data: ChatRoomsMessageField = {
       user_id: myUserId,
       message: messageContent,
-      // created_at: serverTimestamp(),
-      created_at: new Date().toString(),
+      created_at: serverTimestamp(),
+      // created_at: new Date().toUTCString(),
     };
-    // 서버 사용 줄이기 위해 new Date로 임시로 사용
 
     sendMessage(data);
 
     if (bottomListRef.current) {
+      console.log("내려간다.");
       bottomListRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  // toLocaleDateString : '2025. 1. 22.'
-  // new Date().toDateString() 'Wed Jan 22 2025'
-  // new Date().toTimeString()'15:21:36 GMT+0900 (한국 표준시)'
+  useEffect(() => {
+    if (bottomListRef.current) {
+      bottomListRef.current.scrollIntoView();
+    }
 
+    // updateTimeDateToTimeStamp(selectedChatsRoomId);
+  }, [bottomListRef.current, messageDocs]);
   // created_at field Timestamp와 섞여있음
   function formatCreatedAt(
     created_at: string | { seconds: number; nanoseconds: number },
@@ -86,62 +82,78 @@ export default function Channel({
       return new Date(created_at).toUTCString();
     } else if (typeof created_at === "object" && created_at.seconds) {
       // Firestore Timestamp 객체를 Date 객체로 변환하고 날짜만 반환
-      return new Date(created_at.seconds * 1000).toUTCString();
+
+      return new Date(created_at.seconds * 1000).toLocaleTimeString();
     } else {
       // 유효하지 않은 형식 처리
       return "Invalid Date";
     }
   }
 
+  // 사용자 이름을 안전하게 가져오는 함수
+  const getUserName = (
+    userInfoMapById: Map<string, UserFiled> | null,
+    userId: string,
+  ): string => {
+    if (userInfoMapById !== null && userInfoMapById.has(userId)) {
+      return userInfoMapById.get(userId)?.name || "";
+      // undefined일 경우 빈 문자열 반환
+    }
+    return "";
+  };
+
   return (
-    <div>
-      <div>
-        <div>
-          <ul>
-            {chatUserDetails.userList.length !== 0 &&
-              messageDocs
-                ?.sort((first, second) =>
-                  first?.created_at?.seconds <= second?.created_at?.seconds
-                    ? -1
-                    : 1,
-                )
-                ?.map((message, key) => (
-                  <li key={key}>
-                    {/* 추후 Message 컴포넌트 생성해서 채팅 내용 표시 */}
-                    {/* <Message {...message} /> */}
-
-                    <h3>
-                      {chatUserDetails.userInfoMapById
-                        ? chatUserDetails.userInfoMapById.get(message.user_id)
-                            ?.name
-                        : ""}
-                    </h3>
-                    <h1>{message.message}</h1>
-                    <h4>{formatCreatedAt(message.created_at)}</h4>
-                  </li>
-                ))}
-          </ul>
-
-          {/* TODO 하단 스크롤 */}
-          <div ref={bottomListRef} />
-        </div>
-      </div>
+    <ChatWrapper>
+      <Wrapper>
+        {chatUserDetails.userList.length !== 0 &&
+          messageDocs
+            ?.sort((first, second) =>
+              first?.created_at?.seconds <= second?.created_at?.seconds
+                ? -1
+                : 1,
+            )
+            ?.map((message, key) => (
+              <MessageItem
+                key={key}
+                user_image={""}
+                user_name={getUserName(
+                  chatUserDetails.userInfoMapById,
+                  message.user_id,
+                )}
+                message={message.message}
+                created_at={formatCreatedAt(message.created_at)}
+                my_message={message.user_id === myUserId}
+              />
+            ))}
+        {/* TODO 하단 스크롤 */}
+        <div ref={bottomListRef} />
+      </Wrapper>
 
       {/* 채팅 입력 폼 생성 */}
-      <div>
-        <form onSubmit={handleOnSubmit}>
-          <input
-            ref={inputRef}
-            type="text"
-            value={newMessage}
-            onChange={handleOnChange}
-            placeholder="메세지를 입력하세요"
-          />
-          <button type="submit" disabled={!newMessage}>
-            <IoSend />
-          </button>
-        </form>
-      </div>
-    </div>
+
+      <MessageInput
+        value={newMessage}
+        onChange={handleOnChange}
+        onSubmit={handleOnSubmit}
+        disabled={!newMessage}
+      />
+    </ChatWrapper>
   );
 }
+const ChatWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
+// TODO margin-top 헤더 정보를 알아야함
+const Wrapper = styled.div`
+  margin-top: 20px;
+  height: 100%;
+  box-sizing: border-box;
+  overflow: scroll;
+
+  display: flex;
+  flex-direction: column;
+  justify-items: flex-end;
+`;
