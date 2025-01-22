@@ -1,6 +1,11 @@
 import { MemberRoleServer, MemberRoleFront, JobPostList } from "@/types/shared";
 
 import { ObjectType } from "@/types/dateInteface";
+import {
+  ChatRoomField,
+  ChatRoomsMessageField,
+  UserFiled,
+} from "@/types/firebase_db";
 
 export {
   memberRoleServerDummyList,
@@ -511,31 +516,45 @@ const dummyUserClothes = [
     ],
   },
 ];
+/**
+ * firebase DB 데이터 예시
+ */
+export const DummyFirebaseDBList = {
+  userList: [
+    {
+      name: "김준준 팀장",
+      admin: true,
+      created_at: "2022-11-15T08:30:00Z",
+    },
+    {
+      name: "박민민 팀장",
+      admin: true,
+      created_at: "2021-01-10T12:45:00Z",
+    },
+    {
+      name: "김수현",
+      admin: false,
+      created_at: "2022-07-20T16:20:00Z",
+    },
+    {
+      name: "고윤정",
+      admin: false,
+      created_at: "2024-01-05T09:00:00Z",
+    },
+  ] as UserFiled[],
 
-//
-export const DummyUserList = [
-  {
-    name: "JohnDoe",
-    type: "Admin",
-    special_permission: "Access to all system settings",
-    created_at: "2023-11-15T08:30:00Z",
-  },
-  {
-    name: "JaneSmith",
-    type: "Extra",
-    special_permission: null,
-    created_at: "2024-01-10T12:45:00Z",
-  },
-  {
-    name: "AliceJohnson",
-    type: "Admin",
-    special_permission: "Ability to modify user roles",
-    created_at: "2022-07-20T16:20:00Z",
-  },
-  {
-    name: "BobBrown",
-    type: "Extra",
-    special_permission: null,
-    created_at: "2024-01-05T09:00:00Z",
-  },
-];
+  chatRoomList: [
+    {
+      drama_id: "drama000",
+      name: "드라마000의 채팅방입니다.",
+      created_at: "2025-01-15",
+      admin_ids: ["TUeqfdxmCeqF7gRE6qQp"],
+    },
+    {
+      drama_id: "drama001",
+      name: "드라마001의 채팅방입니다.",
+      created_at: "2025-01-17",
+      admin_ids: ["XBb6YU6liLf7fTehEgsX"],
+    },
+  ] as ChatRoomField[],
+};
