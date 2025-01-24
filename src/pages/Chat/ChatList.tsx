@@ -1,25 +1,14 @@
 import { useEffect, useState } from "react";
-import {
-  doc,
-  getDoc,
-  collection,
-  addDoc,
-  Timestamp,
-  serverTimestamp,
-  query,
-  orderBy,
-} from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { MainButton } from "@components/atoms/Button";
 import { db } from "@utills/firebase";
 import {
-  getUserMapByUserIds,
   getChatRoomUserDetailsByChatRoomId,
   getAllOfAmdinOwnedChatRooms,
   getChatRoomInfoByDramaId,
 } from "@utills/chat/get";
 import Channel from "@pages/Chat/Chanel";
-import { UserFiled } from "@/types/firebase_db";
-import { useFirestoreQuery } from "@utills/chat/useFireStoreQuery";
+
 import { ChatRoomInfo } from "@/types/firebase_db";
 import { UserDetailsInChat } from "@/types/firebase_db";
 import { useNavigate } from "react-router-dom";

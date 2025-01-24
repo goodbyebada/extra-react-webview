@@ -1,17 +1,13 @@
-// TODO 추후 파일 폴더 옮길 예정
-
 import { db } from "@utills/firebase";
-import { doc, getDoc, addDoc } from "firebase/firestore";
+import { Timestamp, doc, getDoc, updateDoc } from "firebase/firestore";
 import { collection, query, where, getDocs, orderBy } from "firebase/firestore";
 import {
   ChatRoomInfo,
   UserDetailsInChat,
   ChatRoomsMessageField,
+  ChatRoomField,
 } from "@/types/firebase_db";
-import { FieldPath } from "firebase/firestore/lite";
-import firebase from "firebase/compat/app";
 import { documentId } from "firebase/firestore";
-
 
 /**
  *  chatRoomUsersList를 먼저 확인해야함
@@ -19,7 +15,7 @@ import { documentId } from "firebase/firestore";
  * @param chatRoom_id
  * @returns
  */
-export async function getChatRoomInfoByChatRoomId(
+export async function getChatRoomUserDetailsByChatRoomId(
   chatRoom_id: string,
 ): Promise<UserDetailsInChat> {
   let userList = await getDramaChatRoomUsersList(chatRoom_id);
@@ -91,7 +87,7 @@ export async function getAllOfAmdinOwnedChatRooms(adminId: string) {
  * @param dramaId
  * @returns dramaId (해당 드라마의 채팅방 정보 )
  */
-async function getChatRoomInfoByDramaId(dramaId: string) {
+export async function getChatRoomInfoByDramaId(dramaId: string) {
   const q = query(
     collection(db, "ChatRooms"),
     where("drama_id", "==", dramaId),
@@ -113,6 +109,22 @@ async function getChatRoomInfoByDramaId(dramaId: string) {
   });
 
   return chatRoomInfo;
+}
+
+/**
+ *
+ * @param dramaId
+ * @returns dramaId (해당 드라마의 채팅방 정보 )
+ */
+export async function getChatRoomInfoByChatRoomId(chatRoomId: string) {
+  const docRef = doc(db, "ChatRooms", chatRoomId);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    return docSnap.data() as ChatRoomField;
+  } else {
+    return null;
+  }
 }
 
 async function getDramaChatRoomUsersList(
@@ -148,6 +160,8 @@ async function getMessagesInChatsRoom(chatRoomId: string) {
       message,
       created_at,
     };
+    // console.log(created_at.toDate());
+    // TODO 이렇게 사용하려면 ChatRoomsMessageField 수정해야함
 
     messagesList.push(messageObj);
   });
@@ -161,8 +175,6 @@ async function getMessagesInChatsRoom(chatRoomId: string) {
  * @returns
  */
 export async function getUserMapByUserIds(userIds: string[]) {
-  console.log("userIds", userIds);
-
   //documentID가 userID이다.
   const q = query(collection(db, "Users"), where(documentId(), "in", userIds));
   const querySnapshot = await getDocs(q);
@@ -175,3 +187,48 @@ export async function getUserMapByUserIds(userIds: string[]) {
   return userMap;
 }
 
+// new Date() 형식으로 올라가있던 created_at TimeStamp로 모두 통일
+export async function updateTimeDateToTimeStamp(chatRoomId: string) {
+  const colloectionRef = collection(db, "Messages", chatRoomId, "m1");
+  const querySnapshot = await getDocs(colloectionRef);
+
+  const filteredDocs = querySnapshot.docs.filter((doc) => {
+    const data = doc.data();
+    return typeof data.created_at === "string";
+  });
+
+  // id 반환
+  // doc id에 접근해
+  //  저장된 new Date() ->timestamp로 업데이트 할 수는 없나?
+
+  const list: {
+    id: string;
+    created_at: string;
+  }[] = [];
+  filteredDocs.forEach((elem) => {
+    list.push({
+      id: elem.id,
+      created_at: elem.data().created_at,
+    });
+  });
+
+  list.forEach(async ({ id, created_at }) => {
+    const frankDocRef = doc(db, "Messages", chatRoomId, "m1", id);
+    await updateDoc(frankDocRef, {
+      created_at: Timestamp.fromDate(new Date(created_at)),
+    });
+  });
+}
+
+// TODO 캐싱 로직
+// const userCache = {};
+// // user 캐싱
+// async function getUser(userId: string) {
+//   if (userCache[userId]) {
+//     return userCache[userId];
+//   }
+//   const userDoc = await firestore.collection("users").doc(userId).get();
+//   const userData = userDoc.data();
+//   userCache[userId] = userData;
+//   return userData;
+// }

@@ -13,13 +13,10 @@ export function useFirestoreQuery(query: Query<DocumentData>) {
   const queryRef = useRef<Query<DocumentData> | null>(null);
 
   // Query 객체가 바뀌었을 때만 업데이트
+  // TODO query queryRef.current 깊은 비교에서 계속 비교가 안됨
   useEffect(() => {
-    console.log("query 또 들어옴");
-
     if (query !== queryRef.current) {
-      queryRef.current = query;
-    } else {
-      console.log("query 똑같음 유지");
+      queryRef.current = query; // 쿼리 객체를 업데이트
     }
   }, [query]);
 
@@ -28,12 +25,23 @@ export function useFirestoreQuery(query: Query<DocumentData>) {
     if (!queryRef.current) return;
 
     // Firestore 실시간 구독
-
     const unsubscribe = onSnapshot(queryRef.current, (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+      const data = snapshot.docs.map((doc) => {
+        const newData = doc.data();
+        if (!newData.created_at) {
+          return {
+            ...newData,
+            id: doc.id,
+            created_at: new Date(),
+          };
+        }
+
+        return {
+          ...newData,
+          id: doc.id,
+        };
+      });
+
       setDocs(data);
 
       // TODO 추후 삭제, 수정 , 구현 예정
@@ -51,7 +59,7 @@ export function useFirestoreQuery(query: Query<DocumentData>) {
     });
 
     return () => unsubscribe();
-  }, [queryRef]);
+  }, []);
 
   return docs;
 }

@@ -27,25 +27,10 @@ export interface DramaParticipationField {
   joined_at: string;
 }
 
-/**
- * 받아오는 메시지
- */
 export interface ChatRoomsMessageField {
   user_id: string;
   message: string;
-  created_at: {
-    nanoseconds: number;
-    seconds: number;
-  };
-}
-
-/**
- * FB로 보내는 메시지
- */
-export interface ChatRoomsSendMessageField {
-  user_id: string;
-  message: string;
-  created_at: string;
+  created_at: string | FieldValue;
 }
 
 export interface ChatRoomInfo extends ChatRoomField {
