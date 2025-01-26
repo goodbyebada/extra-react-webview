@@ -36,7 +36,7 @@ export default function Channel({
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   // TODO 쓰로톨링 적용 예정
-  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewMessage(e.currentTarget.value);
   };
 
@@ -44,10 +44,7 @@ export default function Channel({
     await addDoc(colloectionRef, data);
   }
 
-  const handleOnSubmit = (e: ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // 추후에 내용 작성
-
+  const handleOnSubmit = () => {
     const messageContent = newMessage;
     setNewMessage("");
 
