@@ -77,9 +77,7 @@ export default function Channel({
       // 문자열 형식의 날짜를 Date 객체로 변환하고 시간만 반환
       return new Date(created_at).toUTCString();
     } else if (typeof created_at === "object" && created_at.seconds) {
-      // Firestore Timestamp 객체를 Date 객체로 변환하고 날짜만 반환
-
-      return new Date(created_at.seconds * 1000).toLocaleTimeString();
+      return new Date(created_at.seconds * 1000).toString();
     } else {
       // 유효하지 않은 형식 처리
       return "Invalid Date";
@@ -103,14 +101,19 @@ export default function Channel({
       <MessageWrapper>
         {chatUserDetails.userList.length !== 0 &&
           messageDocs
-            ?.sort((first, second) =>
-              first?.created_at?.seconds <= second?.created_at?.seconds
-                ? -1
-                : 1,
-            )
-            ?.map((message, key) => (
+            ?.sort((first, second) => {
+              if (first?.created_at?.seconds === second?.created_at?.seconds) {
+                return (
+                  first?.created_at?.nanoseconds -
+                  second?.created_at?.nanoseconds
+                );
+              }
+
+              return first?.created_at?.seconds - second?.created_at?.seconds;
+            })
+            ?.map((message) => (
               <MessageItem
-                key={key}
+                key={message.id}
                 user_image={""}
                 user_name={getUserName(
                   chatUserDetails.userInfoMapById,
@@ -121,6 +124,7 @@ export default function Channel({
                 my_message={message.user_id === myUserId}
               />
             ))}
+
         <div ref={bottomRef} />
       </MessageWrapper>
       {/* 채팅 입력 폼 생성 */}
