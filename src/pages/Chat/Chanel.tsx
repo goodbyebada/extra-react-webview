@@ -1,19 +1,14 @@
 import { ChatRoomsMessageField, UserFiled } from "@/types/firebase_db";
 import { useFirestoreQuery } from "@utills/chat/useFireStoreQuery";
 import { db } from "@utills/firebase";
-import {
-  addDoc,
-  collection,
-  orderBy,
-  query,
-  serverTimestamp,
-} from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
 import { UserDetailsInChat } from "@/types/firebase_db";
 
 import MessageItem from "@components/mocules/chat/MessageItem";
 import MessageInput from "@components/mocules/chat/MessageInput";
 import styled from "styled-components";
+import InfiniteScroll from "@utills/InfiniteScroll";
 
 export default function Channel({
   chatUserDetails,
@@ -26,11 +21,20 @@ export default function Channel({
 }) {
   // 0. 에서 작성한 useFirestoreQuery 로 도큐먼트 가져옴
   const colloectionRef = collection(db, "Messages", selectedChatsRoomId, "m1");
-  const q = query(colloectionRef, orderBy("created_at"));
-  const messageDocs = useFirestoreQuery(q);
+  const LIMIT_COUNT = 15;
+
+  const { docs: messageDocs, fetchMore } = useFirestoreQuery(
+    colloectionRef,
+    LIMIT_COUNT,
+  );
+
+  useEffect(() => {
+    console.log(messageDocs);
+  }, [messageDocs]);
 
   // 채팅 메세지 생성시 useState로 새로운 메세지 저장
   const [newMessage, setNewMessage] = useState("");
+  // const [newDate, setNewDate] = useState({year: 0000, month : 00 , date: 00});
 
   //  하단 스크롤을 위한 useRef
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -38,6 +42,7 @@ export default function Channel({
   // TODO 쓰로톨링 적용 예정
   const handleOnChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setNewMessage(e.currentTarget.value);
+    // console.log(e.currentTarget.value);
   };
 
   async function sendMessage(data: ChatRoomsMessageField) {
@@ -58,7 +63,7 @@ export default function Channel({
     sendMessage(data);
 
     if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+      bottomRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   };
 
@@ -67,7 +72,7 @@ export default function Channel({
       bottomRef.current.scrollIntoView();
     }
     // updateTimeDateToTimeStamp(selectedChatsRoomId);
-  }, [bottomRef.current, messageDocs]);
+  }, [bottomRef.current]);
 
   // created_at field Timestamp와 섞여있음
   function formatCreatedAt(
@@ -99,33 +104,44 @@ export default function Channel({
   return (
     <ChatWrapper>
       <MessageWrapper>
-        {chatUserDetails.userList.length !== 0 &&
-          messageDocs
-            ?.sort((first, second) => {
-              if (first?.created_at?.seconds === second?.created_at?.seconds) {
-                return (
-                  first?.created_at?.nanoseconds -
-                  second?.created_at?.nanoseconds
-                );
-              }
+        <InfiniteScroll
+          fetchData={fetchMore}
+          hasMore={messageDocs.length > 0}
+          loader={<h2>loading....!</h2>}
+          endMessage={<h2>모든 공고를 업데이트 하였습니다.</h2>}
+          hasError={false}
+          errorMessage={<h2>에러가 발생했습니다.</h2>}
+          requestAtDown={false}
+        >
+          {chatUserDetails.userList.length !== 0 &&
+            messageDocs
+              ?.sort((first, second) => {
+                if (
+                  first?.created_at?.seconds === second?.created_at?.seconds
+                ) {
+                  return (
+                    first?.created_at?.nanoseconds -
+                    second?.created_at?.nanoseconds
+                  );
+                }
 
-              return first?.created_at?.seconds - second?.created_at?.seconds;
-            })
-            ?.map((message) => (
-              <MessageItem
-                key={message.id}
-                user_image={""}
-                user_name={getUserName(
-                  chatUserDetails.userInfoMapById,
-                  message.user_id,
-                )}
-                message={message.message}
-                created_at={formatCreatedAt(message.created_at)}
-                my_message={message.user_id === myUserId}
-              />
-            ))}
-
-        <div ref={bottomRef} />
+                return first?.created_at?.seconds - second?.created_at?.seconds;
+              })
+              ?.map((message, key) => (
+                <MessageItem
+                  key={key}
+                  user_image={""}
+                  user_name={getUserName(
+                    chatUserDetails.userInfoMapById,
+                    message.user_id,
+                  )}
+                  message={message.message}
+                  created_at={formatCreatedAt(message.created_at)}
+                  my_message={message.user_id === myUserId}
+                />
+              ))}
+          <div ref={bottomRef} />
+        </InfiniteScroll>
       </MessageWrapper>
       {/* 채팅 입력 폼 생성 */}
       <MessageInput
@@ -149,4 +165,6 @@ const ChatWrapper = styled.div`
 const MessageWrapper = styled.div`
   box-sizing: border-box;
   overflow-y: scroll;
+  width: 100%;
+  height: 100%;
 `;

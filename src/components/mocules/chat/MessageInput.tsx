@@ -104,8 +104,9 @@ const MessageInput = ({
       textAreaRef.current.style.height =
         textAreaRef.current.scrollHeight + "px";
 
-      if (bottomRef) {
-        bottomRef.current?.scrollIntoView();
+
+      if (bottomRef && bottomRef.current) {
+        bottomRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
       }
     }
   };
@@ -113,10 +114,9 @@ const MessageInput = ({
   const handlePressEnterFetch = (
     e: React.KeyboardEvent<HTMLTextAreaElement>,
   ) => {
+    if (e.nativeEvent.isComposing) return;
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-
-      console.log("enter");
       onSubmit();
     }
   };
@@ -131,7 +131,7 @@ const MessageInput = ({
         placeholder={placeholder}
         onKeyDown={handlePressEnterFetch}
       />
-      <Button type="submit" disabled={disabled || !value}>
+      <Button onClick={onSubmit} type="submit" disabled={disabled || !value}>
         <IoSend />
       </Button>
     </Container>

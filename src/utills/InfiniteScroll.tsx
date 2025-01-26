@@ -9,6 +9,7 @@ interface InfiniteScrollProps {
   endMessage?: React.ReactNode;
   hasError: boolean;
   errorMessage: React.ReactNode;
+  requestAtDown?: boolean;
 }
 
 /**
@@ -22,6 +23,7 @@ interface InfiniteScrollProps {
  * @param {React.ReactNode} [endMessage] - 모든 데이터를 가져온 후 표시할 메시지 (선택 사항).
  * @param {React.ReactNode} [hasError] - fetching 중 애러 여부
  * @param {React.ReactNode} [errorMessage] - 에러 발생 시 표시할 컴포넌트
+ * @param requestAtDown
  */
 export default function InfiniteScroll({
   children,
@@ -31,10 +33,28 @@ export default function InfiniteScroll({
   endMessage,
   hasError,
   errorMessage,
+  requestAtDown = true,
 }: InfiniteScrollProps) {
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const [loadNewData, setLoadNewData] = useState<boolean>(false);
+
   const target = useRef(null);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const [scrollHeight, setScrollHeight] = useState(0);
+
+  // scroll 중간으로 유지
+  useEffect(() => {
+    if (!containerRef) return;
+
+    if (containerRef.current && isFetching) {
+      // 직전 스크롤 기억
+      const scrollTop = containerRef.current.scrollHeight - scrollHeight;
+      containerRef.current.scrollTop = scrollTop;
+      setScrollHeight(containerRef.current.scrollHeight);
+      // 마지막 스크롤 값 저장
+    }
+  }, [isFetching]);
 
   useEffect(() => {
     if (!hasMore) {
@@ -42,9 +62,8 @@ export default function InfiniteScroll({
     }
 
     const observer = new IntersectionObserver(
-      (entries) => {
-        console.log(entries[0]);
-        if (entries[0].isIntersecting) {
+      ([entries]) => {
+        if (entries.isIntersecting) {
           setLoadNewData(true);
         }
       },
@@ -78,23 +97,33 @@ export default function InfiniteScroll({
   }, [loadNewData, isFetching]);
 
   return (
-    <Wrapper>
-      {children}
-      {/* <div ref={target} style={{ height: "10px", visibility: "hidden" }}></div> */}
-      <div ref={target}></div>
-      {loadNewData && loader}
-      {!hasMore && endMessage}
-      {hasError && errorMessage}
-    </Wrapper>
+    <>
+      {!requestAtDown ? (
+        <Wrapper ref={containerRef}>
+          {loadNewData && loader}
+          {!hasMore && endMessage}
+          {hasError && errorMessage}
+          <div ref={target}></div>
+          {children}
+        </Wrapper>
+      ) : (
+        <Wrapper>
+          {children}
+          {/* <div ref={target} style={{ height: "10px", visibility: "hidden" }}></div> */}
+          <div ref={target}></div>
+          {loadNewData && loader}
+          {!hasMore && endMessage}
+          {hasError && errorMessage}
+        </Wrapper>
+      )}
+    </>
   );
 }
 
 const Wrapper = styled.div`
-  height: 100%;
   width: 100%;
   display: flex;
+  height: 100%;
+  overflow: scroll;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
 `;
