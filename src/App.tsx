@@ -55,6 +55,7 @@ import ChatList from "@pages/Chat/ChatList";
 import Channel from "@pages/Chat/Chanel";
 import ManageOverViewPage from "@pages/ManageOverViewPage";
 import ChatRoomPage from "@pages/Chat/ChatRoomPage";
+import Tmp from "@pages/Tmp";
 
 function App() {
   useEffect(() => {
@@ -195,7 +196,6 @@ function App() {
           <Route path="/theme-preview" element={<ThemePreviewPage />} />
 
           <Route path="/chatRoom" element={<ChatList />} />
-          <Route path="/chatRoom/channel/tmp" element={<ChatRoomPage />} />
           <Route path="/chatRoom/channel/:id" element={<ChatRoomPage />} />
         </Routes>
       </BrowserRouter>

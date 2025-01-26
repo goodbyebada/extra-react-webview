@@ -33,7 +33,7 @@ export default function Channel({
   const [newMessage, setNewMessage] = useState("");
 
   //  하단 스크롤을 위한 useRef
-  const bottomListRef = useRef<HTMLDivElement | null>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
 
   // TODO 쓰로톨링 적용 예정
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,19 +60,18 @@ export default function Channel({
 
     sendMessage(data);
 
-    if (bottomListRef.current) {
-      console.log("내려간다.");
-      bottomListRef.current.scrollIntoView({ behavior: "smooth" });
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   useEffect(() => {
-    if (bottomListRef.current) {
-      bottomListRef.current.scrollIntoView();
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView();
     }
-
     // updateTimeDateToTimeStamp(selectedChatsRoomId);
-  }, [bottomListRef.current, messageDocs]);
+  }, [bottomRef.current, messageDocs]);
+
   // created_at field Timestamp와 섞여있음
   function formatCreatedAt(
     created_at: string | { seconds: number; nanoseconds: number },
@@ -104,7 +103,7 @@ export default function Channel({
 
   return (
     <ChatWrapper>
-      <Wrapper>
+      <MessageWrapper>
         {chatUserDetails.userList.length !== 0 &&
           messageDocs
             ?.sort((first, second) =>
@@ -125,13 +124,11 @@ export default function Channel({
                 my_message={message.user_id === myUserId}
               />
             ))}
-        {/* TODO 하단 스크롤 */}
-        <div ref={bottomListRef} />
-      </Wrapper>
-
+        <div ref={bottomRef} />
+      </MessageWrapper>
       {/* 채팅 입력 폼 생성 */}
-
       <MessageInput
+        bottomRef={bottomRef}
         value={newMessage}
         onChange={handleOnChange}
         onSubmit={handleOnSubmit}
@@ -140,20 +137,15 @@ export default function Channel({
     </ChatWrapper>
   );
 }
+
+// TODO 헤더 높이 정보를 알아야함
 const ChatWrapper = styled.div`
-  height: 100%;
+  height: calc(100% - 80px);
   display: flex;
   flex-direction: column;
 `;
 
-// TODO margin-top 헤더 정보를 알아야함
-const Wrapper = styled.div`
-  margin-top: 20px;
-  height: 100%;
+const MessageWrapper = styled.div`
   box-sizing: border-box;
-  overflow: scroll;
-
-  display: flex;
-  flex-direction: column;
-  justify-items: flex-end;
+  overflow-y: scroll;
 `;

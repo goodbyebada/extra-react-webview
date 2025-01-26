@@ -1,8 +1,8 @@
 const COLORS = {
   black: "#000000",
-  darkGray: "#707070",
   lightGray: "#7a7a7a",
   yellow: "#f5c001",
+  darkGray: "#161616",
 };
 
 const COMMON_COLORS = {

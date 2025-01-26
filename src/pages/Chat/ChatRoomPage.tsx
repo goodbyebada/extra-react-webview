@@ -3,15 +3,10 @@ import Text from "@components/atoms/Text";
 import { IoSearch } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { FONT_COLORS } from "@/styled/colors";
-import { styled } from "styled-components";
 import Container from "@components/atoms/Container";
 import { useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import {
-  ChatRoomField,
-  ChatRoomInfo,
-  UserDetailsInChat,
-} from "@/types/firebase_db";
+import { useEffect, useState } from "react";
+import { ChatRoomField, UserDetailsInChat } from "@/types/firebase_db";
 import {
   getChatRoomInfoByChatRoomId,
   getChatRoomUserDetailsByChatRoomId,
@@ -57,8 +52,9 @@ export default function ChatRoomPage() {
   const showChatUserList = () => {};
   const showSearchModal = () => {};
 
+
   return (
-    <>
+    <Wapper>
       {chatRoomInfo && chatUserDetails?.userList ? (
         <>
           <NavBar sticky={true}>
@@ -87,15 +83,28 @@ export default function ChatRoomPage() {
             </Container>
           </NavBar>
 
+          {/* <SidePanel
+            isOpen={navPannelIsOpen}
+            onClose={() => setNavPannel(false)}
+          >
+            {chatUserDetails.userList.map((userId, key) => (
+              <li key={key}>{userName(userId)}</li>
+            ))}
+          </SidePanel> */}
+
           <Channel
             chatUserDetails={chatUserDetails}
-            myUserId={sessionStorage.getItem("myUserId") || ""}
+            myUserId={userId || ""}
             selectedChatsRoomId={chatRoomId || ""}
           />
         </>
       ) : (
         ""
       )}
-    </>
+    </Wapper>
   );
 }
+
+const Wapper = styled.div`
+  height: 100%;
+`;

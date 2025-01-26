@@ -12,10 +12,8 @@ const Wrapper = styled.div<{ sticky?: boolean }>`
   display: flex;
   padding: 10px;
   background-color: ${BACKGROUND_COLORS.default};
-  max-height: 80px;
-  /* position: absolute; */
+  height: 80px;
 
-  /* top: 0; */
   ${({ sticky }) =>
     sticky &&
     `
