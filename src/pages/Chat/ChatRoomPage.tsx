@@ -12,6 +12,9 @@ import {
   getChatRoomUserDetailsByChatRoomId,
 } from "@utills/chat/get";
 import Channel from "@pages/Chat/Chanel";
+import styled from "styled-components";
+import Modal from "@components/atoms/Modal";
+import { SidePanel } from "@components/mocules/SidePanel";
 
 // TODO 회원이 채팅방에서 나가기, 가입 시 기능 구현 예정
 export default function ChatRoomPage() {
@@ -19,6 +22,7 @@ export default function ChatRoomPage() {
   const chatRoomId = params.id;
 
   const [userId, setUserId] = useState("");
+  const [navPannelIsOpen, setNavPannel] = useState<boolean>(false);
 
   const [chatUserDetails, setChatUserDetails] =
     useState<UserDetailsInChat | null>(null);
@@ -49,9 +53,19 @@ export default function ChatRoomPage() {
     setChatRequriedInfo();
   }, []);
 
-  const showChatUserList = () => {};
+  const showChatUserList = () => {
+    setNavPannel((prev) => !prev);
+  };
   const showSearchModal = () => {};
 
+  const userName = (userId: string): string => {
+    if (!chatUserDetails) return "??";
+    const { userInfoMapById } = chatUserDetails;
+    if (userInfoMapById && userInfoMapById.has(userId)) {
+      return userInfoMapById.get(userId)?.name || "??";
+    }
+    return "??";
+  };
 
   return (
     <Wapper>
@@ -83,14 +97,14 @@ export default function ChatRoomPage() {
             </Container>
           </NavBar>
 
-          {/* <SidePanel
+          <SidePanel
             isOpen={navPannelIsOpen}
             onClose={() => setNavPannel(false)}
           >
             {chatUserDetails.userList.map((userId, key) => (
               <li key={key}>{userName(userId)}</li>
             ))}
-          </SidePanel> */}
+          </SidePanel>
 
           <Channel
             chatUserDetails={chatUserDetails}
@@ -107,4 +121,5 @@ export default function ChatRoomPage() {
 
 const Wapper = styled.div`
   height: 100%;
+  position: relative;
 `;
