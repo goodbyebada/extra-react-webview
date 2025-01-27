@@ -57,15 +57,6 @@ export default function ChatRoomPage() {
   };
   const showSearchModal = () => {};
 
-  const userName = (userId: string): string => {
-    if (!chatUserDetails) return "??";
-    const { userInfoMapById } = chatUserDetails;
-    if (userInfoMapById && userInfoMapById.has(userId)) {
-      return userInfoMapById.get(userId)?.name || "??";
-    }
-    return "??";
-  };
-
   return (
     <Wapper>
       {chatRoomInfo && chatUserDetails?.userList ? (
@@ -91,19 +82,22 @@ export default function ChatRoomPage() {
               paddingHorizontal={5}
               style={{ gap: "10px" }}
             >
-              <IoSearch onClick={showSearchModal} size={25} />
-              <GiHamburgerMenu onClick={showChatUserList} size={25} />
+              <button onClick={showSearchModal}>
+                <IoSearch size={25} />
+              </button>
+
+              <button onClick={showChatUserList}>
+                <GiHamburgerMenu size={25} />
+              </button>
             </Container>
           </NavBar>
 
           <SidePanel
             isOpen={navPannelIsOpen}
             onClose={() => setNavPannel(false)}
-          >
-            {chatUserDetails.userList.map((userId, key) => (
-              <li key={key}>{userName(userId)}</li>
-            ))}
-          </SidePanel>
+            chatUserDetails={chatUserDetails}
+            chatRoomInfo={chatRoomInfo}
+          />
 
           <Channel
             chatUserDetails={chatUserDetails}
@@ -121,4 +115,8 @@ export default function ChatRoomPage() {
 const Wapper = styled.div`
   height: 100%;
   position: relative;
+
+  button {
+    cursor: pointer;
+  }
 `;
