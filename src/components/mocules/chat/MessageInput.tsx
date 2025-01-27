@@ -25,8 +25,6 @@ const Input = styled.textarea`
   resize: none;
   height: fit-content;
 
-  min-height: 37px; /* Set a minimum height */
-
   &:focus {
     outline: none;
   }
@@ -72,7 +70,6 @@ const MessageInput = ({
   onSubmit,
   placeholder = "메세지를 입력하세요",
   disabled = false,
-  bottomRef,
 }: MessageInputProps) => {
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -92,6 +89,8 @@ const MessageInput = ({
         return;
       }
 
+      console.log(textAreaRef.current.style.height);
+
       textAreaRef.current.style.height = `${DEFAULT_TEXTAREA_HEIGHT.MIN}px`; //height 초기화
 
       if (
@@ -103,11 +102,6 @@ const MessageInput = ({
 
       textAreaRef.current.style.height =
         textAreaRef.current.scrollHeight + "px";
-
-
-      if (bottomRef && bottomRef.current) {
-        bottomRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-      }
     }
   };
 
