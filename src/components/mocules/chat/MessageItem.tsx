@@ -49,6 +49,7 @@ const MessageItemContainer = styled.div<{ isMyMessage: boolean }>`
 const MessageContent = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   margin-left: 12px;
 `;
 
@@ -78,6 +79,7 @@ const MessageItem = ({
           style={{
             display: "flex",
             flexDirection: my_message ? "row-reverse" : "row",
+            alignItems: "flex-end",
           }}
         >
           <MessageBubble>{message}</MessageBubble>

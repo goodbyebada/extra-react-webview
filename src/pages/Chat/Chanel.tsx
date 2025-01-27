@@ -88,7 +88,11 @@ export default function Channel({
       return new Date(created_at).toUTCString();
     } else if (typeof created_at === "object" && created_at.seconds) {
       const dateObj = new Date(created_at.seconds * 1000);
-      const timeString = `${dateObj.getHours().toString().padStart(2, "0")} : ${dateObj.getMinutes().toString().padStart(2, "0")}`;
+      const hour = dateObj.getHours();
+      const ampm = dateObj.getHours() < 12 ? "오전" : "오후";
+      const convertedHour = hour <= 12 ? hour : hour - 12;
+
+      const timeString = `${ampm} ${convertedHour.toString().padStart(2, "0")} : ${dateObj.getMinutes().toString().padStart(2, "0")}`;
       return timeString;
     } else {
       // 유효하지 않은 형식 처리
