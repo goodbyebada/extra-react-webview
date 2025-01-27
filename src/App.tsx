@@ -21,6 +21,7 @@ import MemberClothesConfirm from "@pages/MemberClothesConfirm";
 import CompanyClothesApproval from "@pages/CompanyClothesApproval";
 import CompanyClothesConfirm from "@pages/CompanyClothesConfirm";
 import MemberClothesComment from "@pages/MemberClothesComment";
+import KakaoMap from "@pages/KakaoMap";
 
 import ThemePreviewPage from "@pages/ThemePreview";
 
@@ -89,6 +90,7 @@ function App() {
             path="/company/clothes-confirm"
             element={<CompanyClothesConfirm />}
           />
+          <Route path="/member/kakaomap" element={<KakaoMap />} />
 
           <Route path="/*" element={<NotFound />} />
 
