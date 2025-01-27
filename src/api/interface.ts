@@ -38,7 +38,7 @@ export type Tattoo = {
 export interface JobPost {
   id: number;
   title: string;
-  gatheringLocation: string;
+  gatheringLocation: Place;
   gatheringTime: string;
   imageUrl?: string; // ? 서버에서 없을텐데 왜 이 속성이 있는지 모르겠다
   status: boolean;
@@ -56,6 +56,18 @@ export interface JobPost {
   currentPersonnelList: number[];
   seasonList: string[];
   tattooList: Tattoo[];
+}
+
+/**
+ * JobPost 주소 지도
+ */
+export interface Place {
+  id: string;
+  placeName: string;
+  roadAddress: string;
+  jibunAddress: string;
+  latitude: number;
+  longitude: number;
 }
 
 /**
