@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { MainButton } from "@components/atoms/Button";
 import { db } from "@utills/firebase";

@@ -13,7 +13,6 @@ import {
 } from "@utills/chat/get";
 import Channel from "@pages/Chat/Chanel";
 import styled from "styled-components";
-import Modal from "@components/atoms/Modal";
 import { SidePanel } from "@components/mocules/SidePanel";
 
 // TODO 회원이 채팅방에서 나가기, 가입 시 기능 구현 예정

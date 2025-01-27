@@ -65,7 +65,8 @@ export function useFirestoreQuery(
         };
       });
 
-      setDocs(data);
+      // NOTE 추가되면 새로 불러오는건가? TEST 필요
+      setDocs(data.reverse());
 
       // TODO 추후 삭제, 수정 , 구현 예정
       // snapshot.docChanges().forEach((change) => {
@@ -96,10 +97,12 @@ export function useFirestoreQuery(
     );
 
     const unsubscribe = onSnapshot(nextQuery, (snapshot) => {
-      const newData = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+      const newData = snapshot.docs
+        .map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }))
+        .reverse();
 
       setDocs((prevDocs) => [...newData, ...prevDocs]);
       setLastVisible(snapshot.docs[snapshot.docs.length - 1]);

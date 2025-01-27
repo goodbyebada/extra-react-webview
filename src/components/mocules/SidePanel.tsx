@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import styled from "styled-components";
-import { COLORS, COMMON_COLORS, FONT_COLORS } from "@/styled/colors";
+import { COLORS, FONT_COLORS } from "@/styled/colors";
 
 // 사이드 패널 컴포넌트
 export const SidePanel = ({

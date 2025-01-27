@@ -9,6 +9,7 @@ import MessageItem from "@components/mocules/chat/MessageItem";
 import MessageInput from "@components/mocules/chat/MessageInput";
 import styled from "styled-components";
 import InfiniteScroll from "@utills/InfiniteScroll";
+import DateDisplay from "@components/mocules/chat/DateDisplay";
 
 export default function Channel({
   chatUserDetails,
@@ -34,7 +35,11 @@ export default function Channel({
 
   // 채팅 메세지 생성시 useState로 새로운 메세지 저장
   const [newMessage, setNewMessage] = useState("");
-  // const [newDate, setNewDate] = useState({year: 0000, month : 00 , date: 00});
+  // const [dateInfo, setDateInfo] = useState({
+  //   year: 0,
+  //   month: 0,
+  //   dateNum: 0,
+  // });
 
   //  하단 스크롤을 위한 useRef
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -82,7 +87,9 @@ export default function Channel({
       // 문자열 형식의 날짜를 Date 객체로 변환하고 시간만 반환
       return new Date(created_at).toUTCString();
     } else if (typeof created_at === "object" && created_at.seconds) {
-      return new Date(created_at.seconds * 1000).toString();
+      const dateObj = new Date(created_at.seconds * 1000);
+      const timeString = `${dateObj.getHours().toString().padStart(2, "0")} : ${dateObj.getMinutes().toString().padStart(2, "0")}`;
+      return timeString;
     } else {
       // 유효하지 않은 형식 처리
       return "Invalid Date";
@@ -101,6 +108,46 @@ export default function Channel({
     return "";
   };
 
+  const isSameDate = (date1: Date, date2: Date) => {
+    return (
+      date1.getFullYear() === date2.getFullYear() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getDate() === date2.getDate()
+    );
+  };
+
+  // 다음과 비교
+  const showDateInfo = (
+    created_at: {
+      seconds: number;
+      nanoseconds: number;
+    },
+    index: number,
+  ) => {
+    let displayDate = false;
+    const date = new Date(created_at.seconds * 1000);
+
+    // 첫 idx라면 그린다.
+    if (index === 0) {
+      displayDate = true;
+      return <DateDisplay date={date} />;
+    }
+
+    // prev index와 비교해 날짜가 달라진다면 표시한다.
+    if (index > 0 && index !== messageDocs.length - 1) {
+      const prevMessageCreatedAt = messageDocs[index - 1].created_at;
+      const prevMessageDate = new Date(prevMessageCreatedAt.seconds * 1000);
+
+      if (!isSameDate(date, prevMessageDate)) {
+        displayDate = true;
+      }
+    }
+
+    if (displayDate) {
+      return <DateDisplay date={date} />;
+    }
+  };
+
   return (
     <ChatWrapper>
       <MessageWrapper>
@@ -114,22 +161,11 @@ export default function Channel({
           requestAtDown={false}
         >
           {chatUserDetails.userList.length !== 0 &&
-            messageDocs
-              ?.sort((first, second) => {
-                if (
-                  first?.created_at?.seconds === second?.created_at?.seconds
-                ) {
-                  return (
-                    first?.created_at?.nanoseconds -
-                    second?.created_at?.nanoseconds
-                  );
-                }
-
-                return first?.created_at?.seconds - second?.created_at?.seconds;
-              })
-              ?.map((message, key) => (
+            messageDocs?.map((message, index) => (
+              <>
+                {showDateInfo(message.created_at, index)}
                 <MessageItem
-                  key={key}
+                  key={index}
                   user_image={""}
                   user_name={getUserName(
                     chatUserDetails.userInfoMapById,
@@ -139,7 +175,8 @@ export default function Channel({
                   created_at={formatCreatedAt(message.created_at)}
                   my_message={message.user_id === myUserId}
                 />
-              ))}
+              </>
+            ))}
           <div ref={bottomRef} />
         </InfiniteScroll>
       </MessageWrapper>
