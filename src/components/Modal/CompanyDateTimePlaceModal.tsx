@@ -3,9 +3,13 @@ import React, { useState, useEffect } from "react";
 import Modal from "@components/atoms/Modal";
 import { MainButton } from "@components/atoms/Button";
 import Text from "@components/atoms/Text";
+import { IoIosSearch } from "react-icons/io";
+import PlaceItem from "@components/mocules/PlaceItem";
+import useKakaoPlaceSearch from "../../customHook/useKakaoPlaceSearch";
+import { Place } from "@api/interface";
 
 interface CompanyDateTimePlaceModalProps {
-  onSubmit: (date: string, time: string, place: string) => void;
+  onSubmit: (date: string, time: string, place: Place) => void;
   closeModal: () => void;
   isVisible: boolean;
 }
@@ -34,42 +38,39 @@ function CompanyDateTimePlaceModal({
     place: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
+  const [showPlaceList, setShowPlaceList] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+
+  const { filteredPosts, searchKakaoPlaces, error } = useKakaoPlaceSearch();
 
   useEffect(() => {
     setIsFormValid(
-      formState.date !== "" && formState.time !== "" && formState.place !== "",
+      formState.date !== "" && formState.time !== "" && !!selectedPlace,
     );
-  }, [formState]);
+  }, [formState, selectedPlace]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    switch (name) {
-      case "date":
-        setFormState((prevState) => ({
-          ...prevState,
-          date: value,
-        }));
-        break;
-      case "time":
-        setFormState((prevState) => ({
-          ...prevState,
-          time: value,
-        }));
-        break;
-      case "place":
-        setFormState((prevState) => ({
-          ...prevState,
-          place: value,
-        }));
-        break;
-    }
+    setFormState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handlePlaceSelect = (place: Place) => {
+    setSelectedPlace(place);
   };
 
   const handleSubmit = () => {
-    if (isFormValid) {
-      onSubmit(formState.date, formState.time, formState.place);
+    if (isFormValid && selectedPlace) {
+      onSubmit(formState.date, formState.time, selectedPlace);
       closeModal();
     }
+  };
+
+  const handleSearchClick = () => {
+    searchKakaoPlaces(formState.place);
+    setShowPlaceList(true);
   };
 
   return (
@@ -102,7 +103,30 @@ function CompanyDateTimePlaceModal({
             장소 :
           </Text>
           <Input name="place" value={formState.place} onChange={handleChange} />
+          <IoIosSearch size={24} onClick={handleSearchClick} />
         </Row>
+
+        {showPlaceList && (
+          <PlaceList>
+            {filteredPosts.length > 0 ? (
+              filteredPosts.map((place) => (
+                <PlaceItem
+                  key={place.id}
+                  placeName={place.placeName}
+                  roadAddress={place.roadAddress}
+                  jibunAddress={place.jibunAddress}
+                  isSelected={selectedPlace?.id === place.id}
+                  onSelect={() => handlePlaceSelect(place)}
+                />
+              ))
+            ) : (
+              <Text size={16} color="#fff">
+                {error || "검색 결과가 없습니다."}
+              </Text>
+            )}
+          </PlaceList>
+        )}
+
         <MainButton isActive={isFormValid} onClick={handleSubmit}>
           확인
         </MainButton>
@@ -137,4 +161,13 @@ const Input = styled.input`
   outline: none;
   padding: 5px;
   margin: 0 10px;
+`;
+
+const PlaceList = styled.div`
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;

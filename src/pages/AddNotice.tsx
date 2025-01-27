@@ -5,7 +5,7 @@ import { MainButton } from "@components/atoms/Button";
 import PostFormCard from "@components/mocules/company/PostFormCard";
 import CompanyTitleCategoryModal from "@components/Modal/CompanyTitleCategoryModal";
 import CompanyDateTimePlaceModal from "@components/Modal/CompanyDateTimePlaceModal";
-import { type CategoryEnum } from "@api/interface";
+import { type CategoryEnum, type Place } from "@api/interface";
 import { useNavigate } from "react-router-dom";
 import { IoCaretBackOutline } from "react-icons/io5";
 import NoticeRole from "@components/mocules/company/NoticeRole";
@@ -30,7 +30,7 @@ function AddNotice() {
 
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [place, setPlace] = useState("");
+  const [place, setPlace] = useState<Place | null>(null);
   const [roleList, setRoleList] = useState<
     { roleName: string; details: RoleBodyType[] }[]
   >([]);
@@ -54,7 +54,7 @@ function AddNotice() {
   const submitDateTimePlaceModal = (
     date: string,
     time: string,
-    place: string,
+    place: Place,
   ) => {
     setDate(date);
     setTime(time);
@@ -86,12 +86,25 @@ function AddNotice() {
   };
 
   const handleSubmit = () => {
+    if (!place || !title || !roleList) {
+      alert("모든 값을 입력해주세요.");
+      return;
+    }
+
     console.log({
       title,
       category,
       date,
       time,
-      place,
+      place: place
+        ? {
+            title: place.placeName,
+            roadAddress: place.roadAddress,
+            jibunAddress: place.jibunAddress,
+            latitude: place.latitude,
+            longitude: place.longitude,
+          }
+        : null,
       roleList,
     });
   };
@@ -124,7 +137,7 @@ function AddNotice() {
         )}
 
         {/* 날짜, 시간, 장소 */}
-        {date.length > 0 && time.length > 0 && place.length > 0 ? (
+        {date.length > 0 && time.length > 0 && place ? (
           <div>
             <Line />
             <Row>
@@ -136,7 +149,7 @@ function AddNotice() {
               </Text>
             </Row>
             <Text size={16} weight={700} align="left">
-              {place}
+              {place.placeName}
             </Text>
             <Line />
           </div>
