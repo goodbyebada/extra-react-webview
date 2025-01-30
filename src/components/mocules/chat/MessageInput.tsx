@@ -1,23 +1,24 @@
 import React, { ChangeEvent, useRef } from "react";
 import styled from "styled-components";
 import { IoSend } from "react-icons/io5";
+import { COLORS } from "@styled/colors";
 
 const Container = styled.div`
   /* flex: 1; */
   /* height: fit-content; */
   display: flex;
   align-items: center;
-  background-color: #2c2c2c;
+  background-color: ${COLORS.midNightGray};
   border-radius: 25px;
   padding: 5px 10px;
   gap: 10px;
 `;
 
-const Input = styled.textarea`
+const StyledTextArea = styled.textarea`
   flex: 1;
   border: none;
-  background-color: #2c2c2c;
-  color: #aaa;
+  background-color: ${COLORS.midNightGray};
+  color: ${COLORS.white};
   padding: 10px 15px;
   border-radius: 20px;
   font-size: 14px;
@@ -30,7 +31,7 @@ const Input = styled.textarea`
   }
 
   &::placeholder {
-    color: #666;
+    color: ${COLORS.lightGray};
   }
 `;
 
@@ -89,8 +90,6 @@ const MessageInput = ({
         return;
       }
 
-      console.log(textAreaRef.current.style.height);
-
       textAreaRef.current.style.height = `${DEFAULT_TEXTAREA_HEIGHT.MIN}px`; //height 초기화
 
       if (
@@ -117,7 +116,7 @@ const MessageInput = ({
 
   return (
     <Container>
-      <Input
+      <StyledTextArea
         ref={textAreaRef}
         rows={1}
         value={value}

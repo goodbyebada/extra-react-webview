@@ -4,7 +4,7 @@
 
 import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 import Text, { ThemeText } from "@components/atoms/Text";
-import { COLORS } from "@/styled/colors";
+import { COLORS } from "@styled/colors";
 import { ContentWrapper, LineWrapper } from "@components/atoms/Wrapper";
 import { styled } from "styled-components";
 

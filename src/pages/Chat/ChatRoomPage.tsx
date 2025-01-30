@@ -22,6 +22,7 @@ export default function ChatRoomPage() {
 
   const [userId, setUserId] = useState("");
   const [navPannelIsOpen, setNavPannel] = useState<boolean>(false);
+  const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
   const [chatUserDetails, setChatUserDetails] =
     useState<UserDetailsInChat | null>(null);
@@ -55,8 +56,9 @@ export default function ChatRoomPage() {
   const showChatUserList = () => {
     setNavPannel((prev) => !prev);
   };
-  const showSearchModal = () => {};
-
+  const showSearchModal = () => {
+    setShowSearchBar(true);
+  };
   return (
     <Wapper>
       {chatRoomInfo && chatUserDetails?.userList ? (
@@ -82,6 +84,14 @@ export default function ChatRoomPage() {
               paddingHorizontal={5}
               style={{ gap: "10px" }}
             >
+              {showSearchBar ? (
+                <>
+                  <Overlay onClick={() => setShowSearchBar(false)} />
+                  검색 창
+                </>
+              ) : (
+                ""
+              )}
               <button onClick={showSearchModal}>
                 <IoSearch size={25} />
               </button>
@@ -119,4 +129,13 @@ const Wapper = styled.div`
   button {
     cursor: pointer;
   }
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
 `;

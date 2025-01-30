@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { WithChildrenProps } from "@components/atoms/Wrapper";
-import { COLORS } from "@/styled/colors";
+import { COLORS } from "@styled/colors";
 
 interface LayOutProps extends WithChildrenProps {
   backGroundColor?: string | undefined;

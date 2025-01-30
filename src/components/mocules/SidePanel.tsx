@@ -3,6 +3,12 @@ import { COLORS, FONT_COLORS } from "@/styled/colors";
 import { ChatRoomField, UserDetailsInChat } from "@/types/firebase_db";
 import { TfiAnnouncement } from "react-icons/tfi";
 import { IoDocumentTextOutline } from "react-icons/io5";
+import { useForm } from "react-hook-form";
+import { InputField } from "@components/atoms/Form";
+import { useEffect, useState } from "react";
+import search from "@utills/search";
+import useDebounce from "@utills/useDebounce";
+import Text from "@components/atoms/Text";
 
 // 사이드 패널 컴포넌트
 export const SidePanel = ({
@@ -30,41 +36,77 @@ export const SidePanel = ({
   };
 
   const showDocument = () => {
-    console.log("계약서 보열주기 ");
+    console.log("계약서 보여주기 ");
   };
+
+  const { control } = useForm();
+  const [inputChange, handleInputChange] = useState<string>("");
+  const [userList, setUserList] = useState<string[]>([""]);
+  const debouncedValue = useDebounce<string>(inputChange, 600);
+
+  useEffect(() => {
+    setUserList(chatUserDetails.userList);
+  }, []);
+
+  useEffect(() => {
+    if (debouncedValue === "") {
+      setUserList(chatUserDetails.userList);
+      return;
+    }
+
+    const newUserList = userList.filter((userId) => {
+      return search(debouncedValue, userName(userId)) === 0;
+    });
+
+    console.log("newUserList", newUserList);
+
+    setUserList(newUserList);
+  }, [debouncedValue]);
 
   return (
     <Container isOpen={isOpen}>
       <Overlay onClick={onClose} />
       <Panel>
-        <ContentWrapper>
-          <h1>{chatRoomInfo.name}</h1>
-          <p>{chatUserDetails.userList.length}명 참여 중</p>
-          <p>개설일 : {chatRoomInfo.created_at.split("-").join(".")}</p>
-        </ContentWrapper>
+        <Text color={COLORS.white} size={25} weight={800}>
+          {chatRoomInfo.name}
+        </Text>
+        <Text color={COLORS.lightGray} size={15}>
+          {chatUserDetails.userList.length}명 참여 중
+        </Text>
+        <Text color={COLORS.lightGray} size={15}>
+          개설일 : {chatRoomInfo.created_at.split("-").join(".")}
+        </Text>
         <Line />
 
         <InfoWrapper>
           <IconButton onClick={showAnnouncement}>
             <TfiAnnouncement />
-            <p>공지사항</p>
+            <Text>공지사항</Text>
           </IconButton>
 
           <IconButton onClick={showDocument}>
             <IoDocumentTextOutline />
-            <p>계약서</p>
+            <Text>계약서</Text>
           </IconButton>
         </InfoWrapper>
 
         <Line />
 
         <InfoWrapper>
-          <div>대화 상대 </div>
-          <div>검색창</div>
+          <Text>대화 상대</Text>
+          <InputField
+            name="member"
+            placeholder="회원 찾기"
+            control={control}
+            inputProps={{
+              onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+                handleInputChange(e.target.value),
+            }}
+          />
         </InfoWrapper>
 
         <UserListWrapper>
-          {chatUserDetails.userList.map((userId, key) => (
+          {userList.map((userId, key) => (
             <User key={key}>
               {userName(userId)}
               <span>{"출석여부"}</span>
@@ -106,7 +148,7 @@ const Panel = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-  width: 40%;
+  width: 80%;
   height: 100%;
 
   display: flex;
@@ -118,23 +160,13 @@ const Panel = styled.div`
 `;
 
 const Line = styled.div`
+  margin-top: 10px;
   width: 100%;
   border-width: 0.2px;
   border-style: solid;
   border-color: ${COLORS.lightGray};
 `;
 
-const ContentWrapper = styled.div`
-  h1 {
-    font-size: larger;
-  }
-
-  p {
-    color: ${COLORS.lightGray};
-    font-size: small;
-    padding-bottom: 10px;
-  }
-`;
 const InfoWrapper = styled.div`
   width: 100%;
   height: 10%;
