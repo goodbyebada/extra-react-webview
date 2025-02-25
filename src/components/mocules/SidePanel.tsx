@@ -5,10 +5,11 @@ import { TfiAnnouncement } from "react-icons/tfi";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { InputField } from "@components/atoms/Form";
-import { useEffect, useState } from "react";
-import search from "@utills/search";
+import { useEffect, useMemo, useState } from "react";
 import useDebounce from "@utills/useDebounce";
 import Text from "@components/atoms/Text";
+import { ChatUser, ChatUsersManager } from "@utills/chat/ChatUsers";
+import { SearchChatUsersService } from "@utills/chat/SearchUsersController";
 
 // 사이드 패널 컴포넌트
 export const SidePanel = ({
@@ -22,15 +23,6 @@ export const SidePanel = ({
   chatUserDetails: UserDetailsInChat;
   chatRoomInfo: ChatRoomField;
 }) => {
-  const userName = (userId: string): string => {
-    if (!chatUserDetails) return "??";
-    const { userInfoMapById } = chatUserDetails;
-    if (userInfoMapById && userInfoMapById.has(userId)) {
-      return userInfoMapById.get(userId)?.name || "??";
-    }
-    return "??";
-  };
-
   const showAnnouncement = () => {
     console.log("공지 사항 페이지 보여주기");
   };
@@ -41,26 +33,27 @@ export const SidePanel = ({
 
   const { control } = useForm();
   const [inputChange, handleInputChange] = useState<string>("");
-  const [userList, setUserList] = useState<string[]>([""]);
+
+  const [searchedChatUserList, setSearchedChatUserList] = useState<
+    ChatUser[] | []
+  >([]);
+
   const debouncedValue = useDebounce<string>(inputChange, 600);
 
-  useEffect(() => {
-    setUserList(chatUserDetails.userList);
-  }, []);
+  const chatUsersManager = useMemo(
+    () => new ChatUsersManager(chatUserDetails),
+    [chatUserDetails],
+  );
+
+  const searchChatUsersService = useMemo(
+    () => new SearchChatUsersService(chatUsersManager.chatUsers),
+    [chatUsersManager.chatUsers],
+  );
 
   useEffect(() => {
-    if (debouncedValue === "") {
-      setUserList(chatUserDetails.userList);
-      return;
-    }
-
-    const newUserList = userList.filter((userId) => {
-      return search(debouncedValue, userName(userId)) === 0;
-    });
-
-    console.log("newUserList", newUserList);
-
-    setUserList(newUserList);
+    setSearchedChatUserList(() =>
+      searchChatUsersService.search(debouncedValue),
+    );
   }, [debouncedValue]);
 
   return (
@@ -71,7 +64,7 @@ export const SidePanel = ({
           {chatRoomInfo.name}
         </Text>
         <Text color={COLORS.lightGray} size={15}>
-          {chatUserDetails.userList.length}명 참여 중
+          {chatUsersManager.getChatUserCount()}명 참여 중
         </Text>
         <Text color={COLORS.lightGray} size={15}>
           개설일 : {chatRoomInfo.created_at.split("-").join(".")}
@@ -105,12 +98,13 @@ export const SidePanel = ({
           />
         </InfoWrapper>
 
+        {/* CHECK  회원 USER LIST 갱신해야함  */}
         <UserListWrapper>
-          {userList.map((userId, key) => (
-            <User key={key}>
-              {userName(userId)}
+          {searchedChatUserList.map((chatUser, key) => (
+            <SearchResult key={key}>
+              {chatUser.getUserName()}
               <span>{"출석여부"}</span>
-            </User>
+            </SearchResult>
           ))}
         </UserListWrapper>
       </Panel>
@@ -193,6 +187,6 @@ const UserListWrapper = styled.div`
   width: 100%;
 `;
 
-const User = styled.span`
+const SearchResult = styled.span`
   padding: 5px;
 `;

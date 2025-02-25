@@ -17,24 +17,26 @@ import { documentId } from "firebase/firestore";
  */
 export async function getChatRoomUserDetailsByChatRoomId(
   chatRoom_id: string,
-): Promise<UserDetailsInChat> {
+): Promise<UserDetailsInChat | null> {
   let userList = await getDramaChatRoomUsersList(chatRoom_id);
   let userInfoMapById;
 
   if (!userList) {
     userList = [];
+
+    return null;
   }
 
   if (userList && userList.length !== 0) {
     userInfoMapById = await getUserMapByUserIds(userList);
-  } else {
-    userInfoMapById = null;
+
+    return {
+      userInfoMapById,
+      userIdList: userList,
+    };
   }
 
-  return {
-    userInfoMapById,
-    userList,
-  };
+  return null;
 }
 
 // Admin(관리자 계정)
