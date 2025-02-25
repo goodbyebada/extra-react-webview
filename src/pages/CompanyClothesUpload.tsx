@@ -6,6 +6,7 @@ import { MainButton } from "@components/atoms/Button";
 import { FaPlus } from "react-icons/fa";
 import ImageComponent from "@components/atoms/Image";
 import { handleImageUpload } from "@utills/imageUpload";
+import BackHeader from "@components/custom/BackHeader";
 
 /**
  * CompanyClothesUpload : 업체 - 공고 의상 등록
@@ -36,66 +37,69 @@ const CompanyClothesUpload = () => {
   };
 
   return (
-    <Container>
-      <InfoWrapper>
-        <Text size={16} align="left">
-          역할
-        </Text>
-        <Input value={roleName} readOnly />
-      </InfoWrapper>
-      <InfoWrapper>
-        <Text size={16} align="left">
-          계절
-        </Text>
-        <Input
-          value={season}
-          onChange={(e) => setSeason(e.target.value)}
-          placeholder="계절을 입력하세요"
-        />
-      </InfoWrapper>
-      <InfoWrapper>
-        <Text size={16} align="left">
-          상세설명
-        </Text>
-        <Input
-          value={etc}
-          onChange={(e) => setEtc(e.target.value)}
-          placeholder="상세설명을 입력하세요"
-        />
-      </InfoWrapper>
-
-      <Text size={18} weight={700} align="left">
-        의상 등록
-      </Text>
-
-      <ImageGrid>
-        {images.map((src, index) => (
-          <ImageComponent
-            key={index}
-            src={src}
-            alt={`uploaded-image-${index}`}
+    <>
+      <BackHeader onBack={() => navigate(-1)} title="의상" />
+      <Container>
+        <InfoWrapper>
+          <Text size={16} align="left">
+            역할
+          </Text>
+          <Input value={roleName} readOnly />
+        </InfoWrapper>
+        <InfoWrapper>
+          <Text size={16} align="left">
+            계절
+          </Text>
+          <Input
+            value={season}
+            onChange={(e) => setSeason(e.target.value)}
+            placeholder="계절을 입력하세요"
           />
-        ))}
-      </ImageGrid>
+        </InfoWrapper>
+        <InfoWrapper>
+          <Text size={16} align="left">
+            상세설명
+          </Text>
+          <Input
+            value={etc}
+            onChange={(e) => setEtc(e.target.value)}
+            placeholder="상세설명을 입력하세요"
+          />
+        </InfoWrapper>
 
-      <AddImageButtonWrapper>
-        <label htmlFor="image-upload">
-          <AddImageButton>
-            <FaPlus style={{ marginRight: "10px" }} />
-            의상 추가
-          </AddImageButton>
-        </label>
-        <HiddenInput
-          id="image-upload"
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={onImageUpload}
-        />
-      </AddImageButtonWrapper>
+        <Text size={18} weight={700} align="left">
+          의상 등록
+        </Text>
 
-      <MainButton onClick={handleSubmit}>등록</MainButton>
-    </Container>
+        <ImageGrid>
+          {images.map((src, index) => (
+            <ImageComponent
+              key={index}
+              src={src}
+              alt={`uploaded-image-${index}`}
+            />
+          ))}
+        </ImageGrid>
+
+        <AddImageButtonWrapper>
+          <label htmlFor="image-upload">
+            <AddImageButton>
+              <FaPlus style={{ marginRight: "10px" }} />
+              의상 추가
+            </AddImageButton>
+          </label>
+          <HiddenInput
+            id="image-upload"
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={onImageUpload}
+          />
+        </AddImageButtonWrapper>
+
+        <MainButton onClick={handleSubmit}>등록</MainButton>
+      </Container>
+    </>
   );
 };
 

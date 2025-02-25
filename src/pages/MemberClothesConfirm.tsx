@@ -6,6 +6,7 @@ import { MainButton } from "@components/atoms/Button";
 import { FaPlus } from "react-icons/fa";
 import ImageComponent from "@components/atoms/Image";
 import { handleImageUpload } from "@utills/imageUpload";
+import BackHeader from "@components/custom/BackHeader";
 
 const dummyClothesInfo = {
   images: [
@@ -37,74 +38,81 @@ const MemberClothesConfirm = () => {
   };
 
   return (
-    <Container>
-      <Text size={18} weight={700} align="left">
-        의상 이미지
-      </Text>
+    <>
+      <BackHeader onBack={() => navigate(-1)} title="의상" />
+      <Container>
+        <Text size={18} weight={700} align="left">
+          의상 이미지
+        </Text>
 
-      <ImageGrid>
-        {dummyClothesInfo.images.map((src, index) => (
-          <ImageComponent key={index} src={src} alt={`placeholder-${index}`} />
-        ))}
-      </ImageGrid>
+        <ImageGrid>
+          {dummyClothesInfo.images.map((src, index) => (
+            <ImageComponent
+              key={index}
+              src={src}
+              alt={`placeholder-${index}`}
+            />
+          ))}
+        </ImageGrid>
 
-      <InfoWrapper>
-        <Text size={16} weight={700} align="left">
-          역할
-        </Text>
-        <Text size={16} color="#f5c001" align="left">
-          {dummyClothesInfo.role}
-        </Text>
-      </InfoWrapper>
-      <InfoWrapper>
-        <Text size={16} weight={700} align="left">
-          계절
-        </Text>
-        <Text size={16} color="#f5c001" align="left">
-          {dummyClothesInfo.season}
-        </Text>
-      </InfoWrapper>
-      <InfoWrapper>
-        <Text size={16} weight={700} align="left">
-          상세설명
-        </Text>
-        <Text size={16} color="#f5c001" align="left">
-          {dummyClothesInfo.description}
-        </Text>
-      </InfoWrapper>
+        <InfoWrapper>
+          <Text size={16} weight={700} align="left">
+            역할
+          </Text>
+          <Text size={16} color="#f5c001" align="left">
+            {dummyClothesInfo.role}
+          </Text>
+        </InfoWrapper>
+        <InfoWrapper>
+          <Text size={16} weight={700} align="left">
+            계절
+          </Text>
+          <Text size={16} color="#f5c001" align="left">
+            {dummyClothesInfo.season}
+          </Text>
+        </InfoWrapper>
+        <InfoWrapper>
+          <Text size={16} weight={700} align="left">
+            상세설명
+          </Text>
+          <Text size={16} color="#f5c001" align="left">
+            {dummyClothesInfo.description}
+          </Text>
+        </InfoWrapper>
 
-      <Text size={18} weight={700} align="left">
-        내 의상 등록
-      </Text>
+        <Text size={18} weight={700} align="left">
+          내 의상 등록
+        </Text>
 
-      <ImageGrid>
-        {myImages.map((src, index) => (
-          <ImageComponent
-            key={index}
-            src={src}
-            alt={`my-uploaded-image-${index}`}
+        <ImageGrid>
+          {myImages.map((src, index) => (
+            <ImageComponent
+              key={index}
+              src={src}
+              alt={`my-uploaded-image-${index}`}
+            />
+          ))}
+        </ImageGrid>
+
+        <AddImageButtonWrapper>
+          <label htmlFor="image-upload">
+            <AddImageButton>
+              <FaPlus style={{ marginRight: "10px" }} />
+              의상 추가
+            </AddImageButton>
+          </label>
+          <HiddenInput
+            id="image-upload"
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={onImageUpload}
           />
-        ))}
-      </ImageGrid>
+        </AddImageButtonWrapper>
 
-      <AddImageButtonWrapper>
-        <label htmlFor="image-upload">
-          <AddImageButton>
-            <FaPlus style={{ marginRight: "10px" }} />
-            의상 추가
-          </AddImageButton>
-        </label>
-        <HiddenInput
-          id="image-upload"
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={onImageUpload}
-        />
-      </AddImageButtonWrapper>
-
-      <MainButton onClick={handleRegister}>등록</MainButton>
-    </Container>
+        <MainButton onClick={handleRegister}>등록</MainButton>
+      </Container>
+    </>
   );
 };
 

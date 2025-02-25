@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Text from "@components/atoms/Text";
 import { MainButton } from "@components/atoms/Button";
 import ImageComponent from "@components/atoms/Image";
+import BackHeader from "@components/custom/BackHeader";
 
 /**
  * CompanyClothesConfirm : 업체 - 사용자 의상컨펌 (최종)
@@ -22,33 +23,36 @@ const CompanyClothesConfirm = () => {
   };
 
   return (
-    <Container>
-      <Text size={18} weight={700} align="left">
-        의상 세부사항
-      </Text>
-      <Space />
-      <ImageGrid>
-        {images.map((src: string, index: number) => (
-          <ImageComponent key={index} src={src} alt={`image-${index}`} />
-        ))}
-      </ImageGrid>
+    <>
+      <BackHeader onBack={() => navigate(-1)} title="의상" />
+      <Container>
+        <Text size={18} weight={700} align="left">
+          의상 세부사항
+        </Text>
+        <Space />
+        <ImageGrid>
+          {images.map((src: string, index: number) => (
+            <ImageComponent key={index} src={src} alt={`image-${index}`} />
+          ))}
+        </ImageGrid>
 
-      <InfoWrapper>
-        <Text size={16} weight={700} align="left">
-          관리자 전체 코멘트
-        </Text>
-        <Text size={16} color="#f5c001" align="left">
-          {hasValidComments ? (
-            comments.map((comment: string, index: number) => (
-              <div key={index}>{comment}</div>
-            ))
-          ) : (
-            <div>No Comment</div>
-          )}
-        </Text>
-      </InfoWrapper>
-      <MainButton onClick={handleNext}>현장 컨펌 등록</MainButton>
-    </Container>
+        <InfoWrapper>
+          <Text size={16} weight={700} align="left">
+            관리자 전체 코멘트
+          </Text>
+          <Text size={16} color="#f5c001" align="left">
+            {hasValidComments ? (
+              comments.map((comment: string, index: number) => (
+                <div key={index}>{comment}</div>
+              ))
+            ) : (
+              <div>No Comment</div>
+            )}
+          </Text>
+        </InfoWrapper>
+        <MainButton onClick={handleNext}>현장 컨펌 등록</MainButton>
+      </Container>
+    </>
   );
 };
 

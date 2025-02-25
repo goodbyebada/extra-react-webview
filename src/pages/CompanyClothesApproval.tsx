@@ -4,6 +4,7 @@ import styled from "styled-components";
 import ImageComponent from "@components/atoms/Image";
 import Text from "@components/atoms/Text";
 import { MainButton } from "@components/atoms/Button";
+import BackHeader from "@components/custom/BackHeader";
 import { GoPaperAirplane } from "react-icons/go";
 import { IoIosLink } from "react-icons/io";
 
@@ -59,50 +60,55 @@ const CompanyClothesApproval = () => {
   const currentClothing = clothes[currentItemIndex];
 
   return (
-    <Container>
-      <Text size={18} weight={700}>
-        의상 세부사항
-      </Text>
-      <Space />
-      <ImageComponent
-        src={currentClothing?.src}
-        alt={currentClothing?.description || "의상"}
-        height="20rem"
-      />
-      <Details>
-        {!isCommentMode ? (
-          <ButtonContainer>
-            <MainButton onClick={handleApprove}>승인</MainButton>
-            <MainButton isActive={false} onClick={handleComment}>
-              코멘트
-            </MainButton>
-          </ButtonContainer>
-        ) : (
-          <CommentWrapper>
-            <ManagerComment>
-              <Text size={16} weight={700}>
-                관리자
-              </Text>
-              <Text size={16}>{comments[currentItemIndex] || "comment"}</Text>
-            </ManagerComment>
-            <InputContainer>
-              <Input
-                type="text"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-              />
-              <GoPaperAirplane
-                size={25}
-                color="#fff"
-                onClick={handleCommentSubmit}
-              />
-              <IoIosLink size={25} color="#fff" />
-            </InputContainer>
-            <MainButton onClick={handleApprove}>다음 의상 컨펌하기</MainButton>
-          </CommentWrapper>
-        )}
-      </Details>
-    </Container>
+    <>
+      <BackHeader onBack={() => navigate(-1)} title="의상" />
+      <Container>
+        <Text size={18} weight={700}>
+          의상 세부사항
+        </Text>
+        <Space />
+        <ImageComponent
+          src={currentClothing?.src}
+          alt={currentClothing?.description || "의상"}
+          height="20rem"
+        />
+        <Details>
+          {!isCommentMode ? (
+            <ButtonContainer>
+              <MainButton onClick={handleApprove}>승인</MainButton>
+              <MainButton isActive={false} onClick={handleComment}>
+                코멘트
+              </MainButton>
+            </ButtonContainer>
+          ) : (
+            <CommentWrapper>
+              <ManagerComment>
+                <Text size={16} weight={700}>
+                  관리자
+                </Text>
+                <Text size={16}>{comments[currentItemIndex] || "comment"}</Text>
+              </ManagerComment>
+              <InputContainer>
+                <Input
+                  type="text"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                />
+                <GoPaperAirplane
+                  size={25}
+                  color="#fff"
+                  onClick={handleCommentSubmit}
+                />
+                <IoIosLink size={25} color="#fff" />
+              </InputContainer>
+              <MainButton onClick={handleApprove}>
+                다음 의상 컨펌하기
+              </MainButton>
+            </CommentWrapper>
+          )}
+        </Details>
+      </Container>
+    </>
   );
 };
 
