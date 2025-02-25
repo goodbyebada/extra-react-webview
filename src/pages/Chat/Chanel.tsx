@@ -164,7 +164,7 @@ export default function Channel({
           errorMessage={<h2>에러가 발생했습니다.</h2>}
           requestAtDown={false}
         >
-          {chatUserDetails.userList.length !== 0 &&
+          {chatUserDetails.userIdList.length !== 0 &&
             messageDocs?.map((message, index) => (
               <>
                 {showDateInfo(message.created_at, index)}

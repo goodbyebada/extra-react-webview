@@ -33,13 +33,14 @@ export default function ChatList() {
   const DUMMY_ADMIN_INFO = {
     user_id: "TUeqfdxmCeqF7gRE6qQp",
   };
+
   const [memberInfo, setMemberInfo] = useState(DUMMY_USER_INFO);
   const [adminInfo, setAdminInfo] = useState(DUMMY_ADMIN_INFO);
   const [openChat, setOpenChat] = useState<boolean>(false);
   const [selectedChatsRoomId, setSelectedChatsRoomId] = useState("");
   const [chatUserDetails, setChatUserDetails] = useState<UserDetailsInChat>({
-    userInfoMapById: null,
-    userList: [],
+    userInfoMapById: new Map(),
+    userIdList: [],
   });
 
   // 관리자용
@@ -122,9 +123,17 @@ export default function ChatList() {
     setSelectedChatsRoomId(chatRoom_id);
     setOpenChat(true);
 
-    const { userInfoMapById, userList } =
-      await getChatRoomUserDetailsByChatRoomId(chatRoom_id);
-    setChatUserDetails((prev) => ({ ...prev, userInfoMapById, userList }));
+    const userDetails = await getChatRoomUserDetailsByChatRoomId(chatRoom_id);
+    if (!userDetails) {
+      return;
+    }
+
+    const { userInfoMapById, userIdList } = userDetails;
+    setChatUserDetails((prev) => ({
+      ...prev,
+      userInfoMapById,
+      userIdList,
+    }));
   };
 
   return (

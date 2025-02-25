@@ -1,11 +1,7 @@
 import { MemberRoleServer, MemberRoleFront, JobPostList } from "@/types/shared";
 
 import { ObjectType } from "@/types/dateInteface";
-import {
-  ChatRoomField,
-  ChatRoomsMessageField,
-  UserFiled,
-} from "@/types/firebase_db";
+import { ChatRoomField, UserFiled } from "@/types/firebase_db";
 
 export {
   memberRoleServerDummyList,

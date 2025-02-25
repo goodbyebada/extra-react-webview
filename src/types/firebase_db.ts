@@ -37,7 +37,16 @@ export interface ChatRoomInfo extends ChatRoomField {
   chatRoom_id: string;
 }
 
+/**
+ * userInfoMapById
+ * key : userId
+ * value : UserFiled( name, admin, created_at 정보 )
+ *
+ * userList
+ * 채팅방에 참여중인 회원 ID List
+ *
+ */
 export interface UserDetailsInChat {
-  userInfoMapById: Map<string, UserFiled> | null;
-  userList: string[] | [];
+  userInfoMapById: Map<string, UserFiled>;
+  userIdList: string[] | [];
 }

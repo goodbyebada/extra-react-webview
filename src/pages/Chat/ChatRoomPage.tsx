@@ -26,6 +26,7 @@ export default function ChatRoomPage() {
 
   const [chatUserDetails, setChatUserDetails] =
     useState<UserDetailsInChat | null>(null);
+
   const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomField | null>({
     drama_id: "",
     name: "",
@@ -33,7 +34,12 @@ export default function ChatRoomPage() {
     created_at: "",
   });
 
-  //   TODO chatUserDetails, chatRoomInfo는 ChatRoomPage온 후 조회해도 된다.
+  /**
+   * chatRoomId로 chatUserDetails,chatRoomInfo setting
+   *
+   * - chatUserDetails : 채팅방에 참여한 유저 정보
+   * - chatRoomInfo:  채팅방 정보 ( drama_id, name, admin_ids, created_at )
+   */
   const setChatRequriedInfo = async () => {
     if (chatRoomId) {
       const chatUserDetails =
@@ -56,12 +62,14 @@ export default function ChatRoomPage() {
   const showChatUserList = () => {
     setNavPannel((prev) => !prev);
   };
+
   const showSearchModal = () => {
     setShowSearchBar(true);
   };
+
   return (
     <Wapper>
-      {chatRoomInfo && chatUserDetails?.userList ? (
+      {chatRoomInfo && chatUserDetails?.userIdList ? (
         <>
           <NavBar sticky={true}>
             <Container
@@ -73,7 +81,7 @@ export default function ChatRoomPage() {
             >
               <Text weight={900}>{chatRoomInfo.name}</Text>
               <Text color={FONT_COLORS.gray} weight={900}>
-                {chatUserDetails.userList.length}
+                {chatUserDetails.userIdList.length}
               </Text>
             </Container>
 
