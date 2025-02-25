@@ -26,6 +26,7 @@
     // 절대경로 설정
     "baseUrl": "./",
     "paths": {
+      "@styled": ["src/styled/*"],
       "@api/*": ["src/api/*"],
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
