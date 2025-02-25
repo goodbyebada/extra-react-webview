@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { FONT_COLORS, BACKGROUND_COLORS, COLORS } from "@/styled/colors";
+import { FONT_COLORS, BACKGROUND_COLORS, COLORS } from "@styled/colors";
 import { WEEK_DAY_LABELS } from "@components/mocules/WeekdayLabels";
 import Container from "@components/atoms/Container";
 

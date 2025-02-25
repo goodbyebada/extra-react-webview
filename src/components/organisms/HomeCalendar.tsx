@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { CalendarWeekdayLabels } from "@components/mocules/WeekdayLabels";
 import HomeCalendarWeek from "@components/organisms/HomeCalendarWeek";
 import CalenderWrapper from "@components/CalenderWrapper";
-import { CALENDER_SIZE } from "@/styled/size";
+import { CALENDER_SIZE } from "@styled/size";
 import {
   DateYearMonth,
   DateSelctedType,

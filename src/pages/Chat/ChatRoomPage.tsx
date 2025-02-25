@@ -2,7 +2,7 @@ import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 import Text from "@components/atoms/Text";
 import { IoSearch } from "react-icons/io5";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { FONT_COLORS } from "@/styled/colors";
+import { FONT_COLORS } from "@styled/colors";
 import Container from "@components/atoms/Container";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";

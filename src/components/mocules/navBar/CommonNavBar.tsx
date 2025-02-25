@@ -1,7 +1,7 @@
 import { SpaceBetweenNavBar } from "@components/atoms/Layout";
 import { styled } from "styled-components";
 import { BackButton } from "@components/atoms/Button";
-import { BACKGROUND_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS } from "@styled/colors";
 
 //TODO z-index 통일해야함 -> 논의 예정
 // TODO theme에 따라 background color 바뀌어야한다.

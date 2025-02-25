@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FONT_COLORS, BACKGROUND_COLORS } from "@/styled/colors";
+import { FONT_COLORS, BACKGROUND_COLORS } from "@styled/colors";
 
 const UserImage = styled.img`
   width: 48px;

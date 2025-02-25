@@ -4,7 +4,7 @@ import { InputField } from "@components/atoms/Form";
 import Text from "@components/atoms/Text";
 import { Control } from "react-hook-form";
 import { TfiAngleDown, TfiAngleUp } from "react-icons/tfi";
-import { FONT_COLORS } from "@/styled/colors";
+import { FONT_COLORS } from "@styled/colors";
 
 interface DropDownInputProps {
   name: string;

@@ -4,9 +4,9 @@ import { styled } from "styled-components";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/store";
 import Text from "@components/atoms/Text";
-import { FONT_COLORS } from "@/styled/colors";
-import { FONT_SIZE } from "@/styled/font";
-import { DATE_SELECTOR_SIZE } from "@/styled/size";
+import { FONT_COLORS } from "@styled/colors";
+import { FONT_SIZE } from "@styled/font";
+import { DATE_SELECTOR_SIZE } from "@styled/size";
 
 type DateReducer = (
   elem: { month: number } | { year: number },

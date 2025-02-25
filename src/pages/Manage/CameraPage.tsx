@@ -13,7 +13,7 @@ import { FaCamera } from "react-icons/fa6";
 import VConsole from "vconsole";
 import { MainButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
-import { COMMON_COLORS } from "@/styled/colors";
+import { COMMON_COLORS } from "@styled/colors";
 const vConsole = new VConsole({ theme: "dark" });
 
 const CaptureIconButton = styled.div`

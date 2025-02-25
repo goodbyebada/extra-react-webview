@@ -3,7 +3,7 @@ import Text from "@components/atoms/Text";
 import { useNavigate } from "react-router-dom";
 import Margin from "@components/atoms/Margin";
 import { FaAngleRight } from "react-icons/fa6";
-import { BACKGROUND_COLORS, FONT_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS, FONT_COLORS } from "@styled/colors";
 
 interface StyledCardItemProps {
   name: string;
