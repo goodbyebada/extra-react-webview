@@ -10,6 +10,7 @@ interface CompanyTitleCategoryModalProps {
   onSubmit: (
     title: string,
     category: [keyof typeof CategoryEnum | null, string],
+    deadline: string,
   ) => void;
   closeModal: () => void;
   isVisible: boolean;
@@ -18,6 +19,7 @@ interface CompanyTitleCategoryModalProps {
 export type TitleCategory = {
   title: string;
   category: [keyof typeof CategoryEnum | null, string];
+  deadline: string;
 };
 
 /**
@@ -35,6 +37,7 @@ function CompanyTitleCategoryModal({
   const [formState, setFormState] = useState<TitleCategory>({
     title: "",
     category: [null, ""],
+    deadline: "",
   });
   const [categoryInput, setCategoryInput] = useState("");
   const [categoryList, setCategoryList] = useState(CategoryEnum);
@@ -44,10 +47,15 @@ function CompanyTitleCategoryModal({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormState((prevState) => ({
-      ...prevState,
-      [name]: name === "categoryInput" ? value : value.trim(),
-    }));
+
+    if (name === "categoryInput") {
+      setCategoryInput(value);
+    } else {
+      setFormState((prevState) => ({
+        ...prevState,
+        [name]: value.trim(),
+      }));
+    }
   };
 
   const handlePlusClick = () => {
@@ -65,12 +73,17 @@ function CompanyTitleCategoryModal({
     setFormState((prevState) => ({
       title: prevState.title,
       category: key === prevState.category[0] ? [null, ""] : [key, value],
+      deadline: prevState.deadline,
     }));
   };
 
   const handleSubmit = () => {
-    if (formState.title.trim() !== "" && formState.category[0] !== null) {
-      onSubmit(formState.title, formState.category);
+    if (
+      formState.title.trim() !== "" &&
+      formState.category[0] !== null &&
+      formState.deadline.trim()
+    ) {
+      onSubmit(formState.title, formState.category, formState.deadline);
       closeModal();
     }
   };
@@ -116,6 +129,17 @@ function CompanyTitleCategoryModal({
             </BoxButton>
           ))}
         </BoxesContainer>
+        <Row>
+          <Text size={20} weight={900} color="#fff">
+            마감기한 :
+          </Text>
+          <Input
+            name="deadline"
+            type="date"
+            value={formState.deadline}
+            onChange={handleChange}
+          />
+        </Row>
         <MainButton isActive={isSubmitActive} onClick={handleSubmit}>
           확인
         </MainButton>
@@ -149,6 +173,10 @@ const Input = styled.input`
   outline: none;
   padding: 5px;
   margin: 0 10px;
+
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* 아이콘 색상 반전 */
+  }
 `;
 
 const BoxesContainer = styled.div`

@@ -50,10 +50,14 @@ function CompanyRoleModal({
       hand: false,
       feet: false,
     },
+    hourPay: "",
   };
   const [formState, setFormState] = useState<RoleBodyType>(initialState);
   const [isFormValid, setIsFormValid] = useState(false);
   const [isClothesModalVisible, setIsClothesModalVisible] = useState(false);
+  const [hourPay, setHourPay] = useState<string>("");
+  const [isMinWageChecked, setIsMinWageChecked] = useState<boolean>(false);
+  const MIN_WAGE = "10030"; // 최저시급 값
 
   const handleClothesSubmit = (costume: Costume) => {
     setFormState((prev) => ({
@@ -68,14 +72,16 @@ function CompanyRoleModal({
   }, [role]);
 
   useEffect(() => {
-    const { roleName, minAge, maxAge, limitPersonnel, costume } = formState;
+    const { roleName, minAge, maxAge, limitPersonnel, costume, hourPay } =
+      formState;
     setIsFormValid(
       roleName.trim() !== "" &&
         minAge.trim() !== "" &&
         maxAge.trim() !== "" &&
         limitPersonnel > 0 &&
         costume.season.trim() !== "" &&
-        costume.etc.trim() !== "",
+        costume.etc.trim() !== "" &&
+        hourPay.trim() !== "",
     );
   }, [formState]);
 
@@ -101,6 +107,32 @@ function CompanyRoleModal({
         ...prevState.tattoo,
         [part]: !prevState.tattoo[part],
       },
+    }));
+  };
+
+  const formatNumber = (value: string) => {
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const handleHourPayChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const rawValue = e.target.value.replace(/[^0-9]/g, ""); // 숫자만 허용
+    const formattedValue = formatNumber(rawValue);
+    setHourPay(formattedValue);
+    setFormState((prevState) => ({
+      ...prevState,
+      hourPay: formattedValue,
+    }));
+    setIsMinWageChecked(false);
+  };
+
+  const handleMinWageToggle = () => {
+    const newCheckedState = !isMinWageChecked;
+    setIsMinWageChecked(newCheckedState);
+    const newHourPay = newCheckedState ? formatNumber(MIN_WAGE) : "";
+    setHourPay(newHourPay);
+    setFormState((prevState) => ({
+      ...prevState,
+      hourPay: newHourPay,
     }));
   };
 
@@ -194,6 +226,25 @@ function CompanyRoleModal({
               onChange={handleChange}
             />
           </Row>
+          <Row>
+            <Text size={20} weight={900} color="#fff">
+              6.시급 :
+            </Text>
+            <Input
+              name="hourPay"
+              type="text"
+              placeholder="시급 입력"
+              value={hourPay}
+              onChange={handleHourPayChange}
+              spellCheck="false"
+            />
+            <input
+              type="checkbox"
+              id="minWage"
+              checked={isMinWageChecked}
+              onChange={handleMinWageToggle}
+            />
+          </Row>
         </RoleBoxWrapper>
         <MainButton isActive={isFormValid} onClick={handleSubmit}>
           확인
@@ -226,20 +277,6 @@ const Row = styled.div`
   margin-bottom: 20px;
 `;
 
-const NumInput = styled.input`
-  width: 60px;
-  height: 35px;
-  text-align: center;
-  background: transparent;
-  color: #fff;
-  font-size: 18px;
-  font-weight: 900;
-  border: none;
-  outline: none;
-  padding: 5px;
-  margin: 5px 0;
-`;
-
 const AgeSeparator = styled.div`
   color: #fff;
   font-size: 20px;
@@ -256,4 +293,27 @@ const TattooContainer = styled.div`
 const TattooRow = styled.div`
   display: flex;
   gap: 8px;
+`;
+
+const BaseInput = styled.input`
+  background: transparent;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 900;
+  border: none;
+  outline: none;
+  padding: 5px;
+`;
+
+const NumInput = styled(BaseInput)`
+  width: 60px;
+  height: 35px;
+  text-align: center;
+  margin: 5px 0;
+`;
+
+const Input = styled(BaseInput)`
+  flex: 1;
+  min-width: 0;
+  margin: 0 10px;
 `;

@@ -104,6 +104,7 @@ export type RoleBodyType = {
   limitPersonnel: number;
   currentPersonnel: number;
   tattoo: Tattoo;
+  hourPay: string;
 };
 
 export type Costume = {

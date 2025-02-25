@@ -9,13 +9,13 @@ import useKakaoPlaceSearch from "../../customHook/useKakaoPlaceSearch";
 import { Place } from "@api/interface";
 
 interface CompanyDateTimePlaceModalProps {
-  onSubmit: (date: string, time: string, place: Place) => void;
+  onSubmit: (dates: string[], time: string, place: Place) => void;
   closeModal: () => void;
   isVisible: boolean;
 }
 
 export type FormType = {
-  date: string;
+  dates: string[];
   time: string;
   place: string;
 };
@@ -33,7 +33,7 @@ function CompanyDateTimePlaceModal({
   isVisible,
 }: CompanyDateTimePlaceModalProps) {
   const [formState, setFormState] = useState<FormType>({
-    date: "",
+    dates: [],
     time: "",
     place: "",
   });
@@ -45,16 +45,33 @@ function CompanyDateTimePlaceModal({
 
   useEffect(() => {
     setIsFormValid(
-      formState.date !== "" && formState.time !== "" && !!selectedPlace,
+      formState.dates.length > 0 && formState.time !== "" && !!selectedPlace,
     );
   }, [formState, selectedPlace]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = e.target.value;
+    setFormState((prevState) => {
+      const newDates = prevState.dates.includes(selectedDate)
+        ? prevState.dates.filter((date) => date !== selectedDate) // 선택 해제
+        : [...prevState.dates, selectedDate]; // 날짜 추가
+      return { ...prevState, dates: newDates };
+    });
+  };
+
+  const handleDateRemove = (dateToRemove: string) => {
     setFormState((prevState) => ({
       ...prevState,
-      [name]: value,
+      dates: prevState.dates.filter((date) => date !== dateToRemove),
     }));
+  };
+
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormState((prevState) => ({ ...prevState, time: e.target.value }));
+  };
+
+  const handlePlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormState((prevState) => ({ ...prevState, place: e.target.value }));
   };
 
   const handlePlaceSelect = (place: Place) => {
@@ -63,7 +80,7 @@ function CompanyDateTimePlaceModal({
 
   const handleSubmit = () => {
     if (isFormValid && selectedPlace) {
-      onSubmit(formState.date, formState.time, selectedPlace);
+      onSubmit(formState.dates, formState.time, selectedPlace);
       closeModal();
     }
   };
@@ -80,13 +97,18 @@ function CompanyDateTimePlaceModal({
           <Text size={20} weight={900} color="#fff">
             날짜 :
           </Text>
-          <Input
-            name="date"
-            type="date"
-            value={formState.date}
-            onChange={handleChange}
-          />
+          <Input type="date" onChange={handleDateChange} />
         </Row>
+
+        {/* 선택한 날짜 목록 표시 */}
+        <SelectedDates>
+          {formState.dates.map((date) => (
+            <SelectedDate key={date} onClick={() => handleDateRemove(date)}>
+              {date} ❌
+            </SelectedDate>
+          ))}
+        </SelectedDates>
+
         <Row>
           <Text size={20} weight={900} color="#fff">
             시간 :
@@ -95,14 +117,19 @@ function CompanyDateTimePlaceModal({
             name="time"
             type="time"
             value={formState.time}
-            onChange={handleChange}
+            onChange={handleTimeChange}
           />
         </Row>
+
         <Row>
           <Text size={20} weight={900} color="#fff">
             장소 :
           </Text>
-          <Input name="place" value={formState.place} onChange={handleChange} />
+          <Input
+            name="place"
+            value={formState.place}
+            onChange={handlePlaceChange}
+          />
           <IoIosSearch size={24} onClick={handleSearchClick} />
         </Row>
 
@@ -170,4 +197,19 @@ const PlaceList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
+`;
+
+const SelectedDates = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+`;
+
+const SelectedDate = styled.div`
+  background: #444;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
 `;

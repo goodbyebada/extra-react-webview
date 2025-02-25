@@ -26,6 +26,7 @@ const RoleInfo = ({ role, index, onClick }: RoleInfoProps) => {
         {RoleDetailText("2. 나이", `${role.minAge} - ${role.maxAge}`)}
         {RoleDetailText("3. 계절", role.costume.season)}
         {RoleDetailText("4. 의상", role.costume.etc)}
+        {RoleDetailText("5. 시급", role.hourPay)}
       </RoleDetail>
       <RolePersonnel>
         <Text size={16} weight={700} color="#fff">

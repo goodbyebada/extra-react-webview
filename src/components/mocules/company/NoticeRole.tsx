@@ -114,6 +114,7 @@ const NoticeRole = ({ roleList, onRoleListChange }: NoticeRoleProps) => {
         hand: false,
         feet: false,
       },
+      hourPay: "",
     });
     toggleModal("role", true);
   };

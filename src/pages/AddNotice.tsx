@@ -27,6 +27,7 @@ function AddNotice() {
   const [category, setCategory] = useState<
     [keyof typeof CategoryEnum | null, string]
   >([null, ""]);
+  const [deadline, setDeadline] = useState("");
 
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -46,17 +47,19 @@ function AddNotice() {
   const submitTitleCategoryModal = (
     title: string,
     category: [keyof typeof CategoryEnum | null, string],
+    deadline: string,
   ) => {
     setTitle(title);
     setCategory(category);
+    setDeadline(deadline);
   };
 
   const submitDateTimePlaceModal = (
-    date: string,
+    date: string[],
     time: string,
     place: Place,
   ) => {
-    setDate(date);
+    setDate(date.join(", "));
     setTime(time);
     setPlace(place);
   };
@@ -94,6 +97,7 @@ function AddNotice() {
     console.log({
       title,
       category,
+      deadline,
       date,
       time,
       place: place
@@ -145,7 +149,7 @@ function AddNotice() {
                 {time} 예정
               </Text>
               <Text size={16} weight={700} align="right">
-                {date.replace(/(\d{4})-(\d{2})-(\d{2})/, "$2/$3")}
+                {date}
               </Text>
             </Row>
             <Text size={16} weight={700} align="left">
