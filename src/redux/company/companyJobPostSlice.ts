@@ -9,7 +9,7 @@ import jobPostAPIForCom from "@api/jobPostAPIForCom";
 import {
   dummyCalenderDataForCompany,
   dummyJobPostList,
-} from "@/mocks/dummyData";
+} from "@/mocks/dummyJobData";
 import { TEST_FLAG } from "@/testFlag";
 import { YearMonthAsNumber } from "@/types/dateInteface";
 

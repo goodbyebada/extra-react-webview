@@ -6,8 +6,12 @@ import {
 } from "@/types/shared";
 
 import { ObjectType } from "@/types/dateInteface";
-import { ChatRoomField, UserFiled } from "@/types/firebase_db";
 
+/**
+ * 공고  관련한 dummyData
+ */
+
+//TODO PR 합친 후, dummy data 참조하는 부분, dummyData임을 구분하기 위해 대문자 `DUMMY_ ~` 네이밍으로 통일할 예정
 export {
   memberRoleServerDummyList,
   memberRoleFrontDummyData,
@@ -17,8 +21,8 @@ export {
   dummyCalenderDataForCompany,
   dummyUserRoleData,
   dummyUserClothes,
-  ManagerJobList,
-  DummyFirebaseDBList,
+  DUMMY_MANAGER_JOB_LIST_VER_1,
+  DUMMY_MANAGER_JOB_LIST_VER_2,
 };
 
 const memberRoleServerDummyList: MemberRoleServer[] = [
@@ -480,7 +484,16 @@ const dummyJobPostList: JobPostList = [
  * 담당자의 담당 공고 리스트
  * 0번, 1번 공고만 담당한다 가정
  */
-const ManagerJobList: JobPostList = dummyJobPostList.slice(0, 2);
+
+/**
+ * userid 1인 담당자가 맡고 있는 JOBLIST
+ */
+const DUMMY_MANAGER_JOB_LIST_VER_1: JobPostList = dummyJobPostList.slice(0, 2);
+
+/**
+ * userid 2인 담당자가 맡고 있는 JOBLIST
+ */
+const DUMMY_MANAGER_JOB_LIST_VER_2: JobPostList = dummyJobPostList.slice(2);
 
 /**
  * 지원자 정보 (임시)
@@ -489,7 +502,7 @@ const ManagerJobList: JobPostList = dummyJobPostList.slice(0, 2);
 const dummyUserRoleData = [
   {
     id: 1,
-    userId: "1",
+    userId: 3,
     name: "user1",
     category: "UMC 드라마",
     role: "학생 역할",
@@ -497,7 +510,7 @@ const dummyUserRoleData = [
   },
   {
     id: 2,
-    userId: "2",
+    userId: 4,
     name: "user2",
     category: "UMC 영화",
     role: "학생 역할",
@@ -505,7 +518,7 @@ const dummyUserRoleData = [
   },
   {
     id: 3,
-    userId: "3",
+    userId: 5,
     name: "user3",
     category: "UMC 연극",
     role: "주인공 역할",
@@ -513,7 +526,7 @@ const dummyUserRoleData = [
   },
   {
     id: 4,
-    userId: "4",
+    userId: 6,
     name: "user4",
     category: "UMC 드라마",
     role: "조연 역할",
@@ -521,7 +534,7 @@ const dummyUserRoleData = [
   },
   {
     id: 5,
-    userId: "5",
+    userId: 7,
     name: "user5",
     category: "UMC 영화",
     role: "조연 역할",
@@ -588,45 +601,3 @@ const dummyUserClothes = [
     ],
   },
 ];
-/**
- * firebase DB 데이터 예시
- */
-const DummyFirebaseDBList = {
-  userList: [
-    {
-      name: "김준준 팀장",
-      admin: true,
-      created_at: "2022-11-15T08:30:00Z",
-    },
-    {
-      name: "박민민 팀장",
-      admin: true,
-      created_at: "2021-01-10T12:45:00Z",
-    },
-    {
-      name: "김수현",
-      admin: false,
-      created_at: "2022-07-20T16:20:00Z",
-    },
-    {
-      name: "고윤정",
-      admin: false,
-      created_at: "2024-01-05T09:00:00Z",
-    },
-  ] as UserFiled[],
-
-  chatRoomList: [
-    {
-      drama_id: "drama000",
-      name: "라스트 서바이벌1",
-      created_at: "2025-01-15",
-      admin_ids: ["TUeqfdxmCeqF7gRE6qQp"],
-    },
-    {
-      drama_id: "drama001",
-      name: "라스트 서바이벌2",
-      created_at: "2025-01-17",
-      admin_ids: ["XBb6YU6liLf7fTehEgsX"],
-    },
-  ] as ChatRoomField[],
-};

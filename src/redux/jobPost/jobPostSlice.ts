@@ -9,7 +9,10 @@ import {
 } from "@/types/dateInteface";
 
 import { JobPostList } from "@/types/shared";
-import { dummyCalenderDataForExtra, dummyJobPostList } from "@/mocks/dummyData";
+import {
+  dummyCalenderDataForExtra,
+  dummyJobPostList,
+} from "@/mocks/dummyJobData";
 import { TEST_FLAG } from "@/testFlag";
 
 // 상태의 타입 정의

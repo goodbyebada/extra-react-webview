@@ -4,7 +4,7 @@ import SmallRecruitBox from "@components/SmallRecruitBox";
 import { JobPost } from "@/types/shared";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { memberRoleFrontDummyData } from "@/mocks/dummyData";
+import { memberRoleFrontDummyData } from "@/mocks/dummyJobData";
 
 /**
  * 추후 props 추가 통해,
