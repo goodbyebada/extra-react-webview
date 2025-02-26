@@ -15,7 +15,7 @@ type NavBarProps = {
  * @param param0 navBar에 작성될 내용
  * @returns navBar UI
  */
-export default function NavBar({ content }: NavBarProps) {
+export default function NavBarInRN({ content }: NavBarProps) {
   //  const navigate = useNavigate();
 
   return (
