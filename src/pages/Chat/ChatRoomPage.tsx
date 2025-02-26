@@ -6,7 +6,7 @@ import { FONT_COLORS } from "@styled/colors";
 import Container from "@components/atoms/Container";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ChatRoomField, UserDetailsInChat } from "@/types/firebase_db";
+import { ChatRoomsField, UserDetailsInChat } from "@/types/firebase_db";
 import {
   getChatRoomInfoByChatRoomId,
   getChatRoomUserDetailsByChatRoomId,
@@ -27,10 +27,10 @@ export default function ChatRoomPage() {
   const [chatUserDetails, setChatUserDetails] =
     useState<UserDetailsInChat | null>(null);
 
-  const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomField | null>({
-    drama_id: "",
+  const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomsField | null>({
+    drama_id: 0,
     name: "",
-    admin_ids: [""],
+    admin_ids: [],
     created_at: "",
   });
 

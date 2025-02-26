@@ -13,10 +13,11 @@ export interface DramaField {
   title: string;
 }
 
-export interface ChatRoomField {
-  drama_id: string;
+// TODO name -> title로 변경 예정
+export interface ChatRoomsField {
+  drama_id: number;
   name: string;
-  admin_ids: string[];
+  admin_ids: number[];
   created_at: string;
 }
 
@@ -33,7 +34,7 @@ export interface ChatRoomsMessageField {
   created_at: string | FieldValue;
 }
 
-export interface ChatRoomInfo extends ChatRoomField {
+export interface ChatRoomInfo extends ChatRoomsField {
   chatRoom_id: string;
 }
 
@@ -47,6 +48,6 @@ export interface ChatRoomInfo extends ChatRoomField {
  *
  */
 export interface UserDetailsInChat {
-  userInfoMapById: Map<string, UserFiled>;
-  userIdList: string[] | [];
+  userInfoMapById: Map<number, UserFiled>;
+  userIdList: number[] | [];
 }

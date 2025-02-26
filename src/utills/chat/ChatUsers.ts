@@ -4,12 +4,12 @@ import { UserDetailsInChat, UserFiled } from "@/types/firebase_db";
  * 채팅 User 정보
  */
 export class ChatUser {
-  #userId: string;
+  #userId: number;
   #userName: string;
   #admin: boolean;
   #createdAt: string;
 
-  constructor(userId: string, userField: UserFiled) {
+  constructor(userId: number, userField: UserFiled) {
     const { name, admin, created_at } = userField;
     this.#userId = userId;
     this.#userName = name;
@@ -39,8 +39,8 @@ export class ChatUser {
  *
  */
 export class ChatUsersManager {
-  userInfoMapById = new Map<string, UserFiled>();
-  userIdList: string[] = [];
+  userInfoMapById = new Map<number, UserFiled>();
+  userIdList: number[] = [];
   chatUsers: ChatUser[] = [];
 
   constructor(chatUserDetails: UserDetailsInChat) {
@@ -63,7 +63,7 @@ export class ChatUsersManager {
   // TODO 채팅 유저가 나갔을시, 유저변동 => 실시간 연동 , API
   updateChatUsers() {}
 
-  #addChatUser(userId: string, userField: UserFiled) {
+  #addChatUser(userId: number, userField: UserFiled) {
     const user = new ChatUser(userId, userField);
     this.chatUsers.push(user);
   }
