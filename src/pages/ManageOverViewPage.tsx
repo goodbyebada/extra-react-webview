@@ -1,5 +1,5 @@
 import Text from "@components/atoms/Text";
-import { ContentWrapper, LineWrapper } from "@components/atoms/Wrapper";
+import { ContentWrapper } from "@components/atoms/Wrapper";
 import { memberRoleFrontDummyData } from "@/mocks/dummyJobData";
 import Item from "@components/mocules/Item";
 import styled from "styled-components";
@@ -19,13 +19,13 @@ export default function ManageOverViewPage() {
         </Text>
       </NavBar>
 
-      <div style={{ height: "100%", overflowY: "scroll" }}>
-        <ContentWrapper marginTop="2rem" paddingLeft="10px" paddingRight="10px">
-          <Text weight={800}>촬영 목록</Text>
+      <ContentWrapper marginTop="2rem" paddingLeft="10px" paddingRight="10px">
+        <Text weight={800}>촬영 목록</Text>
 
-          <ItemWrapper>
-            {/* {memberRoleFrontDummyData.map((elem) => (
+        <ItemWrapper>
+          {memberRoleFrontDummyData.map((elem, key) => (
             <Item
+              key={key}
               title={elem.title}
               category={elem.category}
               date={[elem.gatheringTime]}
@@ -36,6 +36,7 @@ export default function ManageOverViewPage() {
               status={"applied"}
               onClick={() => {}}
             />
+          ))}
         </ItemWrapper>
       </ContentWrapper>
     </>

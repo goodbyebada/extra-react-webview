@@ -1,13 +1,13 @@
 import styled from "styled-components";
-import { COLORS, FONT_COLORS } from "@/styled/colors";
-import { ChatRoomField, UserDetailsInChat } from "@/types/firebase_db";
+import { COLORS, FONT_COLORS } from "@styled/colors";
+import { ChatRoomsField, UserDetailsInChat } from "@/types/firebase_db";
 import { TfiAnnouncement } from "react-icons/tfi";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { InputField } from "@components/atoms/Form";
 import { useEffect, useMemo, useState } from "react";
 import useDebounce from "@utills/useDebounce";
-import Text from "@components/atoms/Text";
+import Text, { ThemeText } from "@components/atoms/Text";
 import { ChatUser, ChatUsersManager } from "@utills/chat/ChatUsers";
 import { SearchChatUsersService } from "@utills/chat/SearchUsersController";
 
@@ -21,7 +21,7 @@ export const SidePanel = ({
   isOpen: boolean;
   onClose: () => void;
   chatUserDetails: UserDetailsInChat;
-  chatRoomInfo: ChatRoomField;
+  chatRoomInfo: ChatRoomsField;
 }) => {
   const showAnnouncement = () => {
     console.log("공지 사항 페이지 보여주기");
@@ -54,7 +54,7 @@ export const SidePanel = ({
     setSearchedChatUserList(() =>
       searchChatUsersService.search(debouncedValue),
     );
-  }, [debouncedValue]);
+  }, [debouncedValue, searchChatUsersService]);
 
   return (
     <Container isOpen={isOpen}>
@@ -86,7 +86,10 @@ export const SidePanel = ({
         <Line />
 
         <InfoWrapper>
-          <Text>대화 상대</Text>
+          <div style={{ minWidth: "80px" }}>
+            <ThemeText variant="item-title">대화 상대</ThemeText>
+          </div>
+
           <InputField
             name="member"
             placeholder="회원 찾기"
@@ -103,6 +106,8 @@ export const SidePanel = ({
           {searchedChatUserList.map((chatUser, key) => (
             <SearchResult key={key}>
               {chatUser.getUserName()}
+
+              {/* 임시 */}
               <span>{"출석여부"}</span>
             </SearchResult>
           ))}

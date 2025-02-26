@@ -6,7 +6,6 @@ import ShowApplicant from "./pages/ShowApplicant";
 import ExtrasHome from "@pages/ExtrasHome";
 import ExtraCastingBoard from "@pages/ExtraCastingBoard";
 import DateSelectedNoticeList from "@pages/DateSelectedNoticeList";
-// import Scheduler from "@pages/Scheduler";
 import CompanyHome from "@pages/CompanyHome";
 import ExtraShootManagePage from "@pages/ExtraShootManagePage";
 import CompanyShootManagePage from "@pages/CompanyShootManagePage";
@@ -25,7 +24,6 @@ import KakaoMap from "@pages/KakaoMap";
 
 import ThemePreviewPage from "@pages/ThemePreview";
 import LoginPage from "@pages/Sign/LoginPage";
-// import MainPage from "@pages/Sign/MainPage";
 import MainFormPage from "@pages/Sign/MainFormPage";
 import AuthenticationPage from "@pages/Sign/AuthenticationPage";
 import SelectUserTypePage from "@pages/Sign/SelectUserTypePage";
@@ -51,11 +49,9 @@ import RecruitmentStatus from "@pages/RecruitmentStatus";
 import SignaturePage from "@pages/SignaturePage";
 import { useEffect } from "react";
 import handleAllowNotification from "@utills/pushNotification/notificationPermission";
-import ChatList from "@pages/Chat/ChatList";
-import Channel from "@pages/Chat/Chanel";
 import ManageOverViewPage from "@pages/ManageOverViewPage";
 import ChatRoomPage from "@pages/Chat/ChatRoomPage";
-import Tmp from "@pages/Tmp";
+import { ChatListForAdmin } from "@pages/Chat/ChatList";
 
 function App() {
   useEffect(() => {
@@ -195,7 +191,7 @@ function App() {
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />
 
-          <Route path="/chatRoom" element={<ChatList />} />
+          <Route path="/chatRoom" element={<ChatListForAdmin />} />
           <Route path="/chatRoom/channel/:id" element={<ChatRoomPage />} />
         </Routes>
       </BrowserRouter>

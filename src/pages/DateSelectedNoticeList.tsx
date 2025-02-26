@@ -12,7 +12,7 @@ import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 
 import { TEST_FLAG } from "@/testFlag";
-import { dummyJobPostList } from "@/mocks/dummyData";
+import { dummyJobPostList } from "@/mocks/dummyJobData";
 import { defaultJobPost } from "@redux/jobPost/jobPostSlice";
 
 /**
