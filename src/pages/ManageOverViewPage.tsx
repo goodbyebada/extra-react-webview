@@ -1,32 +1,30 @@
-/**
- * 업체 측 현장관리
- * 촬영목록 화면
- */
-
 import Text from "@components/atoms/Text";
 import { ContentWrapper, LineWrapper } from "@components/atoms/Wrapper";
-import { memberRoleFrontDummyData } from "@/mocks/dummyData";
+import { memberRoleFrontDummyData } from "@/mocks/dummyJobData";
 import Item from "@components/mocules/Item";
 import styled from "styled-components";
 import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 
-// TODO dummyData로 구현되어있음 추후 API로 수정 예정
+/**
+ * 업체 측 현장관리 촬영목록 화면
+ */
 
+// TODO dummyData로 구현되어있음 추후 API로 수정 예정
 export default function ManageOverViewPage() {
   return (
     <>
-      <LineWrapper>
-        <NavBar>
-          <Text size={25} weight={900}>
-            현장 관리
-          </Text>
-        </NavBar>
-      </LineWrapper>
-      <ContentWrapper marginTop="2rem" paddingLeft="10px" paddingRight="10px">
-        <Text weight={800}>촬영 관리</Text>
+      <NavBar>
+        <Text size={25} weight={900}>
+          현장 관리
+        </Text>
+      </NavBar>
 
-        <ItemWrapper>
-          {memberRoleFrontDummyData.map((elem) => (
+      <div style={{ height: "100%", overflowY: "scroll" }}>
+        <ContentWrapper marginTop="2rem" paddingLeft="10px" paddingRight="10px">
+          <Text weight={800}>촬영 목록</Text>
+
+          <ItemWrapper>
+            {/* {memberRoleFrontDummyData.map((elem) => (
             <Item
               title={elem.title}
               category={elem.category}
@@ -38,7 +36,6 @@ export default function ManageOverViewPage() {
               status={"applied"}
               onClick={() => {}}
             />
-          ))}
         </ItemWrapper>
       </ContentWrapper>
     </>
