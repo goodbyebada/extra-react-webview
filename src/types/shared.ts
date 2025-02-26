@@ -46,6 +46,7 @@ export interface JobPost {
   category: string;
   companyName: string;
   scheduleIdList: number[]; //? 무슨 값인지 확인 필요 와이어프레임에는 안보임
+  applyDeadLine: string;
   calenderList: string[];
   roleIdList: number[];
   roleNameList: string[];

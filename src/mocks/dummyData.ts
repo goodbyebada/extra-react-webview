@@ -1,4 +1,9 @@
-import { MemberRoleServer, MemberRoleFront, JobPostList } from "@/types/shared";
+import {
+  MemberRoleServer,
+  MemberRoleFront,
+  JobPostList,
+  JobPost,
+} from "@/types/shared";
 
 import { ObjectType } from "@/types/dateInteface";
 import { ChatRoomField, UserFiled } from "@/types/firebase_db";
@@ -7,10 +12,13 @@ export {
   memberRoleServerDummyList,
   memberRoleFrontDummyData,
   dummyCalenderDataForExtra,
+  dummyJobPost,
   dummyJobPostList,
   dummyCalenderDataForCompany,
   dummyUserRoleData,
   dummyUserClothes,
+  ManagerJobList,
+  DummyFirebaseDBList,
 };
 
 const memberRoleServerDummyList: MemberRoleServer[] = [
@@ -147,6 +155,64 @@ const dummyCalenderDataForExtra: ObjectType = {
 
 const dummyCalenderDataForCompany: ObjectType = dummyCalenderDataForExtra;
 
+const dummyJobPost: JobPost = {
+  id: 1,
+  title: "라스트 서바이벌1",
+  gatheringLocation: "서울특별시 종로구 광화문역 1번 출구",
+  gatheringTime: "4시 30분까지 도착",
+  status: true,
+  hourPay: 9860,
+  category: "MOVIE",
+  companyName: "UMC",
+  applyDeadLine: "2024-09-01",
+  scheduleIdList: [2, 3],
+  calenderList: ["2024-09-02", "2024-09-05"],
+  roleIdList: [4, 5, 6],
+  roleNameList: ["정보 분석가", "생존 전문가", "무기 전문가"],
+  costumeList: [
+    "가벼운 방탄 조끼, 모자, 방수 바지",
+    "다목적 전투복, 군용 부츠, 다기능 벨트",
+    "전투용 장갑, 방탄 조끼, 전술 헬멧",
+  ],
+  sexList: [false, true, true],
+  roleAgeList: ["31 ~ 25", "41 ~ 30", "44 ~ 33"],
+  limitPersonnelList: [3, 2, 1],
+  currentPersonnelList: [1, 1, 1],
+  seasonList: ["SUMMER", "SUMMER", "SUMMER"],
+  tattooList: [
+    {
+      face: false,
+      chest: false,
+      arm: false,
+      leg: false,
+      shoulder: false,
+      back: false,
+      hand: false,
+      feet: false,
+    },
+    {
+      face: false,
+      chest: false,
+      arm: false,
+      leg: false,
+      shoulder: true,
+      back: false,
+      hand: false,
+      feet: false,
+    },
+    {
+      face: false,
+      chest: false,
+      arm: false,
+      leg: true,
+      shoulder: false,
+      back: false,
+      hand: false,
+      feet: false,
+    },
+  ],
+};
+
 /**
  * JobPost 공고 전체 조회
  * - 캘린더/ 리스트 공고 조회
@@ -168,6 +234,7 @@ const dummyJobPostList: JobPostList = [
     hourPay: 9860,
     category: "MOVIE",
     companyName: "UMC",
+    applyDeadLine: "2024-09-01",
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-02", "2024-09-05"],
     roleIdList: [4, 5, 6],
@@ -231,6 +298,7 @@ const dummyJobPostList: JobPostList = [
     hourPay: 9860,
     category: "MOVIE",
     companyName: "UMC",
+    applyDeadLine: "2024-08-28",
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-02", "2024-09-05"],
     roleIdList: [4, 5, 6],
@@ -294,6 +362,7 @@ const dummyJobPostList: JobPostList = [
     hourPay: 9860,
     category: "MOVIE",
     companyName: "UMC",
+    applyDeadLine: "2024-09-16",
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-18", "2024-09-18"],
     roleIdList: [4, 5, 6],
@@ -357,6 +426,7 @@ const dummyJobPostList: JobPostList = [
     hourPay: 9860,
     category: "MOVIE",
     companyName: "UMC",
+    applyDeadLine: "2024-09-15",
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-18", "2024-09-18"],
     roleIdList: [4, 5, 6],
@@ -405,6 +475,12 @@ const dummyJobPostList: JobPostList = [
     ],
   },
 ];
+
+/**
+ * 담당자의 담당 공고 리스트
+ * 0번, 1번 공고만 담당한다 가정
+ */
+const ManagerJobList: JobPostList = dummyJobPostList.slice(0, 2);
 
 /**
  * 지원자 정보 (임시)
@@ -515,7 +591,7 @@ const dummyUserClothes = [
 /**
  * firebase DB 데이터 예시
  */
-export const DummyFirebaseDBList = {
+const DummyFirebaseDBList = {
   userList: [
     {
       name: "김준준 팀장",
@@ -542,13 +618,13 @@ export const DummyFirebaseDBList = {
   chatRoomList: [
     {
       drama_id: "drama000",
-      name: "드라마000의 채팅방입니다.",
+      name: "라스트 서바이벌1",
       created_at: "2025-01-15",
       admin_ids: ["TUeqfdxmCeqF7gRE6qQp"],
     },
     {
       drama_id: "drama001",
-      name: "드라마001의 채팅방입니다.",
+      name: "라스트 서바이벌2",
       created_at: "2025-01-17",
       admin_ids: ["XBb6YU6liLf7fTehEgsX"],
     },
