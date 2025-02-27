@@ -81,7 +81,7 @@ export default function Channel({
       bottomRef.current.scrollIntoView();
     }
     // updateTimeDateToTimeStamp(selectedChatsRoomId);
-  }, [bottomRef]);
+  }, [bottomRef.current]);
 
   function formatCreatedAt(created_at: {
     seconds: number;

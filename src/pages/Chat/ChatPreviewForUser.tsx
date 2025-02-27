@@ -3,7 +3,7 @@ import { MainButton } from "@components/atoms/Button";
 import {
   checkUserExists,
   getChatRoomIds,
-} from "@utills/chat/FirebaseAPI/getDataFromFirebase";
+} from "@utills/chat/FirebaseAPI/dataGetter";
 
 import { useNavigate } from "react-router-dom";
 import { ChatSessionManager } from "@utills/chat/ChatSessionManager";

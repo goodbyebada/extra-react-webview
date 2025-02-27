@@ -14,7 +14,7 @@ import { styled } from "styled-components";
 import {
   getManagedChatRoomIdList,
   getUserInfoByUserId,
-} from "@utills/chat/FirebaseAPI/getDataFromFirebase";
+} from "@utills/chat/FirebaseAPI/dataGetter";
 import { useEffect, useState } from "react";
 import { UserFiled } from "@/types/firebaseInterface";
 import { ChatSessionManager } from "@utills/chat/ChatSessionManager";

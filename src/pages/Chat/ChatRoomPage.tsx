@@ -14,7 +14,7 @@ import {
 import {
   getChatRoomInfoByChatRoomId,
   getParticipantInfoList,
-} from "@utills/chat/FirebaseAPI/getDataFromFirebase";
+} from "@utills/chat/FirebaseAPI/dataGetter";
 import Channel from "@pages/Chat/Chanel";
 import styled from "styled-components";
 import { SidePanel } from "@pages/Chat/SidePanel";
