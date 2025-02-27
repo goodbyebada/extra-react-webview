@@ -7,7 +7,7 @@ import {
 import { JobPostList } from "@/types/shared";
 import getDdayString from "@utills/getDdayString";
 import { useNavigate } from "react-router-dom";
-import { ContentWrapper, LineWrapper } from "@components/atoms/Wrapper";
+import { ContentWrapper } from "@components/atoms/Wrapper";
 import Text from "@components/atoms/Text";
 import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 import { styled } from "styled-components";
@@ -21,25 +21,13 @@ import { styled } from "styled-components";
  * @param param0
  */
 
-// 공고 ID 요청 시 -> 공고 채팅 ID return하는 API 있다 가정
-function getChatIdById(id: number) {
-  return dummyJobPost;
-}
-
-/**
- * 관리자 시나리오
- * : 본인 담당 채팅방 리스트 중 하나를 선택해 들어간다.
- */
-const DUMMY_ADMIN_INFO = {
-  user_id: 2,
-};
-
 /**
  * getManagerJobPosts
  * 매니저 계정의 담당 공고 return 하는 임시 함수
  *
+ * 매니저(관리자) userId로 요청시, 관리 jobPostList return하는 API 있다고 가정
  */
-function getManagerJobPostsTMP(userId: number): JobPostList {
+function getDummyJobPost(userId: number): JobPostList {
   if (userId === 1) return DUMMY_MANAGER_JOB_LIST_VER_1;
   if (userId === 2) return DUMMY_MANAGER_JOB_LIST_VER_2;
   return [];
@@ -72,7 +60,7 @@ export function ChatListForAdmin() {
             } = jobInfo;
 
             //   공고(드라마/ 영화) id
-            const jobPostId = id;
+            const workId = id;
 
             const dDay = getDdayString(applyDeadLine);
 
@@ -86,7 +74,7 @@ export function ChatListForAdmin() {
                 time={gatheringTime}
                 location={gatheringLocation}
                 company={companyName}
-                onClick={() => navigate(`/chatRoom/channel/${jobPostId}`)}
+                onClick={() => navigate(`/chatRoom/channel/${workId}`)}
               />
             );
           })}

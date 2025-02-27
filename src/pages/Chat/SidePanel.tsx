@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { COLORS, FONT_COLORS } from "@styled/colors";
-import { ChatRoomsField, UserDetailsInChat } from "@/types/firebase_db";
+import { ChatRoomsField, ParticipantInfoList } from "@/types/firebase_db";
 import { TfiAnnouncement } from "react-icons/tfi";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
@@ -61,7 +61,7 @@ export const SidePanel = ({
       <Overlay onClick={onClose} />
       <Panel>
         <Text color={COLORS.white} size={25} weight={800}>
-          {chatRoomInfo.name}
+          {chatRoomInfo.work_title}
         </Text>
         <Text color={COLORS.lightGray} size={15}>
           {chatUsersManager.getChatUserCount()}명 참여 중

@@ -35,11 +35,6 @@ export default function Channel({
 
   // 채팅 메세지 생성시 useState로 새로운 메세지 저장
   const [newMessage, setNewMessage] = useState("");
-  // const [dateInfo, setDateInfo] = useState({
-  //   year: 0,
-  //   month: 0,
-  //   dateNum: 0,
-  // });
 
   //  하단 스크롤을 위한 useRef
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -60,6 +55,7 @@ export default function Channel({
 
     const data: ChatRoomsMessageField = {
       user_id: myUserId,
+      user_name: myUserName,
       message: messageContent,
       created_at: serverTimestamp(),
       // created_at: new Date().toUTCString(),
@@ -159,7 +155,7 @@ export default function Channel({
           fetchData={fetchMore}
           hasMore={messageDocs.length > 0}
           loader={<h2>loading....!</h2>}
-          endMessage={<h2>모든 공고를 업데이트 하였습니다.</h2>}
+          endMessage={<h2>마지막 메시지 입니다.</h2>}
           hasError={false}
           errorMessage={<h2>에러가 발생했습니다.</h2>}
           requestAtDown={false}

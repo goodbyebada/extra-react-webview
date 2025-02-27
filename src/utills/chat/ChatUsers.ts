@@ -1,4 +1,9 @@
-import { UserDetailsInChat, UserFiled } from "@/types/firebase_db";
+import {
+  UserDetailsInChat,
+  UserFiled,
+  ParticipantInfoList,
+  ChatUserInfo,
+} from "@/types/firebase_db";
 
 /**
  * 채팅 User 정보
@@ -9,9 +14,9 @@ export class ChatUser {
   #admin: boolean;
   #createdAt: string;
 
-  constructor(userId: number, userField: UserFiled) {
-    const { name, admin, created_at } = userField;
-    this.#userId = userId;
+  constructor(participantInfo: ChatUserInfo) {
+    const { user_id, admin, created_at, name } = participantInfo;
+    this.#userId = user_id;
     this.#userName = name;
     this.#admin = admin;
     this.#createdAt = created_at;
@@ -39,32 +44,26 @@ export class ChatUser {
  *
  */
 export class ChatUsersManager {
-  userInfoMapById = new Map<number, UserFiled>();
-  userIdList: number[] = [];
   chatUsers: ChatUser[] = [];
+  participantInfoList: ParticipantInfoList = [];
 
-  constructor(chatUserDetails: UserDetailsInChat) {
-    const { userIdList, userInfoMapById } = chatUserDetails;
-    this.userIdList = userIdList;
-    this.userInfoMapById = userInfoMapById;
+  constructor(participantInfoList: ParticipantInfoList) {
+    this.participantInfoList = participantInfoList;
 
     this.#setChatUsers();
   }
 
   #setChatUsers() {
-    for (const userId of this.userIdList) {
-      const userField = this.userInfoMapById.get(userId);
-      if (userField) {
-        this.#addChatUser(userId, userField);
-      }
-    }
+    this.participantInfoList.forEach((participantInfo) => {
+      this.#addChatUser(participantInfo);
+    });
   }
 
   // TODO 채팅 유저가 나갔을시, 유저변동 => 실시간 연동 , API
   updateChatUsers() {}
 
-  #addChatUser(userId: number, userField: UserFiled) {
-    const user = new ChatUser(userId, userField);
+  #addChatUser(participantInfo: ChatUserInfo) {
+    const user = new ChatUser(participantInfo);
     this.chatUsers.push(user);
   }
 

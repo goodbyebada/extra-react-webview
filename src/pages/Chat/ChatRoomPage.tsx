@@ -15,21 +15,18 @@ import Channel from "@pages/Chat/Chanel";
 import styled from "styled-components";
 import { SidePanel } from "@pages/Chat/SidePanel";
 
-// TODO 회원이 채팅방에서 나가기, 가입 시 기능 구현 예정
 export default function ChatRoomPage() {
   const params = useParams();
-  const chatRoomId = params.id;
+  const chatRoomId = Number(params.id);
 
   const [userId, setUserId] = useState("");
   const [navPannelIsOpen, setNavPannel] = useState<boolean>(false);
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
-  const [chatUserDetails, setChatUserDetails] =
-    useState<UserDetailsInChat | null>(null);
 
   const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomsField | null>({
-    drama_id: 0,
-    name: "",
+    work_id: 0,
+    work_title: "",
     admin_ids: [],
     created_at: "",
   });
@@ -79,7 +76,7 @@ export default function ChatRoomPage() {
               paddingHorizontal={5}
               style={{ gap: "10px" }}
             >
-              <Text weight={900}>{chatRoomInfo.name}</Text>
+              <Text weight={900}>{chatRoomInfo.work_title}</Text>
               <Text color={FONT_COLORS.gray} weight={900}>
                 {chatUserDetails.userIdList.length}
               </Text>
@@ -141,7 +138,6 @@ const Wapper = styled.div`
 
 const Overlay = styled.div`
   position: absolute;
-
   top: 0;
   right: 0;
   width: 100%;

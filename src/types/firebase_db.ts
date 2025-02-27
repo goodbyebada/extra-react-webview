@@ -29,25 +29,8 @@ export interface DramaParticipationField {
 }
 
 export interface ChatRoomsMessageField {
-  user_id: string;
+  user_id: number;
+  user_name: string;
   message: string;
   created_at: string | FieldValue;
-}
-
-export interface ChatRoomInfo extends ChatRoomsField {
-  chatRoom_id: string;
-}
-
-/**
- * userInfoMapById
- * key : userId
- * value : UserFiled( name, admin, created_at 정보 )
- *
- * userList
- * 채팅방에 참여중인 회원 ID List
- *
- */
-export interface UserDetailsInChat {
-  userInfoMapById: Map<number, UserFiled>;
-  userIdList: number[] | [];
 }
