@@ -51,7 +51,8 @@ import { useEffect } from "react";
 import handleAllowNotification from "@utills/pushNotification/notificationPermission";
 import ManageOverViewPage from "@pages/ManageOverViewPage";
 import ChatRoomPage from "@pages/Chat/ChatRoomPage";
-import { ChatListForAdmin } from "@pages/Chat/ChatList";
+import { ChatListForAdmin } from "@pages/Chat/ChatListForAdmin";
+import ChatPreviewForUser from "@pages/Chat/ChatPreviewForUser";
 
 function App() {
   useEffect(() => {
@@ -191,8 +192,15 @@ function App() {
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />
 
+          {/* 관리자 계정으로 채팅 들어가기 */}
           <Route path="/chatRoom" element={<ChatListForAdmin />} />
+
+          {/* 테스트 위해 유저 계정으로 들어가기 */}
+          <Route path="/chat-preview/user" element={<ChatPreviewForUser />} />
+
           <Route path="/chatRoom/channel/:id" element={<ChatRoomPage />} />
+
+          <Route path="/chatRoom/channel/-1" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </>
