@@ -50,22 +50,22 @@ export function useFirestoreQuery(
           setLastVisible(doc);
         }
 
+        // 파이어베이스 serverTime이 서버에 저장될때 딜레이가 있어 createed_at이 undefined일 수 있다
         const newData = doc.data();
         if (!newData.created_at) {
           return {
             ...newData,
-            id: Number(doc.id),
+            id: doc.id,
             created_at: new Date(),
           };
         }
 
         return {
           ...newData,
-          id: Number(doc.id),
+          id: doc.id,
         };
       });
 
-      // NOTE 추가되면 새로 불러오는건가? TEST 필요
       setDocs(data.reverse());
 
       // TODO 추후 삭제, 수정 , 구현 예정
@@ -89,6 +89,7 @@ export function useFirestoreQuery(
     console.log("fetchMore");
     if (!lastVisible) return;
 
+    // 최신순으로 limitCount 개만큼 가져온다.
     const nextQuery = query(
       colloectionRef,
       orderBy("created_at", "desc"),
@@ -97,14 +98,19 @@ export function useFirestoreQuery(
     );
 
     const unsubscribe = onSnapshot(nextQuery, (snapshot) => {
-      const newData = snapshot.docs
+      // 오름차순으로 정렬 (과거순)
+      const fetchedOldDocs = snapshot.docs
         .map((doc) => ({
           ...doc.data(),
-          id: Number(doc.id),
+          id: doc.id,
         }))
         .reverse();
 
-      setDocs((prevDocs) => [...newData, ...prevDocs]);
+      // 오름차순으로 정렬 (과거순)
+      // fetchedOldData(더 과거의 데이터), ...이전의 데이터 리스트
+      setDocs((prevDocs) => [...fetchedOldDocs, ...prevDocs]);
+
+      // 가장 오래된 데이터
       setLastVisible(snapshot.docs[snapshot.docs.length - 1]);
     });
 
