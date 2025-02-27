@@ -1,5 +1,3 @@
-
-
 const CHO_HANGUL = [
   "ㄱ",
   "ㄲ",
@@ -52,10 +50,9 @@ function getChosungBracket(choIndex: number) {
  */
 export function generateChosungRangePattern(search = "") {
   const regex = CHO_HANGUL.reduce(
-    (acc, cho, index) =>
-      acc.replace(new RegExp(cho, "g"), getChosungBracket(index)),
+    (acc, cho, index) => acc.replace(new RegExp(cho), getChosungBracket(index)),
     search,
   );
 
-  return new RegExp(`(${regex})`, "g");
+  return new RegExp(`(${regex})`);
 }
