@@ -38,6 +38,9 @@ export default function Channel({
   );
 
   useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
     console.log(messageDocs);
   }, [messageDocs]);
 
