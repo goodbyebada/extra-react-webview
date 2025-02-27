@@ -39,10 +39,11 @@ interface MessageItemProps {
   my_message: boolean;
 }
 
-const MessageItemContainer = styled.div<{ isMyMessage: boolean }>`
+const MessageItemContainer = styled.div<{ $isMyMessage: boolean }>`
   display: flex;
   align-items: flex-start;
-  flex-direction: ${({ isMyMessage }) => (isMyMessage ? "row-reverse" : "row")};
+  flex-direction: ${({ $isMyMessage }) =>
+    $isMyMessage ? "row-reverse" : "row"};
   margin-bottom: 16px;
 `;
 
@@ -61,7 +62,7 @@ const MessageItem = ({
   my_message,
 }: MessageItemProps) => {
   return (
-    <MessageItemContainer isMyMessage={my_message}>
+    <MessageItemContainer $isMyMessage={my_message}>
       {my_message ? (
         ""
       ) : (

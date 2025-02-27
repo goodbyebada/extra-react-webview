@@ -38,7 +38,7 @@ export const SidePanel = ({
     ChatUser[] | []
   >([]);
 
-  const debouncedValue = useDebounce<string>(inputChange, 100);
+  const debouncedValue = useDebounce<string>(inputChange, 500);
 
   const chatUsersManager = useMemo(
     () => new ChatUsersManager(participantInfoList),

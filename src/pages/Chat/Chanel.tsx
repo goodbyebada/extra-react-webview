@@ -2,7 +2,7 @@ import { ChatRoomsMessageField } from "@/types/firebaseInterface";
 import { useFirestoreQuery } from "@utills/chat/useFireStoreQuery";
 import { db } from "@utills/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { useEffect, useState, useRef, ChangeEvent, useMemo } from "react";
+import { useEffect, useState, useRef, ChangeEvent } from "react";
 import { ParticipantInfoList } from "@/types/firebaseInterface";
 
 import MessageItem from "@components/mocules/chat/MessageItem";
@@ -81,7 +81,7 @@ export default function Channel({
       bottomRef.current.scrollIntoView();
     }
     // updateTimeDateToTimeStamp(selectedChatsRoomId);
-  }, [bottomRef.current]);
+  }, []);
 
   function formatCreatedAt(created_at: {
     seconds: number;
@@ -143,23 +143,24 @@ export default function Channel({
     }
   };
 
-  const MessageList = useMemo(() => {
-    if (participantInfoList.length !== 0 && messageDocs) {
-      return messageDocs?.map((message, index) => (
-        <>
-          {showDateInfo(message.created_at, index)}
-          <MessageItem
-            key={index}
-            user_image={""}
-            user_name={message.user_name}
-            message={message.message}
-            created_at={formatCreatedAt(message.created_at)}
-            my_message={message.user_id === myUserId}
-          />
-        </>
-      ));
-    }
-  }, [messageDocs]);
+  // // [ ] 렌더링 의미 없어 보임
+  // const MessageList = useMemo(() => {
+  //   if (participantInfoList.length !== 0 && messageDocs) {
+  //     return messageDocs?.map((message, index) => (
+  //       <>
+  //         {showDateInfo(message.created_at, index)}
+  //         <MessageItem
+  //           key={message.id}
+  //           user_image={""}
+  //           user_name={message.user_name}
+  //           message={message.message}
+  //           created_at={formatCreatedAt(message.created_at)}
+  //           my_message={message.user_id === myUserId}
+  //         />
+  //       </>
+  //     ));
+  //   }
+  // }, [messageDocs]);
 
   return (
     <ChatWrapper>
@@ -173,7 +174,19 @@ export default function Channel({
           errorMessage={<h2>에러가 발생했습니다.</h2>}
           requestAtDown={false}
         >
-          {MessageList}
+          {participantInfoList.length !== 0 &&
+            messageDocs?.map((message, index) => (
+              <div key={message.id}>
+                {showDateInfo(message.created_at, index)}
+                <MessageItem
+                  user_image={""}
+                  user_name={message.user_name}
+                  message={message.message}
+                  created_at={formatCreatedAt(message.created_at)}
+                  my_message={message.user_id === myUserId}
+                />
+              </div>
+            ))}
           <div id="bottom" ref={bottomRef} />
         </InfiniteScroll>
       </MessageWrapper>
