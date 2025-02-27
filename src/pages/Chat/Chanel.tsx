@@ -1,9 +1,9 @@
-import { ChatRoomsMessageField, UserFiled } from "@/types/firebase_db";
+import { ChatRoomsMessageField } from "@/types/firebaseInterface";
 import { useFirestoreQuery } from "@utills/chat/useFireStoreQuery";
 import { db } from "@utills/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { useEffect, useState, useRef, ChangeEvent } from "react";
-import { UserDetailsInChat } from "@/types/firebase_db";
+import { useEffect, useState, useRef, ChangeEvent, useMemo } from "react";
+import { ParticipantInfoList } from "@/types/firebaseInterface";
 
 import MessageItem from "@components/mocules/chat/MessageItem";
 import MessageInput from "@components/mocules/chat/MessageInput";
@@ -12,16 +12,24 @@ import InfiniteScroll from "@utills/InfiniteScroll";
 import DateDisplay from "@components/mocules/chat/DateDisplay";
 
 export default function Channel({
-  chatUserDetails,
+  participantInfoList,
   myUserId,
+  myUserName,
   selectedChatsRoomId,
 }: {
-  chatUserDetails: UserDetailsInChat;
-  myUserId: string;
-  selectedChatsRoomId: string;
+  participantInfoList: ParticipantInfoList;
+  myUserId: number;
+  myUserName: string;
+  selectedChatsRoomId: number;
 }) {
   // 0. 에서 작성한 useFirestoreQuery 로 도큐먼트 가져옴
-  const colloectionRef = collection(db, "Messages", selectedChatsRoomId, "m1");
+
+  const colloectionRef = collection(
+    db,
+    "Messages",
+    selectedChatsRoomId.toString(),
+    "m",
+  );
   const LIMIT_COUNT = 15;
 
   const { docs: messageDocs, fetchMore } = useFirestoreQuery(
@@ -73,40 +81,27 @@ export default function Channel({
       bottomRef.current.scrollIntoView();
     }
     // updateTimeDateToTimeStamp(selectedChatsRoomId);
-  }, [bottomRef.current]);
+  }, [bottomRef]);
 
-  // created_at field Timestamp와 섞여있음
-  function formatCreatedAt(
-    created_at: string | { seconds: number; nanoseconds: number },
-  ): string {
-    if (typeof created_at === "string") {
-      // 문자열 형식의 날짜를 Date 객체로 변환하고 시간만 반환
-      return new Date(created_at).toUTCString();
-    } else if (typeof created_at === "object" && created_at.seconds) {
-      const dateObj = new Date(created_at.seconds * 1000);
-      const hour = dateObj.getHours();
-      const ampm = dateObj.getHours() < 12 ? "오전" : "오후";
-      const convertedHour = hour <= 12 ? hour : hour - 12;
+  function formatCreatedAt(created_at: {
+    seconds: number;
+    nanoseconds: number;
+  }): string {
+    let dateObj;
 
-      const timeString = `${ampm} ${convertedHour.toString().padStart(2, "0")} : ${dateObj.getMinutes().toString().padStart(2, "0")}`;
-      return timeString;
+    if (typeof created_at === "object" && created_at.seconds) {
+      dateObj = new Date(created_at.seconds * 1000);
     } else {
-      // 유효하지 않은 형식 처리
-      return "Invalid Date";
+      dateObj = new Date(created_at.toString());
     }
-  }
 
-  // 사용자 이름을 안전하게 가져오는 함수
-  const getUserName = (
-    userInfoMapById: Map<string, UserFiled> | null,
-    userId: string,
-  ): string => {
-    if (userInfoMapById !== null && userInfoMapById.has(userId)) {
-      return userInfoMapById.get(userId)?.name || "";
-      // undefined일 경우 빈 문자열 반환
-    }
-    return "";
-  };
+    const hour = dateObj.getHours();
+    const ampm = dateObj.getHours() < 12 ? "오전" : "오후";
+    const convertedHour = hour <= 12 ? hour : hour - 12;
+
+    const timeString = `${ampm} ${convertedHour.toString().padStart(2, "0")} : ${dateObj.getMinutes().toString().padStart(2, "0")}`;
+    return timeString;
+  }
 
   const isSameDate = (date1: Date, date2: Date) => {
     return (
@@ -148,6 +143,24 @@ export default function Channel({
     }
   };
 
+  const MessageList = useMemo(() => {
+    if (participantInfoList.length !== 0 && messageDocs) {
+      return messageDocs?.map((message, index) => (
+        <>
+          {showDateInfo(message.created_at, index)}
+          <MessageItem
+            key={index}
+            user_image={""}
+            user_name={message.user_name}
+            message={message.message}
+            created_at={formatCreatedAt(message.created_at)}
+            my_message={message.user_id === myUserId}
+          />
+        </>
+      ));
+    }
+  }, [messageDocs]);
+
   return (
     <ChatWrapper>
       <MessageWrapper>
@@ -160,24 +173,8 @@ export default function Channel({
           errorMessage={<h2>에러가 발생했습니다.</h2>}
           requestAtDown={false}
         >
-          {chatUserDetails.userIdList.length !== 0 &&
-            messageDocs?.map((message, index) => (
-              <>
-                {showDateInfo(message.created_at, index)}
-                <MessageItem
-                  key={index}
-                  user_image={""}
-                  user_name={getUserName(
-                    chatUserDetails.userInfoMapById,
-                    message.user_id,
-                  )}
-                  message={message.message}
-                  created_at={formatCreatedAt(message.created_at)}
-                  my_message={message.user_id === myUserId}
-                />
-              </>
-            ))}
-          <div ref={bottomRef} />
+          {MessageList}
+          <div id="bottom" ref={bottomRef} />
         </InfiniteScroll>
       </MessageWrapper>
       {/* 채팅 입력 폼 생성 */}

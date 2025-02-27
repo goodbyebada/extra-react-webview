@@ -1,9 +1,4 @@
-import {
-  UserDetailsInChat,
-  UserFiled,
-  ParticipantInfoList,
-  ChatUserInfo,
-} from "@/types/firebase_db";
+import { ParticipantInfoList, ChatUserInfo } from "@/types/firebaseInterface";
 
 /**
  * 채팅 User 정보

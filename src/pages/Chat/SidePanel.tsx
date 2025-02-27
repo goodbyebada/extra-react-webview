@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { COLORS, FONT_COLORS } from "@styled/colors";
-import { ChatRoomsField, ParticipantInfoList } from "@/types/firebase_db";
+import { ChatRoomsField, ParticipantInfoList } from "@/types/firebaseInterface";
 import { TfiAnnouncement } from "react-icons/tfi";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
@@ -15,12 +15,12 @@ import { SearchChatUsersService } from "@utills/chat/SearchUsersController";
 export const SidePanel = ({
   isOpen,
   onClose,
-  chatUserDetails,
+  participantInfoList,
   chatRoomInfo,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  chatUserDetails: UserDetailsInChat;
+  participantInfoList: ParticipantInfoList;
   chatRoomInfo: ChatRoomsField;
 }) => {
   const showAnnouncement = () => {
@@ -41,8 +41,8 @@ export const SidePanel = ({
   const debouncedValue = useDebounce<string>(inputChange, 600);
 
   const chatUsersManager = useMemo(
-    () => new ChatUsersManager(chatUserDetails),
-    [chatUserDetails],
+    () => new ChatUsersManager(participantInfoList),
+    [participantInfoList],
   );
 
   const searchChatUsersService = useMemo(

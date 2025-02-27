@@ -6,23 +6,36 @@ import { FONT_COLORS } from "@styled/colors";
 import Container from "@components/atoms/Container";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { ChatRoomsField, UserDetailsInChat } from "@/types/firebase_db";
+import {
+  ChatRoomsField,
+  ParticipantInfoList,
+  UserFiled,
+} from "@/types/firebaseInterface";
 import {
   getChatRoomInfoByChatRoomId,
-  getChatRoomUserDetailsByChatRoomId,
-} from "@utills/chat/get";
+  getParticipantInfoList,
+} from "@utills/chat/FirebaseAPI/getDataFromFirebase";
 import Channel from "@pages/Chat/Chanel";
 import styled from "styled-components";
 import { SidePanel } from "@pages/Chat/SidePanel";
+import { ChatSessionManager } from "@utills/chat/ChatSessionManager";
 
 export default function ChatRoomPage() {
   const params = useParams();
   const chatRoomId = Number(params.id);
 
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState(0);
   const [navPannelIsOpen, setNavPannel] = useState<boolean>(false);
+
+  // TODO 삭제 예정  -> 백의 페이지네이션 필요함
   const [showSearchBar, setShowSearchBar] = useState<boolean>(false);
 
+  // 파이어베이스의 유저 정보
+  const storedUserInfo = ChatSessionManager.getUserInfo();
+  const userInfo: UserFiled | null = storedUserInfo ? storedUserInfo : null;
+
+  const [participantInfoList, setParticipantInfoList] =
+    useState<ParticipantInfoList | null>(null);
 
   const [chatRoomInfo, setChatRoomInfo] = useState<ChatRoomsField | null>({
     work_id: 0,
@@ -31,19 +44,29 @@ export default function ChatRoomPage() {
     created_at: "",
   });
 
+  useEffect(() => {
+    if (chatRoomId) {
+      setChatRequriedInfo();
+    }
+  }, [chatRoomId]);
+
   /**
-   * chatRoomId로 chatUserDetails,chatRoomInfo setting
+   * chatRoomId로 participantInfoList,chatRoomInfo 가져오기
    *
-   * - chatUserDetails : 채팅방에 참여한 유저 정보
-   * - chatRoomInfo:  채팅방 정보 ( drama_id, name, admin_ids, created_at )
+   * - participantInfoList : 채팅방에 참여한 유저 정보 리스트 ChatUserInfo[]
+   * - chatRoomInfo:  채팅방 세부 정보
    */
   const setChatRequriedInfo = async () => {
     if (chatRoomId) {
-      const chatUserDetails =
-        await getChatRoomUserDetailsByChatRoomId(chatRoomId);
-      const chatRoomInfo = await getChatRoomInfoByChatRoomId(chatRoomId);
+      const chatRoomInfo: ChatRoomsField | null =
+        await getChatRoomInfoByChatRoomId(chatRoomId);
 
-      setChatUserDetails(chatUserDetails);
+      const participantInfoList: ParticipantInfoList | null =
+        await getParticipantInfoList(chatRoomId);
+
+      if (participantInfoList) {
+        setParticipantInfoList(participantInfoList);
+      }
 
       if (chatRoomInfo) {
         setChatRoomInfo(chatRoomInfo);
@@ -52,8 +75,11 @@ export default function ChatRoomPage() {
   };
 
   useEffect(() => {
-    setUserId(sessionStorage.getItem("myUserId") || "");
-    setChatRequriedInfo();
+    const userId = ChatSessionManager.getUserId();
+
+    if (!Number.isNaN(userId)) {
+      setUserId(userId);
+    }
   }, []);
 
   const showChatUserList = () => {
@@ -66,7 +92,7 @@ export default function ChatRoomPage() {
 
   return (
     <Wapper>
-      {chatRoomInfo && chatUserDetails?.userIdList ? (
+      {chatRoomInfo && participantInfoList ? (
         <>
           <NavBar sticky={true}>
             <Container
@@ -78,7 +104,7 @@ export default function ChatRoomPage() {
             >
               <Text weight={900}>{chatRoomInfo.work_title}</Text>
               <Text color={FONT_COLORS.gray} weight={900}>
-                {chatUserDetails.userIdList.length}
+                {participantInfoList.length}
               </Text>
             </Container>
 
@@ -110,14 +136,15 @@ export default function ChatRoomPage() {
           <SidePanel
             isOpen={navPannelIsOpen}
             onClose={() => setNavPannel(false)}
-            chatUserDetails={chatUserDetails}
+            participantInfoList={participantInfoList}
             chatRoomInfo={chatRoomInfo}
           />
 
           <Channel
-            chatUserDetails={chatUserDetails}
-            myUserId={userId || ""}
-            selectedChatsRoomId={chatRoomId || ""}
+            participantInfoList={participantInfoList}
+            myUserId={userId}
+            myUserName={userInfo?.name ?? "UNDEFIEND"}
+            selectedChatsRoomId={chatRoomId}
           />
         </>
       ) : (

@@ -1,4 +1,8 @@
-import { ChatRoomsField, UserFiled } from "@/types/firebase_db";
+import {
+  ChatRoomUsersField,
+  ChatRoomsField,
+  UserFiled,
+} from "@/types/firebaseInterface";
 
 import { dummyJobPostList } from "@/mocks/dummyJobData";
 
@@ -64,7 +68,7 @@ const DUMMY_USER_FILED_LIST: UserFiled[] = [
  */
 
 // ChatUser 필드 예시
-const CHAT_USER_LIST = [
+const USER_LIST = [
   {
     user_id: 1,
     name: "김준준",
@@ -127,27 +131,46 @@ const CHAT_USER_LIST = [
   },
 ];
 
+const FIRST_ADMIN = USER_LIST[0].user_id;
+const SECOND_ADMIN = USER_LIST[1].user_id;
+
 /**
  * DB에 저장된 채팅방 리스트
  */
+// dummyJobPostList 기준 앞에서 2개 관리자 : user_id: 1, 김준준
+// 나머지 공고 관리자 : user_id: 2, 박민민
 const DUMMY_CHAT_ROOMS: ChatRoomsField[] = dummyJobPostList.map(
   (jobInfo, index) => {
     const { id, title, calenderList } = jobInfo;
     let tmp_admin_ids;
 
-    // dummyJobPostList 기준 앞에서 2개 관리자 : user_id: 1, 김준준
-    // 나머지 공고 관리자 : user_id: 2, 박민민
-    if (index < 3) {
-      tmp_admin_ids = CHAT_USER_LIST[0].user_id;
+    if (index < 2) {
+      tmp_admin_ids = FIRST_ADMIN;
     } else {
-      tmp_admin_ids = CHAT_USER_LIST[1].user_id;
+      tmp_admin_ids = SECOND_ADMIN;
     }
 
     return {
-      drama_id: id,
-      name: title,
+      work_id: id,
+      work_title: title,
       created_at: calenderList[0],
       admin_ids: [tmp_admin_ids],
+    };
+  },
+);
+
+/**
+ * 관리자가 아닌 모든 유저들은 모든 작품에 참여한다고 가정
+ */
+const DUMMY_CHAT_ROOM_USERS: ChatRoomUsersField[] = dummyJobPostList.map(
+  (jobInfo, index) => {
+    const participantInfoList = USER_LIST.filter((user) =>
+      index < 2 ? user.user_id !== SECOND_ADMIN : user.user_id !== FIRST_ADMIN,
+    );
+
+    return {
+      work_id: jobInfo.id,
+      participant_info_list: participantInfoList,
     };
   },
 );
@@ -157,6 +180,7 @@ const DUMMY_CHAT_ROOMS: ChatRoomsField[] = dummyJobPostList.map(
  */
 const DUMMY_FIREBASE_DB_LIST = {
   DUMMY_USER_FILED_LIST,
-  CHAT_USER_LIST,
+  USER_LIST,
   DUMMY_CHAT_ROOMS,
+  DUMMY_CHAT_ROOM_USERS,
 };

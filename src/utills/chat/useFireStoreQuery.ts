@@ -54,14 +54,14 @@ export function useFirestoreQuery(
         if (!newData.created_at) {
           return {
             ...newData,
-            id: doc.id,
+            id: Number(doc.id),
             created_at: new Date(),
           };
         }
 
         return {
           ...newData,
-          id: doc.id,
+          id: Number(doc.id),
         };
       });
 
@@ -100,7 +100,7 @@ export function useFirestoreQuery(
       const newData = snapshot.docs
         .map((doc) => ({
           ...doc.data(),
-          id: doc.id,
+          id: Number(doc.id),
         }))
         .reverse();
 
