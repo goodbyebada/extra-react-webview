@@ -8,7 +8,7 @@ import { MainButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
 import Text from "@components/atoms/Text";
 
-import logoImage from "@/assets/logo.png";
+import logoImage from "@assets/logo.png";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { FONT_COLORS } from "@/styled/colors";
@@ -88,6 +88,7 @@ const LoginPage = () => {
         <InputField
           name="password"
           placeholder="비밀번호"
+          type="password"
           control={control}
           rules={{
             required: true,
@@ -98,9 +99,10 @@ const LoginPage = () => {
           isActive={isValid}
           disabled={!isValid}
           onClick={handleSubmit((data) => {
+            console.log(data);
             localStorage.setItem("email", data.email);
             localStorage.setItem("password", data.password);
-            navigate("/");
+            navigate("/member/home");
           })}
         >
           로그인
@@ -124,12 +126,6 @@ const LoginPage = () => {
       </Container>
       <Container flex={10}>
         <Container flexDirection="row">
-          {/* <SocialLoginButton
-            style={{ background: "#FEE501" }}
-            onClick={() => console.log("kakao")}
-          >
-            <RiKakaoTalkFill color="#000" size={30} />
-          </SocialLoginButton> */}
           <KakaoLogin
             style={{
               background: "#FEE501",

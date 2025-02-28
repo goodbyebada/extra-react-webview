@@ -30,23 +30,23 @@ const StyledButton = styled.button`
   cursor: pointer;
 `;
 
-const StyledMainButton = styled(StyledButton)<ButtonProps>`
+const StyledMainButton = styled(StyledButton)<{ $isActive: boolean }>`
   width: 100%;
   height: 53px;
   margin: 0 auto;
   border-radius: 18px;
   ${({ disabled }) => !disabled && "cursor: pointer;"}
 
-  background: ${({ isActive }) =>
-    isActive ? COMMON_COLORS.main : BACKGROUND_COLORS.disabled};
+  background: ${({ $isActive }) =>
+    $isActive ? COMMON_COLORS.main : BACKGROUND_COLORS.disabled};
 `;
 
-const StyledBoxButton = styled.div<{ isActive: boolean }>`
+const StyledBoxButton = styled.div<{ $isActive: boolean }>`
   width: 40%;
   height: 30px;
   border-radius: 5px;
   background: ${(props) =>
-    props.isActive ? "rgba(116, 116, 116, 0.4)" : "#747474"};
+    props.$isActive ? "rgba(116, 116, 116, 0.4)" : "#747474"};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -91,7 +91,7 @@ const MainButton = ({
 }: ButtonProps) => {
   return (
     <StyledMainButton
-      isActive={isActive}
+      $isActive={isActive}
       onClick={onClick}
       disabled={disabled}
       {...props}
@@ -115,7 +115,7 @@ const MainButton = ({
  */
 const BoxButton = ({ children, onClick, isActive = false }: ButtonProps) => {
   return (
-    <StyledBoxButton onClick={onClick} isActive={isActive}>
+    <StyledBoxButton onClick={onClick} $isActive={isActive}>
       <Text
         size={13}
         color={isActive ? "rgba(255, 255, 255, 0.4)" : "#fff"}
@@ -126,7 +126,6 @@ const BoxButton = ({ children, onClick, isActive = false }: ButtonProps) => {
     </StyledBoxButton>
   );
 };
-
 
 const BackButton = () => {
   const navigate = useNavigate();
@@ -152,4 +151,10 @@ const HistoryBackButton = ({ onClick }: HistoryBackButtonProps) => {
   );
 };
 
-export { StarToggleButton, MainButton, HistoryBackButton, BackButton, BoxButton };
+export {
+  StarToggleButton,
+  MainButton,
+  HistoryBackButton,
+  BackButton,
+  BoxButton,
+};

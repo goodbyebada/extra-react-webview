@@ -100,7 +100,7 @@ const InputField = forwardRef(
             {...inputProps}
             placeholder={placeholder}
             type={type}
-            ref={ref} // Forward the ref
+            ref={ref}
           />
         )}
       />
