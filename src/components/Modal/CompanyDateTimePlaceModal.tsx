@@ -97,7 +97,7 @@ function CompanyDateTimePlaceModal({
           <Text size={20} weight={900} color="#fff">
             날짜 :
           </Text>
-          <Input type="date" onChange={handleDateChange} />
+          <Input type="date" onChange={handleDateChange} placeholder="날짜" />
         </Row>
 
         {/* 선택한 날짜 목록 표시 */}
@@ -118,6 +118,7 @@ function CompanyDateTimePlaceModal({
             type="time"
             value={formState.time}
             onChange={handleTimeChange}
+            placeholder="시간"
           />
         </Row>
 
@@ -129,6 +130,7 @@ function CompanyDateTimePlaceModal({
             name="place"
             value={formState.place}
             onChange={handlePlaceChange}
+            placeholder="장소"
           />
           <IoIosSearch size={24} onClick={handleSearchClick} />
         </Row>

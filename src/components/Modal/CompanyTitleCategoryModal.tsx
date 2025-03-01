@@ -100,6 +100,7 @@ function CompanyTitleCategoryModal({
             value={formState.title}
             onChange={handleChange}
             spellCheck="false"
+            placeholder="제목"
           />
         </Row>
         <Row>
@@ -111,6 +112,7 @@ function CompanyTitleCategoryModal({
             value={categoryInput}
             onChange={handleChange}
             spellCheck="false"
+            placeholder="카테고리"
           />
           <CiSquarePlus size={35} onClick={handlePlusClick} />
         </Row>
@@ -138,6 +140,7 @@ function CompanyTitleCategoryModal({
             type="date"
             value={formState.deadline}
             onChange={handleChange}
+            placeholder="마감기한"
           />
         </Row>
         <MainButton isActive={isSubmitActive} onClick={handleSubmit}>

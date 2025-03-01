@@ -182,6 +182,7 @@ function CompanyRoleModal({
             <NumInput
               type="number"
               name="minAge"
+              placeholder="나이1"
               value={formState.minAge}
               onChange={handleChange}
             />
@@ -189,6 +190,7 @@ function CompanyRoleModal({
             <NumInput
               type="number"
               name="maxAge"
+              placeholder="나이2"
               value={formState.maxAge}
               onChange={handleChange}
             />
@@ -222,6 +224,7 @@ function CompanyRoleModal({
             <NumInput
               type="number"
               name="limitPersonnel"
+              placeholder="인원"
               value={formState.limitPersonnel}
               onChange={handleChange}
             />
@@ -233,7 +236,7 @@ function CompanyRoleModal({
             <Input
               name="hourPay"
               type="text"
-              placeholder="시급 입력"
+              placeholder="시급"
               value={hourPay}
               onChange={handleHourPayChange}
               spellCheck="false"
