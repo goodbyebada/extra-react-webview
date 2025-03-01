@@ -83,7 +83,7 @@ const ShowApplicant = () => {
           return (
             <RoleCheckItem
               key={item.id}
-              userId={item.userId}
+              userId={item.userId.toString()}
               name={item.name}
               isChecked={selectedItems.includes(item.name)} // 선택된 항목인지 여부 전달
               onCheckClick={(isChecked) =>

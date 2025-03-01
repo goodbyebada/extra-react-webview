@@ -2,11 +2,13 @@ import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import RoleBox from "@components/RoleBox";
 import { RoleListToShow } from "@/types/shared";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useDispatch } from "react-redux";
 import { appliedRole } from "@redux/memberRoles/memberRolesSlice";
 import { AppDispatch } from "@redux/store";
+import { ContentWrapper } from "@components/atoms/Wrapper";
+import { MainButton } from "@components/atoms/Button";
 
 type ModalProps = {
   handleApply: (value: boolean) => void;
@@ -34,14 +36,12 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
 
   const user = DummyUser;
   const dispatch = useDispatch<AppDispatch>();
+  const INIT_SELECTED_STATUS = new Array(roleList.length).fill(false);
 
-  const [isSelected, setSelected] = useState<boolean[]>(
-    new Array(roleList.length).fill(false),
-  );
+  const [selectedStatus, setSelectedStauts] =
+    useState<boolean[]>(INIT_SELECTED_STATUS);
   const [selectedRoleId, setSelectedRoleId] = useState<number>(-1);
-
-  // !!! 데이터 연결 문제 있음
-  // !! 이미 접수 완료 되었을 시 모달 추가 해야함
+  const [isAppliedRole, setIsAppliedRole] = useState<boolean>(false);
 
   /**
    * 역할에 지원신청하고자 하는 유저 인터랙션 있을때마다 해당 역할에 대한 유저의 상태 확인한다.
@@ -53,10 +53,16 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
    * 여러개의 역할 중 하나만 선택될 수 있는 로직
    */
   const handleClick = (idx: number) => {
-    const newArr = Array(roleList.length).fill(false);
-    newArr[idx] = true;
-    setSelected(newArr);
+    const updatedSelectedStatus = [...selectedStatus];
+
+    updatedSelectedStatus[idx] = !updatedSelectedStatus[idx];
+    setSelectedStauts(updatedSelectedStatus);
   };
+
+  useEffect(() => {
+    const result = Boolean(selectedStatus.find((elem) => elem === true));
+    setIsAppliedRole(result);
+  }, [selectedStatus]);
 
   /**
    * POST API 호출
@@ -65,11 +71,18 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
 
   const postEvent = (id: number) => {
     dispatch(appliedRole(id));
+    console.log("1!!");
   };
 
   return (
-    <ModalContainer>
-      <MultiplyIcon src={multiply} onClick={closeModal} />
+    <ContentWrapper>
+      <MultiplyIcon
+        src={multiply}
+        onClick={() => {
+          setSelectedStauts(INIT_SELECTED_STATUS);
+          closeModal();
+        }}
+      />
 
       <RoleBoxWrapper>
         {roleList.length > 0 &&
@@ -93,7 +106,7 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
                     handleClick(idx);
                     setSelectedRoleId(elem.roleId);
                   }}
-                  isSelected={isSelected[idx]}
+                  isSelected={selectedStatus[idx]}
                   styled={styled}
                 />
               );
@@ -111,48 +124,32 @@ function RoleModal({ roleList, closeModal, handleApply }: ModalProps) {
                 index={idx}
                 roleInfo={elem}
                 handleClick={() => {}}
-                isSelected={isSelected[idx]}
+                isSelected={selectedStatus[idx]}
                 styled={styled}
               />
             );
           })}
       </RoleBoxWrapper>
 
-      {/* undefined를 걸러낼수있다.*/}
-      <Btn
-        className={
-          isSelected.find((elem) => elem === true) ? "" : "non-selected"
-        }
+      <MainButton
         onClick={() => {
-          handleApply(!!isSelected.find((elem) => elem === true));
+          handleApply(isAppliedRole);
+
           if (selectedRoleId > 0) {
+            console.log(selectedRoleId);
             postEvent(selectedRoleId);
           }
         }}
+        isActive={isAppliedRole}
+        disabled={!isAppliedRole}
       >
         지원하기
-      </Btn>
-    </ModalContainer>
+      </MainButton>
+    </ContentWrapper>
   );
 }
 
 export default RoleModal;
-
-const ModalContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 345px;
-  height: 537px;
-  flex-shrink: 0;
-  border-radius: 18px;
-  z-index: 10;
-  background:
-    linear-gradient(#000, #000) padding-box,
-    linear-gradient(180deg, #666666 0%, #f5c001 100%) border-box;
-  border: 4px solid transparent;
-`;
 
 const MultiplyIcon = styled.img`
   position: absolute;
@@ -169,31 +166,4 @@ const RoleBoxWrapper = styled.div`
   margin-bottom: 20px;
   max-height: 380px;
   overflow-y: auto;
-`;
-
-const Btn = styled.button`
-  width: 299px;
-  height: 53px;
-  flex-shrink: 0;
-  border-radius: 18px;
-  background: #f5c001;
-  color: #000;
-  font-family: Inter;
-  font-size: 17px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 22px;
-  display: block;
-  margin: 0px auto;
-  position: absolute;
-  bottom: 22px;
-  left: 50%;
-  transform: translateX(-50%);
-
-  /* 선택되지 않았을시 비활성화 버튼  css 추가  */
-
-  &.non-selected {
-    background: #595959;
-    color: #b0b0b0;
-  }
 `;

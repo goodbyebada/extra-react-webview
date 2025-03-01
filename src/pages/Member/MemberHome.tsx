@@ -1,5 +1,3 @@
-import { styled } from "styled-components";
-
 import HomeCalendar from "@components/organisms/HomeCalendar";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +13,7 @@ import { LayoutComponent } from "@components/atoms/Layout";
 import { ThemeText } from "@components/atoms/Text";
 import { Header } from "@components/atoms/Layout";
 import { HomeNavBar } from "@components/mocules/navBar/HomeNavBar";
+import { setHomeDate } from "@redux/dateSlice";
 
 const DUMMY_INIT_NAME = "김출연";
 
@@ -23,7 +22,7 @@ const DUMMY_INIT_NAME = "김출연";
  *
  * @returns 보조 출연자 홈화면 UI
  */
-export default function ExtrasHome() {
+export default function MemberHome() {
   const name = DUMMY_INIT_NAME;
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -40,7 +39,7 @@ export default function ExtrasHome() {
 
   // dateSelectedNoticeList 날짜 선택시 화면으로 이동
   const navigateToSelectedNoticeList = () => {
-    const path = "/date-selected-notice-list";
+    const path = "/member/home/date-selected-notice-list";
     navigate(path);
   };
 
@@ -73,32 +72,20 @@ export default function ExtrasHome() {
     }
 
     if (jobLength > 0) {
-      // const dateNum = stringDate;
-
-      // CHECK dateNum 눌렀을때 어떻게 처리했는지 확인 후 수정 예정
-      // dispatch(setHomeDate(dateNum));
+      dispatch(setHomeDate({ dateNum }));
       navigateToSelectedNoticeList();
     }
-  };
-
-  const homeMessageComponent = () => {
-    return (
-      <HomeMessage>
-        {showRecommand
-          ? HOME_MESSAGES.recommend(name)
-          : HOME_MESSAGES.all(name)}
-      </HomeMessage>
-    );
   };
 
   return (
     <LayoutComponent>
       <Header>
         <HomeNavBar />
-        <ThemeText
-          children={homeMessageComponent()}
-          variant="title"
-        ></ThemeText>
+        <ThemeText variant="title">
+          {showRecommand
+            ? HOME_MESSAGES.recommend(name)
+            : HOME_MESSAGES.all(name)}
+        </ThemeText>
       </Header>
 
       {showAsCalender ? (
@@ -114,10 +101,3 @@ export default function ExtrasHome() {
     </LayoutComponent>
   );
 }
-
-const HomeMessage = styled.p`
-  color: #fff;
-  font-size: 20px;
-  font-weight: 900;
-  margin-top: 20px;
-`;

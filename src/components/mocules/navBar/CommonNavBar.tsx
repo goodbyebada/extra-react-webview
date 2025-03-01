@@ -7,7 +7,7 @@ import { BACKGROUND_COLORS, COLORS } from "@styled/colors";
 // TODO theme에 따라 background color 바뀌어야한다.
 // TODO Wrapper 높이 크기 고정 || 전달해야함-> 가리기 때문에
 // fixed 설정 시, width 따로 지정해줘야함
-const Wrapper = styled.div<{ sticky?: boolean; bottomLine?: boolean }>`
+const Wrapper = styled.div<{ $sticky?: boolean; $bottomLine?: boolean }>`
   width: 100%;
   display: flex;
   align-items: center;
@@ -15,16 +15,16 @@ const Wrapper = styled.div<{ sticky?: boolean; bottomLine?: boolean }>`
   background-color: ${BACKGROUND_COLORS.default};
   height: 80px;
 
-  ${({ sticky }) =>
-    sticky &&
+  ${({ $sticky }) =>
+    $sticky &&
     `
       position: sticky;
       top: 0;
       z-index: 10; 
   `}
 
-  border-bottom: ${({ bottomLine }) =>
-    bottomLine ? `2px solid ${COLORS.white}` : ""}
+  border-bottom: ${({ $bottomLine }) =>
+    $bottomLine ? `2px solid ${COLORS.white}` : ""}
 `;
 
 export function NavBar({
@@ -37,7 +37,7 @@ export function NavBar({
   bottomLine?: boolean;
 }) {
   return (
-    <Wrapper sticky={sticky} bottomLine={bottomLine}>
+    <Wrapper $sticky={sticky} $bottomLine={bottomLine}>
       <BackButton />
       <SpaceBetweenNavBar>{children}</SpaceBetweenNavBar>
     </Wrapper>

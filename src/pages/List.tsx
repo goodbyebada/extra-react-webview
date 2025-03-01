@@ -21,6 +21,7 @@ type ListProps = {
   showRecommand: boolean;
 };
 
+// TODO 인피니트 스크롤링 적요
 export default function List({ dateYearMonth, showRecommand }: ListProps) {
   const [pageNum, setPageNum] = useState(0);
   const dateYM = useSelector((state: RootState) => state.date);

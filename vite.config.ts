@@ -47,16 +47,18 @@ export default defineConfig(({ mode }) => {
         },
       }),
     ],
+
+    // NOTE PR시 주석 제거
     // 인증서가 있을 시 https 설정
-    server:
-      !fs.existsSync("./localhost-key.pem") || !fs.existsSync("./localhost.pem")
-        ? undefined
-        : {
-            https: {
-              key: fs.readFileSync("./localhost-key.pem"),
-              cert: fs.readFileSync("./localhost.pem"),
-            },
-          },
+    // server:
+    //   !fs.existsSync("./localhost-key.pem") || !fs.existsSync("./localhost.pem")
+    //     ? undefined
+    //     : {
+    //         https: {
+    //           key: fs.readFileSync("./localhost-key.pem"),
+    //           cert: fs.readFileSync("./localhost.pem"),
+    //         },
+    //       },
   };
 });
 

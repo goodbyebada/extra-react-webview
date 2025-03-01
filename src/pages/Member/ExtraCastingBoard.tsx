@@ -37,7 +37,6 @@ export default function ExtraCastingBoard() {
         dispatch(fetchJobPostById(parseInt(jobPostId)));
       }
     };
-
     fetch();
   }, [dispatch, jobPostId]);
 
@@ -46,7 +45,8 @@ export default function ExtraCastingBoard() {
       case ResponseStatus.loading:
         return <Loading loading={true} />;
       case ResponseStatus.fullfilled:
-        return <CastInfo selectedJobPostItem={jobPostItem.data} />;
+        const selectedJobPostItem = jobPostItem.data;
+        return <CastInfo selectedJobPostItem={selectedJobPostItem} />;
       case ResponseStatus.rejected:
         return <NotFoundPage />;
 

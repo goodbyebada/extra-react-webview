@@ -7,14 +7,16 @@ import { ResponseStatus } from "@/types/shared";
 import { useState } from "react";
 import Loading from "@components/Loading";
 import { useEffect } from "react";
-import { sendMessage } from "@api/utils";
+import { useNavigate } from "react-router-dom";
+import Modal from "@components/atoms/Modal";
 
 interface customProps {
   closeModal: () => void;
 }
 
+//TODO ATOMIC 디자인 시스템에 맞게 리팩토링 필요
 const CustomCheckModal = ({ closeModal }: customProps) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const appliedData = useSelector(
     (state: RootState) => state.appliedRoles.appliedRole,
   );
@@ -37,24 +39,17 @@ const CustomCheckModal = ({ closeModal }: customProps) => {
       case ResponseStatus.rejected:
         return <>{appliedData.error}</>;
       default:
-        return <Loading loading={true} />;
+        <></>;
+      // return <Loading loading={true} />;
     }
   }
-
-  // RN 라우팅
-  const navigate = (type: string) => {
-    sendMessage({
-      type,
-      version: "1.0",
-    });
-  };
 
   return (
     <>
       {appliedData.status === ResponseStatus.loading ? (
         <Loading loading={true} />
       ) : (
-        <ModalContainer>
+        <Modal isVisible={true} onClose={closeModal}>
           <MultiplyIcon src={multiply} onClick={closeModal} />
           <ModalText> {ReturnMessage()}</ModalText>
           {fullfilled ? <ApprovalIcon src={approval} /> : <Default />}
@@ -62,42 +57,26 @@ const CustomCheckModal = ({ closeModal }: customProps) => {
           <ButtonContainer>
             <Btn
               onClick={() => {
-                navigate("NAVIGATION_HOME");
+                navigate("/member/home");
               }}
             >
               홈 화면 가기
             </Btn>
             <Btn
               onClick={() => {
-                navigate("NAVIGATION_MANAGE");
+                navigate("/member/manage");
               }}
             >
               내 지원 현황 보기
             </Btn>
           </ButtonContainer>
-        </ModalContainer>
+        </Modal>
       )}
     </>
   );
 };
 
 export default CustomCheckModal;
-
-const ModalContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  /* width: 345px; */
-  height: 537px;
-  flex-shrink: 0;
-  border-radius: 18px;
-  z-index: 10;
-  background:
-    linear-gradient(#000, #000) padding-box,
-    linear-gradient(180deg, #666666 0%, #f5c001 100%) border-box;
-  border: 4px solid transparent;
-`;
 
 const MultiplyIcon = styled.img`
   position: absolute;

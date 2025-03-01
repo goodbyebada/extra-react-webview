@@ -26,6 +26,7 @@ const defaultJobPost: JobPost = {
   category: "",
   companyName: "",
   scheduleIdList: [],
+  applyDeadLine: "",
   calenderList: [],
   roleIdList: [],
   roleNameList: [],

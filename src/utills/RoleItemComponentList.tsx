@@ -1,5 +1,5 @@
 import { JobPost } from "@/types/shared";
-import RoleDetailItem from "@utills/RoleDetailItem";
+import RoleDetailItem from "@utills/RoleDetailInfo";
 import { SeasonLabel } from "@/types/shared";
 
 /**

@@ -3,11 +3,11 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AddNotice from "./pages/AddNotice";
 import ShowApplicant from "./pages/ShowApplicant";
 
-import ExtrasHome from "@pages/ExtrasHome";
-import ExtraCastingBoard from "@pages/ExtraCastingBoard";
-import DateSelectedNoticeList from "@pages/DateSelectedNoticeList";
+import MemberHome from "@pages/Member/MemberHome";
+import ExtraCastingBoard from "@pages/Member/ExtraCastingBoard";
+import DateSelectedNoticeList from "@pages/Member/DateSelectedNoticeList";
 import CompanyHome from "@pages/CompanyHome";
-import ExtraShootManagePage from "@pages/ExtraShootManagePage";
+import ExtraShootManagePage from "@pages/Member/ExtraShootManagePage";
 import CompanyShootManagePage from "@pages/CompanyShootManagePage";
 import { ApplicantDetail } from "@pages/ApplicantDetail";
 import DetailPage from "@pages/DetailPage";
@@ -78,7 +78,7 @@ function App() {
 
           {/* member */}
           {/* member home */}
-          <Route path="/member/home" element={<ExtrasHome />} />
+          <Route path="/member/home" element={<MemberHome />} />
           <Route
             path="/member/home/extra-casting-board/:jobPostId"
             element={<ExtraCastingBoard />}
