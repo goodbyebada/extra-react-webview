@@ -158,7 +158,7 @@ const CameraPage = () => {
       {photo != null ? (
         <Container>
           <Container flex={90}>
-            <img src={photo} alt="capture image" style={{ maxWidth: "100%" }} />
+            <img src={photo} alt="capture-image" style={{ maxWidth: "100%" }} />
           </Container>
           <Container flex={10}>
             <Container flexDirection="row" paddingHorizontal={30}>
@@ -176,14 +176,30 @@ const CameraPage = () => {
               justifyContent="space-between"
               paddingHorizontal={10}
             >
-              <button type="button" onClick={() => navigate(-1)}>
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+                data-testid="close-button"
+              >
                 <RxCross2 color="#fff" size={25} />
               </button>
-              <button type="button" onClick={toggleFlash}>
+              <button
+                type="button"
+                onClick={toggleFlash}
+                data-testid="flash-button"
+              >
                 {isFlashOn ? (
-                  <IoIosFlash size={25} color="#fff" />
+                  <IoIosFlash
+                    size={25}
+                    color="#fff"
+                    data-testid="flash-icon-on"
+                  />
                 ) : (
-                  <IoIosFlashOff size={25} color="#fff" />
+                  <IoIosFlashOff
+                    size={25}
+                    color="#fff"
+                    data-testid="flash-icon-off"
+                  />
                 )}
               </button>
               <button
@@ -191,6 +207,7 @@ const CameraPage = () => {
                 onClick={() =>
                   setFacingMode(facingMode == "user" ? "environment" : "user")
                 }
+                data-testid="switch-camera-button"
               >
                 <MdCameraswitch size={20} color="#fff" />
               </button>
@@ -203,7 +220,10 @@ const CameraPage = () => {
               playsInline
               style={{ maxWidth: "100%", maxHeight: "100%" }}
             />
-            <CaptureIconButton onClick={capturePhoto}>
+            <CaptureIconButton
+              onClick={capturePhoto}
+              data-testid="capture-icon"
+            >
               <FaCamera size={15} />
             </CaptureIconButton>
           </Container>
