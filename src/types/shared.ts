@@ -247,7 +247,7 @@ export interface MemberRoleFront {
   gatheringTime: string; //시간
   gatheringLocation: string;
   companyName: string;
-  status: string;
+  status: "applied" | "rejected" | "approved";
   calender: {
     startDateNum: number;
     endDateNum: number;

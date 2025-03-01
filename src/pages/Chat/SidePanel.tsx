@@ -6,7 +6,7 @@ import { IoDocumentTextOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";
 import { InputField } from "@components/atoms/Form";
 import { useEffect, useMemo, useState } from "react";
-import useDebounce from "@utills/useDebounce";
+import useDebounce from "@utills/hooks/useDebounce";
 import Text, { ThemeText } from "@components/atoms/Text";
 import { ChatUser, ChatUsersManager } from "@utills/chat/ChatUsers";
 import { SearchChatUsersService } from "@utills/chat/SearchUsersController";

@@ -13,7 +13,6 @@ import { ApplicantDetail } from "@pages/ApplicantDetail";
 import DetailPage from "@pages/DetailPage";
 import NotFound from "@pages/Error/NotFound";
 import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
-import SchedulerPage from "@pages/Scheduler";
 import TempEvaluation from "@pages/TempEvaluation";
 import CompanyClothesMemberList from "@pages/CompanyClothesMemberList";
 import MemberClothesConfirm from "@pages/MemberClothesConfirm";
@@ -53,6 +52,7 @@ import ManageOverViewPage from "@pages/ManageOverViewPage";
 import ChatRoomPage from "@pages/Chat/ChatRoomPage";
 import { ChatListForAdmin } from "@pages/Chat/ChatListForAdmin";
 import ChatPreviewForUser from "@pages/Chat/ChatPreviewForUser";
+import SchedulerPage from "@pages/Member/SchedulerPage";
 
 function App() {
   useEffect(() => {

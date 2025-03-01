@@ -1,12 +1,13 @@
 import { ItemProps } from "@components/mocules/Item";
 
 /**
- * year month dateNum 을 하나의 숫자로 return
- * ex ) 2024-09-02 => 20240902
+ * year month dateNum 의 dateNum만 return
+ * ex ) 2024-09-02 => 2
  */
 
 export function converToDateObject(calenderItem: string): number {
-  const dateNumber = calenderItem.split("-").join("");
+  const splitedCalenderItem = calenderItem.split("-");
+  const dateNumber = splitedCalenderItem[splitedCalenderItem.length - 1];
 
   return +dateNumber;
 }
