@@ -9,6 +9,7 @@ interface StyledCardItemProps {
   name: string;
   statusComponent: React.ReactNode;
   url: string;
+  status: string;
 }
 
 interface CardStatus {
@@ -93,6 +94,7 @@ const ActorCardItem = ({ name, status, url }: CardItemProps) => {
       name={name}
       url={url}
       statusComponent={<ActorStatus status={status} />}
+      status={status.toString()}
     />
   );
 };
@@ -109,6 +111,7 @@ const ClothesConfirmCardItem = ({ name, status, url }: CardItemProps) => {
           </Text>
         </ClothesStatus>
       }
+      status={status.toString()}
     />
   );
 };
