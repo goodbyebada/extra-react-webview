@@ -38,7 +38,7 @@ export type Tattoo = {
 export interface JobPost {
   id: number;
   title: string;
-  gatheringLocation: string;
+  gatheringLocation: Place;
   gatheringTime: string;
   imageUrl?: string; // ? 서버에서 없을텐데 왜 이 속성이 있는지 모르겠다
   status: boolean;
@@ -56,6 +56,18 @@ export interface JobPost {
   currentPersonnelList: number[];
   seasonList: string[];
   tattooList: Tattoo[];
+}
+
+/**
+ * JobPost 주소 지도
+ */
+export interface Place {
+  id: string;
+  placeName: string;
+  roadAddress: string;
+  jibunAddress: string;
+  latitude: number;
+  longitude: number;
 }
 
 /**
@@ -85,14 +97,32 @@ export type RoleListToShow = RoleItemToShow[];
 export type RoleBodyType = {
   id: number;
   roleName: string;
-  costume: string;
+  costume: Costume;
   sex: boolean;
   minAge: string;
   maxAge: string;
   limitPersonnel: number;
   currentPersonnel: number;
-  season: string;
   tattoo: Tattoo;
+  hourPay: string;
+};
+
+export type Costume = {
+  roleName: string;
+  season: string;
+  etc: string;
+  imageSrc: string[];
+};
+
+export const TattooNames: Record<keyof Tattoo, string> = {
+  face: "얼굴",
+  chest: "가슴",
+  arm: "팔",
+  leg: "다리",
+  shoulder: "어깨",
+  back: "등",
+  hand: "손",
+  feet: "발",
 };
 
 /**

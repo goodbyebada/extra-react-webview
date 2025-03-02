@@ -140,7 +140,7 @@ const Row = styled.div`
 const StarsContainer = styled.div`
   display: flex;
   margin-bottom: 30px;
-  width: 100%;
+  width: 200px;
   gap: 5px;
 `;
 

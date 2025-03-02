@@ -3,15 +3,19 @@ import React, { useState, useEffect } from "react";
 import Modal from "@components/atoms/Modal";
 import { MainButton } from "@components/atoms/Button";
 import Text from "@components/atoms/Text";
+import { IoIosSearch } from "react-icons/io";
+import PlaceItem from "@components/mocules/PlaceItem";
+import useKakaoPlaceSearch from "../../customHook/useKakaoPlaceSearch";
+import { Place } from "@api/interface";
 
 interface CompanyDateTimePlaceModalProps {
-  onSubmit: (date: string, time: string, place: string) => void;
+  onSubmit: (dates: string[], time: string, place: Place) => void;
   closeModal: () => void;
   isVisible: boolean;
 }
 
 export type FormType = {
-  date: string;
+  dates: string[];
   time: string;
   place: string;
 };
@@ -29,47 +33,61 @@ function CompanyDateTimePlaceModal({
   isVisible,
 }: CompanyDateTimePlaceModalProps) {
   const [formState, setFormState] = useState<FormType>({
-    date: "",
+    dates: [],
     time: "",
     place: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
+  const [showPlaceList, setShowPlaceList] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
+
+  const { filteredPosts, searchKakaoPlaces, error } = useKakaoPlaceSearch();
 
   useEffect(() => {
     setIsFormValid(
-      formState.date !== "" && formState.time !== "" && formState.place !== "",
+      formState.dates.length > 0 && formState.time !== "" && !!selectedPlace,
     );
-  }, [formState]);
+  }, [formState, selectedPlace]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    switch (name) {
-      case "date":
-        setFormState((prevState) => ({
-          ...prevState,
-          date: value,
-        }));
-        break;
-      case "time":
-        setFormState((prevState) => ({
-          ...prevState,
-          time: value,
-        }));
-        break;
-      case "place":
-        setFormState((prevState) => ({
-          ...prevState,
-          place: value,
-        }));
-        break;
-    }
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedDate = e.target.value;
+    setFormState((prevState) => {
+      const newDates = prevState.dates.includes(selectedDate)
+        ? prevState.dates.filter((date) => date !== selectedDate) // 선택 해제
+        : [...prevState.dates, selectedDate]; // 날짜 추가
+      return { ...prevState, dates: newDates };
+    });
+  };
+
+  const handleDateRemove = (dateToRemove: string) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      dates: prevState.dates.filter((date) => date !== dateToRemove),
+    }));
+  };
+
+  const handleTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormState((prevState) => ({ ...prevState, time: e.target.value }));
+  };
+
+  const handlePlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormState((prevState) => ({ ...prevState, place: e.target.value }));
+  };
+
+  const handlePlaceSelect = (place: Place) => {
+    setSelectedPlace(place);
   };
 
   const handleSubmit = () => {
-    if (isFormValid) {
-      onSubmit(formState.date, formState.time, formState.place);
+    if (isFormValid && selectedPlace) {
+      onSubmit(formState.dates, formState.time, selectedPlace);
       closeModal();
     }
+  };
+
+  const handleSearchClick = () => {
+    searchKakaoPlaces(formState.place);
+    setShowPlaceList(true);
   };
 
   return (
@@ -79,13 +97,18 @@ function CompanyDateTimePlaceModal({
           <Text size={20} weight={900} color="#fff">
             날짜 :
           </Text>
-          <Input
-            name="date"
-            type="date"
-            value={formState.date}
-            onChange={handleChange}
-          />
+          <Input type="date" onChange={handleDateChange} placeholder="날짜" />
         </Row>
+
+        {/* 선택한 날짜 목록 표시 */}
+        <SelectedDates>
+          {formState.dates.map((date) => (
+            <SelectedDate key={date} onClick={() => handleDateRemove(date)}>
+              {date} ❌
+            </SelectedDate>
+          ))}
+        </SelectedDates>
+
         <Row>
           <Text size={20} weight={900} color="#fff">
             시간 :
@@ -94,15 +117,45 @@ function CompanyDateTimePlaceModal({
             name="time"
             type="time"
             value={formState.time}
-            onChange={handleChange}
+            onChange={handleTimeChange}
+            placeholder="시간"
           />
         </Row>
+
         <Row>
           <Text size={20} weight={900} color="#fff">
             장소 :
           </Text>
-          <Input name="place" value={formState.place} onChange={handleChange} />
+          <Input
+            name="place"
+            value={formState.place}
+            onChange={handlePlaceChange}
+            placeholder="장소"
+          />
+          <IoIosSearch size={24} onClick={handleSearchClick} />
         </Row>
+
+        {showPlaceList && (
+          <PlaceList>
+            {filteredPosts.length > 0 ? (
+              filteredPosts.map((place) => (
+                <PlaceItem
+                  key={place.id}
+                  placeName={place.placeName}
+                  roadAddress={place.roadAddress}
+                  jibunAddress={place.jibunAddress}
+                  isSelected={selectedPlace?.id === place.id}
+                  onSelect={() => handlePlaceSelect(place)}
+                />
+              ))
+            ) : (
+              <Text size={16} color="#fff">
+                {error || "검색 결과가 없습니다."}
+              </Text>
+            )}
+          </PlaceList>
+        )}
+
         <MainButton isActive={isFormValid} onClick={handleSubmit}>
           확인
         </MainButton>
@@ -137,4 +190,28 @@ const Input = styled.input`
   outline: none;
   padding: 5px;
   margin: 0 10px;
+`;
+
+const PlaceList = styled.div`
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const SelectedDates = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+`;
+
+const SelectedDate = styled.div`
+  background: #444;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
 `;

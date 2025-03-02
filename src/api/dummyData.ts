@@ -9,6 +9,7 @@ export {
   dummyJobPostList,
   dummyCalenderDataForCompany,
   dummyUserRoleData,
+  dummyUserClothes,
 };
 
 const memberRoleServerDummyList: MemberRoleServer[] = [
@@ -153,7 +154,14 @@ const dummyJobPostList: JobPostList = [
   {
     id: 1,
     title: "라스트 서바이벌1",
-    gatheringLocation: "서울특별시 종로구 광화문역 1번 출구",
+    gatheringLocation: {
+      id: "21160803",
+      placeName: "강남역 2호선",
+      roadAddress: "서울 강남구 강남대로 지하 396",
+      jibunAddress: "서울 강남구 역삼동 858",
+      latitude: 37.49808633653005,
+      longitude: 127.02800140627488,
+    },
     gatheringTime: "4시 30분까지 도착",
     status: true,
     hourPay: 9860,
@@ -209,7 +217,14 @@ const dummyJobPostList: JobPostList = [
   {
     id: 2,
     title: "라스트 서바이벌2",
-    gatheringLocation: "서울특별시 종로구 광화문역 1번 출구",
+    gatheringLocation: {
+      id: "21160829",
+      placeName: "사당역 4호선",
+      roadAddress: "서울 동작구 동작대로 지하 3",
+      jibunAddress: "서울 동작구 사당동 588-44",
+      latitude: 37.4775912070902,
+      longitude: 126.98169851997,
+    },
     gatheringTime: "4시 30분까지 도착",
     status: true,
     hourPay: 9860,
@@ -265,7 +280,14 @@ const dummyJobPostList: JobPostList = [
   {
     id: 3,
     title: "라스트 서바이벌3",
-    gatheringLocation: "서울특별시 종로구 광화문역 1번 출구",
+    gatheringLocation: {
+      id: "21160803",
+      placeName: "강남역 2호선",
+      roadAddress: "서울 강남구 강남대로 지하 396",
+      jibunAddress: "서울 강남구 역삼동 858",
+      latitude: 37.49808633653005,
+      longitude: 127.02800140627488,
+    },
     gatheringTime: "4시 30분까지 도착",
     status: true,
     hourPay: 9860,
@@ -321,7 +343,14 @@ const dummyJobPostList: JobPostList = [
   {
     id: 4,
     title: "라스트 서바이벌4",
-    gatheringLocation: "서울특별시 종로구 광화문역 1번 출구",
+    gatheringLocation: {
+      id: "21160803",
+      placeName: "강남역 2호선",
+      roadAddress: "서울 강남구 강남대로 지하 396",
+      jibunAddress: "서울 강남구 역삼동 858",
+      latitude: 37.49808633653005,
+      longitude: 127.02800140627488,
+    },
     gatheringTime: "4시 30분까지 도착",
     status: true,
     hourPay: 9860,
@@ -387,7 +416,7 @@ const dummyUserRoleData = [
     name: "user1",
     category: "UMC 드라마",
     role: "학생 역할",
-    imageUrl: "https://via.placeholder.com/100",
+    imageUrl: "",
   },
   {
     id: 2,
@@ -395,7 +424,7 @@ const dummyUserRoleData = [
     name: "user2",
     category: "UMC 영화",
     role: "학생 역할",
-    imageUrl: "https://via.placeholder.com/100",
+    imageUrl: "",
   },
   {
     id: 3,
@@ -419,6 +448,66 @@ const dummyUserRoleData = [
     name: "user5",
     category: "UMC 영화",
     role: "조연 역할",
+    imageUrl: "",
+  },
+];
+
+/**
+ * 업체 사용자 의상 컨펌 (임시)
+ */
+const dummyUserClothes = [
+  {
+    userId: "1",
+    name: "홍길동",
     imageUrl: "https://via.placeholder.com/100",
+    clothesNum: 4,
+    clothes: [
+      {
+        id: 1,
+        src: "https://via.placeholder.com/150/FFFFFF?text=1",
+        description: "의상 1",
+      },
+      {
+        id: 2,
+        src: "https://via.placeholder.com/150/FFFFFF?text=2",
+        description: "의상 2",
+      },
+      {
+        id: 3,
+        src: "https://via.placeholder.com/150/FFFFFF?text=3",
+        description: "의상 3",
+      },
+      {
+        id: 4,
+        src: "https://via.placeholder.com/150/FFFFFF?text=4",
+        description: "의상 4",
+      },
+    ],
+  },
+  {
+    userId: "2",
+    name: "김철수",
+    imageUrl: "https://via.placeholder.com/100",
+    clothesNum: 1,
+    clothes: [
+      {
+        id: 1,
+        src: "https://via.placeholder.com/150/FFFFFF?text=1",
+        description: "의상 1",
+      },
+    ],
+  },
+  {
+    userId: "3",
+    name: "이영희",
+    imageUrl: "https://via.placeholder.com/100",
+    clothesNum: 1,
+    clothes: [
+      {
+        id: 1,
+        src: "https://via.placeholder.com/150/FFFFFF?text=1",
+        description: "의상 1",
+      },
+    ],
   },
 ];
