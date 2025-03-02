@@ -24,7 +24,7 @@
     "noFallthroughCasesInSwitch": true,
 
     // 절대경로 설정
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@api/*": ["src/api/*"],
       "@assets/*": ["src/assets/*"],
