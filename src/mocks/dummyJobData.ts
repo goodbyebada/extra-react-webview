@@ -46,7 +46,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 종로구 광화문역 1번 출구",
     calenderList: ["2024-11-02", "2024-11-05"],
     name: "UMC",
-    applyStatus: "APPROVED",
+    applyStatus: "approved",
   },
   {
     id: 3,
@@ -57,7 +57,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 용산구 이태원역 4번 출구",
     calenderList: ["2024-10-10", "2024-10-12", "2024-10-15"],
     name: "몽실몽실",
-    applyStatus: "APPLIED",
+    applyStatus: "applied",
   },
   {
     id: 4,
@@ -79,7 +79,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 마포구 홍대입구역 1번 출구",
     calenderList: ["2024-11-03", "2024-11-07"],
     name: "UMC",
-    applyStatus: "APPROVED",
+    applyStatus: "approved",
   },
 ];
 
@@ -96,7 +96,7 @@ const memberRoleFrontDummyData: MemberRoleFront[] = [
     gatheringTime: "2024-09-02T10:00:00", // 시간
     gatheringLocation: "Seoul, Korea",
     companyName: "Tech Corp",
-    status: "APPROVED",
+    status: "approved",
     calender: {
       startDateNum: 1,
       endDateNum: 5, // 1일이면 startDateNum == endDateNum
@@ -110,7 +110,7 @@ const memberRoleFrontDummyData: MemberRoleFront[] = [
     gatheringTime: "2024-09-02T10:00:00",
     gatheringLocation: "Busan, Korea",
     companyName: "Creative Studio",
-    status: "APPLIED",
+    status: "applied",
     calender: {
       startDateNum: 2,
       endDateNum: 6,
@@ -124,7 +124,7 @@ const memberRoleFrontDummyData: MemberRoleFront[] = [
     gatheringTime: "2024-09-18T10:00:00",
     gatheringLocation: "Incheon, Korea",
     companyName: "Global Solutions",
-    status: "APPROVED",
+    status: "approved",
     calender: {
       startDateNum: 3,
       endDateNum: 5, // 2일 행사
@@ -138,7 +138,7 @@ const memberRoleFrontDummyData: MemberRoleFront[] = [
     gatheringTime: "2024-09-18T10:00:00",
     gatheringLocation: "Incheon, Korea",
     companyName: "Global Solutions",
-    status: "APPROVED",
+    status: "approved",
     calender: {
       startDateNum: 10,
       endDateNum: 10, // 2일 행사
@@ -162,7 +162,14 @@ const dummyCalenderDataForCompany: ObjectType = dummyCalenderDataForExtra;
 const dummyJobPost: JobPost = {
   id: 1,
   title: "라스트 서바이벌1",
-  gatheringLocation: "서울특별시 종로구 광화문역 1번 출구",
+  gatheringLocation: {
+    id: "21160803",
+    placeName: "강남역 2호선",
+    roadAddress: "서울 강남구 강남대로 지하 396",
+    jibunAddress: "서울 강남구 역삼동 858",
+    latitude: 37.49808633653005,
+    longitude: 127.02800140627488,
+  },
   gatheringTime: "4시 30분까지 도착",
   status: true,
   hourPay: 9860,

@@ -139,7 +139,7 @@ function HomeRecruitBox({ navigate, recruitInfo, recommand }: Props) {
           {status ? "모집중" : "모집마감"}
         </RecruitStatus>
         <TimePlace>
-          {timeToExpected} 예정 <br /> {gatheringLocation}
+          {timeToExpected} 예정 <br /> {gatheringLocation.placeName}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>

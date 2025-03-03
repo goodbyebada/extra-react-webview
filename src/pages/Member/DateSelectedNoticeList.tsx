@@ -9,7 +9,7 @@ import { JobPost } from "@/type/shared";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 import { TEST_FLAG } from "@/testFlag";
-import { dummyJobPostList } from "@mocks/dummyJobData";
+import { dummyJobPostList } from "@/mocks/dummyJobData";
 import { defaultJobPost } from "@redux/jobPost/jobPostSlice";
 import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 import { ThemeText } from "@components/atoms/Text";
