@@ -5,6 +5,7 @@ import { HiMiniXMark } from "react-icons/hi2";
 import { MainButton } from "@components/atoms/Button";
 import { useNavigate } from "react-router-dom";
 import { dummyUserRoleData } from "@api/dummyData";
+import { IoPersonCircleSharp } from "react-icons/io5";
 
 interface DetailProfileProps {
   isVisible: boolean;
@@ -59,10 +60,11 @@ const DetailProfileModal = ({
         <HiMiniXMark size={30} color="#fff" onClick={onClose} />
       </Header>
       <Content>
-        <ProfileImage
-          src={user?.imageUrl || "https://via.placeholder.com/100"}
-          alt="Profile"
-        />
+        {user?.imageUrl ? (
+          <ProfileImage src={user?.imageUrl} alt="Profile" />
+        ) : (
+          <IoPersonCircleSharp size={100} color="#ccc" />
+        )}
         <Text size={18} weight={600} color="#fff">
           이름: {user?.name || "name"}
         </Text>

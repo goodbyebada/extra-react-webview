@@ -17,6 +17,9 @@ import RoleItemComponentList from "@utills/RoleItemComponentList";
 
 import CustomCheckModal from "@components/Modal/CustomCheckModal";
 
+import { FaMapMarkedAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
 /**
  *
  * @param param0
@@ -30,6 +33,8 @@ export default function CastInfo({
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const navigate = useNavigate();
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -40,6 +45,12 @@ export default function CastInfo({
 
   const handleStarClick = () => {
     dispatch(toggleStar());
+  };
+
+  const handleMapClick = () => {
+    navigate("/member/kakaomap", {
+      state: { place: selectedJobPostItem.gatheringLocation },
+    });
   };
 
   const star = useSelector((state: RootState) => state.recruit.star);
@@ -76,7 +87,14 @@ export default function CastInfo({
       <ShootingSchedule className="shooting-schedule">
         <div className="time-location-set">
           <div>{gatheringTime} 예정</div>
-          <div>{gatheringLocation}</div>
+          <div>
+            {gatheringLocation.placeName}
+            <FaMapMarkedAlt
+              onClick={handleMapClick}
+              size={30}
+              style={{ margin: "-5px 15px" }}
+            />
+          </div>
         </div>
         <div className="date-status-set">
           <StarIcon id="star" src={star} onClick={handleStarClick} />
@@ -189,6 +207,9 @@ const ShootingSchedule = styled.div`
   line-height: 100%;
 
   .time-location-set {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     padding: 20px;
     width: 100%;
     align-self: center;

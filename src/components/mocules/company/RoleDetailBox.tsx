@@ -15,7 +15,7 @@ function RoleDetailBox({ onClick }: RoleDetailBoxProps) {
   return (
     <BoxWrapper onClick={onClick}>
       <IoIosAdd size={35} color="#fff" />
-      <Text size={10} color="#fff" align="center">
+      <Text size={16} weight={700} color="#fff" align="center">
         역할 상세 프로필
       </Text>
     </BoxWrapper>
@@ -30,7 +30,6 @@ const BoxWrapper = styled.div`
   opacity: 0.7;
   border-radius: 10px;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
