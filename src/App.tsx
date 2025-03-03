@@ -53,6 +53,7 @@ import ChatRoomPage from "@pages/Chat/ChatRoomPage";
 import { ChatListForAdmin } from "@pages/Chat/ChatListForAdmin";
 import ChatPreviewForUser from "@pages/Chat/ChatPreviewForUser";
 import SchedulerPage from "@pages/Member/SchedulerPage";
+import JobPostManagement from "@pages/JobPostManagement";
 
 function App() {
   useEffect(() => {
@@ -152,6 +153,26 @@ function App() {
             path="/company/profile/setting"
             element={<CompanySettingPage />}
           />
+
+          <Route
+            path="/company/manager-dashboard"
+            element={<ManagerDashboard />}
+          />
+
+          {/* 업체 측 공고 리스트 페이지 화면*/}
+          <Route path="/company/notice/" element={<PostOverViewPage />} />
+
+          {/* 추후 수정 예정, UI 보이기 위해 임시로 id 값 고정 시킴*/}
+          <Route
+            path="/company/notice/post-status/2"
+            element={<RecruitmentStatus />}
+          />
+          {/* <Route
+            path="/company/notice/post-status/:id"
+            element={<PostOverviewPage />}
+          /> */}
+
+          <Route path="/company/manage" element={<ManageOverViewPage />} />
 
           <Route path="/applicants" element={<ShowApplicant />} />
           <Route path="/applicants/detail" element={<ApplicantDetail />} />

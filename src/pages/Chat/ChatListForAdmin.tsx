@@ -129,7 +129,7 @@ export function ChatListForAdmin() {
                 date={calenderList}
                 dDay={dDay}
                 time={gatheringTime}
-                location={gatheringLocation}
+                location={gatheringLocation.placeName}
                 company={companyName}
                 onClick={() => navigate(`/chatRoom/channel/${workId}`)}
               />
