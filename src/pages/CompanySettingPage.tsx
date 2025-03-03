@@ -1,5 +1,5 @@
 import { BACKGROUND_COLORS, FONT_COLORS } from "@/styled/colors";
-import ToggleButton from "@components/atoms/\bToggleButton";
+import ToggleButton from "@components/atoms/ToggleButton";
 import { MainButton } from "@components/atoms/Button";
 import Container from "@components/atoms/Container";
 import Margin from "@components/atoms/Margin";
