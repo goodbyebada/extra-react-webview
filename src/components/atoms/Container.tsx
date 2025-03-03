@@ -23,9 +23,28 @@ interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   flexWrap?: boolean;
 }
 
-const StyledContainer = styled.div<ContainerProps>`
-  ${({ flexDirection, flex }) => {
-    if (flexDirection == "row") {
+interface StyledContainerProps extends ContainerProps {
+  $flexWrap?: boolean;
+  $paddingHorizontal?: number;
+  $paddingVertical?: number;
+  $justifyContent?:
+    | "flex-start"
+    | "flex-end"
+    | "center"
+    | "space-between"
+    | "space-around";
+  $alignItems?:
+    | "flex-start"
+    | "flex-end"
+    | "center"
+    | "space-between"
+    | "space-around";
+  $flexDirection?: "row" | "column";
+}
+
+const StyledContainer = styled.div<StyledContainerProps>`
+  ${({ $flexDirection, flex }) => {
+    if ($flexDirection == "row") {
       return `
             width: ${flex}%;
             height: 100%;
@@ -41,17 +60,17 @@ const StyledContainer = styled.div<ContainerProps>`
 
   background: ${({ background }) => background || "none"};
 
-  padding: ${({ paddingVertical, paddingHorizontal }) => {
-    return `${paddingVertical}px ${paddingHorizontal}px`;
+  padding: ${({ $paddingVertical, $paddingHorizontal }) => {
+    return `${$paddingVertical}px ${$paddingHorizontal}px`;
   }};
 
   position: relative;
 
   display: flex;
-  justify-content: ${({ justifyContent }) => justifyContent};
-  align-items: ${({ alignItems }) => alignItems};
-  flex-direction: ${({ flexDirection }) => flexDirection};
-  ${({ flexWrap }) => flexWrap && `flex-wrap: wrap`}
+  justify-content: ${({ $justifyContent }) => $justifyContent};
+  align-items: ${({ $alignItems }) => $alignItems};
+  flex-direction: ${({ $flexDirection }) => $flexDirection};
+  ${({ $flexWrap }) => $flexWrap && `flex-wrap: wrap`}
 `;
 
 const Container = forwardRef<HTMLDivElement, ContainerProps>(
@@ -75,12 +94,12 @@ const Container = forwardRef<HTMLDivElement, ContainerProps>(
         background={background}
         ref={ref}
         flex={flex}
-        paddingHorizontal={paddingHorizontal}
-        paddingVertical={paddingVertical}
-        justifyContent={justifyContent}
-        alignItems={alignItems}
-        flexDirection={flexDirection}
-        flexWrap={flexWrap}
+        $paddingHorizontal={paddingHorizontal}
+        $paddingVertical={paddingVertical}
+        $justifyContent={justifyContent}
+        $alignItems={alignItems}
+        $flexDirection={flexDirection}
+        $flexWrap={flexWrap}
         {...props}
       >
         {children}

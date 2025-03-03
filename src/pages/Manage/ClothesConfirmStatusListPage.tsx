@@ -83,6 +83,7 @@ const ClothesConfirmStatusListPage = () => {
                 <SearchInputField
                   value={searchKeyList[role] || ""}
                   setValue={setSearchKey(role)}
+                  data-testid={`search-input-${roleIndex + 1}`}
                 />
               </Container>
               <Margin size={20} />

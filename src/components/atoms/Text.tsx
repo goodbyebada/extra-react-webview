@@ -93,8 +93,8 @@ const Text = ({
       color={color}
       align={align}
       weight={weight}
-      highlight={highlight}
-      inline={inline}
+      highlight={highlight ? true : undefined}
+      inline={inline ? true : undefined}
       style={style}
     >
       {children}

@@ -48,6 +48,7 @@ import CompanyProfilePage from "@pages/CompanyProfilePage";
 import CompanySettingPage from "@pages/CompanySettingPage";
 import PostOverviewPage from "@pages/PostOverviewPage";
 import RecruitmentStatus from "@pages/RecruitmentStatus";
+import SignaturePage from "@pages/SignaturePage";
 
 function App() {
   return (
@@ -182,6 +183,9 @@ function App() {
           <Route path="/member/kakaomap" element={<KakaoMap />} />
 
           <Route path="/*" element={<NotFound />} />
+
+          {/* signature */}
+          <Route path="/member/manage/signature" element={<SignaturePage />} />
 
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />
