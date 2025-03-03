@@ -2,7 +2,7 @@ import Container from "@components/atoms/Container";
 import { MainButton, HistoryBackButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
 import Text from "@components/atoms/Text";
-import { COMMON_COLORS, BACKGROUND_COLORS, FONT_COLORS } from "@/styled/colors";
+import { COMMON_COLORS, BACKGROUND_COLORS, FONT_COLORS } from "@styled/colors";
 import Window from "./Window";
 
 interface SignWindowProps {

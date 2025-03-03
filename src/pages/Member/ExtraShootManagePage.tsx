@@ -16,7 +16,7 @@ import {
   ShootManageList,
   ShootManageSelectStatus,
   ShootManage,
-} from "@api/interface";
+} from "@/type/shared";
 import { requestDeleteFetch, requestGetFetch } from "@api/utils";
 
 export default function ExtraShootManagePage() {

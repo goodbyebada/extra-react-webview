@@ -1,6 +1,6 @@
 import React, { forwardRef, HTMLAttributes } from "react";
 import styled from "styled-components";
-import { BACKGROUND_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS } from "@styled/colors";
 import Container from "@components/atoms/Container";
 import type { ContainerProps } from "@components/atoms/Container";
 

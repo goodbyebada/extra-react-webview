@@ -3,7 +3,7 @@ import styled from "styled-components";
 import RoleCheckItem from "@components/mocules/company/RoleCheckItem";
 import Text from "@components/atoms/Text";
 import { MainButton } from "@components/atoms/Button";
-import { dummyUserRoleData } from "@api/dummyData";
+import { dummyUserRoleData } from "@mocks/dummyJobData";
 
 /**
  * ShowApplicant : 업체 - 역할 별 지원현황
@@ -83,7 +83,7 @@ const ShowApplicant = () => {
           return (
             <RoleCheckItem
               key={item.id}
-              userId={item.userId}
+              userId={item.userId.toString()}
               name={item.name}
               isChecked={selectedItems.includes(item.name)} // 선택된 항목인지 여부 전달
               onCheckClick={(isChecked) =>

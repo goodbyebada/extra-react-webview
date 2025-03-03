@@ -1,15 +1,28 @@
-import { MemberRoleServer, MemberRoleFront, JobPostList } from "@api/interface";
+import {
+  MemberRoleServer,
+  MemberRoleFront,
+  JobPostList,
+  JobPost,
+} from "@/type/shared";
 
-import { ObjectType } from "@api/dateInteface";
+import { ObjectType } from "@/type/dateInteface";
 
+/**
+ * 공고  관련한 dummyData
+ */
+
+//TODO PR 합친 후, dummy data 참조하는 부분, dummyData임을 구분하기 위해 대문자 `DUMMY_ ~` 네이밍으로 통일할 예정
 export {
   memberRoleServerDummyList,
   memberRoleFrontDummyData,
   dummyCalenderDataForExtra,
+  dummyJobPost,
   dummyJobPostList,
   dummyCalenderDataForCompany,
   dummyUserRoleData,
   dummyUserClothes,
+  DUMMY_MANAGER_JOB_LIST_VER_1,
+  DUMMY_MANAGER_JOB_LIST_VER_2,
 };
 
 const memberRoleServerDummyList: MemberRoleServer[] = [
@@ -33,7 +46,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 종로구 광화문역 1번 출구",
     calenderList: ["2024-11-02", "2024-11-05"],
     name: "UMC",
-    applyStatus: "APPROVED",
+    applyStatus: "approved",
   },
   {
     id: 3,
@@ -44,7 +57,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 용산구 이태원역 4번 출구",
     calenderList: ["2024-10-10", "2024-10-12", "2024-10-15"],
     name: "몽실몽실",
-    applyStatus: "APPLIED",
+    applyStatus: "applied",
   },
   {
     id: 4,
@@ -66,7 +79,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 마포구 홍대입구역 1번 출구",
     calenderList: ["2024-11-03", "2024-11-07"],
     name: "UMC",
-    applyStatus: "APPROVED",
+    applyStatus: "approved",
   },
 ];
 
@@ -83,7 +96,7 @@ const memberRoleFrontDummyData: MemberRoleFront[] = [
     gatheringTime: "2024-09-02T10:00:00", // 시간
     gatheringLocation: "Seoul, Korea",
     companyName: "Tech Corp",
-    status: "APPROVED",
+    status: "approved",
     calender: {
       startDateNum: 1,
       endDateNum: 5, // 1일이면 startDateNum == endDateNum
@@ -97,7 +110,7 @@ const memberRoleFrontDummyData: MemberRoleFront[] = [
     gatheringTime: "2024-09-02T10:00:00",
     gatheringLocation: "Busan, Korea",
     companyName: "Creative Studio",
-    status: "APPLIED",
+    status: "applied",
     calender: {
       startDateNum: 2,
       endDateNum: 6,
@@ -111,7 +124,7 @@ const memberRoleFrontDummyData: MemberRoleFront[] = [
     gatheringTime: "2024-09-18T10:00:00",
     gatheringLocation: "Incheon, Korea",
     companyName: "Global Solutions",
-    status: "APPROVED",
+    status: "approved",
     calender: {
       startDateNum: 3,
       endDateNum: 5, // 2일 행사
@@ -125,7 +138,7 @@ const memberRoleFrontDummyData: MemberRoleFront[] = [
     gatheringTime: "2024-09-18T10:00:00",
     gatheringLocation: "Incheon, Korea",
     companyName: "Global Solutions",
-    status: "APPROVED",
+    status: "approved",
     calender: {
       startDateNum: 10,
       endDateNum: 10, // 2일 행사
@@ -145,6 +158,71 @@ const dummyCalenderDataForExtra: ObjectType = {
 };
 
 const dummyCalenderDataForCompany: ObjectType = dummyCalenderDataForExtra;
+
+const dummyJobPost: JobPost = {
+  id: 1,
+  title: "라스트 서바이벌1",
+  gatheringLocation: {
+    id: "21160803",
+    placeName: "강남역 2호선",
+    roadAddress: "서울 강남구 강남대로 지하 396",
+    jibunAddress: "서울 강남구 역삼동 858",
+    latitude: 37.49808633653005,
+    longitude: 127.02800140627488,
+  },
+  gatheringTime: "4시 30분까지 도착",
+  status: true,
+  hourPay: 9860,
+  category: "MOVIE",
+  companyName: "UMC",
+  applyDeadLine: "2024-09-01",
+  scheduleIdList: [2, 3],
+  calenderList: ["2024-09-02", "2024-09-05"],
+  roleIdList: [4, 5, 6],
+  roleNameList: ["정보 분석가", "생존 전문가", "무기 전문가"],
+  costumeList: [
+    "가벼운 방탄 조끼, 모자, 방수 바지",
+    "다목적 전투복, 군용 부츠, 다기능 벨트",
+    "전투용 장갑, 방탄 조끼, 전술 헬멧",
+  ],
+  sexList: [false, true, true],
+  roleAgeList: ["31 ~ 25", "41 ~ 30", "44 ~ 33"],
+  limitPersonnelList: [3, 2, 1],
+  currentPersonnelList: [1, 1, 1],
+  seasonList: ["SUMMER", "SUMMER", "SUMMER"],
+  tattooList: [
+    {
+      face: false,
+      chest: false,
+      arm: false,
+      leg: false,
+      shoulder: false,
+      back: false,
+      hand: false,
+      feet: false,
+    },
+    {
+      face: false,
+      chest: false,
+      arm: false,
+      leg: false,
+      shoulder: true,
+      back: false,
+      hand: false,
+      feet: false,
+    },
+    {
+      face: false,
+      chest: false,
+      arm: false,
+      leg: true,
+      shoulder: false,
+      back: false,
+      hand: false,
+      feet: false,
+    },
+  ],
+};
 
 /**
  * JobPost 공고 전체 조회
@@ -167,6 +245,7 @@ const dummyJobPostList: JobPostList = [
     hourPay: 9860,
     category: "MOVIE",
     companyName: "UMC",
+    applyDeadLine: "2024-09-01",
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-02", "2024-09-05"],
     roleIdList: [4, 5, 6],
@@ -230,6 +309,7 @@ const dummyJobPostList: JobPostList = [
     hourPay: 9860,
     category: "MOVIE",
     companyName: "UMC",
+    applyDeadLine: "2024-08-28",
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-02", "2024-09-05"],
     roleIdList: [4, 5, 6],
@@ -293,6 +373,7 @@ const dummyJobPostList: JobPostList = [
     hourPay: 9860,
     category: "MOVIE",
     companyName: "UMC",
+    applyDeadLine: "2024-09-16",
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-18", "2024-09-18"],
     roleIdList: [4, 5, 6],
@@ -356,6 +437,7 @@ const dummyJobPostList: JobPostList = [
     hourPay: 9860,
     category: "MOVIE",
     companyName: "UMC",
+    applyDeadLine: "2024-09-15",
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-18", "2024-09-18"],
     roleIdList: [4, 5, 6],
@@ -406,13 +488,28 @@ const dummyJobPostList: JobPostList = [
 ];
 
 /**
+ * 담당자의 담당 공고 리스트
+ * 0번, 1번 공고만 담당한다 가정
+ */
+
+/**
+ * userid 1인 담당자가 맡고 있는 JOBLIST
+ */
+const DUMMY_MANAGER_JOB_LIST_VER_1: JobPostList = dummyJobPostList.slice(0, 2);
+
+/**
+ * userid 2인 담당자가 맡고 있는 JOBLIST
+ */
+const DUMMY_MANAGER_JOB_LIST_VER_2: JobPostList = dummyJobPostList.slice(2);
+
+/**
  * 지원자 정보 (임시)
  * - 역할 별 지원현황 / 상세페이지 모달 / 온도 평가
  */
 const dummyUserRoleData = [
   {
     id: 1,
-    userId: "1",
+    userId: 3,
     name: "user1",
     category: "UMC 드라마",
     role: "학생 역할",
@@ -420,7 +517,7 @@ const dummyUserRoleData = [
   },
   {
     id: 2,
-    userId: "2",
+    userId: 4,
     name: "user2",
     category: "UMC 영화",
     role: "학생 역할",
@@ -428,7 +525,7 @@ const dummyUserRoleData = [
   },
   {
     id: 3,
-    userId: "3",
+    userId: 5,
     name: "user3",
     category: "UMC 연극",
     role: "주인공 역할",
@@ -436,7 +533,7 @@ const dummyUserRoleData = [
   },
   {
     id: 4,
-    userId: "4",
+    userId: 6,
     name: "user4",
     category: "UMC 드라마",
     role: "조연 역할",
@@ -444,7 +541,7 @@ const dummyUserRoleData = [
   },
   {
     id: 5,
-    userId: "5",
+    userId: 7,
     name: "user5",
     category: "UMC 영화",
     role: "조연 역할",

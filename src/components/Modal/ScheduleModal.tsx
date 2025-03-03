@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
-import SmallRecruitBox from "@components/SmallRecruitBox";
-import { JobPost } from "@api/interface";
-import { useSelector } from "react-redux";
-import { RootState } from "@redux/store";
-import { memberRoleFrontDummyData } from "@api/dummyData";
+import { JobPost, MemberRoleFront } from "@/type/shared";
+import { DateDetailedInfo } from "@/type/dateInteface";
+import Item from "@components/mocules/Item";
+import Modal from "@components/atoms/Modal";
+import { ContentWrapper } from "@components/atoms/Wrapper";
 
 /**
  * 추후 props 추가 통해,
@@ -18,78 +18,90 @@ import { memberRoleFrontDummyData } from "@api/dummyData";
 // dayOfJobList 해당 날짜의 공고일정들 추후 ? 삭제 예정
 interface ScheduleModalProps {
   dayOfJobList?: JobPost;
-  selectedDateInfo: {
-    year: string;
-    month: string;
-    dateNum: string;
-    dayOfWeek: string;
-  };
+  selectedDateInfo: DateDetailedInfo;
+  scheduledJobsByDate: MemberRoleFront[][];
   closeModal: () => void;
+  isVisible: boolean;
 }
 
-/**
- * 현재 서버 문제로,더미데이터로 적용되어있음
- * @param param0
- * @returns
- */
-function ScheduleModal({ selectedDateInfo, closeModal }: ScheduleModalProps) {
-  const appliedListData = useSelector((state: RootState) => {
-    return state.appliedRoles.getMemberApplies.data;
-  });
-  //  더미데이터 적용되어있음 -> 연도 & 월의 일정 store에서 탐색한다.
-  //  initData id가 -1,0이라면 불러온 데이터가없다.
-  const appliedList =
-    appliedListData[0].id <= 0 ? memberRoleFrontDummyData : appliedListData;
+function ScheduleModal({
+  selectedDateInfo,
+  closeModal,
+  scheduledJobsByDate,
+  isVisible,
+}: ScheduleModalProps) {
+  const { year, month, dateNum, weekDayLabel } = selectedDateInfo;
+  const dateString = `${year}/${month + 1}/${dateNum}  (${weekDayLabel})`;
+  const todayJobList = scheduledJobsByDate[dateNum + 1];
 
-  const { year, month, dateNum, dayOfWeek } = selectedDateInfo;
-  const dateString = `${year}/${parseInt(month) + 1}/${dateNum}  (${dayOfWeek})`;
-
-  const dateNumber = parseInt(dateNum);
-
-  const todayJobList = appliedList.filter(
-    (elem) =>
-      elem.calender.startDateNum === dateNumber ||
-      (elem.calender.startDateNum <= dateNumber &&
-        dateNumber <= elem.calender.endDateNum),
-  );
+  const dateYMstr = `${year}/${month + 1}/`;
 
   return (
-    <ModalContainer>
-      <button
+    <Modal isVisible={isVisible} onClose={closeModal}>
+      <MultiplyIcon
+        src={multiply}
         onClick={() => {
           closeModal();
         }}
-      >
-        <MultiplyIcon src={multiply} />
-      </button>
+      />
+
       <ModalText>{dateString}</ModalText>
-      <SmallRecruitBoxWrapper>
-        {todayJobList.map((elem, key) => {
-          console.log(elem);
-          return <SmallRecruitBox key={key} elem={elem} />;
-        })}
-      </SmallRecruitBoxWrapper>
+      <ListContainer>
+        <ContentWrapper>
+          {todayJobList &&
+            todayJobList.length > 0 &&
+            todayJobList.map((jobPost, key) => {
+              const {
+                title,
+                category,
+                gatheringTime,
+                gatheringLocation,
+                companyName,
+                status,
+                calender,
+              } = jobPost;
+
+              const startDate = dateYMstr + calender.startDateNum.toString();
+              const endDate = dateYMstr + calender.endDateNum.toString();
+              return (
+                <ItemWrapper>
+                  <Item
+                    key={key}
+                    title={title}
+                    category={category}
+                    time={gatheringTime}
+                    location={gatheringLocation}
+                    company={companyName}
+                    status={status}
+                    dDay=""
+                    date={[startDate, endDate]}
+                    onClick={() => {}}
+                  />
+                </ItemWrapper>
+              );
+            })}
+        </ContentWrapper>
+      </ListContainer>
       <Edit>편집</Edit>
-    </ModalContainer>
+    </Modal>
   );
 }
 
 export default ScheduleModal;
 
-const ModalContainer = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 345px;
-  height: 537px;
-  flex-shrink: 0;
-  border-radius: 18px;
-  z-index: 10;
-  background:
-    linear-gradient(#000, #000) padding-box,
-    linear-gradient(180deg, #666666 0%, #f5c001 100%) border-box;
-  border: 4px solid transparent;
+const ListContainer = styled.div`
+  height: 60vh;
+`;
+
+const ItemWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  @media screen and (max-width: 430px) {
+    transform: scale(0.7);
+  }
 `;
 
 const MultiplyIcon = styled.img`
@@ -111,14 +123,6 @@ const ModalText = styled.div`
   padding-top: 27px;
   padding-bottom: 38px;
   text-align: center;
-`;
-
-const SmallRecruitBoxWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  flex-direction: column;
 `;
 
 const Edit = styled.div`

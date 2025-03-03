@@ -5,7 +5,7 @@ import { useEffect } from "react";
 // import NotFoundPage from "@pages/Error/NotFound";
 import { fetchJobPostByCalenderForCom } from "@redux/company/companyJobPostSlice";
 import HomeCalendar from "@components/organisms/HomeCalendar";
-import { DateDetailedInfo, CalenderTypeFor } from "@api/dateInteface";
+import { DateDetailedInfo, CalenderTypeFor } from "@/type/dateInteface";
 
 type CalenderProps = {
   type?: CalenderTypeFor;
@@ -52,7 +52,7 @@ export default function CompanyCalender({
 
     if (!jobLength) return;
     if (jobLength > 0) {
-      const dateNum = stringDate;
+      // const dateNum = stringDate;
       // dispatch(setHomeDate(dateNum));
       clickedDateEvent();
     }

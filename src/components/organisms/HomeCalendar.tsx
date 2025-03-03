@@ -4,8 +4,14 @@ import { useEffect, useState } from "react";
 import { CalendarWeekdayLabels } from "@components/mocules/WeekdayLabels";
 import HomeCalendarWeek from "@components/organisms/HomeCalendarWeek";
 import CalenderWrapper from "@components/CalenderWrapper";
-import { CALENDER_SIZE } from "@/styled/size";
-import { DateYearMonth, DateSelctedType, ObjectType } from "@api/dateInteface";
+import { CALENDER_SIZE } from "@styled/size";
+import {
+  DateYearMonth,
+  DateSelctedType,
+  ObjectType,
+} from "@/type/dateInteface";
+
+import Container from "@components/atoms/Container";
 
 type CalenderProps = {
   dateYearMonth: DateYearMonth;
@@ -40,7 +46,7 @@ export default function HomeCalendar({
 
   return (
     <CalenderWrapper dateSelctedType={DateSelctedType.home}>
-      <Container>
+      <Container style={{ width: "372px", height: "430px" }}>
         <CalendarWeekdayLabels HeightPercent={daylistHeigtPersent} />
         <DatesWrapper $HeightPercent={daylistHeigtPersent}>
           {weekLists.map((item, key) => {
@@ -65,14 +71,14 @@ const DatesWrapper = styled.div<{ $HeightPercent: number }>`
   height: ${({ $HeightPercent }) => `calc(100% - ${$HeightPercent}%)`};
 `;
 
-// TODO 어디에 분리해야하는가?
-const Container = styled.div`
-  background-color: black;
-  width: 372px;
-  height: 430px;
+// // TODO 어디에 분리해야하는가?
+// const Container = styled.div`
+//   background-color: black;
+//   width: 372px;
+//   height: 430px;
 
-  font-size: 16px;
-  font-weight: 900;
-  line-height: 125%;
-  letter-spacing: 0.16px;
-`;
+//   font-size: 16px;
+//   font-weight: 900;
+//   line-height: 125%;
+//   letter-spacing: 0.16px;
+// `;

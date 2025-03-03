@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import documentIcon from "@assets/document.png";
-import { JobPost } from "@api/interface";
+import { JobPost } from "@/type/shared";
 
 type Props = {
   navigate: () => void;

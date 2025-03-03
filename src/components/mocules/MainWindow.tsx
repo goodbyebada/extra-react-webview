@@ -4,7 +4,7 @@ import Window from "./Window";
 import Margin from "@components/atoms/Margin";
 
 import styled from "styled-components";
-import { FONT_SIZE } from "@/styled/font";
+import { FONT_SIZE } from "@styled/font";
 import Text from "@components/atoms/Text";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -15,7 +15,7 @@ import { PiListDashesFill } from "react-icons/pi";
 import { FaUserCircle } from "react-icons/fa";
 import { IoDocumentText } from "react-icons/io5";
 import { AiFillTool } from "react-icons/ai";
-import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@styled/colors";
 
 const ICON_SIZE = 40;
 const ACTIVE_COLOR = COMMON_COLORS.main;

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Modal from "@components/atoms/Modal";
 import { MainButton, BoxButton } from "@components/atoms/Button";
 import Text from "@components/atoms/Text";
-import { CategoryEnum } from "@api/interface";
+import { CategoryEnum } from "@/type/shared";
 import { CiSquarePlus } from "react-icons/ci";
 
 interface CompanyTitleCategoryModalProps {

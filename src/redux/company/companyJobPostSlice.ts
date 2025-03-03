@@ -1,14 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { JobPost } from "@api/interface";
-import { ResponseStatus } from "@api/interface";
-import { QuryTypesWithPage, ObjectType } from "@api/dateInteface";
-import { JobPostList } from "@api/interface";
+import { JobPost } from "@/type/shared";
+import { ResponseStatus } from "@/type/shared";
+import { QuryTypesWithPage, ObjectType } from "@/type/dateInteface";
+import { JobPostList } from "@/type/shared";
 import jobPostAPIForCom from "@api/jobPostAPIForCom";
 
-import { dummyCalenderDataForCompany, dummyJobPostList } from "@api/dummyData";
+import {
+  dummyCalenderDataForCompany,
+  dummyJobPostList,
+} from "@mocks/dummyJobData";
 import { TEST_FLAG } from "@/testFlag";
-import { YearMonthAsNumber } from "@api/dateInteface";
+import { YearMonthAsNumber } from "@/type/dateInteface";
 
 // 상태의 타입 정의
 
@@ -23,6 +26,7 @@ const defaultJobPost: JobPost = {
   category: "",
   companyName: "",
   scheduleIdList: [],
+  applyDeadLine: "",
   calenderList: [],
   roleIdList: [],
   roleNameList: [],

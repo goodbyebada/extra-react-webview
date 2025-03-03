@@ -5,7 +5,7 @@ import Text from "@components/atoms/Text";
 import { useEffect, useState } from "react";
 import { MainButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
-import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@styled/colors";
 
 const ModalOverlay = styled.div`
   width: 100%;

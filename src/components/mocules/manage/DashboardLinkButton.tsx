@@ -5,7 +5,7 @@ import Container from "@components/atoms/Container";
 import Text from "@components/atoms/Text";
 
 import { FaAngleRight } from "react-icons/fa6";
-import { BACKGROUND_COLORS, FONT_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS, FONT_COLORS } from "@styled/colors";
 
 interface LinkButtonProps {
   url: string;

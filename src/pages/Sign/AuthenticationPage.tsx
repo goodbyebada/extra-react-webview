@@ -10,7 +10,7 @@ import { SiAuthelia } from "react-icons/si";
 import Margin from "@components/atoms/Margin";
 import { InputField } from "@components/atoms/Form";
 import { MainButton } from "@components/atoms/Button";
-import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@styled/colors";
 
 const NumberInputGroup = ({
   control,

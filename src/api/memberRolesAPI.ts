@@ -1,6 +1,7 @@
 // jobPostAPI.js
 // import { GetToken } from "@api/GetToken";
 // import { BASE_URL } from "@api/interface";
+import { TEST_FLAG } from "@/testFlag";
 import { requestGetFetch, requestPostFetch } from "@api/utils";
 
 const memberRolesURL = `application-request/member/roles`;
@@ -37,6 +38,15 @@ const memberRolesAPI = {
 
   // 역할에 지원 요청
   async postMemberRoles(roleId: number) {
+    if (TEST_FLAG) {
+      const response = new Promise<Object>((resolve) =>
+        setTimeout(() => {
+          resolve({ response: "good" });
+        }, 2000),
+      );
+      console.log("API 보내짐");
+      return response;
+    }
     const response = await requestPostFetch(`${memberRolesURL}/${roleId}`, {});
 
     if (!response) {

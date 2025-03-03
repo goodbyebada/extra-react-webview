@@ -31,6 +31,9 @@
       "@components/*": ["src/components/*"],
       "@pages/*": ["src/pages/*"],
       "@redux/*": ["src/redux/*"],
+      "@styled/*": ["src/styled/*"],
+      "@type/*": ["src/type/*"],
+      "@mocks/*": ["src/mocks/*"],
       "@utills/*": ["src/utills/*"],
       "@/*": ["src/*"]
     }

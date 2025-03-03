@@ -5,7 +5,7 @@ import { styled } from "styled-components";
 import Container from "@components/atoms/Container";
 import { MainButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
-import { FONT_COLORS } from "@/styled/colors";
+import { FONT_COLORS } from "@styled/colors";
 import MainWindow from "@components/mocules/MainWindow";
 
 const QRBackground = styled.div`

@@ -5,11 +5,19 @@ import { MainButton } from "@components/atoms/Button";
 import PostFormCard from "@components/mocules/company/PostFormCard";
 import CompanyTitleCategoryModal from "@components/Modal/CompanyTitleCategoryModal";
 import CompanyDateTimePlaceModal from "@components/Modal/CompanyDateTimePlaceModal";
-import { type CategoryEnum, type Place } from "@api/interface";
+import {
+  RoleBodyType,
+  SeasonEnum,
+  type CategoryEnum,
+  type RoleRegister,
+  // Place,
+} from "@/type/shared";
+
+import { Place } from "@/type/shared";
+import { requestPostFetch } from "@api/utils";
 import { useNavigate } from "react-router-dom";
 import { IoCaretBackOutline } from "react-icons/io5";
 import NoticeRole from "@components/mocules/company/NoticeRole";
-import { RoleBodyType } from "@api/interface";
 
 /**
  * AddNotice : 업체 - 공고 등록 화면

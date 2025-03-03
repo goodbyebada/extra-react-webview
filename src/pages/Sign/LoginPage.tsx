@@ -11,7 +11,7 @@ import Text from "@components/atoms/Text";
 import logoImage from "@assets/logo.png";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
-import { FONT_COLORS } from "@/styled/colors";
+import { FONT_COLORS } from "@styled/colors";
 import Window from "@components/mocules/Window";
 import KakaoLogin from "react-kakao-login";
 

@@ -11,7 +11,7 @@ import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 
 import CastInfo from "@pages/CastInfo";
-import { ResponseStatus } from "@api/interface";
+import { ResponseStatus } from "@/type/shared";
 
 /**
  *
@@ -37,7 +37,6 @@ export default function ExtraCastingBoard() {
         dispatch(fetchJobPostById(parseInt(jobPostId)));
       }
     };
-
     fetch();
   }, [dispatch, jobPostId]);
 
@@ -46,7 +45,8 @@ export default function ExtraCastingBoard() {
       case ResponseStatus.loading:
         return <Loading loading={true} />;
       case ResponseStatus.fullfilled:
-        return <CastInfo selectedJobPostItem={jobPostItem.data} />;
+        const selectedJobPostItem = jobPostItem.data;
+        return <CastInfo selectedJobPostItem={selectedJobPostItem} />;
       case ResponseStatus.rejected:
         return <NotFoundPage />;
 

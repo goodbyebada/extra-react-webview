@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 // import { useRef } from "react";
 import { styled } from "styled-components";
-import { JobPost } from "@api/interface";
-import { DateYearMonth } from "@api/dateInteface";
+import { JobPost } from "@/type/shared";
+import { DateYearMonth } from "@/type/dateInteface";
 import HomeRecruitBox from "@components/HomeRecruitBox";
-import { ResponseStatus } from "@api/interface";
-import Loading from "@components/Loading";
-import NotFoundPage from "@pages/Error/NotFound";
-import { sendMessage } from "@api/utils";
+// import { ResponseStatus } from "@api/interface";
+// import Loading from "@components/Loading";
+// import NotFoundPage from "@pages/Error/NotFound";
+// import { sendMessage } from "@api/utils";
 // import jobPostAPI from "@api/jobPostAPI";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@redux/store";
@@ -21,6 +21,7 @@ type ListProps = {
   showRecommand: boolean;
 };
 
+// TODO 인피니트 스크롤링 적요
 export default function List({ dateYearMonth, showRecommand }: ListProps) {
   const [pageNum, setPageNum] = useState(0);
   const dateYM = useSelector((state: RootState) => state.date);

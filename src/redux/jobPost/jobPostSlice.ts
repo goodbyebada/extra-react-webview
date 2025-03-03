@@ -1,15 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import jobPostAPI from "@api/jobPostAPI";
-import { JobPost } from "@api/interface";
-import { ResponseStatus } from "@api/interface";
+import { JobPost } from "@/type/shared";
+import { ResponseStatus } from "@/type/shared";
 import {
   DateYearMonth,
   QuryTypesWithPage,
   ObjectType,
-} from "@api/dateInteface";
+} from "@/type/dateInteface";
 
-import { JobPostList } from "@api/interface";
-import { dummyCalenderDataForExtra, dummyJobPostList } from "@api/dummyData";
+import { JobPostList } from "@/type/shared";
+
+import {
+  dummyCalenderDataForExtra,
+  dummyJobPostList,
+} from "@mocks/dummyJobData";
 import { TEST_FLAG } from "@/testFlag";
 
 // 상태의 타입 정의
@@ -32,6 +36,7 @@ export const defaultJobPost: JobPost = {
   category: "",
   companyName: "",
   scheduleIdList: [],
+  applyDeadLine: "",
   calenderList: [],
   roleIdList: [],
   roleNameList: [],
@@ -144,7 +149,7 @@ export const fetchJobPostById = createAsyncThunk<JobPost, number>(
   "jobPosts/fetchById",
   async (id: number) => {
     let data: Promise<JobPost>;
-
+    console.log("fetchJobPostById 실행");
     if (TEST_FLAG) {
       data = new Promise<JobPost>((resolve, reject) =>
         setTimeout(() => {
@@ -227,6 +232,8 @@ const jobPostSlice = createSlice({
       })
       .addCase(fetchJobPostById.fulfilled, (state, action) => {
         state.jobPostItem.status = ResponseStatus.fullfilled;
+
+        console.log(action);
 
         state.jobPostItem.data = action.payload;
       })

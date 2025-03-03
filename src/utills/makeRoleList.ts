@@ -1,5 +1,5 @@
-import { JobPost } from "@api/interface";
-import { RoleItemToShow } from "@api/interface";
+import { JobPost } from "@/type/shared";
+import { RoleItemToShow } from "@/type/shared";
 
 /**
  *

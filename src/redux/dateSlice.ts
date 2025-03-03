@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { DateDetailedInfo } from "@api/dateInteface";
+import { DateDetailedInfo } from "@/type/dateInteface";
 import { WEEK_DAY_LABELS } from "@components/mocules/WeekdayLabels";
 
 const date = new Date();

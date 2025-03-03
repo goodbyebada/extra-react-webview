@@ -2,25 +2,24 @@ import { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useNavigate } from "react-router-dom";
-import { sendMessage } from "@api/utils";
-
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import jobPostAPI from "@api/jobPostAPI";
-import { JobPost } from "@api/interface";
+import { JobPost } from "@/type/shared";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
-
 import { TEST_FLAG } from "@/testFlag";
-import { dummyJobPostList } from "@api/dummyData";
+import { dummyJobPostList } from "@/mocks/dummyJobData";
 import { defaultJobPost } from "@redux/jobPost/jobPostSlice";
+import { NavBar } from "@components/mocules/navBar/CommonNavBar";
+import { ThemeText } from "@components/atoms/Text";
 
 /**
  * 날짜 선택시 화면
  * @returns
  */
 export default function DateSelectedNoticeList() {
-  const basePath = "/extra-casting-board";
+  const BASE_PATH = "/member/home/extra-casting-board";
   const navigate = useNavigate();
 
   const INIT_LOCAL_INFOLIST = [] as JobPost[];
@@ -29,7 +28,6 @@ export default function DateSelectedNoticeList() {
   const [loading, setIsLoading] = useState<boolean>(true);
   const [notFound, setNotFound] = useState<boolean>(false);
 
-  // Nav Bar Content 삭제
   const selectedDate = useSelector((state: RootState) => state.date);
 
   const { dateNum, year, month } = selectedDate.selectedByHome;
@@ -41,21 +39,10 @@ export default function DateSelectedNoticeList() {
   const selectedDataIdList = jobListAboutYM[dateNum];
 
   const navigateToExtraCastingBoard = (jobPostId: number) => {
-    navigate(`${basePath}/${jobPostId}`);
+    navigate(`${BASE_PATH}/${jobPostId}`);
   };
 
-  const dateString = `${year}/${month}/${dateNum}`;
-  const navContent = `${dateString} 에 모집 중인 공고예요.`;
-
-  useEffect(() => {
-    sendMessage({
-      type: "POST_DATA",
-      payload: {
-        title: navContent,
-      },
-      version: "1.0",
-    });
-  }, [navContent]);
+  const NAV_CONTENT = `${year}/${month + 1}/${dateNum} 에 모집 중인 공고예요.`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,8 +98,10 @@ export default function DateSelectedNoticeList() {
   }, [selectedDataIdList]);
 
   return (
-    <Container>
-      {/* <NavBar content={navContent} /> */}
+    <div>
+      <NavBar>
+        <ThemeText variant={"content-title"}>{NAV_CONTENT}</ThemeText>
+      </NavBar>
 
       <ItemWrapper>
         {loading ? <Loading loading={loading} /> : ""}
@@ -130,27 +119,15 @@ export default function DateSelectedNoticeList() {
 
         {!loading && notFound ? <NotFoundPage /> : ""}
       </ItemWrapper>
-    </Container>
+    </div>
   );
 }
 
-const Container = styled.div`
-  nav {
-    height: 95px;
-    background: #191919;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 900;
-    line-height: 111.111%;
-    letter-spacing: 0.18px;
-  }
-`;
-
 const ItemWrapper = styled.div`
   display: flex;
-  /* width: 100%; */
-  /* height: 100%; */
+  box-sizing: border-box;
+  height: fit-content;
   flex-direction: column;
   align-items: center;
-  margin-top: 30px;
+  overflow-y: scroll;
 `;

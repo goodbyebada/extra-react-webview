@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { CiSearch } from "react-icons/ci";
-import { BACKGROUND_COLORS, FONT_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS, FONT_COLORS } from "@styled/colors";
 
 interface SearchInputFieldProps {
   value: string;

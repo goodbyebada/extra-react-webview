@@ -8,7 +8,7 @@ import {
 } from "react-hook-form";
 
 import styled from "styled-components";
-import { BACKGROUND_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS } from "@styled/colors";
 
 interface InputProps {
   type?: string;

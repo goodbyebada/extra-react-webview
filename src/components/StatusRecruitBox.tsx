@@ -4,9 +4,9 @@ import RecruitStatus from "@components/custom/recruitStatus";
 import DeleteButton from "@components/custom/deleteBtn";
 import star_g from "@assets/Star_g.png";
 import star_y from "@assets/Star_y.png";
-import { ShootManageSelectStatus, ApplyStatusLabel } from "@api/interface";
+import { ShootManageSelectStatus, ApplyStatusLabel } from "@/type/shared";
 import { sendMessage } from "@api/utils";
-import { ShootManage } from "@api/interface";
+import { ShootManage } from "@/type/shared";
 
 /**
  * 촬영관리 컴포넌트

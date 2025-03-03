@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ClothesMemberItem from "@components/mocules/company/ClothesMemberItem";
-import { dummyUserClothes } from "@api/dummyData";
+import { dummyUserClothes } from "@mocks/dummyJobData";
 import { IoSearch } from "react-icons/io5";
 import { useState } from "react";
 import BackHeader from "@components/custom/BackHeader";

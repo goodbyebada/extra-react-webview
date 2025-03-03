@@ -1,20 +1,18 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ManagerDashboard from "./pages/ManagerDashboard";
+
 import AddNotice from "./pages/AddNotice";
 import ShowApplicant from "./pages/ShowApplicant";
 
-import ExtrasHome from "@pages/ExtrasHome";
-import ExtraCastingBoard from "@pages/ExtraCastingBoard";
-import DateSelectedNoticeList from "@pages/DateSelectedNoticeList";
-// import Scheduler from "@pages/Scheduler";
+import MemberHome from "@pages/Member/MemberHome";
+import ExtraCastingBoard from "@pages/Member/ExtraCastingBoard";
+import DateSelectedNoticeList from "@pages/Member/DateSelectedNoticeList";
 import CompanyHome from "@pages/CompanyHome";
-import ExtraShootManagePage from "@pages/ExtraShootManagePage";
+import ExtraShootManagePage from "@pages/Member/ExtraShootManagePage";
 import CompanyShootManagePage from "@pages/CompanyShootManagePage";
 import { ApplicantDetail } from "@pages/ApplicantDetail";
 import DetailPage from "@pages/DetailPage";
 import NotFound from "@pages/Error/NotFound";
 import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
-import SchedulerPage from "@pages/Scheduler";
 import TempEvaluation from "@pages/TempEvaluation";
 import CompanyClothesMemberList from "@pages/CompanyClothesMemberList";
 import MemberClothesConfirm from "@pages/MemberClothesConfirm";
@@ -25,7 +23,6 @@ import KakaoMap from "@pages/KakaoMap";
 
 import ThemePreviewPage from "@pages/ThemePreview";
 import LoginPage from "@pages/Sign/LoginPage";
-// import MainPage from "@pages/Sign/MainPage";
 import MainFormPage from "@pages/Sign/MainFormPage";
 import AuthenticationPage from "@pages/Sign/AuthenticationPage";
 import SelectUserTypePage from "@pages/Sign/SelectUserTypePage";
@@ -49,8 +46,18 @@ import CompanySettingPage from "@pages/CompanySettingPage";
 import PostOverviewPage from "@pages/PostOverviewPage";
 import RecruitmentStatus from "@pages/RecruitmentStatus";
 import SignaturePage from "@pages/SignaturePage";
+import { useEffect } from "react";
+import handleAllowNotification from "@utills/pushNotification/notificationPermission";
+import ManageOverViewPage from "@pages/ManageOverViewPage";
+import ChatRoomPage from "@pages/Chat/ChatRoomPage";
+import { ChatListForAdmin } from "@pages/Chat/ChatListForAdmin";
+import ChatPreviewForUser from "@pages/Chat/ChatPreviewForUser";
+import SchedulerPage from "@pages/Member/SchedulerPage";
 
 function App() {
+  useEffect(() => {
+    handleAllowNotification();
+  }, []);
   return (
     <>
       <BrowserRouter>
@@ -71,7 +78,7 @@ function App() {
 
           {/* member */}
           {/* member home */}
-          <Route path="/member/home" element={<ExtrasHome />} />
+          <Route path="/member/home" element={<MemberHome />} />
           <Route
             path="/member/home/extra-casting-board/:jobPostId"
             element={<ExtraCastingBoard />}
@@ -121,7 +128,7 @@ function App() {
           <Route path="/company/manage/clock-in" element={<ClockInPage />} />
           <Route path="/company/manage/clock-out" element={<ClockOutPage />} />
           {/* company notice */}
-          <Route path="/company/notice" element={<ManagerDashboard />} />
+          <Route path="/company/notice" element={<ManageOverViewPage />} />
           {/* 업체 측 공고 리스트 페이지 화면 */}
           <Route
             path="/company/notice/post-overview"
@@ -144,11 +151,6 @@ function App() {
           <Route
             path="/company/profile/setting"
             element={<CompanySettingPage />}
-          />
-
-          <Route
-            path="/company/manager-dashboard"
-            element={<ManagerDashboard />}
           />
 
           <Route path="/applicants" element={<ShowApplicant />} />
@@ -189,6 +191,16 @@ function App() {
 
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />
+
+          {/* 관리자 계정으로 채팅 들어가기 */}
+          <Route path="/chatRoom" element={<ChatListForAdmin />} />
+
+          {/* 테스트 위해 유저 계정으로 들어가기 */}
+          <Route path="/chat-preview/user" element={<ChatPreviewForUser />} />
+
+          <Route path="/chatRoom/channel/:id" element={<ChatRoomPage />} />
+
+          <Route path="/chatRoom/channel/-1" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </>
