@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { sendMessage, requestGetFetch } from "@api/utils";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { JobPost } from "@/types/shared";
+import { JobPost } from "@/type/shared";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 
 export default function CompanyShootManagePage() {

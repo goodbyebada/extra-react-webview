@@ -11,7 +11,7 @@ import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 
 import CastInfo from "@pages/CastInfo";
-import { ResponseStatus } from "@/types/shared";
+import { ResponseStatus } from "@/type/shared";
 
 /**
  *

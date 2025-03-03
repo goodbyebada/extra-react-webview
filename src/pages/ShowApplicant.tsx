@@ -3,7 +3,7 @@ import styled from "styled-components";
 import RoleCheckItem from "@components/mocules/company/RoleCheckItem";
 import Text from "@components/atoms/Text";
 import { MainButton } from "@components/atoms/Button";
-import { dummyUserRoleData } from "@/mocks/dummyJobData";
+import { dummyUserRoleData } from "@mocks/dummyJobData";
 
 /**
  * ShowApplicant : 업체 - 역할 별 지원현황

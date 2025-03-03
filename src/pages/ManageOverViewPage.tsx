@@ -1,6 +1,6 @@
 import Text from "@components/atoms/Text";
 import { ContentWrapper } from "@components/atoms/Wrapper";
-import { memberRoleFrontDummyData } from "@/mocks/dummyJobData";
+import { memberRoleFrontDummyData } from "@mocks/dummyJobData";
 import Item from "@components/mocules/Item";
 import styled from "styled-components";
 import { NavBar } from "@components/mocules/navBar/CommonNavBar";

@@ -1,5 +1,5 @@
-import { JobPost } from "@/types/shared";
-import { RoleItemToShow } from "@/types/shared";
+import { JobPost } from "@/type/shared";
+import { RoleItemToShow } from "@/type/shared";
 
 /**
  *

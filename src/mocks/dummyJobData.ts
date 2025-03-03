@@ -3,9 +3,9 @@ import {
   MemberRoleFront,
   JobPostList,
   JobPost,
-} from "@/types/shared";
+} from "@/type/shared";
 
-import { ObjectType } from "@/types/dateInteface";
+import { ObjectType } from "@/type/dateInteface";
 
 /**
  * 공고  관련한 dummyData

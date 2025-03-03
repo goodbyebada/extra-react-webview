@@ -5,7 +5,7 @@ import { HiMiniXMark } from "react-icons/hi2";
 import { MainButton } from "@components/atoms/Button";
 import { useNavigate } from "react-router-dom";
 import { IoPersonCircleSharp } from "react-icons/io5";
-import { dummyUserRoleData } from "@/mocks/dummyJobData";
+import { dummyUserRoleData } from "@mocks/dummyJobData";
 
 interface DetailProfileProps {
   isVisible: boolean;

@@ -1,6 +1,6 @@
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@utills/firebase";
-import { DUMMY_FIREBASE_DB_LIST } from "@/mocks/dummyChatData";
+import { DUMMY_FIREBASE_DB_LIST } from "@mocks/dummyChatData";
 
 /**
  * 파이어베이스에 dummyData 세팅하는 utils

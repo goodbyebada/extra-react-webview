@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { useEffect, useState } from "react";
 
-import { JobPost } from "@/types/shared";
+import { JobPost } from "@/type/shared";
 import RoleModal from "@components/Modal/RoleModal";
 import { ReturnDateOfShooting } from "@utills/returnDateOfShooting";
 

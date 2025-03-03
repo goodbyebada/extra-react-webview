@@ -10,8 +10,10 @@ import {
   SeasonEnum,
   type CategoryEnum,
   type RoleRegister,
-  Place,
-} from "@/types/shared";
+  // Place,
+} from "@/type/shared";
+
+import { Place } from "@/type/shared";
 import { requestPostFetch } from "@api/utils";
 import { useNavigate } from "react-router-dom";
 import { IoCaretBackOutline } from "react-icons/io5";

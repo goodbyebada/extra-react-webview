@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
 import RoleBox from "@components/RoleBox";
-import { RoleListToShow } from "@/types/shared";
+import { RoleListToShow } from "@/type/shared";
 import { useEffect, useState } from "react";
 
 import { useDispatch } from "react-redux";

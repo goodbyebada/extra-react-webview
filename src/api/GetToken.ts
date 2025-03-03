@@ -1,4 +1,4 @@
-import { BASE_URL } from "@/types/shared";
+import { BASE_URL } from "@/type/shared";
 
 /**
  *

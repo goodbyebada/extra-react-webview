@@ -2,8 +2,8 @@ import styled from "styled-components";
 import RecruitStatus from "@components/custom/smallRecuitStatus";
 // import { useSelector } from "react-redux";
 // import { RootState } from "../redux/store";
-import { MemberRoleFront } from "@/types/shared";
-import { ScheduleTypeStatusLabel } from "@/types/shared";
+import { MemberRoleFront } from "@/type/shared";
+import { ScheduleTypeStatusLabel } from "@/type/shared";
 import { sendMessage } from "@api/utils";
 
 const SmallRecruitBox = ({ elem }: { elem: MemberRoleFront }) => {

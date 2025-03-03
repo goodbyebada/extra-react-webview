@@ -9,7 +9,7 @@ import {
   DateYearMonth,
   DateSelctedType,
   ObjectType,
-} from "@/types/dateInteface";
+} from "@/type/dateInteface";
 
 import Container from "@components/atoms/Container";
 

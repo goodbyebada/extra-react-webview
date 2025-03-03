@@ -2,7 +2,7 @@
  *
  * @returns 한 주에 대한 UI return
  */
-import { ObjectType } from "@/types/dateInteface";
+import { ObjectType } from "@/type/dateInteface";
 import CalendarItem from "@components/mocules/calender/CalendarItem";
 import { styled } from "styled-components";
 

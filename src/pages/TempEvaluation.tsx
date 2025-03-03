@@ -4,7 +4,7 @@ import Text from "@components/atoms/Text";
 import { MainButton } from "@components/atoms/Button";
 import { FaStar } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { dummyUserRoleData } from "@/mocks/dummyJobData";
+import { dummyUserRoleData } from "@mocks/dummyJobData";
 
 /**
  * TempEvaluation : 지원자 온도 평가 화면

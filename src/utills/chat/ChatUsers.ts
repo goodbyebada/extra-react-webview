@@ -1,4 +1,4 @@
-import { ParticipantInfoList, ChatUserInfo } from "@/types/firebaseInterface";
+import { ParticipantInfoList, ChatUserInfo } from "@/type/firebaseInterface";
 
 /**
  * 채팅 User 정보

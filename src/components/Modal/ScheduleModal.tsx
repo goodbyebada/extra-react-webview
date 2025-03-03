@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import multiply from "@assets/Multiply.png";
-import { JobPost, MemberRoleFront } from "@/types/shared";
-import { DateDetailedInfo } from "@/types/dateInteface";
+import { JobPost, MemberRoleFront } from "@/type/shared";
+import { DateDetailedInfo } from "@/type/dateInteface";
 import Item from "@components/mocules/Item";
 import Modal from "@components/atoms/Modal";
 import { ContentWrapper } from "@components/atoms/Wrapper";

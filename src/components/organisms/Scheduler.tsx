@@ -7,10 +7,10 @@ import { AppDispatch } from "@redux/store";
 import returnSchduleItemComponent from "@utills/returnScheduleItemComponent";
 import SchedulerSingleWeek from "@components/mocules/calender/SchedulerSingleWeek";
 import CalenderWrapper from "@components/CalenderWrapper";
-import { MemberRoleFront, ScheduleType } from "@/types/shared";
+import { MemberRoleFront, ScheduleType } from "@/type/shared";
 import Ellipsis from "@components/custom/Ellipsis";
 import { setScheduleDate } from "@redux/dateSlice";
-import { DateDetailedInfo, DateSelctedType } from "@/types/dateInteface";
+import { DateDetailedInfo, DateSelctedType } from "@/type/dateInteface";
 import { SchedulerWeekdayLabels } from "@components/mocules/WeekdayLabels";
 import ScheduleModal from "@components/Modal/ScheduleModal";
 

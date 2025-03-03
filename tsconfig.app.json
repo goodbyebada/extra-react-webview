@@ -26,12 +26,13 @@
     // 절대경로 설정
     "baseUrl": "./",
     "paths": {
-      "@styled/*": ["src/styled/*"],
       "@api/*": ["src/api/*"],
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@pages/*": ["src/pages/*"],
       "@redux/*": ["src/redux/*"],
+      "@styled/*": ["src/styled/*"],
+      "@mocks/*": ["src/mocks/*"],
       "@utills/*": ["src/utills/*"],
       "@/*": ["src/*"]
     }

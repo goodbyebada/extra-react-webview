@@ -1,18 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import jobPostAPI from "@api/jobPostAPI";
-import { JobPost } from "@/types/shared";
-import { ResponseStatus } from "@/types/shared";
+import { JobPost } from "@/type/shared";
+import { ResponseStatus } from "@/type/shared";
 import {
   DateYearMonth,
   QuryTypesWithPage,
   ObjectType,
-} from "@/types/dateInteface";
+} from "@/type/dateInteface";
 
-import { JobPostList } from "@/types/shared";
+import { JobPostList } from "@/type/shared";
+
 import {
   dummyCalenderDataForExtra,
   dummyJobPostList,
-} from "@/mocks/dummyJobData";
+} from "@mocks/dummyJobData";
 import { TEST_FLAG } from "@/testFlag";
 
 // 상태의 타입 정의

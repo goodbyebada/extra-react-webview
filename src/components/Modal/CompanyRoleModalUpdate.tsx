@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import { RoleBodyType, Tattoo } from "@/types/shared";
+import { RoleBodyType, Tattoo } from "@/type/shared";
 import { requestGetFetch } from "@api/utils";
 import { requestPutFetch } from "../../api/utils";
 

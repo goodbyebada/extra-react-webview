@@ -2,8 +2,8 @@ import Item from "@components/mocules/Item";
 import {
   DUMMY_MANAGER_JOB_LIST_VER_1,
   DUMMY_MANAGER_JOB_LIST_VER_2,
-} from "@/mocks/dummyJobData";
-import { JobPostList } from "@/types/shared";
+} from "@mocks/dummyJobData";
+import { JobPostList } from "@/type/shared";
 import getDdayString from "@utills/getDdayString";
 import { useNavigate } from "react-router-dom";
 import { ContentWrapper } from "@components/atoms/Wrapper";
@@ -16,7 +16,7 @@ import {
   getUserInfoByUserId,
 } from "@utills/chat/FirebaseAPI/dataGetter";
 import { useEffect, useState } from "react";
-import { UserFiled } from "@/types/firebaseInterface";
+import { UserFiled } from "@/type/firebaseInterface";
 import { ChatSessionManager } from "@utills/chat/ChatSessionManager";
 
 /**

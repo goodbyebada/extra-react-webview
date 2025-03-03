@@ -4,7 +4,7 @@ import { RootState } from "@redux/store";
 import { AppDispatch } from "@redux/store";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
-import { ResponseStatus } from "@/types/shared";
+import { ResponseStatus } from "@/type/shared";
 import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
 import Scheduler from "@components/organisms/Scheduler";
 
