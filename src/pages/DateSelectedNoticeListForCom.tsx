@@ -8,7 +8,11 @@ import jobPostAPI from "@api/jobPostAPI";
 import { JobPost } from "@/type/shared";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
-import { sendMessage } from "@api/utils";
+import { useNavigate } from "react-router-dom";
+import { DUMMY_MANAGER_JOB_LIST_VER_1 } from "@mocks/dummyJobData";
+import { TEST_FLAG } from "@/testFlag";
+import { NavBar } from "@components/mocules/navBar/CommonNavBar";
+import { ThemeText } from "@components/atoms/Text";
 
 /**
  * 날짜 선택시 화면
@@ -25,7 +29,10 @@ export default function DateSelectedNoticeListForCom() {
     (state: RootState) => state.date.selectedByHome,
   );
 
-  const { dateNum } = selectedDate;
+  const navigate = useNavigate();
+
+  const { dateNum, year, month } = selectedDate;
+  const NAV_CONTENT = `${year}/${month + 1}/${dateNum}의 촬영 스케줄이에요.`;
 
   const jobListAboutYM = useSelector(
     (state: RootState) => state.companyJobpost.jobPostByCalenderForCom.data,
@@ -38,15 +45,8 @@ export default function DateSelectedNoticeListForCom() {
    * @param jobPostId
    */
   const navigateToExtraCastingBoard = (jobPostId: number) => {
-    // const basePath = "/detail";
-    // navigate(`${basePath}/${jobPostId}`);
-    sendMessage({
-      type: "NAVIGATION_DETAIL",
-      payload: {
-        uri: `/detail/${jobPostId}`,
-      },
-      version: "1.0",
-    });
+    const basePath = "/detail";
+    navigate(`${basePath}/${jobPostId}`);
   };
 
   useEffect(() => {
@@ -67,6 +67,8 @@ export default function DateSelectedNoticeListForCom() {
         finalList = await Promise.all(
           selectedDataIdList.map((id) => fetch(id)),
         );
+
+        console.log(finalList);
       }
 
       // null 값(에러)을 제거하고 성공한 데이터만 남김
@@ -87,8 +89,10 @@ export default function DateSelectedNoticeListForCom() {
   }, [selectedDataIdList]);
 
   return (
-    <Container>
-      {/* <NavBar content={navContent} /> */}
+    <div>
+      <NavBar>
+        <ThemeText variant={"content-title"}>{NAV_CONTENT}</ThemeText>
+      </NavBar>
 
       <ItemWrapper>
         {loading ? <Loading loading={loading} /> : ""}
@@ -108,7 +112,7 @@ export default function DateSelectedNoticeListForCom() {
 
         {!loading && notFound ? <NotFoundPage /> : ""}
       </ItemWrapper>
-    </Container>
+    </div>
   );
 }
 

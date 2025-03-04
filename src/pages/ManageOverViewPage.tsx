@@ -5,6 +5,7 @@ import Item from "@components/mocules/Item";
 import styled from "styled-components";
 import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 import MainWindow from "@components/mocules/MainWindow";
+import { useNavigate } from "react-router-dom";
 
 /**
  * 업체 측 현장관리 촬영목록 화면
@@ -12,6 +13,8 @@ import MainWindow from "@components/mocules/MainWindow";
 
 // TODO dummyData로 구현되어있음 추후 API로 수정 예정
 export default function ManageOverViewPage() {
+  const navigate = useNavigate();
+  const DETAIL_PATH = `/company/manage/detail`;
   return (
     <MainWindow headerShown={false}>
       <NavBar>
@@ -35,7 +38,9 @@ export default function ManageOverViewPage() {
               time={elem.gatheringTime}
               location={elem.gatheringLocation}
               status={"applied"}
-              onClick={() => {}}
+              onClick={() => {
+                navigate(DETAIL_PATH);
+              }}
             />
           ))}
         </ItemWrapper>

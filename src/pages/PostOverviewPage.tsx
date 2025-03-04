@@ -97,8 +97,7 @@ export default function PostOverviewPage() {
     }
   };
 
-  // TODO 추후 공고 추가 페이제 path와 연결해야함
-  const path = "/";
+  const path = "/add-notice";
   const tmpPath = "/company/notice/post-status/2";
 
   return (

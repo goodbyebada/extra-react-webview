@@ -155,11 +155,6 @@ function App() {
             element={<CompanySettingPage />}
           />
 
-          <Route
-            path="/company/manager-dashboard"
-            element={<ManagerDashboard />}
-          />
-
           {/* 업체 측 공고 리스트 페이지 화면*/}
           <Route path="/company/notice/" element={<PostOverviewPage />} />
 

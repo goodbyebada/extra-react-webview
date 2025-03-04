@@ -28,7 +28,7 @@ export default function CompanyHome() {
    */
   const openModalWindow = () => {
     // 모달창을 연다
-    const path = "/date-selected-notice-list-company";
+    const path = "/company/home/date-selected-notice-list";
     navigate(path);
   };
 
