@@ -20,7 +20,7 @@ import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@styled/colors";
 const ICON_SIZE = 40;
 const ACTIVE_COLOR = COMMON_COLORS.main;
 const INACTIVE_COLOR = FONT_COLORS.gray;
-const headerHeight = 155;
+const headerHeight = 80;
 const bottomHeight = 160;
 
 const BottomNavigationWrapper = styled.footer`
@@ -299,9 +299,9 @@ const MainWindow = ({
         <Container
           style={{ height: `${headerHeight}px` }}
           background={BACKGROUND_COLORS.navigation}
-          paddingHorizontal={40}
+          paddingHorizontal={30}
         >
-          <Margin size={100} />
+          {/* <Margin size={100} /> */}
           <Container flexDirection="row" justifyContent="space-between">
             <HistoryBackButton />
             <Text size={24} color={FONT_COLORS.white} weight={900}>
