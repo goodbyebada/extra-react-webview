@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "@redux/store";
 import { useSelector } from "react-redux";
 import CompanyCalender from "@components/template/CompanyCalender";
+import MainWindow from "@components/mocules/MainWindow";
 // import CompanyList from "@components/organisms/CompanyList";
 
 /**
@@ -40,7 +41,7 @@ export default function CompanyHome() {
   // }, []);
 
   return (
-    <div className="company-home-container">
+    <MainWindow>
       <CompanyHomeTopBar>
         <nav>
           <TypeSelector />
@@ -60,7 +61,7 @@ export default function CompanyHome() {
           // <CompanyList dateYM={dateYM} showRecommand={false} />
         )}
       </div>
-    </div>
+    </MainWindow>
   );
 }
 

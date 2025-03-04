@@ -14,6 +14,7 @@ import { ThemeText } from "@components/atoms/Text";
 import { Header } from "@components/atoms/Layout";
 import { HomeNavBar } from "@components/mocules/navBar/HomeNavBar";
 import { setHomeDate } from "@redux/dateSlice";
+import MainWindow from "@components/mocules/MainWindow";
 
 const DUMMY_INIT_NAME = "김출연";
 
@@ -78,26 +79,28 @@ export default function MemberHome() {
   };
 
   return (
-    <LayoutComponent>
-      <Header>
-        <HomeNavBar />
-        <ThemeText variant="title">
-          {showRecommand
-            ? HOME_MESSAGES.recommend(name)
-            : HOME_MESSAGES.all(name)}
-        </ThemeText>
-      </Header>
+    <MainWindow>
+      <LayoutComponent>
+        <Header>
+          <HomeNavBar />
+          <ThemeText variant="title">
+            {showRecommand
+              ? HOME_MESSAGES.recommend(name)
+              : HOME_MESSAGES.all(name)}
+          </ThemeText>
+        </Header>
 
-      {showAsCalender ? (
-        <HomeCalendar
-          dateYearMonth={{ year, month }}
-          showRecommand={showRecommand}
-          clickedDateEvent={(dateNum) => clickedDateEvent(dateNum)}
-          gotJobDataList={gotJobDataList}
-        />
-      ) : (
-        <List dateYearMonth={{ year, month }} showRecommand={showRecommand} />
-      )}
-    </LayoutComponent>
+        {showAsCalender ? (
+          <HomeCalendar
+            dateYearMonth={{ year, month }}
+            showRecommand={showRecommand}
+            clickedDateEvent={(dateNum) => clickedDateEvent(dateNum)}
+            gotJobDataList={gotJobDataList}
+          />
+        ) : (
+          <List dateYearMonth={{ year, month }} showRecommand={showRecommand} />
+        )}
+      </LayoutComponent>
+    </MainWindow>
   );
 }

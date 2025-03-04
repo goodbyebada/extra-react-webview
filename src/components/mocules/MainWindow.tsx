@@ -153,7 +153,7 @@ const MemberNavigationIconList = () => {
         onClick={() => {
           if (index != 3) {
             setIndex(3);
-            navigate("/");
+            navigate("/member/profile");
           }
         }}
       />

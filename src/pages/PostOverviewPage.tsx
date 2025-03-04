@@ -8,11 +8,14 @@ import { LabeledCheckBoxGroup } from "@components/mocules/LabeledCheckBoxGroup";
 import InfiniteScroll from "@utills/InfiniteScroll";
 import Item, { ItemProps } from "@components/mocules/Item";
 import { testConvertFun } from "@utills/convert";
+import MainWindow from "@components/mocules/MainWindow";
 
 /**
  * 업체 측 공고 화면
  * (본인이 소속된 회사의 공고 리스트를 보여주는 화면)
  */
+
+const NAV_BAR_HEIGHT = 100;
 
 // TODO + 버튼 눌렀을때 역할 추가 페이지 역할로 이동
 export default function PostOverviewPage() {
@@ -99,7 +102,7 @@ export default function PostOverviewPage() {
   const tmpPath = "/company/notice/post-status/2";
 
   return (
-    <>
+    <MainWindow headerShown={false}>
       <StickyWrapper>
         <Header>
           <SpaceBetweenNavBar>
@@ -121,38 +124,40 @@ export default function PostOverviewPage() {
         </Header>
       </StickyWrapper>
 
-      <InfiniteScroll
-        fetchData={fetchData}
-        hasMore={hasMore}
-        loader={<h2>loading....!</h2>}
-        endMessage={<h2>모든 공고를 업데이트 하였습니다.</h2>}
-        hasError={hasError}
-        errorMessage={<h2>에러가 발생했습니다.</h2>}
-      >
-        {dataList.length > 0 &&
-          dataList.map((elem, key) => {
-            let props = convertFunc(elem);
-            if (!props) return "";
+      <div style={{ marginTop: `${NAV_BAR_HEIGHT}px`, height: "100%" }}>
+        <InfiniteScroll
+          fetchData={fetchData}
+          hasMore={hasMore}
+          loader={<h2>loading....!</h2>}
+          endMessage={<h2>모든 공고를 업데이트 하였습니다.</h2>}
+          hasError={hasError}
+          errorMessage={<h2>에러가 발생했습니다.</h2>}
+        >
+          {dataList.length > 0 &&
+            dataList.map((elem, key) => {
+              let props = convertFunc(elem);
+              if (!props) return "";
 
-            const { title, category, date, dDay, company, time, location } =
-              props;
+              const { title, category, date, dDay, company, time, location } =
+                props;
 
-            return (
-              <Item
-                key={key}
-                title={title}
-                category={category}
-                date={date}
-                dDay={dDay}
-                company={company}
-                time={time}
-                onClick={() => navigate(tmpPath)}
-                location={location}
-              ></Item>
-            );
-          })}
-      </InfiniteScroll>
-    </>
+              return (
+                <Item
+                  key={key}
+                  title={title}
+                  category={category}
+                  date={date}
+                  dDay={dDay}
+                  company={company}
+                  time={time}
+                  onClick={() => navigate(tmpPath)}
+                  location={location}
+                ></Item>
+              );
+            })}
+        </InfiniteScroll>
+      </div>
+    </MainWindow>
   );
 }
 
@@ -168,6 +173,7 @@ const IconImage = styled.img`
 
 const StickyWrapper = styled.div`
   width: 100%;
-  position: fixed;
+  position: sticky;
   top: 0;
+  height: ${NAV_BAR_HEIGHT}px;
 `;

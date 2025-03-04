@@ -7,6 +7,7 @@ import NotFoundPage from "@pages/Error/NotFound";
 import { ResponseStatus } from "@/type/shared";
 import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
 import Scheduler from "@components/organisms/Scheduler";
+import MainWindow from "@components/mocules/MainWindow";
 
 export default function SchedulerPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -40,8 +41,8 @@ export default function SchedulerPage() {
   };
 
   return (
-    <>
+    <MainWindow>
       <Component />
-    </>
+    </MainWindow>
   );
 }

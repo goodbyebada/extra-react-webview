@@ -4,6 +4,7 @@ import { memberRoleFrontDummyData } from "@mocks/dummyJobData";
 import Item from "@components/mocules/Item";
 import styled from "styled-components";
 import { NavBar } from "@components/mocules/navBar/CommonNavBar";
+import MainWindow from "@components/mocules/MainWindow";
 
 /**
  * 업체 측 현장관리 촬영목록 화면
@@ -12,7 +13,7 @@ import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 // TODO dummyData로 구현되어있음 추후 API로 수정 예정
 export default function ManageOverViewPage() {
   return (
-    <>
+    <MainWindow headerShown={false}>
       <NavBar>
         <Text size={25} weight={900}>
           현장 관리
@@ -39,7 +40,7 @@ export default function ManageOverViewPage() {
           ))}
         </ItemWrapper>
       </ContentWrapper>
-    </>
+    </MainWindow>
   );
 }
 

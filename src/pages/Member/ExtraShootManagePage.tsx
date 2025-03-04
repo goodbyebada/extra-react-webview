@@ -18,6 +18,7 @@ import {
   ShootManage,
 } from "@/type/shared";
 import { requestDeleteFetch, requestGetFetch } from "@api/utils";
+import MainWindow from "@components/mocules/MainWindow";
 
 export default function ExtraShootManagePage() {
   const [applyStatusIdx, setApplyStatusIdx] = useState(0);
@@ -131,35 +132,37 @@ export default function ExtraShootManagePage() {
         marginTop: "10px",
       }}
     >
-      <Top>
-        <DropDownSelector
-          currentIdx={applyStatusIdx}
-          modalIdxList={selcetorList}
-          handler={handler}
-        />
-      </Top>
-      <ListContainer>
-        {recruitBoxes.map((box) => (
-          <Wrapper key={box.id}>
-            <StatusRecruitBox
-              shootManageInfo={box}
-              onDelete={(id) => handleDeleteOrCancel(id, false)}
-              onOpenCancelModal={openCancelModal}
-            />
-          </Wrapper>
-        ))}
-      </ListContainer>
-      {isCancelCheckModalOpen && modalData && (
-        <CancelCheckModal
-          title={modalData.title}
-          date={modalData.calenderList}
-          onConfirm={handleConfirmCancel}
-          onCancel={closeCancelModal}
-        />
-      )}
-      {isCompleteModalOpen && (
-        <CompleteModal type="supportCancel" closeModal={closeCompleteModal} />
-      )}
+      <MainWindow>
+        <Top>
+          <DropDownSelector
+            currentIdx={applyStatusIdx}
+            modalIdxList={selcetorList}
+            handler={handler}
+          />
+        </Top>
+        <ListContainer>
+          {recruitBoxes.map((box) => (
+            <Wrapper key={box.id}>
+              <StatusRecruitBox
+                shootManageInfo={box}
+                onDelete={(id) => handleDeleteOrCancel(id, false)}
+                onOpenCancelModal={openCancelModal}
+              />
+            </Wrapper>
+          ))}
+        </ListContainer>
+        {isCancelCheckModalOpen && modalData && (
+          <CancelCheckModal
+            title={modalData.title}
+            date={modalData.calenderList}
+            onConfirm={handleConfirmCancel}
+            onCancel={closeCancelModal}
+          />
+        )}
+        {isCompleteModalOpen && (
+          <CompleteModal type="supportCancel" closeModal={closeCompleteModal} />
+        )}
+      </MainWindow>
     </div>
   );
 }
