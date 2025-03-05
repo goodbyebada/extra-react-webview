@@ -268,7 +268,7 @@ function DetailPage() {
             {roleGroups[roleName].map((role, index, array) => (
               <React.Fragment key={role.index}>
                 <RoleInfoComponent
-                  role={role}
+                  roleDetailInfo={role}
                   roleName={roleName}
                   index={role.index}
                   onClick={handleRoleInfoClick}

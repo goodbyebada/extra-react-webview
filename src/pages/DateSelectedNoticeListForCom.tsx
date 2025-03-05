@@ -46,7 +46,7 @@ export default function DateSelectedNoticeListForCom() {
    * @param jobPostId
    */
   const navigateToExtraCastingBoard = (jobPostId: number) => {
-    const basePath = "/detail";
+    const basePath = "/company/notice/post-status";
     navigate(`${basePath}/${jobPostId}`);
   };
 

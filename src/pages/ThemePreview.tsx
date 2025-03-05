@@ -21,15 +21,37 @@ const ThemePreviewPage = () => {
   const handleDelete = () => {
     alert("아이템이 삭제되었습니다!");
   };
-  const roleExample: RoleBodyType = {
-    sex: true,
-    roleAge: ["20", "30"],
-    season: "봄",
-    costume: ["드레스", "정장"],
-    currentPersonnel: 3,
-    limitPersonnel: 5,
-    roleId: 101,
+
+  const dummyRoleDetailData: RoleBodyType = {
+    id: 1,
+    roleName: "주연 배우",
+    costume: {
+      roleName: "정장",
+      season: "겨울",
+      etc: "검은색 넥타이와 가죽 구두 포함",
+      imageSrc: [
+        "https://example.com/costume1.jpg",
+        "https://example.com/costume2.jpg",
+      ],
+    },
+    sex: true, // true: 남성, false: 여성
+    minAge: "25",
+    maxAge: "35",
+    limitPersonnel: 1,
+    currentPersonnel: 0,
+    tattoo: {
+      face: false,
+      chest: false,
+      arm: false,
+      leg: false,
+      shoulder: false,
+      back: false,
+      hand: false,
+      feet: false,
+    },
+    hourPay: "50",
   };
+
   const { control, setValue } = useForm();
 
   return (
@@ -60,8 +82,7 @@ const ThemePreviewPage = () => {
       </Text>
 
       <RoleInfo
-        role={roleExample}
-        roleName="주연 배우"
+        roleDetailInfo={dummyRoleDetailData}
         index={0}
         onClick={(roleName, index) => {
           console.log(`Role Name: ${roleName}, Index: ${index}`);

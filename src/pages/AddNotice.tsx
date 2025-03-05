@@ -15,8 +15,8 @@ import {
 
 import { Place } from "@/type/shared";
 import { useNavigate } from "react-router-dom";
-import { IoCaretBackOutline } from "react-icons/io5";
 import NoticeRole from "@components/mocules/company/NoticeRole";
+import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 
 /**
  * AddNotice : 업체 - 공고 등록 화면
@@ -45,10 +45,6 @@ function AddNotice() {
 
   const toggleModal = (modalName: keyof typeof modals, isOpen: boolean) => {
     setModals((prev) => ({ ...prev, [modalName]: isOpen }));
-  };
-
-  const goBackManager = () => {
-    navigate("/manager-dashboard");
   };
 
   const submitTitleCategoryModal = (
@@ -122,13 +118,11 @@ function AddNotice() {
 
   return (
     <>
-      <Header>
-        <IoCaretBackOutline size={40} onClick={goBackManager} />
+      <NavBar>
         <Text size={25} color="#fff" weight={900}>
           공고 등록
         </Text>
-      </Header>
-
+      </NavBar>
       <Column>
         {/* 제목 및 카테고리 */}
         {title.length > 0 && category[0] !== null ? (
@@ -209,13 +203,6 @@ const Row = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-`;
-
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  gap: 10px;
 `;
 
 const Line = styled.div`

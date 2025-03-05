@@ -3,6 +3,7 @@ import {
   MemberRoleFront,
   JobPostList,
   JobPost,
+  RoleBodyType,
 } from "@/type/shared";
 
 import { ObjectType } from "@/type/dateInteface";
@@ -248,7 +249,7 @@ const dummyJobPostList: JobPostList = [
     applyDeadLine: "2024-09-01",
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-02", "2024-09-05"],
-    roleIdList: [4, 5, 6],
+    roleIdList: [1, 2, 3],
     roleNameList: ["정보 분석가", "생존 전문가", "무기 전문가"],
     costumeList: [
       "가벼운 방탄 조끼, 모자, 방수 바지",
@@ -295,7 +296,7 @@ const dummyJobPostList: JobPostList = [
   },
   {
     id: 2,
-    title: "라스트 서바이벌2",
+    title: "마무리를 향해",
     gatheringLocation: {
       id: "21160829",
       placeName: "사당역 4호선",
@@ -313,7 +314,7 @@ const dummyJobPostList: JobPostList = [
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-02", "2024-09-05"],
     roleIdList: [4, 5, 6],
-    roleNameList: ["정보 분석가", "생존 전문가", "무기 전문가"],
+    roleNameList: ["군인", "조교", "장교"],
     costumeList: [
       "가벼운 방탄 조끼, 모자, 방수 바지",
       "다목적 전투복, 군용 부츠, 다기능 벨트",

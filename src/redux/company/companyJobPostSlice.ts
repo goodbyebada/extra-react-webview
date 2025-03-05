@@ -146,7 +146,25 @@ export const fetchJobPostByListForCom = createAsyncThunk(
 export const fetchJobPostByIdForCom = createAsyncThunk<JobPost, number>(
   "companyJobpost/fetchById",
   async (id: number) => {
-    const data = await jobPostAPIForCom.getJobPostById(id);
+    let data: Promise<JobPost>;
+
+    if (TEST_FLAG) {
+      data = new Promise<JobPost>((resolve, reject) =>
+        setTimeout(() => {
+          const dummyData = dummyJobPostList.find(
+            (jobPost) => jobPost.id === id,
+          );
+          if (dummyData) {
+            resolve(dummyData);
+          } else {
+            reject(new Error(`ID ${id} 더미 데이터가 없습니다.`));
+          }
+        }, 2000),
+      );
+      return data;
+    }
+
+    data = await jobPostAPIForCom.getJobPostById(id);
     return data;
   },
 );
