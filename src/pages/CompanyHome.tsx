@@ -7,7 +7,14 @@ import { RootState } from "@redux/store";
 import { useSelector } from "react-redux";
 import CompanyCalender from "@components/template/CompanyCalender";
 import MainWindow from "@components/mocules/MainWindow";
+import { SpaceBetweenNavBar } from "@components/atoms/Layout";
+import List from "@pages/List";
+import { DateDetailedInfo } from "@type/dateInteface";
+import { useState } from "react";
 // import CompanyList from "@components/organisms/CompanyList";
+import Modal from "@components/atoms/Modal";
+import Container from "@components/atoms/Container";
+import ScrollingList from "@components/mocules/ScrollingList";
 
 /**
  *추후 수정 예정
@@ -16,6 +23,10 @@ import MainWindow from "@components/mocules/MainWindow";
  * @returns 회사 업체측 홈화면 UI
  */
 export default function CompanyHome() {
+  const dateYearMonth: DateDetailedInfo = useSelector(
+    (state: RootState) => state.date.selectedByHome,
+  );
+
   // 캘린더 || 리스트
   const showAsCalender = useSelector(
     (state: RootState) => state.showType.showAsCalender,
@@ -41,44 +52,38 @@ export default function CompanyHome() {
   // }, []);
 
   return (
-    <MainWindow>
-      <CompanyHomeTopBar>
-        <nav>
-          <TypeSelector />
-        </nav>
-        <h1>내 촬영</h1>
-      </CompanyHomeTopBar>
+    <MainWindow headerShown={false}>
+      <NavWrapper>
+        <TypeSelector />
+      </NavWrapper>
 
-      <div className="content">
+      <Title>내 촬영</Title>
+
+      <ScrollingList>
         {showAsCalender ? (
           <CompanyCalender
             showRecommand={false}
             clickedDateEvent={openModalWindow}
           />
         ) : (
-          ""
-          // TODO test 위해 CompanyList 주석 처리
-          // <CompanyList dateYM={dateYM} showRecommand={false} />
+          <List dateYearMonth={dateYearMonth} showRecommand={false} />
         )}
-      </div>
+      </ScrollingList>
     </MainWindow>
   );
 }
 
-const CompanyHomeTopBar = styled.div`
-  nav {
-    display: flex;
-    justify-content: end;
-  }
-  h1 {
-    display: flex;
-    justify-content: center;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 83.333%;
-    letter-spacing: 0.24px;
-    margin: 0px;
-    padding-top: 20px;
-  }
+const NavWrapper = styled.nav`
+  width: 100%;
+  height: fit-content;
+  position: sticky;
+  display: flex;
+  justify-content: flex-end;
+`;
+const Title = styled.h1`
+  height: fit-content;
+  width: 100%;
+  position: sticky;
+  display: flex;
+  justify-content: center;
 `;

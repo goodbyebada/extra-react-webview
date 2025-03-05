@@ -16,6 +16,7 @@ import { JobPost, JobPostList } from "@type/shared";
 import { DUMMY_ADMIN_INFO } from "@pages/Chat/ChatListForAdmin";
 import Loading from "@components/Loading";
 import Container from "@components/atoms/Container";
+import ScrollingList from "@components/mocules/ScrollingList";
 
 /**
  * 업체 측 현장관리 촬영목록 화면
@@ -48,7 +49,7 @@ export default function ManageOverViewPage() {
   }, []);
   return (
     <MainWindow headerShown={false}>
-      <Container>
+      <ScrollingList>
         <NavBar>
           <Text size={25} weight={900}>
             현장 관리
@@ -83,7 +84,7 @@ export default function ManageOverViewPage() {
             </>
           )}
         </ContentWrapper>
-      </Container>
+      </ScrollingList>
     </MainWindow>
   );
 }

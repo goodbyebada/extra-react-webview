@@ -9,13 +9,15 @@ import InfiniteScroll from "@utills/InfiniteScroll";
 import Item, { ItemProps } from "@components/mocules/Item";
 import { testConvertFun } from "@utills/convert";
 import MainWindow from "@components/mocules/MainWindow";
+import ScrollingList from "@components/mocules/ScrollingList";
+import { ContentWrapper } from "@components/atoms/Wrapper";
 
 /**
  * 업체 측 공고 화면
  * (본인이 소속된 회사의 공고 리스트를 보여주는 화면)
  */
 
-const NAV_BAR_HEIGHT = 100;
+const NAV_BAR_HEIGHT = 150;
 
 // TODO + 버튼 눌렀을때 역할 추가 페이지 역할로 이동
 export default function PostOverviewPage() {
@@ -102,7 +104,8 @@ export default function PostOverviewPage() {
 
   return (
     <MainWindow headerShown={false}>
-      <StickyWrapper>
+      <ScrollingList>
+        {/* <StickyWrapper> */}
         <Header>
           <SpaceBetweenNavBar>
             <h1>우리 회사 공고</h1>
@@ -121,9 +124,8 @@ export default function PostOverviewPage() {
             />
           </CheckBoxWrapper>
         </Header>
-      </StickyWrapper>
+        {/* </StickyWrapper> */}
 
-      <div style={{ marginTop: `${NAV_BAR_HEIGHT}px`, height: "100%" }}>
         <InfiniteScroll
           fetchData={fetchData}
           hasMore={hasMore}
@@ -141,21 +143,23 @@ export default function PostOverviewPage() {
                 props;
 
               return (
-                <Item
-                  key={key}
-                  title={title}
-                  category={category}
-                  date={date}
-                  dDay={dDay}
-                  company={company}
-                  time={time}
-                  onClick={() => navigate(tmpPath)}
-                  location={location}
-                ></Item>
+                <ContentWrapper paddingBottom={"10px"}>
+                  <Item
+                    key={key}
+                    title={title}
+                    category={category}
+                    date={date}
+                    dDay={dDay}
+                    company={company}
+                    time={time}
+                    onClick={() => navigate(tmpPath)}
+                    location={location}
+                  ></Item>
+                </ContentWrapper>
               );
             })}
         </InfiniteScroll>
-      </div>
+      </ScrollingList>
     </MainWindow>
   );
 }
