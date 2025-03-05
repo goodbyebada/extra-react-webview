@@ -32,58 +32,61 @@ function ScheduleModal({
 }: ScheduleModalProps) {
   const { year, month, dateNum, weekDayLabel } = selectedDateInfo;
   const dateString = `${year}/${month + 1}/${dateNum}  (${weekDayLabel})`;
-  const todayJobList = scheduledJobsByDate[dateNum + 1];
+  const todayJobList = scheduledJobsByDate[dateNum];
 
   const dateYMstr = `${year}/${month + 1}/`;
 
   return (
-    <Modal isVisible={isVisible} onClose={closeModal}>
-      <MultiplyIcon
-        src={multiply}
-        onClick={() => {
-          closeModal();
-        }}
-      />
+    <>
+      {todayJobList && todayJobList.length > 0 ? (
+        <Modal isVisible={isVisible} onClose={closeModal}>
+          <MultiplyIcon
+            src={multiply}
+            onClick={() => {
+              closeModal();
+            }}
+          />
 
-      <ModalText>{dateString}</ModalText>
-      <ListContainer>
-        <ContentWrapper>
-          {todayJobList &&
-            todayJobList.length > 0 &&
-            todayJobList.map((jobPost, key) => {
-              const {
-                title,
-                category,
-                gatheringTime,
-                gatheringLocation,
-                companyName,
-                status,
-                calender,
-              } = jobPost;
+          <ModalText>{dateString}</ModalText>
+          <ListContainer>
+            <ContentWrapper>
+              {todayJobList.map((jobPost, key) => {
+                const {
+                  title,
+                  category,
+                  gatheringTime,
+                  gatheringLocation,
+                  companyName,
+                  status,
+                  calender,
+                } = jobPost;
 
-              const startDate = dateYMstr + calender.startDateNum.toString();
-              const endDate = dateYMstr + calender.endDateNum.toString();
-              return (
-                <ItemWrapper>
-                  <Item
-                    key={key}
-                    title={title}
-                    category={category}
-                    time={gatheringTime}
-                    location={gatheringLocation}
-                    company={companyName}
-                    status={status}
-                    dDay=""
-                    date={[startDate, endDate]}
-                    onClick={() => {}}
-                  />
-                </ItemWrapper>
-              );
-            })}
-        </ContentWrapper>
-      </ListContainer>
-      <Edit>편집</Edit>
-    </Modal>
+                const startDate = dateYMstr + calender.startDateNum.toString();
+                const endDate = dateYMstr + calender.endDateNum.toString();
+                return (
+                  <ItemWrapper key={key}>
+                    <Item
+                      title={title}
+                      category={category}
+                      time={gatheringTime}
+                      location={gatheringLocation}
+                      company={companyName}
+                      status={status}
+                      dDay=""
+                      date={[startDate, endDate]}
+                      onClick={() => {}}
+                    />
+                  </ItemWrapper>
+                );
+              })}
+            </ContentWrapper>
+          </ListContainer>
+          <Edit>편집</Edit>
+        </Modal>
+      ) : (
+        ""
+      )}
+    </>
   );
 }
 

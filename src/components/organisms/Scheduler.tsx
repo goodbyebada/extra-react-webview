@@ -13,6 +13,7 @@ import { setScheduleDate } from "@redux/dateSlice";
 import { DateDetailedInfo, DateSelctedType } from "@/type/dateInteface";
 import { SchedulerWeekdayLabels } from "@components/mocules/WeekdayLabels";
 import ScheduleModal from "@components/Modal/ScheduleModal";
+import { useStyleSheetContext } from "styled-components/dist/models/StyleSheetManager";
 
 interface SchedulerPageProps {
   dateYM: DateDetailedInfo;
@@ -24,20 +25,23 @@ export default function Scheduler({
   appliedListData,
 }: SchedulerPageProps) {
   const DAYLIST_HEIGHT_PERCENT = 8;
-  const dispatch = useDispatch<AppDispatch>();
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const openModal = () => setModalOpen((prev) => !prev);
+  const openModal = () => {
+    setModalOpen(true);
+  };
   const closeModal = () => setModalOpen(false);
 
   const [weeklists, setWeeklists] = useState<number[][]>([]);
   const [scheduledJobsByDate, setScheduledJobsByDate] = useState<
     MemberRoleFront[][]
   >([]);
+  const [selectedDateInfo, setSelectedDateInfo] =
+    useState<DateDetailedInfo>(dateYM);
 
   useEffect(() => {
-    console.log(modalOpen);
-  }, [modalOpen]);
+    console.log(appliedListData);
+  }, [appliedListData]);
 
   useEffect(() => {
     const filtered = weeklists.flat().filter((dateNum) => dateNum !== 0);
@@ -53,6 +57,7 @@ export default function Scheduler({
 
       newWeeklist[dateNum] = ShootJobList;
     }
+
     setScheduledJobsByDate(newWeeklist);
   }, [weeklists, appliedListData]);
 
@@ -66,7 +71,9 @@ export default function Scheduler({
   const selectedDateEvent = (elem: number) => {
     openModal();
     // console.log("selectedDateEvent called");
-    // dispatch(setScheduleDate({ ...dateYM, dateNum: elem.toString() }));
+    // dispatch(setScheduleDate({ ...dateYM, dateNum: elem }));
+
+    setSelectedDateInfo({ ...dateYM, dateNum: elem });
   };
 
   // FullCalender -> 일반 캘린더 UI 수정
@@ -108,11 +115,11 @@ export default function Scheduler({
             {weeklists.map((item, key) => {
               return (
                 <SchedulerSingleWeek
-                  openModal={openModal}
                   height={weeklists.length}
                   key={key}
                   item={item}
                   CheckGotJob={CheckGotJob}
+                  selectedDateEvent={selectedDateEvent}
                 />
               );
             })}
@@ -122,7 +129,7 @@ export default function Scheduler({
 
       <ScheduleModal
         isVisible={modalOpen}
-        selectedDateInfo={dateYM}
+        selectedDateInfo={selectedDateInfo}
         closeModal={closeModal}
         scheduledJobsByDate={scheduledJobsByDate}
       />
