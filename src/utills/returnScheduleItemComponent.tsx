@@ -1,6 +1,5 @@
 import { styled } from "styled-components";
 import { MemberRoleFront } from "@/type/shared";
-import { ScheduleTypeStatusLabel } from "@/type/shared";
 
 const ScheduleItem = styled.div`
   /* 스케줄표 border width 만큼 늘림 */
@@ -68,7 +67,7 @@ const returnSchduleItemComponent = (
   const { status, title } = elem;
   let approve;
 
-  if (status === ScheduleTypeStatusLabel.APPROVED) {
+  if (status === "approved") {
     approve = true;
   } else {
     approve = false;
