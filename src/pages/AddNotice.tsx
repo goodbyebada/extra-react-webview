@@ -7,14 +7,13 @@ import CompanyTitleCategoryModal from "@components/Modal/CompanyTitleCategoryMod
 import CompanyDateTimePlaceModal from "@components/Modal/CompanyDateTimePlaceModal";
 import {
   RoleBodyType,
-  SeasonEnum,
+  // SeasonEnum,
   type CategoryEnum,
-  type RoleRegister,
+  // type RoleRegister,
   // Place,
 } from "@/type/shared";
 
 import { Place } from "@/type/shared";
-import { requestPostFetch } from "@api/utils";
 import { useNavigate } from "react-router-dom";
 import { IoCaretBackOutline } from "react-icons/io5";
 import NoticeRole from "@components/mocules/company/NoticeRole";

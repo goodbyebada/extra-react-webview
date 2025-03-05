@@ -17,8 +17,6 @@ import { ContentWrapper } from "@components/atoms/Wrapper";
  * (본인이 소속된 회사의 공고 리스트를 보여주는 화면)
  */
 
-const NAV_BAR_HEIGHT = 150;
-
 // TODO + 버튼 눌렀을때 역할 추가 페이지 역할로 이동
 export default function PostOverviewPage() {
   const navigate = useNavigate();
@@ -172,11 +170,4 @@ const CheckBoxWrapper = styled.div`
 const IconImage = styled.img`
   width: 50px;
   height: 50px;
-`;
-
-const StickyWrapper = styled.div`
-  width: 100%;
-  position: sticky;
-  top: 0;
-  height: ${NAV_BAR_HEIGHT}px;
 `;

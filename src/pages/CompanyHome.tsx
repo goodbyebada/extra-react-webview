@@ -7,13 +7,9 @@ import { RootState } from "@redux/store";
 import { useSelector } from "react-redux";
 import CompanyCalender from "@components/template/CompanyCalender";
 import MainWindow from "@components/mocules/MainWindow";
-import { SpaceBetweenNavBar } from "@components/atoms/Layout";
 import List from "@pages/List";
 import { DateDetailedInfo } from "@type/dateInteface";
-import { useState } from "react";
 // import CompanyList from "@components/organisms/CompanyList";
-import Modal from "@components/atoms/Modal";
-import Container from "@components/atoms/Container";
 import ScrollingList from "@components/mocules/ScrollingList";
 
 /**

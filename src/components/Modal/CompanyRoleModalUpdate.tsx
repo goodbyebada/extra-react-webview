@@ -22,13 +22,17 @@ function CompanyRoleModalUpdate({
   const [formState, setFormState] = useState<RoleBodyType>({
     id: roleId,
     roleName: roleName,
-    costume: "",
+    costume: {
+      roleName: "",
+      season: "",
+      etc: "",
+      imageSrc: [""],
+    },
     sex: false,
     minAge: "00",
     maxAge: "00",
     limitPersonnel: 0,
     currentPersonnel: 0,
-    season: "SPRING",
     tattoo: {
       face: false,
       chest: false,

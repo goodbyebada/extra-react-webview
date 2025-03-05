@@ -9,6 +9,7 @@ import RoleInfo from "@components/custom/RoleInfo";
 // import { InputField } from "@components/atoms/Form";
 import DropDownInput from "@components/mocules/DropDownInput";
 import { useForm } from "react-hook-form";
+import { RoleBodyType } from "@type/shared";
 
 const PreviewContainer = styled.section`
   background: #000;
@@ -20,7 +21,7 @@ const ThemePreviewPage = () => {
   const handleDelete = () => {
     alert("아이템이 삭제되었습니다!");
   };
-  const roleExample = {
+  const roleExample: RoleBodyType = {
     sex: true,
     roleAge: ["20", "30"],
     season: "봄",

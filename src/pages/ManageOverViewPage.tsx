@@ -1,21 +1,16 @@
 import Text from "@components/atoms/Text";
 import { ContentWrapper } from "@components/atoms/Wrapper";
-import {
-  DUMMY_MANAGER_JOB_LIST_VER_2,
-  memberRoleFrontDummyData,
-} from "@mocks/dummyJobData";
+import { DUMMY_MANAGER_JOB_LIST_VER_2 } from "@mocks/dummyJobData";
 import Item from "@components/mocules/Item";
 import styled from "styled-components";
 import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 import MainWindow from "@components/mocules/MainWindow";
 import { useNavigate } from "react-router-dom";
 import { DUMMY_MANAGER_JOB_LIST_VER_1 } from "@mocks/dummyJobData";
-import { resolve } from "path";
 import { useEffect, useState } from "react";
-import { JobPost, JobPostList } from "@type/shared";
+import { JobPostList } from "@type/shared";
 import { DUMMY_ADMIN_INFO } from "@pages/Chat/ChatListForAdmin";
 import Loading from "@components/Loading";
-import Container from "@components/atoms/Container";
 import ScrollingList from "@components/mocules/ScrollingList";
 
 /**

@@ -8,7 +8,6 @@ import ExtraCastingBoard from "@pages/Member/ExtraCastingBoard";
 import DateSelectedNoticeList from "@pages/Member/DateSelectedNoticeList";
 import CompanyHome from "@pages/CompanyHome";
 import ExtraShootManagePage from "@pages/Member/ExtraShootManagePage";
-import CompanyShootManagePage from "@pages/CompanyShootManagePage";
 import { ApplicantDetail } from "@pages/ApplicantDetail";
 import DetailPage from "@pages/DetailPage";
 import NotFound from "@pages/Error/NotFound";
@@ -53,7 +52,6 @@ import ChatRoomPage from "@pages/Chat/ChatRoomPage";
 import { ChatListForAdmin } from "@pages/Chat/ChatListForAdmin";
 import ChatPreviewForUser from "@pages/Chat/ChatPreviewForUser";
 import SchedulerPage from "@pages/Member/SchedulerPage";
-import ManagerDashboard from "@pages/ManagerDashboard";
 
 function App() {
   useEffect(() => {

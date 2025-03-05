@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Text from "@components/atoms/Text";
-import { RoleBodyType } from "@api/interface";
+import { RoleBodyType } from "@type/shared";
 
 interface RoleInfoProps {
   role: RoleBodyType;

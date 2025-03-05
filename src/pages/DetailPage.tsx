@@ -7,7 +7,7 @@ import CompanyRoleModalUpdate from "@components/Modal/CompanyRoleModalUpdate";
 import CompanyRoleModalCreate from "@components/Modal/CompanyRoleModalCreate";
 import { JobPost } from "@/type/shared";
 import RoleInfoComponent from "@components/custom/RoleInfo";
-import { requestGetFetch, requestPutFetch, sendMessage } from "@api/utils";
+import { requestGetFetch, requestPutFetch } from "@api/utils";
 
 interface RoleInfo {
   index: number;
@@ -149,11 +149,11 @@ function DetailPage() {
   };
 
   const goBackManager = () => {
-    // navigate("/manager-dashboard");
-    sendMessage({
-      type: "HISTORY_BACK",
-      version: "1.0",
-    });
+    navigate("/manager-dashboard");
+    // sendMessage({
+    //   type: "HISTORY_BACK",
+    //   version: "1.0",
+    // });
   };
 
   const handleReviseClick = () => {

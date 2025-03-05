@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Place } from "@api/interface";
+import { Place } from "@type/shared";
 
 interface KakaoApiResponse {
   documents: Array<{

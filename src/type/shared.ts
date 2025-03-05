@@ -263,11 +263,17 @@ export type ScheduleElemType = {
   status: string; // status는 문자열로 가정
 };
 
-export enum ScheduleTypeStatusLabel {
+export enum ScheduleTypeStatusServerLabel {
   "APPLIED" = "APPLIED",
   "REJECTED" = "REJECTED",
   "APPROVED" = "APPROVED",
   "DEFAULT" = "DEFAULT",
+}
+export enum ScheduleTypeStatusFrontLabel {
+  "APPLIED" = "applied",
+  "REJECTED" = "rejected",
+  "APPROVED" = "approved",
+  "DEFAULT" = "default",
 }
 
 export enum ScheduleType {
