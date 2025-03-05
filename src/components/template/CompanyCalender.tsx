@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { fetchJobPostByCalenderForCom } from "@redux/company/companyJobPostSlice";
 import HomeCalendar from "@components/organisms/HomeCalendar";
 import { DateDetailedInfo, CalenderTypeFor } from "@/type/dateInteface";
+import { setHomeDate } from "@redux/dateSlice";
 
 type CalenderProps = {
   type?: CalenderTypeFor;
@@ -47,13 +48,11 @@ export default function CompanyCalender({
   // 캘린더의 Item을 선택했을때의 onClikcEvent;
   // 눌렀을때 모달 창 나오기 위함
   const dateOnClick = (dateNum: number) => {
-    const stringDate = dateNum.toString();
-    const jobLength = gotJobDataList[stringDate].length;
+    const jobLength = gotJobDataList[dateNum].length;
 
     if (!jobLength) return;
     if (jobLength > 0) {
-      // const dateNum = stringDate;
-      // dispatch(setHomeDate(dateNum));
+      dispatch(setHomeDate(dateNum));
       clickedDateEvent();
     }
   };

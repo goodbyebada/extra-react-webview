@@ -45,8 +45,8 @@ function getDummyJobPost(userId: number): JobPostList {
  * 관리자 시나리오
  * : 본인 담당 채팅방 리스트 중 하나를 선택해 들어간다.
  */
-const DUMMY_ADMIN_INFO = {
-  user_id: 2,
+export const DUMMY_ADMIN_INFO = {
+  user_id: 1,
 };
 
 export function ChatListForAdmin() {

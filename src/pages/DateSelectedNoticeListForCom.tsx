@@ -9,10 +9,14 @@ import { JobPost } from "@/type/shared";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 import { useNavigate } from "react-router-dom";
-import { DUMMY_MANAGER_JOB_LIST_VER_1 } from "@mocks/dummyJobData";
+import {
+  DUMMY_MANAGER_JOB_LIST_VER_1,
+  dummyJobPostList,
+} from "@mocks/dummyJobData";
 import { TEST_FLAG } from "@/testFlag";
 import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 import { ThemeText } from "@components/atoms/Text";
+import { defaultJobPost } from "@redux/jobPost/jobPostSlice";
 
 /**
  * 날짜 선택시 화면
@@ -53,7 +57,23 @@ export default function DateSelectedNoticeListForCom() {
     const fetchData = async () => {
       let finalList: (JobPost | null)[] = []; // 에러일 경우 null을 넣도록 변경
 
-      const fetch = async (id: number) => {
+      const fetchAllJobPostID = async (id: number) => {
+        let data: Promise<JobPost>;
+
+        if (TEST_FLAG) {
+          data = new Promise<JobPost>((resolve) =>
+            setTimeout(() => {
+              const jobPost = dummyJobPostList.find((elem) => elem.id === id);
+              if (!jobPost) {
+                return resolve(defaultJobPost);
+              }
+              return resolve(jobPost);
+            }, 2000),
+          );
+          return data;
+        }
+
+        // test 아닐때
         try {
           const data = await jobPostAPI.getJobPostById(id);
           return data;
@@ -65,10 +85,8 @@ export default function DateSelectedNoticeListForCom() {
 
       if (selectedDataIdList && selectedDataIdList.length > 0) {
         finalList = await Promise.all(
-          selectedDataIdList.map((id) => fetch(id)),
+          selectedDataIdList.map((id) => fetchAllJobPostID(id)),
         );
-
-        console.log(finalList);
       }
 
       // null 값(에러)을 제거하고 성공한 데이터만 남김
@@ -115,18 +133,6 @@ export default function DateSelectedNoticeListForCom() {
     </div>
   );
 }
-
-const Container = styled.div`
-  nav {
-    height: 95px;
-    background: #191919;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 900;
-    line-height: 111.111%;
-    letter-spacing: 0.18px;
-  }
-`;
 
 const ItemWrapper = styled.div`
   display: flex;

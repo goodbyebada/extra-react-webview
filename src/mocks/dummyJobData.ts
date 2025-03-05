@@ -46,7 +46,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 종로구 광화문역 1번 출구",
     calenderList: ["2024-11-02", "2024-11-05"],
     name: "UMC",
-    applyStatus: "approved",
+    applyStatus: "APPROVED",
   },
   {
     id: 3,
@@ -57,7 +57,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 용산구 이태원역 4번 출구",
     calenderList: ["2024-10-10", "2024-10-12", "2024-10-15"],
     name: "몽실몽실",
-    applyStatus: "applied",
+    applyStatus: "APPLIED",
   },
   {
     id: 4,
@@ -79,7 +79,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 마포구 홍대입구역 1번 출구",
     calenderList: ["2024-11-03", "2024-11-07"],
     name: "UMC",
-    applyStatus: "approved",
+    applyStatus: "APPROVED",
   },
 ];
 

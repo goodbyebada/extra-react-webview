@@ -230,7 +230,7 @@ function DetailPage() {
         </p>
         <Row>
           <p style={{ margin: 0, marginRight: "auto" }}>
-            {jobPost?.gatheringLocation}
+            {jobPost?.gatheringLocation.placeName}
           </p>
           <div style={{ display: "flex", alignItems: "center" }}>
             <p style={{ margin: "0 10px 0 0" }}>

@@ -18,7 +18,14 @@ import { YearMonthAsNumber } from "@/type/dateInteface";
 const defaultJobPost: JobPost = {
   id: -1,
   title: "",
-  gatheringLocation: "",
+  gatheringLocation: {
+    id: "",
+    placeName: "",
+    roadAddress: "",
+    jibunAddress: "",
+    latitude: 0,
+    longitude: 0,
+  },
   gatheringTime: "",
   imageUrl: "",
   status: false,
@@ -44,7 +51,7 @@ function transformAndSortDates(input: ObjectType): ObjectType {
 
   for (const date in input) {
     const day = date.split("-")[2]; // "YYYY-MM-DD"에서 "DD" 추출
-    transformedObject[day] = input[date];
+    transformedObject[+day] = input[date];
   }
 
   const sortedKeys = Object.keys(transformedObject).sort(
