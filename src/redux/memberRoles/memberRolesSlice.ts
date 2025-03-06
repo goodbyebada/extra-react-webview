@@ -4,8 +4,8 @@ import {
   ResponseStatus,
   ScheduleTypeStatusServerLabel,
   MemberRoleServer,
-} from "@/type/shared";
-import { DateYearMonth } from "@/type/dateInteface";
+} from "@type/shared";
+import { DateYearMonth } from "@type/dateInteface";
 import memberRolesAPI from "@api/memberRolesAPI";
 import { converToDateObject } from "@utills/convert";
 import { TEST_FLAG } from "@/testFlag";

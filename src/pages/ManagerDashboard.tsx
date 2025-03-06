@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Modal from "@components/atoms/Modal";
 import { requestGetFetch, sendMessage } from "@api/utils";
-import { JobPost } from "@/type/shared";
+import { JobPost } from "@type/shared";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 // import HomeRecruitBox from "@components/HomeRecruitBox";
 // import { dummyMonthJobList } from "@api/dummyData";

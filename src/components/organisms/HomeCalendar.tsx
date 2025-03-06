@@ -1,15 +1,11 @@
 import { styled } from "styled-components";
-import useCalendar from "@/customHook/useCalendar";
+import useCalendar from "@customHook/useCalendar";
 import { useEffect, useState } from "react";
 import { CalendarWeekdayLabels } from "@components/mocules/WeekdayLabels";
 import HomeCalendarWeek from "@components/organisms/HomeCalendarWeek";
 import CalenderWrapper from "@components/CalenderWrapper";
 import { CALENDER_SIZE } from "@styled/size";
-import {
-  DateYearMonth,
-  DateSelctedType,
-  ObjectType,
-} from "@/type/dateInteface";
+import { DateYearMonth, DateSelctedType, ObjectType } from "@type/dateInteface";
 
 import Container from "@components/atoms/Container";
 

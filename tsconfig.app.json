@@ -29,15 +29,17 @@
       "@api/*": ["src/api/*"],
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
+      "@constants/*": ["src/constants/*"],
+      "@customHook/*": ["src/customHook/*"],
+      "@mocks/*": ["src/mocks/*"],
       "@pages/*": ["src/pages/*"],
       "@redux/*": ["src/redux/*"],
       "@styled/*": ["src/styled/*"],
       "@type/*": ["src/type/*"],
-      "@mocks/*": ["src/mocks/*"],
       "@utills/*": ["src/utills/*"],
       "@/*": ["src/*"]
     }
   },
 
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "ex.ts"]
 }

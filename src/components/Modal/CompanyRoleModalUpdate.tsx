@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import { RoleBodyType, Tattoo } from "@/type/shared";
+import { RoleBodyType, Tattoo } from "@type/shared";
 import { requestGetFetch } from "@api/utils";
 import { requestPutFetch } from "../../api/utils";
 
@@ -43,6 +43,7 @@ function CompanyRoleModalUpdate({
       hand: false,
       feet: false,
     },
+    hourPay: "",
   });
 
   const [isFormValid, setIsFormValid] = useState(false);

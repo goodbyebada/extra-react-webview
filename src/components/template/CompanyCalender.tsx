@@ -5,7 +5,7 @@ import { useEffect } from "react";
 // import NotFoundPage from "@pages/Error/NotFound";
 import { fetchJobPostByCalenderForCom } from "@redux/company/companyJobPostSlice";
 import HomeCalendar from "@components/organisms/HomeCalendar";
-import { DateDetailedInfo, CalenderTypeFor } from "@/type/dateInteface";
+import { DateDetailedInfo, CalenderTypeFor } from "@type/dateInteface";
 import { setHomeDate } from "@redux/dateSlice";
 import { ResponseStatus } from "@type/shared";
 import Loading from "@components/Loading";

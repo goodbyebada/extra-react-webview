@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { COLORS, FONT_COLORS } from "@styled/colors";
-import { ChatRoomsField, ParticipantInfoList } from "@/type/firebaseInterface";
+import { ChatRoomsField, ParticipantInfoList } from "@type/firebaseInterface";
 import { TfiAnnouncement } from "react-icons/tfi";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { useForm } from "react-hook-form";

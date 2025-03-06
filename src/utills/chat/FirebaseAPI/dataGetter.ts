@@ -7,7 +7,7 @@ import {
   ChatRoomInfoFrontend,
   ParticipantInfoList,
   UserFiled,
-} from "@/type/firebaseInterface";
+} from "@type/firebaseInterface";
 
 /**
  *

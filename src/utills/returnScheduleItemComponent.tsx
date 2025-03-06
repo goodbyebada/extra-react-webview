@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { MemberRoleFront } from "@/type/shared";
+import { MemberRoleFront } from "@type/shared";
 
 const ScheduleItem = styled.div`
   /* 스케줄표 border width 만큼 늘림 */

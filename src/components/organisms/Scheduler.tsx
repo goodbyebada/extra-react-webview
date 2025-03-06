@@ -1,12 +1,12 @@
 import { styled } from "styled-components";
 import { useEffect, useState } from "react";
-import useCalendar from "@/customHook/useCalendar";
+import useCalendar from "@customHook/useCalendar";
 import returnSchduleItemComponent from "@utills/returnScheduleItemComponent";
 import SchedulerSingleWeek from "@components/mocules/calender/SchedulerSingleWeek";
 import CalenderWrapper from "@components/CalenderWrapper";
-import { MemberRoleFront, ScheduleType } from "@/type/shared";
+import { MemberRoleFront, ScheduleType } from "@type/shared";
 import Ellipsis from "@components/custom/Ellipsis";
-import { DateDetailedInfo, DateSelctedType } from "@/type/dateInteface";
+import { DateDetailedInfo, DateSelctedType } from "@type/dateInteface";
 import { SchedulerWeekdayLabels } from "@components/mocules/WeekdayLabels";
 import ScheduleModal from "@components/Modal/ScheduleModal";
 

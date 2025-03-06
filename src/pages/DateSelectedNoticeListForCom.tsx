@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import { useEffect, useState } from "react";
 import jobPostAPI from "@api/jobPostAPI";
-import { JobPost } from "@/type/shared";
+import { JobPost } from "@type/shared";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
 import { useNavigate } from "react-router-dom";
