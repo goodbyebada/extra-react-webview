@@ -7,6 +7,9 @@ import { fetchJobPostByCalenderForCom } from "@redux/company/companyJobPostSlice
 import HomeCalendar from "@components/organisms/HomeCalendar";
 import { DateDetailedInfo, CalenderTypeFor } from "@/type/dateInteface";
 import { setHomeDate } from "@redux/dateSlice";
+import { ResponseStatus } from "@type/shared";
+import Loading from "@components/Loading";
+import NotFoundPage from "@pages/Error/NotFound";
 
 type CalenderProps = {
   type?: CalenderTypeFor;
@@ -35,10 +38,10 @@ export default function CompanyCalender({
   );
   const gotJobDataList = gotJob.data;
 
-  const dateDetailedInfoByString: DateDetailedInfo = useSelector(
+  const dateDetailedInfo: DateDetailedInfo = useSelector(
     (state: RootState) => state.date.selectedByHome,
   );
-  const { year, month } = dateDetailedInfoByString;
+  const { year, month } = dateDetailedInfo;
 
   // 데이터 요청
   useEffect(() => {
@@ -48,49 +51,35 @@ export default function CompanyCalender({
   // 캘린더의 Item을 선택했을때의 onClikcEvent;
   // 눌렀을때 모달 창 나오기 위함
   const dateOnClick = (dateNum: number) => {
-    const jobLength = gotJobDataList[dateNum].length;
+    const jobList = gotJobDataList[dateNum];
 
-    if (!jobLength) return;
-    if (jobLength > 0) {
-      dispatch(setHomeDate(dateNum));
+    if (!jobList || !jobList.length) return;
+
+    if (jobList.length > 0) {
+      dispatch(setHomeDate({ dateNum }));
       clickedDateEvent();
     }
   };
 
   // // TODO ResponseStatus 에 따른 분기처리 모듈화할 것
-  // const Component = () => {
-  //   switch (gotJob.status) {
-  //     case ResponseStatus.loading:
-  //       return <Loading loading={true} />;
+  const Component = () => {
+    switch (gotJob.status) {
+      case ResponseStatus.loading:
+        return <Loading loading={true} />;
 
-  //     case ResponseStatus.rejected:
-  //       return <NotFoundPage />;
+      case ResponseStatus.fullfilled:
+        return (
+          <HomeCalendar
+            dateYearMonth={{ year, month }}
+            gotJobDataList={gotJobDataList}
+            showRecommand={showRecommand}
+            clickedDateEvent={dateOnClick}
+          />
+        );
+      case ResponseStatus.rejected:
+        return <NotFoundPage />;
+    }
+  };
 
-  //     case ResponseStatus.fullfilled:
-  //       console.log(gotJob.status);
-  //       return (
-  //         // <div>removeCalender</div>
-  //         <HomeCalendar
-  //           type={CalenderTypeFor.company}
-  //           showRecommand={showRecommand}
-  //           clickedDateEvent={dateOnClick}
-  //           gotJobDataList={gotJobDataList}
-  //         />
-  //       );
-
-  //     default:
-  //       return;
-  //   }
-  // };
-
-  // return <>{Component()}</>;
-
-  return (
-    <HomeCalendar
-      dateYearMonth={{ year, month }}
-      gotJobDataList={gotJobDataList}
-      showRecommand={showRecommand}
-      clickedDateEvent={dateOnClick}
-    />
-  );
+  return <>{Component()}</>;
 }
