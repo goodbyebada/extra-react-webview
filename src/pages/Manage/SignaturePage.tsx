@@ -22,13 +22,21 @@ type CanvasEvent =
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 300;
 
-// const keyword = "서명";
+const keyword = "소프트웨어";
 
-interface HighlightLocation {
+// interface HighlightLocation {
+//   x: number;
+//   y: number;
+//   width: number;
+//   height: number;
+//   page: number;
+// }
+
+interface TextLocation {
   x: number;
   y: number;
-  width: number;
-  height: number;
+  fontSize: number;
+  text: string;
   page: number;
 }
 
@@ -44,9 +52,10 @@ const SignaturePage = () => {
   const [isRendering, setIsRendering] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [numPages, setNumPages] = useState<number>(0);
-  const [highlightLocations, setHighlightLocations] = useState<
-    HighlightLocation[]
-  >([]);
+  // const [highlightLocations, setHighlightLocations] = useState<
+  //   HighlightLocation[]
+  // >([]);
+  const [textLocations, setTextLocations] = useState<TextLocation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [pageScale, setPageScale] = useState(1);
   const [isSigned, setIsSigned] = useState<number[]>([]);
@@ -139,23 +148,11 @@ const SignaturePage = () => {
     const pngImage = await pdfDoc.embedPng(signatureDataURL);
     const pngDims = pngImage.scale(0.25);
 
-    highlightLocations.forEach((loc: HighlightLocation) => {
-      if (loc.page !== currentPage) return;
+    // highlightLocations.forEach((loc: HighlightLocation) => {
+    //   if (loc.page !== currentPage) return;
 
-      const x = (loc.x / 100) * width;
-      const y = height - (loc.y / 100) * height - loc.height;
-
-      targetPage.drawImage(pngImage, {
-        x,
-        y,
-        width: pngDims.width,
-        height: pngDims.height,
-      });
-    });
-
-    // textLocations.forEach((loc: TextLocation) => {
-    //   const x = (loc.x / 100) * width - pngDims.width / 4;
-    //   const y = height - (loc.y / 100) * height - pngDims.height / 2;
+    //   const x = (loc.x / 100) * width;
+    //   const y = height - (loc.y / 100) * height - loc.height;
 
     //   targetPage.drawImage(pngImage, {
     //     x,
@@ -164,6 +161,18 @@ const SignaturePage = () => {
     //     height: pngDims.height,
     //   });
     // });
+
+    textLocations.forEach((loc: TextLocation) => {
+      const x = (loc.x / 100) * width - pngDims.width / 4;
+      const y = height - (loc.y / 100) * height - pngDims.height / 2;
+
+      targetPage.drawImage(pngImage, {
+        x,
+        y,
+        width: pngDims.width,
+        height: pngDims.height,
+      });
+    });
 
     setIsSigned((prev) => {
       const newSigned = [...prev];
@@ -180,125 +189,77 @@ const SignaturePage = () => {
       new File([blob], selectedFile.name, { type: "application/pdf" }),
     );
     setIsOpen(false);
-    setHighlightLocations([]);
+    // setHighlightLocations([]);
+    setTextLocations([]);
   };
 
   const extractHighlightPositions = async (pdf: PDFDocumentProxy) => {
     for (let i = 1; i <= pdf.numPages; i++) {
-      await pdf.getPage(i).then(async (page) => {
-        const { viewBox } = page.getViewport({ scale: 1 });
-        if (i === 1) {
+      await pdf
+        .getPage(i)
+        .then((page) => {
+          const { viewBox } = page.getViewport({ scale: 1 });
           const bodyWidth = document.body.clientWidth;
           const scale = bodyWidth / viewBox[2];
           setPageScale(scale);
           setIsLoading(false);
-        }
+          return { page, scale };
+        })
+        .then(async ({ page, scale }) => {
+          const viewport = page.getViewport({ scale: scale });
+          const textContent = await page.getTextContent();
 
-        const annotation = await page.getAnnotations();
+          return { viewport, textContent };
+        })
+        .then(({ viewport, textContent }) => {
+          for (const item of textContent.items) {
+            if ("str" in item && "transform" in item) {
+              const { str, transform } = item;
+              if (str.includes(keyword)) {
+                const x = transform[4];
+                const y = transform[5];
 
-        console.log(annotation);
+                const left = (x / viewport.viewBox[2]) * 100;
+                const top = 100 - (y / viewport.viewBox[3]) * 100;
 
-        const highlights = annotation
-          .filter((annotation) => annotation.subtype === "Highlight")
-          .map((annotation) => {
-            console.log(annotation);
+                setTextLocations((prev) => {
+                  const newLocations = [...prev];
+                  newLocations.push({
+                    x: left,
+                    y: top,
+                    fontSize: transform[0],
+                    text: str,
+                    page: currentPage,
+                  });
+                  return newLocations;
+                });
 
-            const component = (
-              <Highlight
-                style={{
-                  left: `${(annotation.rect[0] / viewBox[2]) * 100}%`,
-                  top: `${100 - (annotation.rect[1] / viewBox[3]) * 100}%`,
-                  width: `${((annotation.rect[2] - annotation.rect[0]) / viewBox[2]) * 100}%`,
-                  height: `${((annotation.rect[3] - annotation.rect[1]) / viewBox[3]) * 100}%`,
-                }}
-                onClick={() => {
-                  setIsOpen(true);
-                }}
-              >
-                {annotation.id}
-              </Highlight>
-            );
+                const highlight = (
+                  <Highlight
+                    key={str}
+                    style={{
+                      left: `${left}%`,
+                      top: `${top}%`,
+                      fontSize: `${transform[0]}px`,
+                    }}
+                    onClick={() => {
+                      setIsOpen(true);
+                    }}
+                  >
+                    {str}
+                  </Highlight>
+                );
 
-            setHighlightComponent((prev) => {
-              const newComponent = [...prev];
-              newComponent.push(component);
-              return newComponent;
-            });
-
-            return {
-              x: annotation.rect[0],
-              y: annotation.rect[1],
-              width: annotation.rect[2] - annotation.rect[0],
-              height: annotation.rect[3] - annotation.rect[1],
-              page: i,
-            };
-          });
-
-        setHighlightLocations((prev) => [...prev, ...highlights]);
-      });
+                setHighlightComponent((prev) => {
+                  const newComponent = [...prev];
+                  newComponent.push(highlight);
+                  return newComponent;
+                });
+              }
+            }
+          }
+        });
     }
-
-    // await pdf
-    //   .getPage(currentPage)
-    //   .then((page) => {
-    //     const { viewBox } = page.getViewport({ scale: 1 });
-    //     const bodyWidth = document.body.clientWidth;
-    //     const scale = bodyWidth / viewBox[2];
-    //     setPageScale(scale);
-    //     setIsLoading(false);
-    //     return { page, scale };
-    //   })
-    //   .then(async ({ page, scale }) => {
-    //     const viewport = page.getViewport({ scale: scale });
-    //     const textContent = await page.getTextContent();
-
-    //     return { viewport, textContent };
-    //   })
-    //   .then(({ viewport, textContent }) => {
-    //     // for (const item of textContent.items) {
-    //     //   if ("str" in item && "transform" in item) {
-    //     //     const { str, transform } = item;
-    //     //     if (str.includes(keyword)) {
-    //     //       const x = transform[4];
-    //     //       const y = transform[5];
-
-    //     //       const left = (x / viewport.viewBox[2]) * 100;
-    //     //       const top = 100 - (y / viewport.viewBox[3]) * 100;
-
-    //     //       locations.push({
-    //     //         x: left,
-    //     //         y: top,
-    //     //         fontSize: transform[0],
-    //     //         text: str,
-    //     //       });
-
-    //     //       const highlight = (
-    //     //         <Highlight
-    //     //           key={str}
-    //     //           style={{
-    //     //             left: `${left}%`,
-    //     //             top: `${top}%`,
-    //     //             fontSize: `${transform[0]}px`,
-    //     //           }}
-    //     //           onClick={() => {
-    //     //             setIsOpen(true);
-    //     //           }}
-    //     //         >
-    //     //           {str}
-    //     //         </Highlight>
-    //     //       );
-
-    //     //       setHighlightComponent((prev) => {
-    //     //         const newComponent = [...prev];
-    //     //         newComponent.push(highlight);
-    //     //         return newComponent;
-    //     //       });
-    //     //     }
-    //     //   }
-    //     // }
-
-    //     // setTextLocations(locations);
-    //   });
   };
 
   const onDocumentLoadSuccess = async (pdf: PDFDocumentProxy) => {
