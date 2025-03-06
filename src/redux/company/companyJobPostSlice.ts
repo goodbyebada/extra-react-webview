@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { JobPost } from "@/type/shared";
-import { ResponseStatus } from "@/type/shared";
-import { QuryTypesWithPage, ObjectType } from "@/type/dateInteface";
-import { JobPostList } from "@/type/shared";
+import { JobPost } from "@type/shared";
+import { ResponseStatus } from "@type/shared";
+import { QuryTypesWithPage, ObjectType } from "@type/dateInteface";
+import { JobPostList } from "@type/shared";
 import jobPostAPIForCom from "@api/jobPostAPIForCom";
 
 import {
@@ -11,14 +11,21 @@ import {
   dummyJobPostList,
 } from "@mocks/dummyJobData";
 import { TEST_FLAG } from "@/testFlag";
-import { YearMonthAsNumber } from "@/type/dateInteface";
+import { YearMonthAsNumber } from "@type/dateInteface";
 
 // 상태의 타입 정의
 
 const defaultJobPost: JobPost = {
   id: -1,
   title: "",
-  gatheringLocation: "",
+  gatheringLocation: {
+    id: "",
+    placeName: "",
+    roadAddress: "",
+    jibunAddress: "",
+    latitude: 0,
+    longitude: 0,
+  },
   gatheringTime: "",
   imageUrl: "",
   status: false,
@@ -44,7 +51,7 @@ function transformAndSortDates(input: ObjectType): ObjectType {
 
   for (const date in input) {
     const day = date.split("-")[2]; // "YYYY-MM-DD"에서 "DD" 추출
-    transformedObject[day] = input[date];
+    transformedObject[+day] = input[date];
   }
 
   const sortedKeys = Object.keys(transformedObject).sort(
@@ -139,7 +146,25 @@ export const fetchJobPostByListForCom = createAsyncThunk(
 export const fetchJobPostByIdForCom = createAsyncThunk<JobPost, number>(
   "companyJobpost/fetchById",
   async (id: number) => {
-    const data = await jobPostAPIForCom.getJobPostById(id);
+    let data: Promise<JobPost>;
+
+    if (TEST_FLAG) {
+      data = new Promise<JobPost>((resolve, reject) =>
+        setTimeout(() => {
+          const dummyData = dummyJobPostList.find(
+            (jobPost) => jobPost.id === id,
+          );
+          if (dummyData) {
+            resolve(dummyData);
+          } else {
+            reject(new Error(`ID ${id} 더미 데이터가 없습니다.`));
+          }
+        }, 2000),
+      );
+      return data;
+    }
+
+    data = await jobPostAPIForCom.getJobPostById(id);
     return data;
   },
 );

@@ -1,4 +1,4 @@
-import { RoleItemToShow } from "@/type/shared";
+import { RoleItemToShow } from "@type/shared";
 import styled from "styled-components";
 import splitAgeMinMax from "@utills/splitAgeMinMax";
 

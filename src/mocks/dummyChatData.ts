@@ -2,7 +2,7 @@ import {
   ChatRoomUsersField,
   ChatRoomsField,
   UserFiled,
-} from "@/type/firebaseInterface";
+} from "@type/firebaseInterface";
 
 import { dummyJobPostList } from "@mocks/dummyJobData";
 

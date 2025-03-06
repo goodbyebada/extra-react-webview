@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import jobPostAPI from "@api/jobPostAPI";
-import { JobPost } from "@/type/shared";
-import { ResponseStatus } from "@/type/shared";
+import { JobPost } from "@type/shared";
+import { ResponseStatus } from "@type/shared";
 import {
   DateYearMonth,
   QuryTypesWithPage,
   ObjectType,
-} from "@/type/dateInteface";
+} from "@type/dateInteface";
 
-import { JobPostList } from "@/type/shared";
+import { JobPostList } from "@type/shared";
 
 import {
   dummyCalenderDataForExtra,

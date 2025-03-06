@@ -140,7 +140,7 @@ const NoticeRole = ({ roleList, onRoleListChange }: NoticeRoleProps) => {
                 {role.details.map((detail, detailIndex) => (
                   <RoleInfo
                     key={detailIndex}
-                    role={detail}
+                    roleDetailInfo={detail}
                     index={detailIndex}
                     onClick={() => handleRoleEdit(detail)}
                   />

@@ -10,7 +10,7 @@ import {
   ChatRoomsField,
   ParticipantInfoList,
   UserFiled,
-} from "@/type/firebaseInterface";
+} from "@type/firebaseInterface";
 import {
   getChatRoomInfoByChatRoomId,
   getParticipantInfoList,

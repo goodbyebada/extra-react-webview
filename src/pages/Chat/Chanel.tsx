@@ -1,9 +1,9 @@
-import { ChatRoomsMessageField } from "@/type/firebaseInterface";
+import { ChatRoomsMessageField } from "@type/firebaseInterface";
 import { useFirestoreQuery } from "@utills/chat/useFireStoreQuery";
 import { db } from "@utills/firebase";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useEffect, useState, useRef, ChangeEvent } from "react";
-import { ParticipantInfoList } from "@/type/firebaseInterface";
+import { ParticipantInfoList } from "@type/firebaseInterface";
 
 import MessageItem from "@components/mocules/chat/MessageItem";
 import MessageInput from "@components/mocules/chat/MessageInput";

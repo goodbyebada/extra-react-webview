@@ -1,16 +1,12 @@
 import { styled } from "styled-components";
 import { useEffect, useState } from "react";
-import useCalendar from "@/customHook/useCalendar";
-import { useRef } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@redux/store";
+import useCalendar from "@customHook/useCalendar";
 import returnSchduleItemComponent from "@utills/returnScheduleItemComponent";
 import SchedulerSingleWeek from "@components/mocules/calender/SchedulerSingleWeek";
 import CalenderWrapper from "@components/CalenderWrapper";
-import { MemberRoleFront, ScheduleType } from "@/type/shared";
+import { MemberRoleFront, ScheduleType } from "@type/shared";
 import Ellipsis from "@components/custom/Ellipsis";
-import { setScheduleDate } from "@redux/dateSlice";
-import { DateDetailedInfo, DateSelctedType } from "@/type/dateInteface";
+import { DateDetailedInfo, DateSelctedType } from "@type/dateInteface";
 import { SchedulerWeekdayLabels } from "@components/mocules/WeekdayLabels";
 import ScheduleModal from "@components/Modal/ScheduleModal";
 
@@ -24,23 +20,24 @@ export default function Scheduler({
   appliedListData,
 }: SchedulerPageProps) {
   const DAYLIST_HEIGHT_PERCENT = 8;
-  const dispatch = useDispatch<AppDispatch>();
 
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const openModal = () => setModalOpen((prev) => !prev);
+  const openModal = () => {
+    setModalOpen(true);
+  };
   const closeModal = () => setModalOpen(false);
 
-  const [weeklists, setWeeklists] = useState<number[][]>([]);
+  // const [weeklists, setWeeklists] = useState<number[][]>([]);
   const [scheduledJobsByDate, setScheduledJobsByDate] = useState<
     MemberRoleFront[][]
   >([]);
+  const [selectedDateInfo, setSelectedDateInfo] =
+    useState<DateDetailedInfo>(dateYM);
+
+  const weekList = useCalendar(dateYM.year, dateYM.month);
 
   useEffect(() => {
-    console.log(modalOpen);
-  }, [modalOpen]);
-
-  useEffect(() => {
-    const filtered = weeklists.flat().filter((dateNum) => dateNum !== 0);
+    const filtered = weekList.flat().filter((dateNum) => dateNum !== 0);
     const newWeeklist = new Array(filtered.length).fill(0);
 
     for (let i = 0; i < filtered.length; i++) {
@@ -53,20 +50,17 @@ export default function Scheduler({
 
       newWeeklist[dateNum] = ShootJobList;
     }
-    setScheduledJobsByDate(newWeeklist);
-  }, [weeklists, appliedListData]);
 
-  useEffect(() => {
-    if (dateYM?.year && dateYM?.month) {
-      setWeeklists(useCalendar(dateYM.year, dateYM.month));
-    }
-  }, [dateYM]);
+    setScheduledJobsByDate(newWeeklist);
+  }, [weekList, appliedListData]);
 
   // NOTE dispatch시 openModal 안되는 버그 있음
   const selectedDateEvent = (elem: number) => {
     openModal();
     // console.log("selectedDateEvent called");
-    // dispatch(setScheduleDate({ ...dateYM, dateNum: elem.toString() }));
+    // dispatch(setScheduleDate({ ...dateYM, dateNum: elem }));
+
+    setSelectedDateInfo({ ...dateYM, dateNum: elem });
   };
 
   // FullCalender -> 일반 캘린더 UI 수정
@@ -105,14 +99,14 @@ export default function Scheduler({
         <Wrapper>
           <SchedulerWeekdayLabels HeightPercent={DAYLIST_HEIGHT_PERCENT} />
           <DatesWrapper>
-            {weeklists.map((item, key) => {
+            {weekList.map((item, key) => {
               return (
                 <SchedulerSingleWeek
-                  openModal={openModal}
-                  height={weeklists.length}
+                  height={weekList.length}
                   key={key}
                   item={item}
                   CheckGotJob={CheckGotJob}
+                  selectedDateEvent={selectedDateEvent}
                 />
               );
             })}
@@ -122,7 +116,7 @@ export default function Scheduler({
 
       <ScheduleModal
         isVisible={modalOpen}
-        selectedDateInfo={dateYM}
+        selectedDateInfo={selectedDateInfo}
         closeModal={closeModal}
         scheduledJobsByDate={scheduledJobsByDate}
       />

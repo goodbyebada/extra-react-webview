@@ -8,7 +8,6 @@ import ExtraCastingBoard from "@pages/Member/ExtraCastingBoard";
 import DateSelectedNoticeList from "@pages/Member/DateSelectedNoticeList";
 import CompanyHome from "@pages/CompanyHome";
 import ExtraShootManagePage from "@pages/Member/ExtraShootManagePage";
-import CompanyShootManagePage from "@pages/CompanyShootManagePage";
 import { ApplicantDetail } from "@pages/ApplicantDetail";
 import DetailPage from "@pages/DetailPage";
 import NotFound from "@pages/Error/NotFound";
@@ -44,7 +43,7 @@ import MemberSettingPage from "@pages/MemberSettingPage";
 import CompanyProfilePage from "@pages/CompanyProfilePage";
 import CompanySettingPage from "@pages/CompanySettingPage";
 import PostOverviewPage from "@pages/PostOverviewPage";
-import RecruitmentStatus from "@pages/RecruitmentStatus";
+import RecruitmentStatusPage from "@pages/RecruitmentStatusPage";
 import SignaturePage from "@pages/SignaturePage";
 import { useEffect } from "react";
 import handleAllowNotification from "@utills/pushNotification/notificationPermission";
@@ -53,7 +52,6 @@ import ChatRoomPage from "@pages/Chat/ChatRoomPage";
 import { ChatListForAdmin } from "@pages/Chat/ChatListForAdmin";
 import ChatPreviewForUser from "@pages/Chat/ChatPreviewForUser";
 import SchedulerPage from "@pages/Member/SchedulerPage";
-import ManagerDashboard from "@pages/ManagerDashboard";
 
 function App() {
   useEffect(() => {
@@ -110,18 +108,21 @@ function App() {
             path="/company/home/date-selected-notice-list"
             element={<DateSelectedNoticeListForCom />}
           />
+
           {/* company manage */}
           <Route path="/company/manage" element={<ManageOverViewPage />} />
-
           <Route
             path="/company/manage/detail"
             element={<CompanyShootManageDetailPage />}
           />
           <Route path="/company/manage/actor" element={<ActorListPage />} />
+
+          {/* TODO 의상연결 */}
           <Route
             path="/company/manage/clothes-confirm"
             element={<ClothesConfirmStatusListPage />}
           />
+
           <Route path="/company/manage/camera" element={<CameraPage />} />
           <Route
             path="/company/manage/attendance"
@@ -130,46 +131,25 @@ function App() {
           <Route path="/company/manage/clock-in" element={<ClockInPage />} />
           <Route path="/company/manage/clock-out" element={<ClockOutPage />} />
           {/* company notice */}
-          <Route path="/company/notice" element={<ManageOverViewPage />} />
+
           {/* 업체 측 공고 리스트 페이지 화면 */}
-          <Route
-            path="/company/notice/post-overview"
-            element={<PostOverviewPage />}
-          />
+          <Route path="/company/notice" element={<PostOverviewPage />} />
 
-          {/* 추후 수정 예정, UI 보이기 위해 임시로 id 값 고정 시킴*/}
           <Route
-            path="/company/notice/post-status/2"
-            element={<RecruitmentStatus />}
-          />
-
-          {/* <Route
             path="/company/notice/post-status/:id"
-            element={<PostOverviewPage />}
-          /> */}
+            element={<RecruitmentStatusPage />}
+          />
 
-          {/* member profile */}
           <Route path="/company/profile" element={<CompanyProfilePage />} />
           <Route
             path="/company/profile/setting"
             element={<CompanySettingPage />}
           />
 
-          {/* 업체 측 공고 리스트 페이지 화면*/}
-          <Route path="/company/notice/" element={<PostOverviewPage />} />
+          <Route path="/applicants/:id" element={<ShowApplicant />} />
+          <Route path="/applicants/:id/detail" element={<ApplicantDetail />} />
 
-          {/* 추후 수정 예정, UI 보이기 위해 임시로 id 값 고정 시킴*/}
-          <Route
-            path="/company/notice/post-status/2"
-            element={<RecruitmentStatus />}
-          />
-          {/* <Route
-            path="/company/notice/post-status/:id"
-            element={<PostOverviewPage />}
-          /> */}
-
-          <Route path="/applicants" element={<ShowApplicant />} />
-          <Route path="/applicants/detail" element={<ApplicantDetail />} />
+          {/* ?? legacy */}
           <Route path="/detail/:id" element={<DetailPage />} />
           <Route
             path="/detail/:jobPostId/applicants"

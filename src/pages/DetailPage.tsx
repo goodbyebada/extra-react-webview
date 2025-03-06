@@ -5,9 +5,9 @@ import backIcon from "@assets/backIcon.png";
 import reviseIcon from "@assets/reviseIcon.png";
 import CompanyRoleModalUpdate from "@components/Modal/CompanyRoleModalUpdate";
 import CompanyRoleModalCreate from "@components/Modal/CompanyRoleModalCreate";
-import { JobPost } from "@/type/shared";
+import { JobPost } from "@type/shared";
 import RoleInfoComponent from "@components/custom/RoleInfo";
-import { requestGetFetch, requestPutFetch, sendMessage } from "@api/utils";
+import { requestGetFetch, requestPutFetch } from "@api/utils";
 
 interface RoleInfo {
   index: number;
@@ -149,11 +149,11 @@ function DetailPage() {
   };
 
   const goBackManager = () => {
-    // navigate("/manager-dashboard");
-    sendMessage({
-      type: "HISTORY_BACK",
-      version: "1.0",
-    });
+    navigate("/manager-dashboard");
+    // sendMessage({
+    //   type: "HISTORY_BACK",
+    //   version: "1.0",
+    // });
   };
 
   const handleReviseClick = () => {
@@ -230,7 +230,7 @@ function DetailPage() {
         </p>
         <Row>
           <p style={{ margin: 0, marginRight: "auto" }}>
-            {jobPost?.gatheringLocation}
+            {jobPost?.gatheringLocation.placeName}
           </p>
           <div style={{ display: "flex", alignItems: "center" }}>
             <p style={{ margin: "0 10px 0 0" }}>
@@ -268,7 +268,7 @@ function DetailPage() {
             {roleGroups[roleName].map((role, index, array) => (
               <React.Fragment key={role.index}>
                 <RoleInfoComponent
-                  role={role}
+                  roleDetailInfo={role}
                   roleName={roleName}
                   index={role.index}
                   onClick={handleRoleInfoClick}
