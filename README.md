@@ -84,17 +84,24 @@ main branch와 merge 전에 PR 진행
 
 ### Package Structure
 
-- src
-  - api
-  - assets
-  - components
-    - atoms
-    - mocules
-    - custom
-    - modal
-  - pages
-  - redux
-  - utills
+```
+
+src/
+├── **tests**            # 테스트 코드
+├── api/                 # API 요청 및 비즈니스 로직
+├── assets/              # 이미지, 폰트, 아이콘 등 정적 파일
+├── components/          # 재사용 가능한 UI 컴포넌트
+├── constants/           # 프로젝트에서 사용하는 상수 값
+├── customHook/          # 커스텀 훅 (재사용 가능한 React Hook)
+├── mocks/               # 더미 데이터 (Dummy Data)
+├── pages/               # 라우트별 페이지 컴포넌트
+├── redux/               # Redux 상태 관리 관련 폴더
+├── styled/              # Styled-Components에서 사용하는 CSS 상수 값
+├── type/                # TypeScript 인터페이스 및 타입 정의
+└── utils/               # 공통 유틸 함수
+
+
+```
 
 ### 주석
 

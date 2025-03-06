@@ -1,4 +1,4 @@
-import { UserFiled } from "@/type/firebaseInterface";
+import { UserFiled } from "@type/firebaseInterface";
 
 export class ChatSessionManager {
   static saveChatRoomInfo(

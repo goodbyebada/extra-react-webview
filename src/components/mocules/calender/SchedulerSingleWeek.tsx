@@ -6,13 +6,15 @@ type SchedulerProps = {
   key?: number;
   item: number[];
   CheckGotJob: (elem: number) => React.ReactNode;
-  openModal: () => void;
+
+  selectedDateEvent: (elem: number) => void;
 };
 export default function SchedulerSingleWeek({
   height,
   item,
   CheckGotJob,
-  openModal,
+
+  selectedDateEvent,
 }: SchedulerProps) {
   return (
     <Week $weekcnt={height}>
@@ -22,7 +24,12 @@ export default function SchedulerSingleWeek({
         }
 
         return (
-          <DateItem key={key} onClick={openModal}>
+          <DateItem
+            key={key}
+            onClick={() => {
+              selectedDateEvent(dateNumber);
+            }}
+          >
             <DateNumber>{dateNumber}</DateNumber>
             {CheckGotJob(dateNumber)}
           </DateItem>

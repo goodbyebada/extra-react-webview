@@ -34,7 +34,7 @@ const DetailProfileModal = ({
   isApprovalModal = true,
 }: DetailProfileProps) => {
   const navigate = useNavigate();
-  const user = dummyUserRoleData.find((user) => user.userId === userId);
+  const user = dummyUserRoleData.find((user) => user.userId === Number(userId));
 
   const handleApprove = () => {
     console.log("승인");

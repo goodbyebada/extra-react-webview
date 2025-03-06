@@ -311,6 +311,7 @@ const MainWindow = ({
           </Container>
         </Container>
       )}
+
       <Container
         {...paddingProps}
         style={{

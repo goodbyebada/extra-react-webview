@@ -2,8 +2,7 @@ import styled from "styled-components";
 import RecruitStatus from "@components/custom/smallRecuitStatus";
 // import { useSelector } from "react-redux";
 // import { RootState } from "../redux/store";
-import { MemberRoleFront } from "@/type/shared";
-import { ScheduleTypeStatusLabel } from "@/type/shared";
+import { MemberRoleFront, ScheduleTypeStatusFrontLabel } from "@type/shared";
 import { sendMessage } from "@api/utils";
 
 const SmallRecruitBox = ({ elem }: { elem: MemberRoleFront }) => {
@@ -24,7 +23,7 @@ const SmallRecruitBox = ({ elem }: { elem: MemberRoleFront }) => {
 
   const StatusUI = (label: string) => {
     switch (label) {
-      case ScheduleTypeStatusLabel.APPLIED:
+      case ScheduleTypeStatusFrontLabel.APPLIED:
         return (
           <RecruitStatus
             visible={true}
@@ -37,7 +36,7 @@ const SmallRecruitBox = ({ elem }: { elem: MemberRoleFront }) => {
           </RecruitStatus>
         );
 
-      case ScheduleTypeStatusLabel.APPROVED:
+      case ScheduleTypeStatusFrontLabel.APPROVED:
         return (
           <RecruitStatus
             visible={true}
@@ -49,7 +48,7 @@ const SmallRecruitBox = ({ elem }: { elem: MemberRoleFront }) => {
             승인 완료
           </RecruitStatus>
         );
-      case ScheduleTypeStatusLabel.REJECTED:
+      case ScheduleTypeStatusFrontLabel.REJECTED:
         return (
           <RecruitStatus
             visible={true}
@@ -67,7 +66,7 @@ const SmallRecruitBox = ({ elem }: { elem: MemberRoleFront }) => {
   return (
     <RecruitContainer
       onClick={() => {
-        if (status === ScheduleTypeStatusLabel.APPROVED) {
+        if (status === ScheduleTypeStatusFrontLabel.APPROVED) {
           sendMessage({
             type: "NAVIGATION_MANAGE",
             payload: {

@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 // import { useRef } from "react";
 import { styled } from "styled-components";
-import { JobPost } from "@/type/shared";
-import { DateYearMonth } from "@/type/dateInteface";
+import { AuthType, JobPost, ResponseStatus, Company } from "@type/shared";
+import { AUTH_TYPE_CONST } from "@constants/const";
+import { DateYearMonth } from "@type/dateInteface";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 // import { ResponseStatus } from "@api/interface";
 // import Loading from "@components/Loading";
@@ -15,15 +16,23 @@ import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import { fetchJobPostByList } from "@redux/jobPost/jobPostSlice";
 import { useNavigate } from "react-router-dom";
+import Loading from "@components/Loading";
+import NotFoundPage from "@pages/Error/NotFound";
 
 type ListProps = {
   dateYearMonth: DateYearMonth;
   showRecommand: boolean;
+  authType: AuthType;
 };
 
 // TODO 인피니트 스크롤링 적요
-export default function List({ dateYearMonth, showRecommand }: ListProps) {
+export default function List({
+  dateYearMonth,
+  showRecommand,
+  authType,
+}: ListProps) {
   const [pageNum, setPageNum] = useState(0);
+
   const dateYM = useSelector((state: RootState) => state.date);
   const navigate = useNavigate();
   // const [localJobPost, setLocalJobPost] = useState<JobPost[]>([]);
@@ -37,29 +46,49 @@ export default function List({ dateYearMonth, showRecommand }: ListProps) {
   };
 
   const dispatch = useDispatch<AppDispatch>();
-  const jobPost = useSelector(
-    (state: RootState) => state.jobPosts.jobPostByList,
-  );
-  const localJobPost = jobPost.data;
+
+  const isCompany = (authType: string): authType is Company => {
+    return authType === AUTH_TYPE_CONST.COMPANY;
+  };
+
+  const jobPost = useSelector((state: RootState) => {
+    if (isCompany(authType)) {
+      return state.companyJobpost.jobPostByListForCom;
+    }
+    return state.jobPosts.jobPostByList;
+  });
 
   useEffect(() => {
     const { year, month } = dateYearMonth;
     dispatch(fetchJobPostByList({ year, month, pageNum }));
     setPageNum((prev) => prev + 1);
-  }, [dispatch, dateYM]);
+  }, [dispatch, dateYM, dateYearMonth]);
 
-  return (
-    <ItemWrapper>
-      {localJobPost.map((elem: JobPost, key: number) => (
-        <HomeRecruitBox
-          navigate={() => navigateToExtraCastingBoard(elem)}
-          key={key}
-          recruitInfo={elem}
-          recommand={showRecommand}
-        />
-      ))}
-    </ItemWrapper>
-  );
+  // // TODO ResponseStatus 에 따른 분기처리 모듈화할 것
+  const Component = () => {
+    switch (jobPost.status) {
+      case ResponseStatus.loading:
+        return <Loading loading={true} />;
+
+      case ResponseStatus.fullfilled:
+        return (
+          <ItemWrapper>
+            {jobPost.data.map((elem: JobPost, key: number) => (
+              <HomeRecruitBox
+                navigate={() => navigateToExtraCastingBoard(elem)}
+                key={key}
+                recruitInfo={elem}
+                recommand={showRecommand}
+              />
+            ))}
+          </ItemWrapper>
+        );
+      case ResponseStatus.rejected:
+        return <NotFoundPage />;
+    }
+  };
+
+  return <>{Component()}</>;
 }
 
 const ItemWrapper = styled.div`

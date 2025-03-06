@@ -7,7 +7,7 @@ import {
   Costume,
   RoleRegister,
   SeasonEnum,
-} from "@/type/shared";
+} from "@type/shared";
 import Modal from "@components/atoms/Modal";
 import { MainButton, BoxButton, SubButton } from "@components/atoms/Button";
 import Text from "@components/atoms/Text";

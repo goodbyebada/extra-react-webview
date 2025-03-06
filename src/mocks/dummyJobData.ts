@@ -3,6 +3,7 @@ import {
   MemberRoleFront,
   JobPostList,
   JobPost,
+  RoleBodyType,
 } from "@/type/shared";
 
 import { ObjectType } from "@/type/dateInteface";
@@ -46,7 +47,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 종로구 광화문역 1번 출구",
     calenderList: ["2024-11-02", "2024-11-05"],
     name: "UMC",
-    applyStatus: "approved",
+    applyStatus: "APPROVED",
   },
   {
     id: 3,
@@ -57,7 +58,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 용산구 이태원역 4번 출구",
     calenderList: ["2024-10-10", "2024-10-12", "2024-10-15"],
     name: "몽실몽실",
-    applyStatus: "applied",
+    applyStatus: "APPLIED",
   },
   {
     id: 4,
@@ -79,7 +80,7 @@ const memberRoleServerDummyList: MemberRoleServer[] = [
     gatheringLocation: "서울특별시 마포구 홍대입구역 1번 출구",
     calenderList: ["2024-11-03", "2024-11-07"],
     name: "UMC",
-    applyStatus: "approved",
+    applyStatus: "APPROVED",
   },
 ];
 
@@ -248,7 +249,7 @@ const dummyJobPostList: JobPostList = [
     applyDeadLine: "2024-09-01",
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-02", "2024-09-05"],
-    roleIdList: [4, 5, 6],
+    roleIdList: [1, 2, 3],
     roleNameList: ["정보 분석가", "생존 전문가", "무기 전문가"],
     costumeList: [
       "가벼운 방탄 조끼, 모자, 방수 바지",
@@ -295,7 +296,7 @@ const dummyJobPostList: JobPostList = [
   },
   {
     id: 2,
-    title: "라스트 서바이벌2",
+    title: "마무리를 향해",
     gatheringLocation: {
       id: "21160829",
       placeName: "사당역 4호선",
@@ -313,7 +314,7 @@ const dummyJobPostList: JobPostList = [
     scheduleIdList: [2, 3],
     calenderList: ["2024-09-02", "2024-09-05"],
     roleIdList: [4, 5, 6],
-    roleNameList: ["정보 분석가", "생존 전문가", "무기 전문가"],
+    roleNameList: ["군인", "조교", "장교"],
     costumeList: [
       "가벼운 방탄 조끼, 모자, 방수 바지",
       "다목적 전투복, 군용 부츠, 다기능 벨트",

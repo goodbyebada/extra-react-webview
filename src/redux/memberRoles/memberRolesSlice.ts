@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   MemberRoleFront,
   ResponseStatus,
-  ScheduleTypeStatusLabel,
+  ScheduleTypeStatusServerLabel,
   MemberRoleServer,
-} from "@/type/shared";
-import { DateYearMonth } from "@/type/dateInteface";
+} from "@type/shared";
+import { DateYearMonth } from "@type/dateInteface";
 import memberRolesAPI from "@api/memberRolesAPI";
 import { converToDateObject } from "@utills/convert";
 import { TEST_FLAG } from "@/testFlag";
@@ -19,11 +19,28 @@ const initDate: MemberRoleFront = {
   gatheringTime: "", //시간
   gatheringLocation: "",
   companyName: "",
-  status: ScheduleTypeStatusLabel.DEFAULT,
+  status: "applied",
   calender: {
     startDateNum: -1,
     endDateNum: -1,
   },
+};
+
+type ScheduleTypeFontStatusLabel = "approved" | "applied" | "rejected";
+
+const covertFrontStauts = (status: string): ScheduleTypeFontStatusLabel => {
+  if (status === ScheduleTypeStatusServerLabel.APPROVED) {
+    return "approved";
+  }
+  if (status === ScheduleTypeStatusServerLabel.APPLIED) {
+    return "applied";
+  }
+
+  // if (status === ScheduleTypeStatusLabel.REJECTED) {
+  return "rejected";
+  // }
+
+  // return "";
 };
 
 const convertServerInterfaceToFrontInterface = (
@@ -44,7 +61,7 @@ const convertServerInterfaceToFrontInterface = (
       },
       gatheringLocation: elem.gatheringLocation,
       companyName: elem.name,
-      status: elem.applyStatus,
+      status: covertFrontStauts(elem.applyStatus),
     };
     return newElem;
   });

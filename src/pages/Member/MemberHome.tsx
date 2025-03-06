@@ -5,16 +5,19 @@ import { AppDispatch, RootState } from "@redux/store";
 // import { GetToken } from "@api/GetToken";
 
 import { useNavigate } from "react-router-dom";
-import { DateDetailedInfo } from "@/type/dateInteface";
+import { DateDetailedInfo } from "@type/dateInteface";
 import { fetchJobPostByCalender } from "@redux/jobPost/jobPostSlice";
 import List from "@pages/List";
-import { HOME_MESSAGES } from "@/constants/messages";
+import { HOME_MESSAGES } from "@constants/messages";
 import { LayoutComponent } from "@components/atoms/Layout";
 import { ThemeText } from "@components/atoms/Text";
 import { Header } from "@components/atoms/Layout";
 import { HomeNavBar } from "@components/mocules/navBar/HomeNavBar";
 import { setHomeDate } from "@redux/dateSlice";
 import MainWindow from "@components/mocules/MainWindow";
+
+import { useLocation } from "react-router-dom";
+import { getAuthType } from "@utills/getAuthType";
 
 const DUMMY_INIT_NAME = "김출연";
 
@@ -25,6 +28,10 @@ const DUMMY_INIT_NAME = "김출연";
  */
 export default function MemberHome() {
   const name = DUMMY_INIT_NAME;
+
+  const location = useLocation();
+  const type = location.pathname.split("/")[1];
+
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -52,7 +59,7 @@ export default function MemberHome() {
 
   // 날짜 정보
   //CHECK date.getMonth는 항상 원래 월보다 -1이다.
-  //CHECK useCaleder에 들어가는 값도 원래  month보다 -1 이어야한다.s
+  //CHECK useCaleder에 들어가는 값도 원래  month보다 -1 이어야한다.
   const dateDetailedInfo: DateDetailedInfo = useSelector(
     (state: RootState) => state.date.selectedByHome,
   );
@@ -60,7 +67,11 @@ export default function MemberHome() {
 
   useEffect(() => {
     const dateYearMonth = { year, month };
-    showAsCalender ? dispatch(fetchJobPostByCalender(dateYearMonth)) : "";
+
+    if (showAsCalender) {
+      dispatch(fetchJobPostByCalender(dateYearMonth));
+      return;
+    }
   }, [dispatch, year, month, showAsCalender]);
 
   // Only Calender
@@ -98,7 +109,11 @@ export default function MemberHome() {
             gotJobDataList={gotJobDataList}
           />
         ) : (
-          <List dateYearMonth={{ year, month }} showRecommand={showRecommand} />
+          <List
+            dateYearMonth={{ year, month }}
+            showRecommand={showRecommand}
+            authType={getAuthType(type)}
+          />
         )}
       </LayoutComponent>
     </MainWindow>

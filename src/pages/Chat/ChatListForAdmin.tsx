@@ -3,7 +3,7 @@ import {
   DUMMY_MANAGER_JOB_LIST_VER_1,
   DUMMY_MANAGER_JOB_LIST_VER_2,
 } from "@mocks/dummyJobData";
-import { JobPostList } from "@/type/shared";
+import { JobPostList } from "@type/shared";
 import getDdayString from "@utills/getDdayString";
 import { useNavigate } from "react-router-dom";
 import { ContentWrapper } from "@components/atoms/Wrapper";
@@ -16,7 +16,7 @@ import {
   getUserInfoByUserId,
 } from "@utills/chat/FirebaseAPI/dataGetter";
 import { useEffect, useState } from "react";
-import { UserFiled } from "@/type/firebaseInterface";
+import { UserFiled } from "@type/firebaseInterface";
 import { ChatSessionManager } from "@utills/chat/ChatSessionManager";
 
 /**
@@ -45,8 +45,8 @@ function getDummyJobPost(userId: number): JobPostList {
  * 관리자 시나리오
  * : 본인 담당 채팅방 리스트 중 하나를 선택해 들어간다.
  */
-const DUMMY_ADMIN_INFO = {
-  user_id: 2,
+export const DUMMY_ADMIN_INFO = {
+  user_id: 1,
 };
 
 export function ChatListForAdmin() {

@@ -16,7 +16,7 @@ import {
   ShootManageList,
   ShootManageSelectStatus,
   ShootManage,
-} from "@/type/shared";
+} from "@type/shared";
 import { requestDeleteFetch, requestGetFetch } from "@api/utils";
 import MainWindow from "@components/mocules/MainWindow";
 

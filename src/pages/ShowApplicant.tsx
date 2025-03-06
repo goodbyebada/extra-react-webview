@@ -4,6 +4,8 @@ import RoleCheckItem from "@components/mocules/company/RoleCheckItem";
 import Text from "@components/atoms/Text";
 import { MainButton } from "@components/atoms/Button";
 import { dummyUserRoleData } from "@mocks/dummyJobData";
+import MainWindow from "@components/mocules/MainWindow";
+import Container from "@components/atoms/Container";
 
 /**
  * ShowApplicant : 업체 - 역할 별 지원현황
@@ -49,72 +51,77 @@ const ShowApplicant = () => {
   };
 
   return (
-    <Container>
-      <Text size={20} weight={700} color="#fff">
-        {role || "role"} 역할
-      </Text>
-      <TabWrapper>
-        <LeftTabs>
-          {[
-            TABS.ORDER_BY_TIME,
-            TABS.ORDER_BY_TEMP,
-            TABS.ORDER_BY_EXPERIENCE,
-          ].map((tab) => (
+    <MainWindow>
+      <Container>
+        <RoleNameWrapper>
+          <Text size={20} weight={700} color="#fff">
+            {role || "role"} 역할
+          </Text>
+        </RoleNameWrapper>
+
+        <TabWrapper>
+          <LeftTabs>
+            {[
+              TABS.ORDER_BY_TIME,
+              TABS.ORDER_BY_TEMP,
+              TABS.ORDER_BY_EXPERIENCE,
+            ].map((tab) => (
+              <TabItem
+                key={tab}
+                isActive={activeTab === tab}
+                onClick={() => handleTabClick(tab)}
+              >
+                {tab}
+              </TabItem>
+            ))}
+          </LeftTabs>
+          <RightTab>
             <TabItem
-              key={tab}
-              isActive={activeTab === tab}
-              onClick={() => handleTabClick(tab)}
+              isActive={selectedItems.length === dummyUserRoleData.length}
+              onClick={() => handleTabClick(TABS.SELECT_ALL)}
             >
-              {tab}
+              {TABS.SELECT_ALL}
             </TabItem>
-          ))}
-        </LeftTabs>
-        <RightTab>
-          <TabItem
-            isActive={selectedItems.length === dummyUserRoleData.length}
-            onClick={() => handleTabClick(TABS.SELECT_ALL)}
+          </RightTab>
+        </TabWrapper>
+
+        <RoleList>
+          {dummyUserRoleData.map((item) => {
+            return (
+              <RoleCheckItem
+                key={item.id}
+                userId={item.userId.toString()}
+                name={item.name}
+                isChecked={selectedItems.includes(item.name)} // 선택된 항목인지 여부 전달
+                onCheckClick={(isChecked) =>
+                  handleCheckClick(item.name, isChecked)
+                }
+              />
+            );
+          })}
+        </RoleList>
+        <Footer>
+          <MainButton onClick={() => console.log("승인: ", selectedItems)}>
+            승인
+          </MainButton>
+          <MainButton
+            isActive={false}
+            onClick={() => console.log("미승인: ", selectedItems)}
           >
-            {TABS.SELECT_ALL}
-          </TabItem>
-        </RightTab>
-      </TabWrapper>
-      <RoleList>
-        {dummyUserRoleData.map((item) => {
-          return (
-            <RoleCheckItem
-              key={item.id}
-              userId={item.userId.toString()}
-              name={item.name}
-              isChecked={selectedItems.includes(item.name)} // 선택된 항목인지 여부 전달
-              onCheckClick={(isChecked) =>
-                handleCheckClick(item.name, isChecked)
-              }
-            />
-          );
-        })}
-      </RoleList>
-      <Footer>
-        <MainButton onClick={() => console.log("승인: ", selectedItems)}>
-          승인
-        </MainButton>
-        <MainButton
-          isActive={false}
-          onClick={() => console.log("미승인: ", selectedItems)}
-        >
-          미승인
-        </MainButton>
-      </Footer>
-    </Container>
+            미승인
+          </MainButton>
+        </Footer>
+      </Container>
+    </MainWindow>
   );
 };
 
 export default ShowApplicant;
 
-const Container = styled.div`
-  padding: 30px;
+const RoleNameWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  height: 100vh;
+  justify-content: flex-start;
+  width: 100%;
 `;
 
 const TabWrapper = styled.div`
