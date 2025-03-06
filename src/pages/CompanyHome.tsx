@@ -11,6 +11,8 @@ import List from "@pages/List";
 import { DateDetailedInfo } from "@type/dateInteface";
 // import CompanyList from "@components/organisms/CompanyList";
 import ScrollingList from "@components/mocules/ScrollingList";
+import { useLocation } from "react-router-dom";
+import { getAuthType } from "@utills/getAuthType";
 
 /**
  *추후 수정 예정
@@ -19,6 +21,8 @@ import ScrollingList from "@components/mocules/ScrollingList";
  * @returns 회사 업체측 홈화면 UI
  */
 export default function CompanyHome() {
+  const location = useLocation();
+  const type = location.pathname.split("/")[1];
   const dateYearMonth: DateDetailedInfo = useSelector(
     (state: RootState) => state.date.selectedByHome,
   );
@@ -62,7 +66,11 @@ export default function CompanyHome() {
             clickedDateEvent={openModalWindow}
           />
         ) : (
-          <List dateYearMonth={dateYearMonth} showRecommand={false} />
+          <List
+            dateYearMonth={dateYearMonth}
+            showRecommand={false}
+            authType={getAuthType(type)}
+          />
         )}
       </ScrollingList>
     </MainWindow>

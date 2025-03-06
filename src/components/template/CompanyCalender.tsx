@@ -23,9 +23,7 @@ type CalenderProps = {
  */
 
 //CHECK
-// [ ] 데이터 로직이 분리 되어있는가?
-// [ ] 그렇다면 굳이 CompanyCalender 컴포넌트를 만들 필요가 있는가?
-// [ ] 어느 폴더에 들어가야하는가? 확장성은 없다.
+
 export default function CompanyCalender({
   showRecommand,
   clickedDateEvent,

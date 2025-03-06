@@ -1,4 +1,8 @@
-export const BASE_URL = "https://test-server.store/api/v1";
+import { AUTH_TYPE_CONST } from "@constants/const";
+
+export type AuthType =
+  | typeof AUTH_TYPE_CONST.COMPANY
+  | typeof AUTH_TYPE_CONST.MEMBER;
 
 /**
  * JobPost API 관련 인터페이스
@@ -108,6 +112,7 @@ export type RoleBodyType = {
   hourPay: string;
 };
 
+// TODO 혼동 수정 필요해보임
 export type Costume = {
   roleName: string;
   season: string;
