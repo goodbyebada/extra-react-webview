@@ -43,6 +43,7 @@ import CompanySettingPage from "@pages/CompanySettingPage";
 import PostOverviewPage from "@pages/PostOverviewPage";
 import RecruitmentStatus from "@pages/RecruitmentStatus";
 import SignaturePage from "@pages/SignaturePage";
+import UploadPDFPage from "@pages/Manage/UploadPDF";
 
 function App() {
   return (
@@ -159,6 +160,10 @@ function App() {
 
           {/* signature */}
           <Route path="/member/manage/signature" element={<SignaturePage />} />
+          <Route
+            path="/company/manage/upload-pdf"
+            element={<UploadPDFPage />}
+          />
 
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />

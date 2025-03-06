@@ -12,12 +12,15 @@ const CompanyShootManageDetailPage = () => {
         // paddingVertical={50}
         justifyContent="space-between"
       >
-        <DashboardLinkButton url="/" title="출석" />
-        <DashboardLinkButton url="/actor-list" title="출연자 목록" />
-        <DashboardLinkButton url="/" title="퇴근" />
-        <DashboardLinkButton url="/" title="출근" />
-        <DashboardLinkButton url="/" title="계약서" />
-        <DashboardLinkButton url="/" title="의상 컨펌" />
+        <DashboardLinkButton url="/company/manage/attendance" title="출석" />
+        <DashboardLinkButton url="/company/manage/actor" title="출연자 목록" />
+        <DashboardLinkButton url="/company/manage/clock-out" title="퇴근" />
+        <DashboardLinkButton url="/company/manage/clock-in" title="출근" />
+        <DashboardLinkButton url="/company/manage/upload-pdf" title="계약서" />
+        <DashboardLinkButton
+          url="/company/manage/clothes-confirm"
+          title="의상 컨펌"
+        />
       </Container>
     </MainWindow>
   );
