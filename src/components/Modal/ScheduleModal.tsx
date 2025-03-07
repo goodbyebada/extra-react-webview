@@ -5,6 +5,9 @@ import { DateDetailedInfo } from "@type/dateInteface";
 import Item from "@components/mocules/Item";
 import Modal from "@components/atoms/Modal";
 import { ContentWrapper } from "@components/atoms/Wrapper";
+import ScrollingList from "@components/mocules/ScrollingList";
+
+const MARGIN_BOTTOM = 30;
 
 /**
  * 추후 props 추가 통해,
@@ -49,38 +52,42 @@ function ScheduleModal({
 
           <ModalText>{dateString}</ModalText>
           <ListContainer>
-            <ContentWrapper>
-              {todayJobList.map((jobPost, key) => {
-                const {
-                  title,
-                  category,
-                  gatheringTime,
-                  gatheringLocation,
-                  companyName,
-                  status,
-                  calender,
-                } = jobPost;
+            <ScrollingList>
+              <ContentWrapper>
+                {todayJobList.map((jobPost, key) => {
+                  const {
+                    title,
+                    category,
+                    gatheringTime,
+                    gatheringLocation,
+                    companyName,
+                    status,
+                    calender,
+                  } = jobPost;
 
-                const startDate = dateYMstr + calender.startDateNum.toString();
-                const endDate = dateYMstr + calender.endDateNum.toString();
-                return (
-                  <ItemWrapper key={key}>
-                    <Item
-                      title={title}
-                      category={category}
-                      time={gatheringTime}
-                      location={gatheringLocation}
-                      company={companyName}
-                      status={status}
-                      dDay=""
-                      date={[startDate, endDate]}
-                      onClick={() => {}}
-                    />
-                  </ItemWrapper>
-                );
-              })}
-            </ContentWrapper>
+                  const startDate =
+                    dateYMstr + calender.startDateNum.toString();
+                  const endDate = dateYMstr + calender.endDateNum.toString();
+                  return (
+                    <ItemWrapper key={key}>
+                      <Item
+                        title={title}
+                        category={category}
+                        time={gatheringTime}
+                        location={gatheringLocation}
+                        company={companyName}
+                        status={status}
+                        dDay=""
+                        date={[startDate, endDate]}
+                        onClick={() => {}}
+                      />
+                    </ItemWrapper>
+                  );
+                })}
+              </ContentWrapper>
+            </ScrollingList>
           </ListContainer>
+
           <Edit>편집</Edit>
         </Modal>
       ) : (
@@ -105,6 +112,8 @@ const ItemWrapper = styled.div`
   @media screen and (max-width: 430px) {
     transform: scale(0.7);
   }
+
+  margin-bottom: ${MARGIN_BOTTOM}px;
 `;
 
 const MultiplyIcon = styled.img`

@@ -8,6 +8,7 @@ import { ResponseStatus } from "@type/shared";
 import { getMemberAppliedRoles } from "@redux/memberRoles/memberRolesSlice";
 import Scheduler from "@components/organisms/Scheduler";
 import MainWindow from "@components/mocules/MainWindow";
+import ScrollingList from "@components/mocules/ScrollingList";
 
 export default function SchedulerPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -42,7 +43,7 @@ export default function SchedulerPage() {
 
   return (
     <MainWindow>
-      <Component />
+      <ScrollingList>{Component()}</ScrollingList>
     </MainWindow>
   );
 }
