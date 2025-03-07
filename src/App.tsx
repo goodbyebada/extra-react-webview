@@ -43,7 +43,6 @@ import CompanyProfilePage from "@pages/CompanyProfilePage";
 import CompanySettingPage from "@pages/CompanySettingPage";
 import PostOverviewPage from "@pages/PostOverviewPage";
 import RecruitmentStatusPage from "@pages/RecruitmentStatusPage";
-import SignaturePage from "@pages/SignaturePage";
 import { useEffect } from "react";
 import handleAllowNotification from "@utills/pushNotification/notificationPermission";
 import ManageOverViewPage from "@pages/ManageOverViewPage";
@@ -51,6 +50,8 @@ import ChatRoomPage from "@pages/Chat/ChatRoomPage";
 import { ChatListForAdmin } from "@pages/Chat/ChatListForAdmin";
 import ChatPreviewForUser from "@pages/Chat/ChatPreviewForUser";
 import SchedulerPage from "@pages/Member/SchedulerPage";
+import UploadPDFPage from "@pages/Manage/UploadPDF";
+import SignaturePage from "@pages/Manage/SignaturePage";
 
 function App() {
   useEffect(() => {
@@ -180,6 +181,10 @@ function App() {
 
           {/* signature */}
           <Route path="/member/manage/signature" element={<SignaturePage />} />
+          <Route
+            path="/company/manage/upload-pdf"
+            element={<UploadPDFPage />}
+          />
 
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />

@@ -7,7 +7,7 @@ import { MainButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
 import { FONT_COLORS } from "@styled/colors";
 import MainWindow from "@components/mocules/MainWindow";
-
+import { useNavigate } from "react-router-dom";
 const QRBackground = styled.div`
   background: ${FONT_COLORS.white};
 
@@ -22,6 +22,8 @@ const QRBackground = styled.div`
 
 const MemberShootManageDetailPage = () => {
   const [value, setValue] = useState<string>("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const data = {
@@ -43,7 +45,14 @@ const MemberShootManageDetailPage = () => {
         <Margin size={20} />
         <MainButton isActive={true}>의상</MainButton>
         <Margin size={20} />
-        <MainButton isActive={true}>계약서</MainButton>
+        <MainButton
+          isActive={true}
+          onClick={() => {
+            navigate("/member/manage/signature");
+          }}
+        >
+          계약서
+        </MainButton>
       </Container>
     </MainWindow>
   );

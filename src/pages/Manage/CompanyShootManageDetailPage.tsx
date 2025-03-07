@@ -9,7 +9,7 @@ const PATH = {
   출연자목록: `${BASE}/actor`,
   퇴근: `${BASE}/clock-out`,
   출근: `${BASE}/clock-in`,
-  계약서: `${BASE}/actor`,
+  계약서: `${BASE}/upload-pdf`,
   의상컨펌: `${BASE}/clothes-member`,
 };
 
