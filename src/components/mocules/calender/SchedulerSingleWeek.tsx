@@ -41,8 +41,7 @@ export default function SchedulerSingleWeek({
 
 const DateItem = styled.div`
   position: relative;
-  /* width: var(--__dateWidth); */
-  width: var(--__dateWidth);
+  width: calc(100% / 7);
 
   box-sizing: border-box;
   border: none;
