@@ -31,7 +31,10 @@ describe("ClothesConfirmStatusListPage", () => {
     const searchInput = screen
       .getByTestId("search-input-1")
       .querySelector("input");
-    fireEvent.change(searchInput, { target: { value: "이름1" } });
+
+    if (searchInput) {
+      fireEvent.change(searchInput, { target: { value: "이름1" } });
+    }
 
     // 필터링된 항목이 표시되는지 확인합니다
     expect(screen.getByText(/이름1/i)).toBeInTheDocument();

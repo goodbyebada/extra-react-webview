@@ -10,10 +10,12 @@ type MessageType = {
 };
 
 // RN에 메시지 전송
+// TODO RN으로 작업했던 이전 파일 삭제 하면서, 같이 함수 삭제할 예정,빌드위해 주석 처리해놓음
 export const sendMessage = (data: MessageType) => {
-  if (window.ReactNativeWebView) {
-    window.ReactNativeWebView.postMessage(JSON.stringify(data));
-  }
+  console.log(data);
+  // if (window.ReactNativeWebView) {
+  //   window.ReactNativeWebView.postMessage(JSON.stringify(data));
+  // }
 };
 
 // decrypted accesstoken
@@ -84,8 +86,7 @@ const requestFetch = async (
   data?: object,
   option?: object,
 ) => {
-
-  console.log("호출")
+  console.log("호출");
   const token = await new Promise<string>((resolve) => {
     requestToken(resolve);
   });

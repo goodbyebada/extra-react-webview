@@ -9,7 +9,6 @@ import DateSelectedNoticeList from "@pages/Member/DateSelectedNoticeList";
 import CompanyHome from "@pages/CompanyHome";
 import ExtraShootManagePage from "@pages/Member/ExtraShootManagePage";
 import { ApplicantDetail } from "@pages/ApplicantDetail";
-import DetailPage from "@pages/DetailPage";
 import NotFound from "@pages/Error/NotFound";
 import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
 import TempEvaluation from "@pages/TempEvaluation";
@@ -149,8 +148,6 @@ function App() {
           <Route path="/applicants/:id" element={<ShowApplicant />} />
           <Route path="/applicants/:id/detail" element={<ApplicantDetail />} />
 
-          {/* ?? legacy */}
-          <Route path="/detail/:id" element={<DetailPage />} />
           <Route
             path="/detail/:jobPostId/applicants"
             element={<ShowApplicant />}

@@ -80,7 +80,7 @@ function CompanyRecruitMiniBox({ navigate, recruitInfo, recommand }: Props) {
           {status ? "모집중" : "모집마감"}
         </RecruitStatus>
         <TimePlace>
-          {gatheringTime} 예정 <br /> {gatheringLocation}
+          {gatheringTime} 예정 <br /> {gatheringLocation.placeName}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>

@@ -12,11 +12,7 @@ interface RoleInfoProps {
  * RoleInfo : 업체 역할 정보 박스
  */
 
-const RoleInfo = ({
-  roleDetailInfo: roleDetailInfo,
-  index,
-  onClick,
-}: RoleInfoProps) => {
+const RoleInfo = ({ roleDetailInfo, index, onClick }: RoleInfoProps) => {
   const RoleDetailText = (label: string, value: string) => (
     <Text size={14} weight={700}>
       {label} : {value || "정보 없음"}

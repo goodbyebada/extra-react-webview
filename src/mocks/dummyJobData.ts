@@ -3,7 +3,6 @@ import {
   MemberRoleFront,
   JobPostList,
   JobPost,
-  RoleBodyType,
 } from "@/type/shared";
 
 import { ObjectType } from "@/type/dateInteface";

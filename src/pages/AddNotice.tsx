@@ -14,7 +14,7 @@ import {
 } from "@type/shared";
 
 import { Place } from "@type/shared";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import NoticeRole from "@components/mocules/company/NoticeRole";
 import { NavBar } from "@components/mocules/navBar/CommonNavBar";
 
@@ -23,7 +23,7 @@ import { NavBar } from "@components/mocules/navBar/CommonNavBar";
  **/
 
 function AddNotice() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [modals, setModals] = useState({
     title: false,
     date: false,
