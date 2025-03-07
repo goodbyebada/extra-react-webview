@@ -9,6 +9,7 @@ import Ellipsis from "@components/custom/Ellipsis";
 import { DateDetailedInfo, DateSelctedType } from "@type/dateInteface";
 import { SchedulerWeekdayLabels } from "@components/mocules/WeekdayLabels";
 import ScheduleModal from "@components/Modal/ScheduleModal";
+const SCHEDULER_HEGIHT = 412;
 
 interface SchedulerPageProps {
   dateYM: DateDetailedInfo;
@@ -52,9 +53,9 @@ export default function Scheduler({
     }
 
     setScheduledJobsByDate(newWeeklist);
-  }, [weekList, appliedListData]);
+  }, [appliedListData]);
 
-  // NOTE dispatch시 openModal 안되는 버그 있음
+  // TODO dispatch시 openModal 안되는 버그 있음 추후 수정 예정
   const selectedDateEvent = (elem: number) => {
     openModal();
     // console.log("selectedDateEvent called");
@@ -127,8 +128,7 @@ export default function Scheduler({
 const DatesWrapper = styled.div``;
 
 const Container = styled.div<{ $daylistHeight: number }>`
-  width: 372px;
-  height: 412px;
+  height: ${SCHEDULER_HEGIHT}px;
   border: 3px solid transparent;
   background-image: linear-gradient(#5d4900, #333333);
   background-origin: border-box;
