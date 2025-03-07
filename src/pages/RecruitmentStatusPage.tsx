@@ -37,3 +37,4 @@ export default function RecruitmentStatusPage() {
 
   return <MainWindow headerShown={false}>{Component()}</MainWindow>;
 }
+// 30:9  error  Unexpected lexical declaration in case block  no-case-declarations

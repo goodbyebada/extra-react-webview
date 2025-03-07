@@ -1,13 +1,6 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
-import {
-  RoleBodyType,
-  Tattoo,
-  TattooNames,
-  Costume,
-  RoleRegister,
-  SeasonEnum,
-} from "@type/shared";
+import { RoleBodyType, Tattoo, TattooNames, Costume } from "@type/shared";
 import Modal from "@components/atoms/Modal";
 import { MainButton, BoxButton, SubButton } from "@components/atoms/Button";
 import Text from "@components/atoms/Text";
@@ -19,6 +12,7 @@ interface CompanyRoleModalProps {
   closeModal: () => void;
   isVisible: boolean;
   role?: RoleBodyType | null;
+  isEditMode?: boolean;
 }
 
 /**
@@ -27,11 +21,13 @@ interface CompanyRoleModalProps {
  * role: 역할 정보(RoleBodyType)
  */
 
+// (최초 작성이 아닌 이미 작성된) 모집 공고 수정 시, initialState 대신 기존 role data로 초기값을 설정하기 위해 isEditMode props 추가
 function CompanyRoleModal({
   onSubmit,
   closeModal,
   isVisible,
   role,
+  isEditMode = false,
 }: CompanyRoleModalProps) {
   const initialState: RoleBodyType = {
     id: role?.id || Date.now(),
@@ -59,7 +55,11 @@ function CompanyRoleModal({
     },
     hourPay: "",
   };
-  const [formState, setFormState] = useState<RoleBodyType>(initialState);
+
+  const [formState, setFormState] = useState<RoleBodyType>(
+    isEditMode && role ? role : initialState,
+  );
+
   const [isFormValid, setIsFormValid] = useState(false);
   const [isClothesModalVisible, setIsClothesModalVisible] = useState(false);
   const [hourPay, setHourPay] = useState<string>("");
@@ -90,6 +90,12 @@ function CompanyRoleModal({
         costume.etc.trim() !== "" &&
         hourPay.trim() !== "",
     );
+
+    if (isEditMode) {
+      const rawValue = hourPay.replace(/[^0-9]/g, ""); // 숫자만 허용
+      const formattedValue = formatNumber(rawValue);
+      setHourPay(formattedValue);
+    }
   }, [formState]);
 
   const handleGenderSelect = (value: string) => {

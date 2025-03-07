@@ -4,11 +4,10 @@ import { COLORS } from "@styled/colors";
 import { ContentWrapper, LineWrapper } from "@components/atoms/Wrapper";
 import { JobPost, RoleBodyType, SeasonLabel } from "@type/shared";
 import styled from "styled-components";
-import RoleInfo from "@components/custom/RoleInfo";
 import ScrollingList from "@components/mocules/ScrollingList";
-
 import Container from "@components/atoms/Container";
-import { useNavigate } from "react-router-dom";
+import EditableRoleCard from "@components/organisms/EditableRoleCard";
+import { useEffect, useState } from "react";
 
 const MARGIN_TOP = 30;
 /**
@@ -19,11 +18,22 @@ export default function RecruitmentStatus({
 }: {
   selectedJobPostItem: JobPost;
 }) {
-  const navigate = useNavigate();
-  const clickRoleInfoItemEvent = (id: number) => {
-    const BASE_PATH = "/applicants";
-    navigate(BASE_PATH + `/${id}`);
+  const [convertedRoleDetails, setConvertedRoleDetails] = useState<
+    RoleBodyType[]
+  >([]);
+
+  const onEdit = (formState: RoleBodyType) => {
+    setConvertedRoleDetails((prev: RoleBodyType[]) => {
+      const index = prev.findIndex((elem) => elem.id === formState.id);
+      prev[index] = formState;
+      const updatedRoleDetails = [...prev];
+
+      return updatedRoleDetails;
+    });
+
+    // 공고 역할 수정된 값 POST API 하는 코드
   };
+
   const convertToDetailRole = (selectedJobPostItem: JobPost) => {
     const {
       roleIdList,
@@ -41,7 +51,12 @@ export default function RecruitmentStatus({
     const RoleDetailList: RoleBodyType[] = [];
     for (let index = 0; index < roleNameList.length; index++) {
       // TODO  JobPost etc, imageSrc 넣거나  RoleBodyType에서 제거하거나 논의해아함
-      const [minAge, maxAge] = roleAgeList[index].split("~");
+
+      // 더미데이터에 섞여있어서 비교 후  min,max 정하는 방향으로 수정함
+      const ageList = roleAgeList[index].split("~").map(Number);
+      const minAge = Math.min(...ageList);
+      const maxAge = Math.max(...ageList);
+
       const roleDetail: RoleBodyType = {
         id: roleIdList[index],
         roleName: roleNameList[index],
@@ -52,8 +67,8 @@ export default function RecruitmentStatus({
           imageSrc: [""],
         },
         sex: sexList[index],
-        minAge: minAge.trim(),
-        maxAge: maxAge.trim(),
+        minAge: minAge.toString(),
+        maxAge: maxAge.toString(),
         limitPersonnel: limitPersonnelList[index],
         currentPersonnel: currentPersonnelList[index],
         tattoo: tattooList[index],
@@ -66,20 +81,10 @@ export default function RecruitmentStatus({
     return RoleDetailList;
   };
 
-  const roleDetails: RoleBodyType[] = convertToDetailRole(selectedJobPostItem);
-
-  const showRoleInfoComponent = (RoleDetailList: RoleBodyType[]) => {
-    return RoleDetailList.map((roleDetailInfo: RoleBodyType, key: number) => (
-      <RoleInfo
-        key={key}
-        roleDetailInfo={roleDetailInfo}
-        index={key}
-        onClick={() => {
-          clickRoleInfoItemEvent(roleDetailInfo.id);
-        }}
-      />
-    ));
-  };
+  useEffect(() => {
+    const convertedRoleDetailList = convertToDetailRole(selectedJobPostItem);
+    setConvertedRoleDetails(convertedRoleDetailList);
+  }, []);
 
   return (
     <ScrollingList>
@@ -117,8 +122,18 @@ export default function RecruitmentStatus({
 
       <ContentWrapper marginTop={`${MARGIN_TOP}px`}>
         <Container>
+          {convertedRoleDetails?.length > 0 &&
+            convertedRoleDetails.map(
+              (roleDetail: RoleBodyType, index: number) => (
+                <EditableRoleCard
+                  RoleDetail={roleDetail}
+                  key={index}
+                  indexNumber={index + 1}
+                  onEdit={onEdit}
+                />
+              ),
+            )}
           {/* 역할 컴포넌트 */}
-          {showRoleInfoComponent(roleDetails)}
         </Container>
       </ContentWrapper>
     </ScrollingList>
