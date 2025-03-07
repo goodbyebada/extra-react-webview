@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 // import { useRef } from "react";
 import { styled } from "styled-components";
-import { AuthType, JobPost, ResponseStatus, Company } from "@type/shared";
+import { AuthType, JobPost, ResponseStatus } from "@type/shared";
 import { AUTH_TYPE_CONST } from "@constants/const";
 import { DateYearMonth } from "@type/dateInteface";
 import HomeRecruitBox from "@components/HomeRecruitBox";
@@ -47,7 +47,7 @@ export default function List({
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const isCompany = (authType: string): authType is Company => {
+  const isCompany = (authType: string) => {
     return authType === AUTH_TYPE_CONST.COMPANY;
   };
 
@@ -62,9 +62,8 @@ export default function List({
     const { year, month } = dateYearMonth;
     dispatch(fetchJobPostByList({ year, month, pageNum }));
     setPageNum((prev) => prev + 1);
-  }, [dispatch, dateYM, dateYearMonth]);
+  }, [dispatch, dateYM, dateYearMonth, pageNum]);
 
-  // // TODO ResponseStatus 에 따른 분기처리 모듈화할 것
   const Component = () => {
     switch (jobPost.status) {
       case ResponseStatus.loading:

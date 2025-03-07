@@ -6,7 +6,7 @@ import Text from "@components/atoms/Text";
 import { IoIosSearch } from "react-icons/io";
 import PlaceItem from "@components/mocules/PlaceItem";
 import useKakaoPlaceSearch from "../../customHook/useKakaoPlaceSearch";
-import { Place } from "@api/interface";
+import { Place } from "@type/shared";
 
 interface CompanyDateTimePlaceModalProps {
   onSubmit: (dates: string[], time: string, place: Place) => void;

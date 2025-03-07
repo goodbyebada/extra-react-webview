@@ -6,7 +6,7 @@ import { FaPlus } from "react-icons/fa";
 import ImageComponent from "@components/atoms/Image";
 import { handleImageUpload } from "@utills/imageUpload";
 import Modal from "@components/atoms/Modal";
-import { Costume } from "@api/interface";
+import { Costume } from "@type/shared";
 
 interface CompanyClothesModalProps {
   onSubmit: (costume: Costume) => void;

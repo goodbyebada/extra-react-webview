@@ -41,5 +41,5 @@
     }
   },
 
-  "include": ["src/**/*", "ex.ts"]
+  "include": ["src/**/*", "vite-env.d.ts"]
 }

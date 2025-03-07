@@ -6,7 +6,7 @@ import PostFormCard from "./PostFormCard";
 import RoleDetailBox from "@components/mocules/company/RoleDetailBox";
 import CompanyAddRoleModal from "@components/Modal/CompanyAddRoleModal";
 import CompanyRoleModal from "@components/Modal/CompanyRoleModal";
-import { RoleBodyType } from "@api/interface";
+import { RoleBodyType } from "@type/shared";
 import RoleInfo from "@components/custom/RoleInfo";
 import { MdEdit } from "react-icons/md";
 

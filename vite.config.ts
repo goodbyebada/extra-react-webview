@@ -5,13 +5,16 @@ import fs from "fs";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(() => {
   // console.log(mode);
   return {
     plugins: [
       react(),
       tsconfigPaths(),
       VitePWA({
+        workbox: {
+          maximumFileSizeToCacheInBytes: 3000000,
+        },
         registerType: "autoUpdate",
         injectRegister: null,
         includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
@@ -48,17 +51,15 @@ export default defineConfig(({ mode }) => {
       }),
     ],
 
-    // NOTE PR시 주석 제거
-    // 인증서가 있을 시 https 설정
-    // server:
-    //   !fs.existsSync("./localhost-key.pem") || !fs.existsSync("./localhost.pem")
-    //     ? undefined
-    //     : {
-    //         https: {
-    //           key: fs.readFileSync("./localhost-key.pem"),
-    //           cert: fs.readFileSync("./localhost.pem"),
-    //         },
-    //       },
+    server:
+      !fs.existsSync("./localhost-key.pem") || !fs.existsSync("./localhost.pem")
+        ? undefined
+        : {
+            https: {
+              key: fs.readFileSync("./localhost-key.pem"),
+              cert: fs.readFileSync("./localhost.pem"),
+            },
+          },
   };
 });
 
