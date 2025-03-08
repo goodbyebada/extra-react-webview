@@ -18,6 +18,7 @@ import MainWindow from "@components/mocules/MainWindow";
 
 import { useLocation } from "react-router-dom";
 import { getAuthType } from "@utills/getAuthType";
+import ScrollingList from "@components/mocules/ScrollingList";
 
 const DUMMY_INIT_NAME = "김출연";
 
@@ -91,31 +92,33 @@ export default function MemberHome() {
 
   return (
     <MainWindow>
-      <LayoutComponent>
-        <Header>
-          <HomeNavBar />
-          <ThemeText variant="title">
-            {showRecommand
-              ? HOME_MESSAGES.recommend(name)
-              : HOME_MESSAGES.all(name)}
-          </ThemeText>
-        </Header>
+      <ScrollingList>
+        <LayoutComponent>
+          <Header>
+            <HomeNavBar />
+            <ThemeText variant="title">
+              {showRecommand
+                ? HOME_MESSAGES.recommend(name)
+                : HOME_MESSAGES.all(name)}
+            </ThemeText>
+          </Header>
 
-        {showAsCalender ? (
-          <HomeCalendar
-            dateYearMonth={{ year, month }}
-            showRecommand={showRecommand}
-            clickedDateEvent={(dateNum) => clickedDateEvent(dateNum)}
-            gotJobDataList={gotJobDataList}
-          />
-        ) : (
-          <List
-            dateYearMonth={{ year, month }}
-            showRecommand={showRecommand}
-            authType={getAuthType(type)}
-          />
-        )}
-      </LayoutComponent>
+          {showAsCalender ? (
+            <HomeCalendar
+              dateYearMonth={{ year, month }}
+              showRecommand={showRecommand}
+              clickedDateEvent={(dateNum) => clickedDateEvent(dateNum)}
+              gotJobDataList={gotJobDataList}
+            />
+          ) : (
+            <List
+              dateYearMonth={{ year, month }}
+              showRecommand={showRecommand}
+              authType={getAuthType(type)}
+            />
+          )}
+        </LayoutComponent>
+      </ScrollingList>
     </MainWindow>
   );
 }

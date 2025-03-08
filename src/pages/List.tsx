@@ -38,8 +38,12 @@ export default function List({
   const navigate = useNavigate();
 
   const navigateToExtraCastingBoard = (elem: JobPost) => {
-    const path = `/extra-casting-board/${elem.id}`;
-    navigate(path);
+    const BASE_PATH = isCompany(authType)
+      ? "/chatRoom/channel"
+      : `/member/home/extra-casting-board`;
+
+    const PATH = `${BASE_PATH}/${elem.id}`;
+    navigate(PATH);
   };
 
   const dispatch = useDispatch<AppDispatch>();

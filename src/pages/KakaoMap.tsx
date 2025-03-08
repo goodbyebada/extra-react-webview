@@ -2,6 +2,7 @@ import { Map, MapMarker, CustomOverlayMap } from "react-kakao-maps-sdk";
 import styled from "styled-components";
 import Text from "@components/atoms/Text";
 import { useLocation } from "react-router-dom";
+import MainWindow from "@components/mocules/MainWindow";
 
 /**
  * KakaoMap : 공고 주소 지도 화면
@@ -17,35 +18,37 @@ function KakaoMap() {
   };
 
   return (
-    <div style={{ width: "100%", height: "100vh" }}>
-      <Map
-        center={position}
-        style={{ width: "100%", height: "100%" }}
-        level={3}
-        draggable={true}
-      >
-        <MapMarker position={position} />
-        <CustomOverlayMap position={position} yAnchor={1.5}>
-          <OverlayContainer>
-            <Text size={18} weight={700} color="#333">
-              {place.placeName}
-            </Text>
-            <AddressLine>
-              <Tag>도로명</Tag>
-              <Text size={14} weight={400} color="#555">
-                {place.roadAddress}
+    <MainWindow bottomNavigationShown={false} activeDefaultPadding={false}>
+      <div style={{ width: "100%", height: "100vh" }}>
+        <Map
+          center={position}
+          style={{ width: "100%", height: "100%" }}
+          level={3}
+          draggable={true}
+        >
+          <MapMarker position={position} />
+          <CustomOverlayMap position={position} yAnchor={1.5}>
+            <OverlayContainer>
+              <Text size={18} weight={700} color="#333">
+                {place.placeName}
               </Text>
-            </AddressLine>
-            <AddressLine>
-              <Tag>지번</Tag>
-              <Text size={14} weight={400} color="#555">
-                {place.jibunAddress}
-              </Text>
-            </AddressLine>
-          </OverlayContainer>
-        </CustomOverlayMap>
-      </Map>
-    </div>
+              <AddressLine>
+                <Tag>도로명</Tag>
+                <Text size={14} weight={400} color="#555">
+                  {place.roadAddress}
+                </Text>
+              </AddressLine>
+              <AddressLine>
+                <Tag>지번</Tag>
+                <Text size={14} weight={400} color="#555">
+                  {place.jibunAddress}
+                </Text>
+              </AddressLine>
+            </OverlayContainer>
+          </CustomOverlayMap>
+        </Map>
+      </div>
+    </MainWindow>
   );
 }
 
