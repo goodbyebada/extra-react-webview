@@ -158,14 +158,15 @@ export type RoleRegister = {
 
 export type ShootManage = {
   id: number;
-  jobPostId: number;
-  category: string;
   title: string;
-  gatheringTime: string;
-  gatheringLocation: string;
+  category: string;
   calenderList: string[];
-  name: string;
-  applyStatus: ShootManageSelectStatus;
+  dDay: string;
+  company: string;
+  time: string;
+  location: string;
+  applyStatus: "applied" | "rejected" | "approved";
+  applyStatusText: string;
 };
 
 /**

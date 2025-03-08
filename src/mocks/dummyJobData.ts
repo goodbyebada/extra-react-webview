@@ -3,6 +3,7 @@ import {
   MemberRoleFront,
   JobPostList,
   JobPost,
+  ShootManage,
 } from "@/type/shared";
 
 import { ObjectType } from "@/type/dateInteface";
@@ -23,6 +24,7 @@ export {
   dummyUserClothes,
   DUMMY_MANAGER_JOB_LIST_VER_1,
   DUMMY_MANAGER_JOB_LIST_VER_2,
+  dummyShootManageList,
 };
 
 const memberRoleServerDummyList: MemberRoleServer[] = [
@@ -606,5 +608,47 @@ const dummyUserClothes = [
         description: "의상 1",
       },
     ],
+  },
+];
+
+/**
+ * ShootManage 촬영관리 리스트
+ */
+const dummyShootManageList: ShootManage[] = [
+  {
+    id: 1,
+    title: "라스트 서바이벌1",
+    category: "MOVIE",
+    calenderList: ["2024-09-02", "2024-09-05"],
+    dDay: "2024-09-01",
+    company: "UMC",
+    time: "16:30",
+    location: "강남역 2호선",
+    applyStatus: "applied",
+    applyStatusText: "승인대기",
+  },
+  {
+    id: 2,
+    title: "마무리를 향해",
+    category: "MOVIE",
+    calenderList: ["2025-09-05", "2025-09-12"],
+    dDay: "2024-08-28",
+    company: "UMC",
+    time: "16:30",
+    location: "사당역 4호선",
+    applyStatus: "approved",
+    applyStatusText: "승인완료",
+  },
+  {
+    id: 3,
+    title: "라스트 서바이벌3",
+    category: "MOVIE",
+    calenderList: ["2024-09-18", "2024-09-18"],
+    dDay: "2024-09-16",
+    company: "UMC",
+    time: "16:30",
+    location: "강남역 2호선",
+    applyStatus: "rejected",
+    applyStatusText: "미승인",
   },
 ];
