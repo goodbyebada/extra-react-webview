@@ -18,6 +18,7 @@ import { fetchJobPostByList } from "@redux/jobPost/jobPostSlice";
 import { useNavigate } from "react-router-dom";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
+import { fetchJobPostByListForCom } from "@redux/company/companyJobPostSlice";
 
 type ListProps = {
   dateYearMonth: DateYearMonth;
@@ -35,10 +36,6 @@ export default function List({
 
   const dateYM = useSelector((state: RootState) => state.date);
   const navigate = useNavigate();
-  // const [localJobPost, setLocalJobPost] = useState<JobPost[]>([]);
-  // const [status, setStatus] = useState<ResponseStatus>(ResponseStatus.loading);
-  // const [hasMore, setHasMore] = useState(true);
-  // const isFetching = useRef(false); // 추가된 변수: fetch 중복 방지용
 
   const navigateToExtraCastingBoard = (elem: JobPost) => {
     const path = `/extra-casting-board/${elem.id}`;
@@ -60,9 +57,14 @@ export default function List({
 
   useEffect(() => {
     const { year, month } = dateYearMonth;
-    dispatch(fetchJobPostByList({ year, month, pageNum }));
+    if (isCompany(authType)) {
+      dispatch(fetchJobPostByListForCom({ year, month, pageNum }));
+    } else {
+      dispatch(fetchJobPostByList({ year, month, pageNum }));
+    }
+
     setPageNum((prev) => prev + 1);
-  }, [dispatch, dateYM, dateYearMonth, pageNum]);
+  }, [dispatch, dateYM, dateYearMonth]);
 
   const Component = () => {
     switch (jobPost.status) {
