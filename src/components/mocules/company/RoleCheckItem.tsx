@@ -4,6 +4,8 @@ import { IoCheckmarkCircle } from "react-icons/io5";
 import { GrFormNext } from "react-icons/gr";
 import { useState } from "react";
 import DetailProfileModal from "@components/Modal/DetailProfileModal";
+import { TbCheck } from "react-icons/tb";
+import { HiMiniXMark } from "react-icons/hi2";
 
 /**
  * RoleCheckItem : 업체 - 역할 별 지원현황 체크 리스트 아이템
@@ -11,6 +13,7 @@ import DetailProfileModal from "@components/Modal/DetailProfileModal";
  * isChecked: 클릭 상태
  * onCheckClick: 체크버튼 클릭 이벤트
  * onNextClick: 상세 프로필 이동
+ * approvalStatus: 승인 상태 ('approved', 'rejected', 'none')
  */
 
 interface RoleCheckItemProps {
@@ -18,6 +21,7 @@ interface RoleCheckItemProps {
   name: string;
   isChecked: boolean;
   onCheckClick?: (isChecked: boolean) => void;
+  approvalStatus: "approved" | "rejected" | "none";
 }
 
 const RoleCheckItem = ({
@@ -25,6 +29,7 @@ const RoleCheckItem = ({
   name,
   isChecked,
   onCheckClick,
+  approvalStatus,
 }: RoleCheckItemProps) => {
   const [isModalVisible, setModalVisible] = useState(false);
 
@@ -55,6 +60,13 @@ const RoleCheckItem = ({
             {name}
           </Text>
         </TextWrapper>
+
+        {approvalStatus === "approved" ? (
+          <TbCheck size={25} color="#4caf50" />
+        ) : approvalStatus === "rejected" ? (
+          <HiMiniXMark size={25} color="#f44336" />
+        ) : null}
+
         <GrFormNext size={35} onClick={handleNextClick} />
       </ListItemWrapper>
 
