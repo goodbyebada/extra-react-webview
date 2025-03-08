@@ -41,9 +41,26 @@ const MemberShootManageDetailPage = () => {
         </QRBackground>
       </Container>
       <Container flex={40} paddingHorizontal={40}>
-        <MainButton isActive={true}>채팅방</MainButton>
+        <MainButton
+          onClick={() => {
+            // id 정보 없어서 임시로 해놓음
+            const TMP_PATH = `/chatRoom/channel/3`;
+            navigate(TMP_PATH);
+          }}
+          isActive={true}
+        >
+          채팅방
+        </MainButton>
         <Margin size={20} />
-        <MainButton isActive={true}>의상</MainButton>
+        <MainButton
+          isActive={true}
+          onClick={() => {
+            const TMP_PATH = `/member/clothes-comment`;
+            navigate(TMP_PATH);
+          }}
+        >
+          의상
+        </MainButton>
         <Margin size={20} />
         <MainButton
           isActive={true}
