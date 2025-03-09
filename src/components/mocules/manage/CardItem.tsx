@@ -3,12 +3,13 @@ import Text from "@components/atoms/Text";
 import { useNavigate } from "react-router-dom";
 import Margin from "@components/atoms/Margin";
 import { FaAngleRight } from "react-icons/fa6";
-import { BACKGROUND_COLORS, FONT_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS, FONT_COLORS } from "@styled/colors";
 
 interface StyledCardItemProps {
   name: string;
   statusComponent: React.ReactNode;
   url: string;
+  status: string;
 }
 
 interface CardStatus {
@@ -93,6 +94,7 @@ const ActorCardItem = ({ name, status, url }: CardItemProps) => {
       name={name}
       url={url}
       statusComponent={<ActorStatus status={status} />}
+      status={status.toString()}
     />
   );
 };
@@ -109,6 +111,7 @@ const ClothesConfirmCardItem = ({ name, status, url }: CardItemProps) => {
           </Text>
         </ClothesStatus>
       }
+      status={status.toString()}
     />
   );
 };

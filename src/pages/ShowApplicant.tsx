@@ -3,13 +3,12 @@ import styled from "styled-components";
 import RoleCheckItem from "@components/mocules/company/RoleCheckItem";
 import Text from "@components/atoms/Text";
 import { MainButton } from "@components/atoms/Button";
-import { dummyUserRoleData } from "@api/dummyData";
+import { dummyUserRoleData } from "@mocks/dummyJobData";
+import MainWindow from "@components/mocules/MainWindow";
+import Container from "@components/atoms/Container";
 
 /**
  * ShowApplicant : 업체 - 역할 별 지원현황
- * 추후 수정
- * - 역할 이름 전 화면에서 넘겨 받아야 함
- * - 역할 상세 내역 전 화면에서 컴포넌트 만들어지면 추가
  */
 
 const role = "학생";
@@ -24,8 +23,10 @@ const TABS = {
 const ShowApplicant = () => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<string>(TABS.ORDER_BY_TIME);
+  const [approvalStatus, setApprovalStatus] = useState<
+    Record<string, "approved" | "rejected" | "none">
+  >({});
 
-  // 체크박스 클릭 시 상태 업데이트
   const handleCheckClick = (name: string, isChecked: boolean) => {
     setSelectedItems((prev) => {
       if (isChecked) {
@@ -34,6 +35,17 @@ const ShowApplicant = () => {
         return prev.filter((item) => item !== name);
       }
     });
+  };
+
+  const handleApproval = (status: "approved" | "rejected") => {
+    setApprovalStatus((prev) => {
+      const updatedStatus = { ...prev };
+      selectedItems.forEach((name) => {
+        updatedStatus[name] = status;
+      });
+      return updatedStatus;
+    });
+    setSelectedItems([]);
   };
 
   const handleTabClick = (tab: string) => {
@@ -49,72 +61,76 @@ const ShowApplicant = () => {
   };
 
   return (
-    <Container>
-      <Text size={20} weight={700} color="#fff">
-        {role || "role"} 역할
-      </Text>
-      <TabWrapper>
-        <LeftTabs>
-          {[
-            TABS.ORDER_BY_TIME,
-            TABS.ORDER_BY_TEMP,
-            TABS.ORDER_BY_EXPERIENCE,
-          ].map((tab) => (
+    <MainWindow>
+      <Container>
+        <RoleNameWrapper>
+          <Text size={20} weight={700} color="#fff">
+            {role || "role"} 역할
+          </Text>
+        </RoleNameWrapper>
+
+        <TabWrapper>
+          <LeftTabs>
+            {[
+              TABS.ORDER_BY_TIME,
+              TABS.ORDER_BY_TEMP,
+              TABS.ORDER_BY_EXPERIENCE,
+            ].map((tab) => (
+              <TabItem
+                key={tab}
+                isActive={activeTab === tab}
+                onClick={() => handleTabClick(tab)}
+              >
+                {tab}
+              </TabItem>
+            ))}
+          </LeftTabs>
+          <RightTab>
             <TabItem
-              key={tab}
-              isActive={activeTab === tab}
-              onClick={() => handleTabClick(tab)}
+              isActive={selectedItems.length === dummyUserRoleData.length}
+              onClick={() => handleTabClick(TABS.SELECT_ALL)}
             >
-              {tab}
+              {TABS.SELECT_ALL}
             </TabItem>
-          ))}
-        </LeftTabs>
-        <RightTab>
-          <TabItem
-            isActive={selectedItems.length === dummyUserRoleData.length}
-            onClick={() => handleTabClick(TABS.SELECT_ALL)}
-          >
-            {TABS.SELECT_ALL}
-          </TabItem>
-        </RightTab>
-      </TabWrapper>
-      <RoleList>
-        {dummyUserRoleData.map((item) => {
-          return (
-            <RoleCheckItem
-              key={item.id}
-              userId={item.userId}
-              name={item.name}
-              isChecked={selectedItems.includes(item.name)} // 선택된 항목인지 여부 전달
-              onCheckClick={(isChecked) =>
-                handleCheckClick(item.name, isChecked)
-              }
-            />
-          );
-        })}
-      </RoleList>
-      <Footer>
-        <MainButton onClick={() => console.log("승인: ", selectedItems)}>
-          승인
-        </MainButton>
-        <MainButton
-          isActive={false}
-          onClick={() => console.log("미승인: ", selectedItems)}
-        >
-          미승인
-        </MainButton>
-      </Footer>
-    </Container>
+          </RightTab>
+        </TabWrapper>
+
+        <RoleList>
+          {dummyUserRoleData.map((item) => {
+            return (
+              <RoleCheckItem
+                key={item.id}
+                userId={item.userId.toString()}
+                name={item.name}
+                isChecked={selectedItems.includes(item.name)}
+                onCheckClick={(isChecked) =>
+                  handleCheckClick(item.name, isChecked)
+                }
+                approvalStatus={approvalStatus[item.name] || "none"}
+              />
+            );
+          })}
+        </RoleList>
+
+        <Footer>
+          <MainButton onClick={() => handleApproval("approved")}>
+            승인
+          </MainButton>
+          <MainButton onClick={() => handleApproval("rejected")}>
+            미승인
+          </MainButton>
+        </Footer>
+      </Container>
+    </MainWindow>
   );
 };
 
 export default ShowApplicant;
 
-const Container = styled.div`
-  padding: 30px;
+const RoleNameWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  height: 100vh;
+  justify-content: flex-start;
+  width: 100%;
 `;
 
 const TabWrapper = styled.div`
@@ -139,6 +155,7 @@ const TabItem = styled.div<{ isActive: boolean }>`
   font-weight: 700;
   color: ${({ isActive }) => (isActive ? "#ffffff" : "#cccccc")};
   position: relative;
+  cursor: pointer;
 
   &:after {
     content: "";

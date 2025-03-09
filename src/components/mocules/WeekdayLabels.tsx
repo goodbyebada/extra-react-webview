@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { FONT_COLORS } from "@/styled/colors";
+import { FONT_COLORS } from "@styled/colors";
 
 export { CalendarWeekdayLabels, SchedulerWeekdayLabels };
 /**

@@ -4,7 +4,7 @@ import Text from "@components/atoms/Text";
 import { MainButton } from "@components/atoms/Button";
 import { FaStar } from "react-icons/fa";
 import { useParams } from "react-router-dom";
-import { dummyUserRoleData } from "@api/dummyData";
+import { dummyUserRoleData } from "@mocks/dummyJobData";
 
 /**
  * TempEvaluation : 지원자 온도 평가 화면
@@ -15,7 +15,9 @@ const TempEvaluation = () => {
   const [review, setReview] = useState("");
   const { id } = useParams<{ id: string }>();
   const isDragging = useRef(false); // 드래그 중 여부 추적
-  const user = dummyUserRoleData.find((user) => user.userId === id);
+  const user = dummyUserRoleData.find(
+    (user) => user.userId === (id ? +id : -1),
+  );
 
   const handleDragStart = (event: React.MouseEvent | React.TouchEvent) => {
     isDragging.current = true;
@@ -140,7 +142,7 @@ const Row = styled.div`
 const StarsContainer = styled.div`
   display: flex;
   margin-bottom: 30px;
-  width: 100%;
+  width: 200px;
   gap: 5px;
 `;
 

@@ -1,12 +1,13 @@
 import { ItemProps } from "@components/mocules/Item";
 
 /**
- * year month dateNum 을 하나의 숫자로 return
- * ex ) 2024-09-02 => 20240902
+ * year month dateNum 의 dateNum만 return
+ * ex ) 2024-09-02 => 2
  */
 
 export function converToDateObject(calenderItem: string): number {
-  const dateNumber = calenderItem.split("-").join("");
+  const splitedCalenderItem = calenderItem.split("-");
+  const dateNumber = splitedCalenderItem[splitedCalenderItem.length - 1];
 
   return +dateNumber;
 }
@@ -17,14 +18,14 @@ const convertItemPropsAllType = (elem: {
   title: string;
 }): ItemProps | null => {
   if (!elem) return null;
-  let { id, body, title } = elem;
+  const { id, title } = elem;
 
   // title = title ? title.split(" ").slice(0, 5).join(" ") : "none";
   const tmpDateStr = new Date().toString().split(" ").slice(0, 4).join(" ");
   const itemProps: ItemProps = {
     title,
     category: id.toString(),
-    date: tmpDateStr,
+    date: [tmpDateStr],
     dDay: "D-3",
     company: "companyName",
     time: tmpDateStr,
@@ -43,14 +44,14 @@ const convertItemPropsMyType = (elem: {
 }): ItemProps | null => {
   // 반환 타입을 ItemProps로 명시
   if (!elem) return null;
-  const { id, name, email, body } = elem;
+  const { id, name, email } = elem;
 
   console.log(elem);
   const tmpDateStr = new Date().toString().split(" ").slice(0, 4).join(" ");
   const itemProps: ItemProps = {
     title: name,
     category: id.toString(),
-    date: tmpDateStr,
+    date: [tmpDateStr],
     dDay: "D-3",
     company: email,
     time: tmpDateStr,

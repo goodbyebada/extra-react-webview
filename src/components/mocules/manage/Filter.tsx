@@ -5,7 +5,7 @@ import Text from "@components/atoms/Text";
 import { GoTriangleDown } from "react-icons/go";
 import { GoTriangleUp } from "react-icons/go";
 import Margin from "@components/atoms/Margin";
-import { BACKGROUND_COLORS, FONT_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS, FONT_COLORS } from "@styled/colors";
 
 const FilterWrapper = styled.div`
   position: relative;

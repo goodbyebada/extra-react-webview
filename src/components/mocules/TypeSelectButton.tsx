@@ -1,4 +1,4 @@
-import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@styled/colors";
 import Margin from "@components/atoms/Margin";
 import Text from "@components/atoms/Text";
 import styled from "styled-components";
@@ -14,20 +14,21 @@ interface TypeSelectButtonProps extends StyledTypeSelectButtonProps {
   text: string;
 }
 
-const StyledTypeSelectButton = styled.button<StyledTypeSelectButtonProps>`
+const StyledButton = styled.button<{ $isActive: boolean }>`
   width: 100%;
   height: 150px;
 
   border-radius: 20px;
 
-  background: ${BACKGROUND_COLORS.input};
+  background: ${({ $isActive }) =>
+    $isActive ? BACKGROUND_COLORS.input : "#ccc"};
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  ${({ isActive }) =>
-    isActive ? `border: 2px solid ${COMMON_COLORS.main}` : ""}
+  ${({ $isActive }) =>
+    $isActive ? `border: 2px solid ${COMMON_COLORS.main}` : ""}
 `;
 
 const TypeSelectButton = ({
@@ -37,7 +38,7 @@ const TypeSelectButton = ({
   text,
 }: TypeSelectButtonProps) => {
   return (
-    <StyledTypeSelectButton onClick={onClick} isActive={isActive}>
+    <StyledButton $isActive={isActive} onClick={onClick}>
       {icon !== undefined && (
         <>
           {icon}
@@ -51,7 +52,7 @@ const TypeSelectButton = ({
       >
         {text}
       </Text>
-    </StyledTypeSelectButton>
+    </StyledButton>
   );
 };
 

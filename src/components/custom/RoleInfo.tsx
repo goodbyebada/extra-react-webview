@@ -1,17 +1,9 @@
 import styled from "styled-components";
 import Text from "@components/atoms/Text";
+import { RoleBodyType } from "@type/shared";
 
 interface RoleInfoProps {
-  role: {
-    sex: boolean;
-    roleAge: string[];
-    season: string;
-    costume: string[];
-    currentPersonnel: number;
-    limitPersonnel: number;
-    roleId: number;
-  };
-  roleName: string;
+  roleDetailInfo: RoleBodyType;
   index: number;
   onClick: (roleName: string, index: number) => void;
 }
@@ -20,26 +12,30 @@ interface RoleInfoProps {
  * RoleInfo : 업체 역할 정보 박스
  */
 
-const RoleInfo = ({ role, roleName, index, onClick }: RoleInfoProps) => {
+const RoleInfo = ({ roleDetailInfo, index, onClick }: RoleInfoProps) => {
+  const RoleDetailText = (label: string, value: string) => (
+    <Text size={14} weight={700}>
+      {label} : {value || "정보 없음"}
+    </Text>
+  );
+
   return (
-    <RoleInfoContainer onClick={() => onClick(roleName, index)}>
+    <RoleInfoContainer
+      onClick={() => onClick(roleDetailInfo.costume.roleName, index)}
+    >
       <RoleDetail>
-        <Text size={14} weight={700}>
-          1. 성별 : {role.sex ? "여" : "남"}
-        </Text>
-        <Text size={14} weight={700}>
-          2. 나이 : {role.roleAge}
-        </Text>
-        <Text size={14} weight={700}>
-          3. 계절 : {role.season}
-        </Text>
-        <Text size={14} weight={700}>
-          4. 의상 : {role.costume}
-        </Text>
+        {RoleDetailText("1. 성별", roleDetailInfo.sex ? "여" : "남")}
+        {RoleDetailText(
+          "2. 나이",
+          `${roleDetailInfo.minAge} - ${roleDetailInfo.maxAge}`,
+        )}
+        {RoleDetailText("3. 계절", roleDetailInfo.costume.season)}
+        {RoleDetailText("4. 의상", roleDetailInfo.costume.etc)}
+        {RoleDetailText("5. 시급", roleDetailInfo.hourPay)}
       </RoleDetail>
       <RolePersonnel>
         <Text size={16} weight={700} color="#fff">
-          ({role.currentPersonnel}/{role.limitPersonnel})
+          ({roleDetailInfo.currentPersonnel}/{roleDetailInfo.limitPersonnel})
         </Text>
       </RolePersonnel>
     </RoleInfoContainer>
@@ -53,7 +49,7 @@ const RoleInfoContainer = styled.div`
   box-shadow: 5px 5px 4px 0px #000;
   width: 90%;
   padding: 16px;
-  margin: 20px 0;
+  margin-bottom: 20px;
   border-radius: 20px;
   display: flex;
   align-items: center;

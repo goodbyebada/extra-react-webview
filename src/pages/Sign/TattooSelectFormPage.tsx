@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Text from "@components/atoms/Text";
 import SignWindow from "@components/mocules/SignWindow";
-import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@/styled/colors";
+import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@styled/colors";
 
 interface SelectButtonProps {
   isActive: boolean;

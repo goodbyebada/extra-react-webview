@@ -8,6 +8,9 @@ import { LabeledCheckBoxGroup } from "@components/mocules/LabeledCheckBoxGroup";
 import InfiniteScroll from "@utills/InfiniteScroll";
 import Item, { ItemProps } from "@components/mocules/Item";
 import { testConvertFun } from "@utills/convert";
+import MainWindow from "@components/mocules/MainWindow";
+import ScrollingList from "@components/mocules/ScrollingList";
+import { ContentWrapper } from "@components/atoms/Wrapper";
 
 /**
  * 업체 측 공고 화면
@@ -94,13 +97,13 @@ export default function PostOverviewPage() {
     }
   };
 
-  // TODO 추후 공고 추가 페이제 path와 연결해야함
-  const path = "/";
+  const path = "/add-notice";
   const tmpPath = "/company/notice/post-status/2";
 
   return (
-    <>
-      <StickyWrapper>
+    <MainWindow headerShown={false}>
+      <ScrollingList>
+        {/* <StickyWrapper> */}
         <Header>
           <SpaceBetweenNavBar>
             <h1>우리 회사 공고</h1>
@@ -119,9 +122,8 @@ export default function PostOverviewPage() {
             />
           </CheckBoxWrapper>
         </Header>
-      </StickyWrapper>
+        {/* </StickyWrapper> */}
 
-      <ContentWrapper>
         <InfiniteScroll
           fetchData={fetchData}
           hasMore={hasMore}
@@ -139,22 +141,24 @@ export default function PostOverviewPage() {
                 props;
 
               return (
-                <Item
-                  key={key}
-                  title={title}
-                  category={category}
-                  date={date}
-                  dDay={dDay}
-                  company={company}
-                  time={time}
-                  onClick={() => navigate(tmpPath)}
-                  location={location}
-                ></Item>
+                <ContentWrapper paddingBottom={"10px"}>
+                  <Item
+                    key={key}
+                    title={title}
+                    category={category}
+                    date={date}
+                    dDay={dDay}
+                    company={company}
+                    time={time}
+                    onClick={() => navigate(tmpPath)}
+                    location={location}
+                  ></Item>
+                </ContentWrapper>
               );
             })}
         </InfiniteScroll>
-      </ContentWrapper>
-    </>
+      </ScrollingList>
+    </MainWindow>
   );
 }
 
@@ -166,14 +170,4 @@ const CheckBoxWrapper = styled.div`
 const IconImage = styled.img`
   width: 50px;
   height: 50px;
-`;
-
-const StickyWrapper = styled.div`
-  width: 100%;
-  position: fixed;
-  top: 0;
-`;
-
-const ContentWrapper = styled.div`
-  margin-top: 10rem;
 `;

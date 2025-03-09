@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 
 import { setHomeDate, setScheduleDate } from "@redux/dateSlice";
-import { DateDetailedInfo, DateSelctedType } from "@api/dateInteface";
+import { DateDetailedInfo, DateSelctedType } from "@type/dateInteface";
 import { styled } from "styled-components";
 
 /**

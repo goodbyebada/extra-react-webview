@@ -1,25 +1,26 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ManagerDashboard from "./pages/ManagerDashboard";
+
 import AddNotice from "./pages/AddNotice";
 import ShowApplicant from "./pages/ShowApplicant";
 
-import ExtrasHome from "@pages/ExtrasHome";
-import ExtraCastingBoard from "@pages/ExtraCastingBoard";
-import DateSelectedNoticeList from "@pages/DateSelectedNoticeList";
-// import Scheduler from "@pages/Scheduler";
+import MemberHome from "@pages/Member/MemberHome";
+import ExtraCastingBoard from "@pages/Member/ExtraCastingBoard";
+import DateSelectedNoticeList from "@pages/Member/DateSelectedNoticeList";
 import CompanyHome from "@pages/CompanyHome";
-import ExtraShootManagePage from "@pages/ExtraShootManagePage";
-import CompanyShootManagePage from "@pages/CompanyShootManagePage";
+import ExtraShootManagePage from "@pages/Member/ExtraShootManagePage";
 import { ApplicantDetail } from "@pages/ApplicantDetail";
-import DetailPage from "@pages/DetailPage";
 import NotFound from "@pages/Error/NotFound";
 import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
-import SchedulerPage from "@pages/Scheduler";
 import TempEvaluation from "@pages/TempEvaluation";
+import CompanyClothesMemberList from "@pages/CompanyClothesMemberList";
+import MemberClothesConfirm from "@pages/MemberClothesConfirm";
+import CompanyClothesApproval from "@pages/CompanyClothesApproval";
+import CompanyClothesConfirm from "@pages/CompanyClothesConfirm";
+import MemberClothesComment from "@pages/MemberClothesComment";
+import KakaoMap from "@pages/KakaoMap";
 
 import ThemePreviewPage from "@pages/ThemePreview";
 import LoginPage from "@pages/Sign/LoginPage";
-// import MainPage from "@pages/Sign/MainPage";
 import MainFormPage from "@pages/Sign/MainFormPage";
 import AuthenticationPage from "@pages/Sign/AuthenticationPage";
 import SelectUserTypePage from "@pages/Sign/SelectUserTypePage";
@@ -41,9 +42,21 @@ import MemberSettingPage from "@pages/MemberSettingPage";
 import CompanyProfilePage from "@pages/CompanyProfilePage";
 import CompanySettingPage from "@pages/CompanySettingPage";
 import PostOverviewPage from "@pages/PostOverviewPage";
-import RecruitmentStatus from "@pages/RecruitmentStatus";
+import RecruitmentStatusPage from "@pages/RecruitmentStatusPage";
+import { useEffect } from "react";
+import handleAllowNotification from "@utills/pushNotification/notificationPermission";
+import ManageOverViewPage from "@pages/ManageOverViewPage";
+import ChatRoomPage from "@pages/Chat/ChatRoomPage";
+import { ChatListForAdmin } from "@pages/Chat/ChatListForAdmin";
+import ChatPreviewForUser from "@pages/Chat/ChatPreviewForUser";
+import SchedulerPage from "@pages/Member/SchedulerPage";
+import UploadPDFPage from "@pages/Manage/UploadPDF";
+import SignaturePage from "@pages/Manage/SignaturePage";
 
 function App() {
+  useEffect(() => {
+    handleAllowNotification();
+  }, []);
   return (
     <>
       <BrowserRouter>
@@ -64,7 +77,7 @@ function App() {
 
           {/* member */}
           {/* member home */}
-          <Route path="/member/home" element={<ExtrasHome />} />
+          <Route path="/member/home" element={<MemberHome />} />
           <Route
             path="/member/home/extra-casting-board/:jobPostId"
             element={<ExtraCastingBoard />}
@@ -95,17 +108,21 @@ function App() {
             path="/company/home/date-selected-notice-list"
             element={<DateSelectedNoticeListForCom />}
           />
+
           {/* company manage */}
-          <Route path="/company/manage" element={<CompanyShootManagePage />} />
+          <Route path="/company/manage" element={<ManageOverViewPage />} />
           <Route
             path="/company/manage/detail"
             element={<CompanyShootManageDetailPage />}
           />
           <Route path="/company/manage/actor" element={<ActorListPage />} />
+
+          {/* TODO 의상연결 */}
           <Route
             path="/company/manage/clothes-confirm"
             element={<ClothesConfirmStatusListPage />}
           />
+
           <Route path="/company/manage/camera" element={<CameraPage />} />
           <Route
             path="/company/manage/attendance"
@@ -114,50 +131,73 @@ function App() {
           <Route path="/company/manage/clock-in" element={<ClockInPage />} />
           <Route path="/company/manage/clock-out" element={<ClockOutPage />} />
           {/* company notice */}
-          <Route path="/company/notice" element={<ManagerDashboard />} />
+
           {/* 업체 측 공고 리스트 페이지 화면 */}
-          <Route
-            path="/company/notice/post-overview"
-            element={<PostOverviewPage />}
-          />
+          <Route path="/company/notice" element={<PostOverviewPage />} />
 
-          {/* 추후 수정 예정, UI 보이기 위해 임시로 id 값 고정 시킴*/}
           <Route
-            path="/company/notice/post-status/2"
-            element={<RecruitmentStatus />}
-          />
-
-          {/* <Route
             path="/company/notice/post-status/:id"
-            element={<PostOverviewPage />}
-          /> */}
+            element={<RecruitmentStatusPage />}
+          />
 
-          {/* member profile */}
           <Route path="/company/profile" element={<CompanyProfilePage />} />
           <Route
             path="/company/profile/setting"
             element={<CompanySettingPage />}
           />
 
-          <Route
-            path="/company/manager-dashboard"
-            element={<ManagerDashboard />}
-          />
+          <Route path="/applicants/:id" element={<ShowApplicant />} />
+          <Route path="/applicants/:id/detail" element={<ApplicantDetail />} />
 
-          <Route path="/applicants" element={<ShowApplicant />} />
-          <Route path="/applicants/detail" element={<ApplicantDetail />} />
-          <Route path="/detail/:id" element={<DetailPage />} />
           <Route
             path="/detail/:jobPostId/applicants"
             element={<ShowApplicant />}
           />
           <Route path="/add-notice" element={<AddNotice />} />
           <Route path="/temp/:id" element={<TempEvaluation />} />
+          <Route
+            path="/member/clothes-confirm"
+            element={<MemberClothesConfirm />}
+          />
+          <Route
+            path="/member/clothes-comment"
+            element={<MemberClothesComment />}
+          />
+          <Route
+            path="/company/clothes-member"
+            element={<CompanyClothesMemberList />}
+          />
+          <Route
+            path="/company/clothes-approval"
+            element={<CompanyClothesApproval />}
+          />
+          <Route
+            path="/company/clothes-confirm"
+            element={<CompanyClothesConfirm />}
+          />
+          <Route path="/member/kakaomap" element={<KakaoMap />} />
 
           <Route path="/*" element={<NotFound />} />
 
+          {/* signature */}
+          <Route path="/member/manage/signature" element={<SignaturePage />} />
+          <Route
+            path="/company/manage/upload-pdf"
+            element={<UploadPDFPage />}
+          />
+
           {/* for testing theme */}
           <Route path="/theme-preview" element={<ThemePreviewPage />} />
+
+          {/* 관리자 계정으로 채팅 들어가기 */}
+          <Route path="/chatRoom" element={<ChatListForAdmin />} />
+
+          {/* 테스트 위해 유저 계정으로 들어가기 */}
+          <Route path="/chat-preview/user" element={<ChatPreviewForUser />} />
+
+          <Route path="/chatRoom/channel/:id" element={<ChatRoomPage />} />
+
+          <Route path="/chatRoom/channel/-1" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </>

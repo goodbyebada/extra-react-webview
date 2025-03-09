@@ -5,10 +5,15 @@ import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import { useEffect, useState } from "react";
 import jobPostAPI from "@api/jobPostAPI";
-import { JobPost } from "@api/interface";
+import { JobPost } from "@type/shared";
 import Loading from "@components/Loading";
 import NotFoundPage from "@pages/Error/NotFound";
-import { sendMessage } from "@api/utils";
+import { useNavigate } from "react-router-dom";
+import { dummyJobPostList } from "@mocks/dummyJobData";
+import { TEST_FLAG } from "@/testFlag";
+import { NavBar } from "@components/mocules/navBar/CommonNavBar";
+import { ThemeText } from "@components/atoms/Text";
+import { defaultJobPost } from "@redux/jobPost/jobPostSlice";
 
 /**
  * 날짜 선택시 화면
@@ -25,7 +30,10 @@ export default function DateSelectedNoticeListForCom() {
     (state: RootState) => state.date.selectedByHome,
   );
 
-  const { dateNum } = selectedDate;
+  const navigate = useNavigate();
+
+  const { dateNum, year, month } = selectedDate;
+  const NAV_CONTENT = `${year}/${month + 1}/${dateNum}의 촬영 스케줄이에요.`;
 
   const jobListAboutYM = useSelector(
     (state: RootState) => state.companyJobpost.jobPostByCalenderForCom.data,
@@ -38,22 +46,31 @@ export default function DateSelectedNoticeListForCom() {
    * @param jobPostId
    */
   const navigateToExtraCastingBoard = (jobPostId: number) => {
-    // const basePath = "/detail";
-    // navigate(`${basePath}/${jobPostId}`);
-    sendMessage({
-      type: "NAVIGATION_DETAIL",
-      payload: {
-        uri: `/detail/${jobPostId}`,
-      },
-      version: "1.0",
-    });
+    const basePath = "/company/notice/post-status";
+    navigate(`${basePath}/${jobPostId}`);
   };
 
   useEffect(() => {
     const fetchData = async () => {
       let finalList: (JobPost | null)[] = []; // 에러일 경우 null을 넣도록 변경
 
-      const fetch = async (id: number) => {
+      const fetchAllJobPostID = async (id: number) => {
+        let data: Promise<JobPost>;
+
+        if (TEST_FLAG) {
+          data = new Promise<JobPost>((resolve) =>
+            setTimeout(() => {
+              const jobPost = dummyJobPostList.find((elem) => elem.id === id);
+              if (!jobPost) {
+                return resolve(defaultJobPost);
+              }
+              return resolve(jobPost);
+            }, 2000),
+          );
+          return data;
+        }
+
+        // test 아닐때
         try {
           const data = await jobPostAPI.getJobPostById(id);
           return data;
@@ -65,7 +82,7 @@ export default function DateSelectedNoticeListForCom() {
 
       if (selectedDataIdList && selectedDataIdList.length > 0) {
         finalList = await Promise.all(
-          selectedDataIdList.map((id) => fetch(id)),
+          selectedDataIdList.map((id) => fetchAllJobPostID(id)),
         );
       }
 
@@ -87,8 +104,10 @@ export default function DateSelectedNoticeListForCom() {
   }, [selectedDataIdList]);
 
   return (
-    <Container>
-      {/* <NavBar content={navContent} /> */}
+    <div>
+      <NavBar>
+        <ThemeText variant={"content-title"}>{NAV_CONTENT}</ThemeText>
+      </NavBar>
 
       <ItemWrapper>
         {loading ? <Loading loading={loading} /> : ""}
@@ -108,21 +127,9 @@ export default function DateSelectedNoticeListForCom() {
 
         {!loading && notFound ? <NotFoundPage /> : ""}
       </ItemWrapper>
-    </Container>
+    </div>
   );
 }
-
-const Container = styled.div`
-  nav {
-    height: 95px;
-    background: #191919;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 900;
-    line-height: 111.111%;
-    letter-spacing: 0.18px;
-  }
-`;
 
 const ItemWrapper = styled.div`
   display: flex;

@@ -1,6 +1,6 @@
-import { JobPost } from "@api/interface";
-import RoleDetailItem from "@utills/RoleDetailItem";
-import { SeasonLabel } from "@api/interface";
+import { JobPost } from "@type/shared";
+import RoleDetailItem from "@utills/RoleDetailInfo";
+import { SeasonLabel } from "@type/shared";
 
 /**
  *

@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { WithChildrenProps } from "@components/atoms/Wrapper";
-import { COLORS } from "@/styled/colors";
+import { COLORS } from "@styled/colors";
 
 interface LayOutProps extends WithChildrenProps {
   backGroundColor?: string | undefined;
@@ -19,26 +19,8 @@ const Layout = styled.div<{ $backGroundColor: string | undefined }>`
     $backGroundColor ? $backGroundColor : COLORS.black};
 `;
 
-const CenteredLayout = styled(Layout)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
 const LayoutComponent = ({ children, backGroundColor }: LayOutProps) => {
   return <Layout $backGroundColor={backGroundColor}>{children}</Layout>;
-};
-
-const CenteredLayoutComponent = ({
-  children,
-  backGroundColor,
-}: LayOutProps) => {
-  return (
-    <CenteredLayout $backGroundColor={backGroundColor}>
-      {children}
-    </CenteredLayout>
-  );
 };
 
 const HandlerWrapper = ({ children, handler }: WrapperProps) => {
@@ -75,10 +57,4 @@ const SpaceBetweenNavBar = ({ children }: WithChildrenProps) => {
   return <StyledSpaceBetweenNavBar>{children}</StyledSpaceBetweenNavBar>;
 };
 
-export {
-  LayoutComponent,
-  CenteredLayoutComponent,
-  HandlerWrapper,
-  Header,
-  SpaceBetweenNavBar,
-};
+export { LayoutComponent, HandlerWrapper, Header, SpaceBetweenNavBar };

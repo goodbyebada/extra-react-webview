@@ -206,10 +206,62 @@ const LineWrapper = ({ children }: { children: React.ReactNode }) => {
   return <StyledBottomLine>{children}</StyledBottomLine>;
 };
 
+// SpacingWrapper 컴포넌트: marginTop과 padding을 props로 받는 styled-component
+interface SpacingWrapperProps {
+  marginTop?: string;
+  marginRight?: string;
+  marginBottom?: string;
+  marginLeft?: string;
+  paddingTop?: string;
+  paddingRight?: string;
+  paddingBottom?: string;
+  paddingLeft?: string;
+}
+
+const SpacingWrapper = styled.div<SpacingWrapperProps>`
+  margin-top: ${(props) => props.marginTop || "0px"};
+  margin-right: ${(props) => props.marginRight || "0px"};
+  margin-bottom: ${(props) => props.marginBottom || "0px"};
+  margin-left: ${(props) => props.marginLeft || "0px"};
+
+  padding-top: ${(props) => props.paddingTop || "0px"};
+  padding-right: ${(props) => props.paddingRight || "0px"};
+  padding-bottom: ${(props) => props.paddingBottom || "0px"};
+  padding-left: ${(props) => props.paddingLeft || "0px"};
+`;
+
+const ContentWrapper = ({
+  children,
+  marginTop,
+  marginRight,
+  marginBottom,
+  marginLeft,
+  paddingTop,
+  paddingRight,
+  paddingBottom,
+  paddingLeft,
+}: WrapperProps & SpacingWrapperProps) => {
+  return (
+    <SpacingWrapper
+      marginTop={marginTop}
+      marginRight={marginRight}
+      marginBottom={marginBottom}
+      marginLeft={marginLeft}
+      paddingTop={paddingTop}
+      paddingRight={paddingRight}
+      paddingBottom={paddingBottom}
+      paddingLeft={paddingLeft}
+    >
+      {children}
+    </SpacingWrapper>
+  );
+};
+
 export {
   TagWrapper,
   StatusWrapper,
   ItemWrapper,
   CalendarItemWrapper,
   LineWrapper,
+  ContentWrapper,
 };

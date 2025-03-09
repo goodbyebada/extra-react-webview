@@ -1,17 +1,8 @@
 ## ✨ Issue Number
 
-- close 
+- close
 
 ## 🗂️ Details
 
 - [ ] TODO
 - [ ] TODO
-
-## ✅ Need Review
-
-
-## 📸 Screenshot
-
-
-## 📚 Reference
-

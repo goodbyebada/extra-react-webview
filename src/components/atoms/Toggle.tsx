@@ -1,10 +1,9 @@
 import { styled } from "styled-components";
 export { Toggle };
-import { COMMON_COLORS, COLORS } from "@/styled/colors";
-import { TEXT_CONSTANTS } from "@/constants/TEXT_CONSTANTS";
+import { COMMON_COLORS, COLORS } from "@styled/colors";
 
 const Item = styled.span<{ $on: boolean }>`
-  color: ${(props) => (props.$on ? COLORS.black : COLORS.darkGray)};
+  color: ${(props) => (props.$on ? COLORS.black : COLORS.lightGray)};
   width: 100%;
   text-align: center;
   z-index: 2;
@@ -45,7 +44,7 @@ const ToggleLabel = styled.label`
   position: relative;
 
   border-radius: 26px;
-  border: solid 1px ${COLORS.darkGray};
+  border: solid 1px ${COLORS.lightGray};
   background-color: ${COLORS.black};
   position: relative;
 

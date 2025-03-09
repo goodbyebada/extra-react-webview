@@ -24,17 +24,22 @@
     "noFallthroughCasesInSwitch": true,
 
     // 절대경로 설정
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@api/*": ["src/api/*"],
       "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
+      "@constants/*": ["src/constants/*"],
+      "@customHook/*": ["src/customHook/*"],
+      "@mocks/*": ["src/mocks/*"],
       "@pages/*": ["src/pages/*"],
       "@redux/*": ["src/redux/*"],
+      "@styled/*": ["src/styled/*"],
+      "@type/*": ["src/type/*"],
       "@utills/*": ["src/utills/*"],
       "@/*": ["src/*"]
     }
   },
 
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "vite-env.d.ts"]
 }

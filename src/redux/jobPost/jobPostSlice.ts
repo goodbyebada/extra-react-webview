@@ -1,15 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import jobPostAPI from "@api/jobPostAPI";
-import { JobPost } from "@api/interface";
-import { ResponseStatus } from "@api/interface";
+import { JobPost } from "@type/shared";
+import { ResponseStatus } from "@type/shared";
 import {
   DateYearMonth,
   QuryTypesWithPage,
   ObjectType,
-} from "@api/dateInteface";
+} from "@type/dateInteface";
 
-import { JobPostList } from "@api/interface";
-import { dummyCalenderDataForExtra, dummyJobPostList } from "@api/dummyData";
+import { JobPostList } from "@type/shared";
+
+import {
+  dummyCalenderDataForExtra,
+  dummyJobPostList,
+} from "@mocks/dummyJobData";
 import { TEST_FLAG } from "@/testFlag";
 
 // 상태의 타입 정의
@@ -17,7 +21,14 @@ import { TEST_FLAG } from "@/testFlag";
 export const defaultJobPost: JobPost = {
   id: -1,
   title: "",
-  gatheringLocation: "",
+  gatheringLocation: {
+    id: "",
+    placeName: "",
+    roadAddress: "",
+    jibunAddress: "",
+    latitude: 0,
+    longitude: 0,
+  },
   gatheringTime: "",
   imageUrl: "",
   status: false,
@@ -25,6 +36,7 @@ export const defaultJobPost: JobPost = {
   category: "",
   companyName: "",
   scheduleIdList: [],
+  applyDeadLine: "",
   calenderList: [],
   roleIdList: [],
   roleNameList: [],
@@ -136,8 +148,31 @@ export const fetchJobPostByList = createAsyncThunk(
 export const fetchJobPostById = createAsyncThunk<JobPost, number>(
   "jobPosts/fetchById",
   async (id: number) => {
-    const data = await jobPostAPI.getJobPostById(id);
-    return data;
+    let data: Promise<JobPost>;
+    console.log("fetchJobPostById 실행");
+    if (TEST_FLAG) {
+      data = new Promise<JobPost>((resolve, reject) =>
+        setTimeout(() => {
+          const dummyData = dummyJobPostList.find(
+            (jobPost) => jobPost.id === id,
+          );
+          if (dummyData) {
+            resolve(dummyData);
+          } else {
+            reject(new Error(`ID ${id} 더미 데이터가 없습니다.`));
+          }
+        }, 2000),
+      );
+      return data;
+    }
+
+    try {
+      data = await jobPostAPI.getJobPostById(id);
+      return data;
+    } catch (error) {
+      console.error(`ID ${id}의 공고를 가져오는 요청이 실패했습니다:`, error);
+      throw error;
+    }
   },
 );
 
@@ -197,6 +232,8 @@ const jobPostSlice = createSlice({
       })
       .addCase(fetchJobPostById.fulfilled, (state, action) => {
         state.jobPostItem.status = ResponseStatus.fullfilled;
+
+        console.log(action);
 
         state.jobPostItem.data = action.payload;
       })

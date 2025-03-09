@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import RecruitStatus from "@components/custom/recruitStatus";
-import { JobPost } from "@api/interface";
+import { JobPost } from "@type/shared";
 
 type Props = {
   navigate: () => void;
@@ -80,7 +80,7 @@ function CompanyRecruitMiniBox({ navigate, recruitInfo, recommand }: Props) {
           {status ? "모집중" : "모집마감"}
         </RecruitStatus>
         <TimePlace>
-          {gatheringTime} 예정 <br /> {gatheringLocation}
+          {gatheringTime} 예정 <br /> {gatheringLocation.placeName}
         </TimePlace>
       </RecruitBox>
     </RecruitContainer>

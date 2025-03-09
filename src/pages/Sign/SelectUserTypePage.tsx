@@ -8,7 +8,7 @@ import SignWindow from "@components/mocules/SignWindow";
 
 import { RiMovie2Line } from "react-icons/ri";
 import { GiDirectorChair } from "react-icons/gi";
-import { FONT_COLORS } from "@/styled/colors";
+import { FONT_COLORS } from "@styled/colors";
 
 const SelectUserTypePage = () => {
   const navigate = useNavigate();

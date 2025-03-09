@@ -3,13 +3,14 @@ import styled from "styled-components";
 import Modal from "@components/atoms/Modal";
 import { MainButton, BoxButton } from "@components/atoms/Button";
 import Text from "@components/atoms/Text";
-import { CategoryEnum } from "@api/interface";
+import { CategoryEnum } from "@type/shared";
 import { CiSquarePlus } from "react-icons/ci";
 
 interface CompanyTitleCategoryModalProps {
   onSubmit: (
     title: string,
     category: [keyof typeof CategoryEnum | null, string],
+    deadline: string,
   ) => void;
   closeModal: () => void;
   isVisible: boolean;
@@ -18,6 +19,7 @@ interface CompanyTitleCategoryModalProps {
 export type TitleCategory = {
   title: string;
   category: [keyof typeof CategoryEnum | null, string];
+  deadline: string;
 };
 
 /**
@@ -35,22 +37,24 @@ function CompanyTitleCategoryModal({
   const [formState, setFormState] = useState<TitleCategory>({
     title: "",
     category: [null, ""],
+    deadline: "",
   });
   const [categoryInput, setCategoryInput] = useState("");
   const [categoryList, setCategoryList] = useState(CategoryEnum);
 
   const isSubmitActive =
-    formState.title !== "" && formState.category[0] !== null;
+    formState.title.trim() !== "" && formState.category[0] !== null;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    if (name === "title") {
+
+    if (name === "categoryInput") {
+      setCategoryInput(value);
+    } else {
       setFormState((prevState) => ({
         ...prevState,
-        title: value,
+        [name]: value.trim(),
       }));
-    } else if (name === "categoryInput") {
-      setCategoryInput(value);
     }
   };
 
@@ -69,12 +73,17 @@ function CompanyTitleCategoryModal({
     setFormState((prevState) => ({
       title: prevState.title,
       category: key === prevState.category[0] ? [null, ""] : [key, value],
+      deadline: prevState.deadline,
     }));
   };
 
   const handleSubmit = () => {
-    if (formState.title !== "" && formState.category[0] !== null) {
-      onSubmit(formState.title, formState.category);
+    if (
+      formState.title.trim() !== "" &&
+      formState.category[0] !== null &&
+      formState.deadline.trim()
+    ) {
+      onSubmit(formState.title, formState.category, formState.deadline);
       closeModal();
     }
   };
@@ -91,6 +100,7 @@ function CompanyTitleCategoryModal({
             value={formState.title}
             onChange={handleChange}
             spellCheck="false"
+            placeholder="제목"
           />
         </Row>
         <Row>
@@ -102,6 +112,7 @@ function CompanyTitleCategoryModal({
             value={categoryInput}
             onChange={handleChange}
             spellCheck="false"
+            placeholder="카테고리"
           />
           <CiSquarePlus size={35} onClick={handlePlusClick} />
         </Row>
@@ -120,6 +131,18 @@ function CompanyTitleCategoryModal({
             </BoxButton>
           ))}
         </BoxesContainer>
+        <Row>
+          <Text size={20} weight={900} color="#fff">
+            마감기한 :
+          </Text>
+          <Input
+            name="deadline"
+            type="date"
+            value={formState.deadline}
+            onChange={handleChange}
+            placeholder="마감기한"
+          />
+        </Row>
         <MainButton isActive={isSubmitActive} onClick={handleSubmit}>
           확인
         </MainButton>
@@ -153,6 +176,10 @@ const Input = styled.input`
   outline: none;
   padding: 5px;
   margin: 0 10px;
+
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* 아이콘 색상 반전 */
+  }
 `;
 
 const BoxesContainer = styled.div`

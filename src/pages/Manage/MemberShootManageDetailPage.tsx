@@ -5,9 +5,9 @@ import { styled } from "styled-components";
 import Container from "@components/atoms/Container";
 import { MainButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
-import { FONT_COLORS } from "@/styled/colors";
+import { FONT_COLORS } from "@styled/colors";
 import MainWindow from "@components/mocules/MainWindow";
-
+import { useNavigate } from "react-router-dom";
 const QRBackground = styled.div`
   background: ${FONT_COLORS.white};
 
@@ -22,6 +22,8 @@ const QRBackground = styled.div`
 
 const MemberShootManageDetailPage = () => {
   const [value, setValue] = useState<string>("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const data = {
@@ -39,11 +41,35 @@ const MemberShootManageDetailPage = () => {
         </QRBackground>
       </Container>
       <Container flex={40} paddingHorizontal={40}>
-        <MainButton isActive={true}>채팅방</MainButton>
+        <MainButton
+          onClick={() => {
+            // id 정보 없어서 임시로 해놓음
+            const TMP_PATH = `/chatRoom/channel/3`;
+            navigate(TMP_PATH);
+          }}
+          isActive={true}
+        >
+          채팅방
+        </MainButton>
         <Margin size={20} />
-        <MainButton isActive={true}>의상</MainButton>
+        <MainButton
+          isActive={true}
+          onClick={() => {
+            const TMP_PATH = `/member/clothes-comment`;
+            navigate(TMP_PATH);
+          }}
+        >
+          의상
+        </MainButton>
         <Margin size={20} />
-        <MainButton isActive={true}>계약서</MainButton>
+        <MainButton
+          isActive={true}
+          onClick={() => {
+            navigate("/member/manage/signature");
+          }}
+        >
+          계약서
+        </MainButton>
       </Container>
     </MainWindow>
   );

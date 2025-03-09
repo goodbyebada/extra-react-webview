@@ -1,7 +1,7 @@
 //TODO naming 정확하지 않음
 //TODO dateNum을 따로 받는애랑 분리하자.
 
-import { YearMonthAsNumber, DateFieldsAsNumber } from "@api/dateInteface";
+import { YearMonthAsNumber, DateFieldsAsNumber } from "@type/dateInteface";
 
 export function converStringToInt(elem: string) {
   return Number(elem);

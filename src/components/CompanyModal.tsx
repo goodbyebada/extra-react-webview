@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { JobPostList } from "@api/interface";
+import { JobPostList } from "@type/shared";
 import HomeRecruitBox from "@components/HomeRecruitBox";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";

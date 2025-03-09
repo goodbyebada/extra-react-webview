@@ -6,7 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "@redux/store";
 import { useSelector } from "react-redux";
 import CompanyCalender from "@components/template/CompanyCalender";
+import MainWindow from "@components/mocules/MainWindow";
+import List from "@pages/List";
+import { DateDetailedInfo } from "@type/dateInteface";
 // import CompanyList from "@components/organisms/CompanyList";
+import ScrollingList from "@components/mocules/ScrollingList";
+import { useLocation } from "react-router-dom";
+import { getAuthType } from "@utills/getAuthType";
 
 /**
  *추후 수정 예정
@@ -15,6 +21,12 @@ import CompanyCalender from "@components/template/CompanyCalender";
  * @returns 회사 업체측 홈화면 UI
  */
 export default function CompanyHome() {
+  const location = useLocation();
+  const type = location.pathname.split("/")[1];
+  const dateYearMonth: DateDetailedInfo = useSelector(
+    (state: RootState) => state.date.selectedByHome,
+  );
+
   // 캘린더 || 리스트
   const showAsCalender = useSelector(
     (state: RootState) => state.showType.showAsCalender,
@@ -27,7 +39,7 @@ export default function CompanyHome() {
    */
   const openModalWindow = () => {
     // 모달창을 연다
-    const path = "/date-selected-notice-list-company";
+    const path = "/company/home/date-selected-notice-list";
     navigate(path);
   };
 
@@ -40,44 +52,42 @@ export default function CompanyHome() {
   // }, []);
 
   return (
-    <div className="company-home-container">
-      <CompanyHomeTopBar>
-        <nav>
-          <TypeSelector />
-        </nav>
-        <h1>내 촬영</h1>
-      </CompanyHomeTopBar>
+    <MainWindow headerShown={false}>
+      <NavWrapper>
+        <TypeSelector />
+      </NavWrapper>
 
-      <div className="content">
+      <Title>내 촬영</Title>
+
+      <ScrollingList>
         {showAsCalender ? (
           <CompanyCalender
             showRecommand={false}
             clickedDateEvent={openModalWindow}
           />
         ) : (
-          ""
-          // TODO test 위해 CompanyList 주석 처리
-          // <CompanyList dateYM={dateYM} showRecommand={false} />
+          <List
+            dateYearMonth={dateYearMonth}
+            showRecommand={false}
+            authType={getAuthType(type)}
+          />
         )}
-      </div>
-    </div>
+      </ScrollingList>
+    </MainWindow>
   );
 }
 
-const CompanyHomeTopBar = styled.div`
-  nav {
-    display: flex;
-    justify-content: end;
-  }
-  h1 {
-    display: flex;
-    justify-content: center;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 83.333%;
-    letter-spacing: 0.24px;
-    margin: 0px;
-    padding-top: 20px;
-  }
+const NavWrapper = styled.nav`
+  width: 100%;
+  height: fit-content;
+  position: sticky;
+  display: flex;
+  justify-content: flex-end;
+`;
+const Title = styled.h1`
+  height: fit-content;
+  width: 100%;
+  position: sticky;
+  display: flex;
+  justify-content: center;
 `;
