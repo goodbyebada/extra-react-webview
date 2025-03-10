@@ -91,7 +91,7 @@ export default function MemberHome() {
   };
 
   return (
-    <MainWindow>
+    <MainWindow showInstallBanner={true}>
       <ScrollingList>
         <LayoutComponent>
           <Header>

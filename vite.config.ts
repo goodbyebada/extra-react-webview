@@ -15,6 +15,9 @@ export default defineConfig(() => {
         workbox: {
           maximumFileSizeToCacheInBytes: 3000000,
         },
+        devOptions: {
+          enabled: true,
+        },
         registerType: "autoUpdate",
         injectRegister: null,
         includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
