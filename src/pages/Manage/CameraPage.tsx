@@ -14,7 +14,11 @@ import VConsole from "vconsole";
 import { MainButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
 import { COMMON_COLORS } from "@styled/colors";
-const vConsole = new VConsole({ theme: "dark" });
+
+let vConsole: VConsole | undefined;
+if (process.env.NODE_ENV === "development") {
+  vConsole = new VConsole({ theme: "dark" });
+}
 
 const CaptureIconButton = styled.div`
   display: flex;
@@ -149,7 +153,9 @@ const CameraPage = () => {
         stream.getTracks().forEach((track) => track.stop());
       }
 
-      vConsole.destroy();
+      if (vConsole) {
+        vConsole.destroy();
+      }
     };
   }, []);
 
