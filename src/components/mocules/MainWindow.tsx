@@ -16,7 +16,6 @@ import { FaUserCircle } from "react-icons/fa";
 import { IoDocumentText } from "react-icons/io5";
 import { AiFillTool } from "react-icons/ai";
 import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@styled/colors";
-import { BeforeInstallPromptEvent } from "@/global";
 import PwaInstallBanner from "@components/mocules/PwaInstallBanner";
 
 const ICON_SIZE = 40;
@@ -297,42 +296,8 @@ const MainWindow = ({
     ? { paddingHorizontal: 34, paddingVertical: 20 }
     : {};
 
-  const [deferredPrompt, setDeferredPrompt] = useState<
-    BeforeInstallPromptEvent | undefined
-  >(undefined);
-
-  const onClick = async () => {
-    if (!deferredPrompt) {
-      return;
-    }
-    deferredPrompt.prompt();
-    const choiceResult = await deferredPrompt.userChoice;
-    if (choiceResult.outcome === "accepted") {
-      setDeferredPrompt(undefined);
-    }
-  };
-
-  useEffect(() => {
-    const handleBeforeInstallPropmpt = (event: BeforeInstallPromptEvent) => {
-      event.preventDefault();
-      setDeferredPrompt(event);
-    };
-
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPropmpt);
-
-    return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPropmpt,
-      );
-    };
-  }, []);
-
   return (
     <Window>
-      {showInstallBanner && (
-        <PwaInstallBanner onClick={onClick} deferredPrompt={deferredPrompt} />
-      )}
       {headerShown && (
         <Container
           style={{ height: `${headerHeight}px` }}
@@ -366,7 +331,10 @@ const MainWindow = ({
       >
         {children}
       </Container>
+
       {bottomNavigationShown && <BottomNavigation />}
+
+      {showInstallBanner && <PwaInstallBanner />}
     </Window>
   );
 };
