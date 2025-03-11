@@ -1,6 +1,8 @@
-import { BeforeInstallPromptEvent } from "@/global";
+// import { BeforeInstallPromptEvent } from "@/global";
+
 import { checkUnsupportedBrowser } from "@utills/checkUnsupportedBrowser";
 import { useState, useEffect } from "react";
+import { BeforeInstallPromptEvent } from "@type/shared";
 
 type UseDeferredPromptReturn = {
   handleInstallButton: () => Promise<void>;
