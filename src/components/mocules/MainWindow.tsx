@@ -16,6 +16,7 @@ import { FaUserCircle } from "react-icons/fa";
 import { IoDocumentText } from "react-icons/io5";
 import { AiFillTool } from "react-icons/ai";
 import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@styled/colors";
+import PwaInstallBanner from "@components/mocules/PwaInstallBanner";
 
 const ICON_SIZE = 40;
 const ACTIVE_COLOR = COMMON_COLORS.main;
@@ -279,6 +280,7 @@ interface MainWindowProps extends ContainerProps {
   title?: string;
   bottomNavigationShown?: boolean;
   activeDefaultPadding?: boolean;
+  showInstallBanner?: boolean;
 }
 
 const MainWindow = ({
@@ -287,6 +289,7 @@ const MainWindow = ({
   title = "",
   bottomNavigationShown = true,
   activeDefaultPadding = true,
+  showInstallBanner = false,
   ...props
 }: MainWindowProps) => {
   const paddingProps = activeDefaultPadding
@@ -328,7 +331,10 @@ const MainWindow = ({
       >
         {children}
       </Container>
+
       {bottomNavigationShown && <BottomNavigation />}
+
+      {showInstallBanner && <PwaInstallBanner />}
     </Window>
   );
 };

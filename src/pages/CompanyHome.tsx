@@ -52,7 +52,7 @@ export default function CompanyHome() {
   // }, []);
 
   return (
-    <MainWindow headerShown={false}>
+    <MainWindow headerShown={false} showInstallBanner={true}>
       <NavWrapper>
         <TypeSelector />
       </NavWrapper>
