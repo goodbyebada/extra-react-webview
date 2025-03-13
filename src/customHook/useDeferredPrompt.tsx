@@ -43,6 +43,8 @@ const useDeferredPrompt = (): UseDeferredPromptReturn => {
     const handleBeforeInstallPrompt = (event: BeforeInstallPromptEvent) => {
       event.preventDefault();
       setDeferredPrompt(event);
+
+      console.log(`BeforeInstallPromptEvent 이벤트 객체 `, event);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
