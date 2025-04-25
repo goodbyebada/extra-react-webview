@@ -3,7 +3,7 @@ import backIcon from "@assets/backIcon.png";
 import { sendMessage } from "@api/utils";
 import { useEffect, useState } from "react";
 
-export function ApplicantDetail() {
+export default function ApplicantDetail() {
   const [data, setData] = useState({
     id: "",
     name: "",
