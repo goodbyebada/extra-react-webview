@@ -49,7 +49,7 @@ export const DUMMY_ADMIN_INFO = {
   user_id: 1,
 };
 
-export function ChatListForAdmin() {
+export default function ChatListForAdmin() {
   const [userId, setUserId] = useState<number>(0);
   const managedWorkItems = getDummyJobPost(userId);
   const [userInfo, setUserInfo] = useState<UserFiled>();
