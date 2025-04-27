@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import tsconfigPaths from "vite-tsconfig-paths";
 import fs from "fs";
 import { VitePWA } from "vite-plugin-pwa";
+import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
 export default defineConfig(() => {
@@ -11,6 +12,7 @@ export default defineConfig(() => {
     plugins: [
       react(),
       tsconfigPaths(),
+      visualizer(),
       VitePWA({
         workbox: {
           maximumFileSizeToCacheInBytes: 3000000,
@@ -63,6 +65,29 @@ export default defineConfig(() => {
               cert: fs.readFileSync("./localhost.pem"),
             },
           },
+    build: {
+      rollupOptions: {
+        output: {
+          inlineDynamicImports: false,
+          manualChunks(id: string) {
+            if (id.includes("firebase")) {
+              return "@firebase-module";
+            }
+
+            if (id.includes("react-pdf")) {
+              return "@react-pdf";
+            }
+
+            if (id.includes("pdf-lib")) {
+              return "@pdf-module";
+            }
+            if (id.includes("crypto-js")) {
+              return "@crypto-js";
+            }
+          },
+        },
+      },
+    },
   };
 });
 
