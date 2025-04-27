@@ -1,85 +1,61 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useEffect, Suspense } from "react";
+import Loading from "@components/Loading";
 
-import { Suspense, lazy } from "react";
+import AddNotice from "./pages/AddNotice";
+import ShowApplicant from "./pages/ShowApplicant";
 
-const AddNotice = lazy(() => import("./pages/AddNotice"));
-const ShowApplicant = lazy(() => import("./pages/ShowApplicant"));
+import MemberHome from "@pages/Member/MemberHome";
+import ExtraCastingBoard from "@pages/Member/ExtraCastingBoard";
+import DateSelectedNoticeList from "@pages/Member/DateSelectedNoticeList";
+import CompanyHome from "@pages/CompanyHome";
+import ExtraShootManagePage from "@pages/Member/ExtraShootManagePage";
+import ApplicantDetail from "@pages/ApplicantDetail";
+import NotFound from "@pages/Error/NotFound";
+import DateSelectedNoticeListForCom from "@pages/DateSelectedNoticeListForCom";
+import TempEvaluation from "@pages/TempEvaluation";
+import CompanyClothesMemberList from "@pages/CompanyClothesMemberList";
+import MemberClothesConfirm from "@pages/MemberClothesConfirm";
+import CompanyClothesApproval from "@pages/CompanyClothesApproval";
+import CompanyClothesConfirm from "@pages/CompanyClothesConfirm";
+import MemberClothesComment from "@pages/MemberClothesComment";
+import KakaoMap from "@pages/KakaoMap";
 
-const MemberHome = lazy(() => import("@pages/Member/MemberHome"));
-const ExtraCastingBoard = lazy(() => import("@pages/Member/ExtraCastingBoard"));
-const DateSelectedNoticeList = lazy(
-  () => import("@pages/Member/DateSelectedNoticeList"),
-);
-const CompanyHome = lazy(() => import("@pages/CompanyHome"));
-const ExtraShootManagePage = lazy(
-  () => import("@pages/Member/ExtraShootManagePage"),
-);
-const ApplicantDetail = lazy(() => import("@pages/ApplicantDetail"));
-const NotFound = lazy(() => import("@pages/Error/NotFound"));
-const DateSelectedNoticeListForCom = lazy(
-  () => import("@pages/DateSelectedNoticeListForCom"),
-);
-const TempEvaluation = lazy(() => import("@pages/TempEvaluation"));
-const CompanyClothesMemberList = lazy(
-  () => import("@pages/CompanyClothesMemberList"),
-);
-const MemberClothesConfirm = lazy(() => import("@pages/MemberClothesConfirm"));
-const CompanyClothesApproval = lazy(
-  () => import("@pages/CompanyClothesApproval"),
-);
-const CompanyClothesConfirm = lazy(
-  () => import("@pages/CompanyClothesConfirm"),
-);
-const MemberClothesComment = lazy(() => import("@pages/MemberClothesComment"));
-const KakaoMap = lazy(() => import("@pages/KakaoMap"));
+import ThemePreviewPage from "@pages/ThemePreview";
+import LoginPage from "@pages/Sign/LoginPage";
+import MainFormPage from "@pages/Sign/MainFormPage";
+import AuthenticationPage from "@pages/Sign/AuthenticationPage";
+import SelectUserTypePage from "@pages/Sign/SelectUserTypePage";
+import MemberInfoFormPage from "@pages/Sign/MemberInfoFormPage";
+import AccountFormPage from "@pages/Sign/AccountFormPage";
+import TattooFormPage from "@pages/Sign/TattooFormPage";
+import TattooSelectFormPage from "@pages/Sign/TattooSelectFormPage";
+import CompanyInfoFormPage from "@pages/Sign/CompanyInfoFormPage";
+import CompanyShootManageDetailPage from "@pages/Manage/CompanyShootManageDetailPage";
+import ActorListPage from "@pages/Manage/ActorListPage";
+import ClothesConfirmStatusListPage from "@pages/Manage/ClothesConfirmStatusListPage";
+import CameraPage from "@pages/Manage/CameraPage";
+import MemberShootManageDetailPage from "@pages/Manage/MemberShootManageDetailPage";
+import AttendancePage from "@pages/Manage/AttendancePage";
+import ClockInPage from "@pages/Manage/ClockInPage";
+import ClockOutPage from "@pages/Manage/ClockOutPage";
+import MemberProfilePage from "@pages/MemberProfilePage";
+import MemberSettingPage from "@pages/MemberSettingPage";
+import CompanyProfilePage from "@pages/CompanyProfilePage";
+import CompanySettingPage from "@pages/CompanySettingPage";
+import PostOverviewPage from "@pages/PostOverviewPage";
+import RecruitmentStatusPage from "@pages/RecruitmentStatusPage";
 
-const ThemePreviewPage = lazy(() => import("@pages/ThemePreview"));
-const LoginPage = lazy(() => import("@pages/Sign/LoginPage"));
-const MainFormPage = lazy(() => import("@pages/Sign/MainFormPage"));
-const AuthenticationPage = lazy(() => import("@pages/Sign/AuthenticationPage"));
-const SelectUserTypePage = lazy(() => import("@pages/Sign/SelectUserTypePage"));
-const MemberInfoFormPage = lazy(() => import("@pages/Sign/MemberInfoFormPage"));
-const AccountFormPage = lazy(() => import("@pages/Sign/AccountFormPage"));
-const TattooFormPage = lazy(() => import("@pages/Sign/TattooFormPage"));
-const TattooSelectFormPage = lazy(
-  () => import("@pages/Sign/TattooSelectFormPage"),
-);
-const CompanyInfoFormPage = lazy(
-  () => import("@pages/Sign/CompanyInfoFormPage"),
-);
-const CompanyShootManageDetailPage = lazy(
-  () => import("@pages/Manage/CompanyShootManageDetailPage"),
-);
-const ActorListPage = lazy(() => import("@pages/Manage/ActorListPage"));
-const ClothesConfirmStatusListPage = lazy(
-  () => import("@pages/Manage/ClothesConfirmStatusListPage"),
-);
-const CameraPage = lazy(() => import("@pages/Manage/CameraPage"));
-const MemberShootManageDetailPage = lazy(
-  () => import("@pages/Manage/MemberShootManageDetailPage"),
-);
-const AttendancePage = lazy(() => import("@pages/Manage/AttendancePage"));
-const ClockInPage = lazy(() => import("@pages/Manage/ClockInPage"));
-const ClockOutPage = lazy(() => import("@pages/Manage/ClockOutPage"));
-const MemberProfilePage = lazy(() => import("@pages/MemberProfilePage"));
-const MemberSettingPage = lazy(() => import("@pages/MemberSettingPage"));
-const CompanyProfilePage = lazy(() => import("@pages/CompanyProfilePage"));
-const CompanySettingPage = lazy(() => import("@pages/CompanySettingPage"));
-const PostOverviewPage = lazy(() => import("@pages/PostOverviewPage"));
-const RecruitmentStatusPage = lazy(
-  () => import("@pages/RecruitmentStatusPage"),
-);
-const ManageOverViewPage = lazy(() => import("@pages/ManageOverViewPage"));
+import handleAllowNotification from "@utills/pushNotification/notificationPermission";
+import ManageOverViewPage from "@pages/ManageOverViewPage";
+import SchedulerPage from "@pages/Member/SchedulerPage";
+
+import { lazy } from "react";
 const ChatRoomPage = lazy(() => import("@pages/Chat/ChatRoomPage"));
 const ChatListForAdmin = lazy(() => import("@pages/Chat/ChatListForAdmin"));
 const ChatPreviewForUser = lazy(() => import("@pages/Chat/ChatPreviewForUser"));
-const SchedulerPage = lazy(() => import("@pages/Member/SchedulerPage"));
 const UploadPDFPage = lazy(() => import("@pages/Manage/UploadPDF"));
 const SignaturePage = lazy(() => import("@pages/Manage/SignaturePage"));
-
-import { useEffect } from "react";
-import handleAllowNotification from "@utills/pushNotification/notificationPermission";
-import Loading from "@components/Loading";
 
 function App() {
   useEffect(() => {
