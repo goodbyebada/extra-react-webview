@@ -70,19 +70,22 @@ export default defineConfig(() => {
         output: {
           inlineDynamicImports: false,
           manualChunks(id: string) {
-            if (id.includes("firebase")) {
-              return "@firebase-module";
-            }
-
-            if (id.includes("react-pdf")) {
-              return "@react-pdf";
-            }
-
-            if (id.includes("pdf-lib")) {
-              return "@pdf-module";
-            }
-            if (id.includes("crypto-js")) {
-              return "@crypto-js";
+            if (id.includes("node_modules")) {
+              // if (id.includes("pdf")) {
+              //   return "@pdf";
+              // }
+              if (id.includes("firebase")) {
+                return "@firebase-module";
+              }
+              // if (id.includes("react-pdf")) {
+              //   return "@react-pdf";
+              // }
+              // if (id.includes("pdf-lib")) {
+              //   return "@pdf-module";
+              // }
+              if (id.includes("crypto-js")) {
+                return "@crypto-js";
+              }
             }
           },
         },

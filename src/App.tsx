@@ -1,10 +1,10 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect, Suspense } from "react";
 import Loading from "@components/Loading";
+import handleAllowNotification from "@utills/pushNotification/notificationPermission";
 
 import AddNotice from "./pages/AddNotice";
 import ShowApplicant from "./pages/ShowApplicant";
-
 import MemberHome from "@pages/Member/MemberHome";
 import ExtraCastingBoard from "@pages/Member/ExtraCastingBoard";
 import DateSelectedNoticeList from "@pages/Member/DateSelectedNoticeList";
@@ -46,16 +46,15 @@ import CompanySettingPage from "@pages/CompanySettingPage";
 import PostOverviewPage from "@pages/PostOverviewPage";
 import RecruitmentStatusPage from "@pages/RecruitmentStatusPage";
 
-import handleAllowNotification from "@utills/pushNotification/notificationPermission";
 import ManageOverViewPage from "@pages/ManageOverViewPage";
+import ChatRoomPage from "@pages/Chat/ChatRoomPage";
+import ChatListForAdmin from "@pages/Chat/ChatListForAdmin";
 import SchedulerPage from "@pages/Member/SchedulerPage";
 
 import { lazy } from "react";
-const ChatRoomPage = lazy(() => import("@pages/Chat/ChatRoomPage"));
-const ChatListForAdmin = lazy(() => import("@pages/Chat/ChatListForAdmin"));
-const ChatPreviewForUser = lazy(() => import("@pages/Chat/ChatPreviewForUser"));
-const UploadPDFPage = lazy(() => import("@pages/Manage/UploadPDF"));
+// PDF 라이브러리를 사용하는 컴포넌트만 동적 import
 const SignaturePage = lazy(() => import("@pages/Manage/SignaturePage"));
+const UploadPDFPage = lazy(() => import("@pages/Manage/UploadPDF"));
 
 function App() {
   useEffect(() => {
@@ -198,6 +197,7 @@ function App() {
               path="/member/manage/signature"
               element={<SignaturePage />}
             />
+
             <Route
               path="/company/manage/upload-pdf"
               element={<UploadPDFPage />}
@@ -208,9 +208,6 @@ function App() {
 
             {/* 관리자 계정으로 채팅 들어가기 */}
             <Route path="/chatRoom" element={<ChatListForAdmin />} />
-
-            {/* 테스트 위해 유저 계정으로 들어가기 */}
-            <Route path="/chat-preview/user" element={<ChatPreviewForUser />} />
 
             <Route path="/chatRoom/channel/:id" element={<ChatRoomPage />} />
 

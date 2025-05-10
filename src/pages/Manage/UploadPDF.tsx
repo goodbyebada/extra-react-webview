@@ -3,7 +3,6 @@ import { COMMON_COLORS } from "@/styled/colors";
 import MainWindow from "@components/mocules/MainWindow";
 import { useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
-
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 
