@@ -16,7 +16,6 @@ import { FaUserCircle } from "react-icons/fa";
 import { IoDocumentText } from "react-icons/io5";
 import { AiFillTool } from "react-icons/ai";
 import { BACKGROUND_COLORS, COMMON_COLORS, FONT_COLORS } from "@styled/colors";
-import PwaInstallBanner from "@components/mocules/PwaInstallBanner";
 import { PWAInstallBottomSheet } from "@components/organisms/PWAInstallBottomSheet";
 
 const ICON_SIZE = 40;
