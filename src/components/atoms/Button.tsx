@@ -219,9 +219,9 @@ const GuestStyledButton = styled(StyledButton)`
   }
 `;
 
-const GuestButton = ({ children, ...props }: ButtonProps) => {
+const GuestButton = ({ children, onClick, ...props }: ButtonProps) => {
   return (
-    <GuestStyledButton {...props}>
+    <GuestStyledButton onClick={onClick} {...props}>
       <Text size={17} weight={700}>
         {children}
       </Text>
