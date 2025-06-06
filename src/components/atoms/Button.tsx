@@ -6,7 +6,12 @@ import star_y from "@assets/Star_y.png";
 import BackIconImg from "@assets/backIcon.png";
 import { useNavigate } from "react-router-dom";
 import { TfiAngleLeft } from "react-icons/tfi";
-import { BACKGROUND_COLORS, COMMON_COLORS } from "@styled/colors";
+import {
+  BACKGROUND_COLORS,
+  COLORS,
+  COMMON_COLORS,
+  FONT_COLORS,
+} from "@styled/colors";
 
 interface ButtonProps extends HTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
@@ -198,6 +203,32 @@ const HistoryBackButton = ({ onClick }: HistoryBackButtonProps) => {
   );
 };
 
+const GuestStyledButton = styled(StyledButton)`
+  width: 100%;
+  height: 53px;
+  margin: 0 auto;
+  border-radius: 18px;
+
+  color: ${FONT_COLORS.white};
+  background-color: ${BACKGROUND_COLORS.disabled};
+  border: 1px solid ${BACKGROUND_COLORS.disabled};
+
+  &:hover {
+    background-color: ${COLORS.midNightGray};
+    border: 1px solid ${COLORS.midNightGray};
+  }
+`;
+
+const GuestButton = ({ children, ...props }: ButtonProps) => {
+  return (
+    <GuestStyledButton {...props}>
+      <Text size={17} weight={700}>
+        {children}
+      </Text>
+    </GuestStyledButton>
+  );
+};
+
 export {
   StarToggleButton,
   MainButton,
@@ -205,4 +236,5 @@ export {
   BackButton,
   BoxButton,
   SubButton,
+  GuestButton,
 };

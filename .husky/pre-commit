@@ -1,1 +1,9 @@
+#!/bin/sh
+echo "NODE 버전: $(node -v)"
+echo "node 위치: $(which node)"
+. "$HOME/.nvm/nvm.sh"
+nvm use 22.9.0
 npx lint-staged
+
+
+

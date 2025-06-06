@@ -52,6 +52,7 @@ import ChatListForAdmin from "@pages/Chat/ChatListForAdmin";
 import SchedulerPage from "@pages/Member/SchedulerPage";
 
 import { lazy } from "react";
+import SelectGuestTypePage from "@pages/SelectGuestTypePage";
 // PDF 라이브러리를 사용하는 컴포넌트만 동적 import
 const SignaturePage = lazy(() => import("@pages/Manage/SignaturePage"));
 const UploadPDFPage = lazy(() => import("@pages/Manage/UploadPDF"));
@@ -60,6 +61,8 @@ function App() {
   useEffect(() => {
     handleAllowNotification();
   }, []);
+
+  // SelectGuestTypePage
   return (
     <>
       <BrowserRouter>
@@ -212,6 +215,9 @@ function App() {
             <Route path="/chatRoom/channel/:id" element={<ChatRoomPage />} />
 
             <Route path="/chatRoom/channel/-1" element={<NotFound />} />
+
+            {/* GuestMode */}
+            <Route path="/guest/user-type" element={<SelectGuestTypePage />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
