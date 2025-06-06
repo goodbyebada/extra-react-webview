@@ -4,10 +4,9 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import Container from "@components/atoms/Container";
 import { InputField } from "@components/atoms/Form";
-import { MainButton } from "@components/atoms/Button";
+import { GuestButton, MainButton } from "@components/atoms/Button";
 import Margin from "@components/atoms/Margin";
 import Text from "@components/atoms/Text";
-
 import logoImage from "@assets/logo.png";
 import { RiKakaoTalkFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
@@ -67,6 +66,10 @@ const LoginPage = () => {
     console.log(error);
   };
 
+  const clickedGuestButton = () => {
+    navigate("/guest/user-type");
+  };
+
   return (
     <Window>
       <Container flex={20}>
@@ -124,6 +127,7 @@ const LoginPage = () => {
           </button>
         </Container>
       </Container>
+
       <Container flex={10}>
         <Container flexDirection="row">
           <KakaoLogin
@@ -142,7 +146,7 @@ const LoginPage = () => {
           >
             <RiKakaoTalkFill color="#000" size={30} />
           </KakaoLogin>
-          <Margin direction="horizontal" size={15} />
+
           <SocialLoginButton
             style={{ background: "#fff" }}
             onClick={() => console.log("kakao")}
@@ -150,6 +154,13 @@ const LoginPage = () => {
             <FcGoogle size={25} />
           </SocialLoginButton>
         </Container>
+      </Container>
+
+      <Margin direction="vertical" size={30} />
+      <Container flex={10} paddingHorizontal={30}>
+        <GuestButton onClick={clickedGuestButton}>
+          비회원으로 둘러보기
+        </GuestButton>
       </Container>
     </Window>
   );
