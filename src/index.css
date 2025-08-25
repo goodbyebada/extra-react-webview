@@ -1,6 +1,8 @@
 *,
 body,
 :root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -10,16 +12,16 @@ body,
   --__scheduledItemHeigth: 17px;
 }
 
-html,
 body {
   height: 100%;
   overflow-x: hidden;
   max-width: 460px;
-  justify-self: center;
+  /* justify-self: center; */
 }
 
 html {
   width: 100vw;
+  /* justify-self: center; */
 }
 
 :root {

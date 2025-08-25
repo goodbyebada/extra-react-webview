@@ -202,7 +202,7 @@ const RoleItemsWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
+  /* margin-top: 10px; */
 `;
 
 const ButtonWrapper = styled.div`
